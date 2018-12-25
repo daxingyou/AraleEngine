@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 5650d5f3a2335ca48b8c36e8df0f6e28
+TrueTypeFontImporter:
+  serializedVersion: 3
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 1
+  characterPadding: 0
+  includeFontData: 1
+  fontNames: []
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: font/simhei.data
+  assetBundleVariant: 

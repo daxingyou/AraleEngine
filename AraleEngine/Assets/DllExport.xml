@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Root>
+    <Module>
+        <Export path="E:/project/AraleEngine.dll"></Export>
+        <RefFile path="C:/Program Files/Unity/Editor/Data/Managed/UnityEngine.dll" />
+        <RefFile path="C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll" />
+        <RefFile path="C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll" />
+        <RefFile path="E:/project/Engine/Library/ScriptAssemblies/Assembly-CSharp.dll" />
+        <RefFile path="E:/project/Engine/Assets/Lib/DOTween/DOTween.dll" />
+        <RefFile path="E:/project/Engine/Assets/Lib/DOTween/DOTween43.dll" />
+        <RefFile path="E:/project/Engine/Assets/Lib/DOTween/DOTween46.dll" />
+        <RefFile path="E:/project/Engine/Assets/Lib/DOTween/DOTween50.dll" />
+        <SourceFile path="Engine" exclude=":Editor|*.meta" include="*.cs" />
+        <Define>DEBUG;UNITY_EDITOR;DEBUG_TOOL_ENABLE;</Define>
+    </Module>
+</Root>

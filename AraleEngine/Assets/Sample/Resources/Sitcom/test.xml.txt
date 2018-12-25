@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf8"?>
+<!--测试模板,给一个不存在的NEXTID就可以结束剧情-->
+<SITCOM>
+   <ACTION ID="1" TYPE="camera" ACT="shake" ACTOR="TestCamera" TIME="0" NEXTID="2" PARAM='{"duration":3,"strength":1,"vibrate":10}'/>
+   <ACTION ID="2" TYPE="gameobject" ACT="create" NEXTID="3" PARAM="{'path':'Sitcom/TestPath','position':'0,0,0','rotation':'0,0,0'}"/>
+   <ACTION ID="3" TYPE="gameobject" ACT="move" ACTOR="Box" NEXTID="-1" PARAM="{'duration':6,'path':'boxpath'}"/>
+</SITCOM>

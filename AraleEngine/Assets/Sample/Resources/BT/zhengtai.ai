@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<BTTree version="0" guid="4ae08227707445ddb0f4bf888bfa96ab">
+	<BTNode type="Root" id="0" pos="837,19" title="" class="">
+		<BTLink type="Loop" id="1" flag="0" />
+		<BTLink type="Loop" id="5" flag="0" />
+	</BTNode>
+	<BTNode type="Loop" id="1" pos="842,228" title="" vslot="_time0" looptype="Timer" loopcount="0" delay="0" interval="0.03" />
+	<BTNode type="Action" id="2" pos="786,619" title="" fslot="doRun" vslot="" />
+	<BTNode type="Action" id="3" pos="597,620" title="" fslot="doAttack" vslot="" />
+	<BTNode type="Random" id="4" pos="605,312" title="" randomtype="Weight" range="3" vslot="" weight="50,30,20">
+		<BTLink type="Selection" id="6" flag="0" />
+	</BTNode>
+	<BTNode type="Loop" id="5" pos="605,94" title="" vslot="_time1" looptype="Timer" loopcount="0" delay="0" interval="3">
+		<BTLink type="Random" id="4" flag="0" />
+	</BTNode>
+	<BTNode type="Selection" id="6" pos="602,463" title="" vslot="">
+		<BTLink type="Action" id="2" flag="0" />
+		<BTLink type="Action" id="3" flag="1" />
+		<BTLink type="Action" id="7" flag="2" />
+	</BTNode>
+	<BTNode type="Action" id="7" pos="413,622" title="" fslot="doDie" vslot="" />
+</BTTree>

@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.20506</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <RootNamespace></RootNamespace>
+    <ProjectGuid>{46899280-5E31-84E4-E6B0-287351D735CE}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <AssemblyName>Assembly-CSharp-Editor</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <BaseDirectory>Assets</BaseDirectory>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>Temp\bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;UNITY_5_3_OR_NEWER;UNITY_5_3_6;UNITY_5_3;UNITY_5;ENABLE_NEW_BUGREPORTER;ENABLE_AUDIO;ENABLE_CACHING;ENABLE_CLOTH;ENABLE_DUCK_TYPING;ENABLE_FRAME_DEBUGGER;ENABLE_GENERICS;ENABLE_HOME_SCREEN;ENABLE_IMAGEEFFECTS;ENABLE_LIGHT_PROBES_LEGACY;ENABLE_MICROPHONE;ENABLE_MULTIPLE_DISPLAYS;ENABLE_PHYSICS;ENABLE_PLUGIN_INSPECTOR;ENABLE_SHADOWS;ENABLE_SINGLE_INSTANCE_BUILD_SETTING;ENABLE_SPRITERENDERER_FLIPPING;ENABLE_SPRITES;ENABLE_SPRITE_POLYGON;ENABLE_TERRAIN;ENABLE_RAKNET;ENABLE_UNET;ENABLE_UNITYEVENTS;ENABLE_VR;ENABLE_WEBCAM;ENABLE_WWW;ENABLE_CLOUD_SERVICES;ENABLE_CLOUD_SERVICES_ADS;ENABLE_CLOUD_HUB;ENABLE_CLOUD_PROJECT_ID;ENABLE_CLOUD_SERVICES_PURCHASING;ENABLE_CLOUD_SERVICES_ANALYTICS;ENABLE_CLOUD_SERVICES_UNET;ENABLE_CLOUD_SERVICES_BUILD;ENABLE_CLOUD_LICENSE;ENABLE_EDITOR_METRICS;ENABLE_EDITOR_METRICS_CACHING;INCLUDE_DYNAMIC_GI;INCLUDE_GI;INCLUDE_IL2CPP;INCLUDE_DIRECTX12;PLATFORM_SUPPORTS_MONO;RENDER_SOFTWARE_CURSOR;ENABLE_LOCALIZATION;ENABLE_ANDROID_ATLAS_ETC1_COMPRESSION;ENABLE_EDITOR_TESTS_RUNNER;UNITY_STANDALONE_WIN;UNITY_STANDALONE;ENABLE_SUBSTANCE;ENABLE_TEXTUREID_MAP;ENABLE_RUNTIME_GI;ENABLE_MOVIES;ENABLE_NETWORK;ENABLE_CRUNCH_TEXTURE_COMPRESSION;ENABLE_LOG_MIXED_STACKTRACE;ENABLE_UNITYWEBREQUEST;ENABLE_EVENT_QUEUE;ENABLE_CLUSTERINPUT;ENABLE_WEBSOCKET_HOST;ENABLE_MONO;ENABLE_PROFILER;UNITY_ASSERTIONS;UNITY_EDITOR;UNITY_EDITOR_64;UNITY_EDITOR_WIN;UNITY_TEAM_LICENSE;UNITY_PRO_LICENSE;FEAT_SAFE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoWarn>0169</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>Temp\bin\Release\</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoWarn>0169</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.XML" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="UnityEngine">
+      <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor">
+      <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+     <Compile Include="Assets\Engine\Core\Action\Editor\AnimActionInspector.cs" />
+     <Compile Include="Assets\Engine\Core\Scene\Editor\ActorCreatorEditor.cs" />
+     <Compile Include="Assets\Engine\Core\Scene\Editor\SceneToolEditor.cs" />
+     <Compile Include="Assets\Engine\DevelopTools\Editor\MenuItems.cs" />
+     <Compile Include="Assets\Engine\DevelopTools\Editor\NGUIEditorTools.cs" />
+     <Compile Include="Assets\Lib\AIBone\Editor\AIBoneInspector.cs" />
+     <Compile Include="Assets\Lib\Apshai Arts\CodeGuard\Editor\CodeGuard.cs" />
+     <Compile Include="Assets\Lib\Apshai Arts\CodeGuard\Editor\CodeGuardWindow.cs" />
+     <Compile Include="Assets\Lib\BMFont\Editor\BMFont.cs" />
+     <Compile Include="Assets\Lib\BMFont\Editor\BMFontReader.cs" />
+     <Compile Include="Assets\Lib\BMFont\Editor\BMGlyph.cs" />
+     <Compile Include="Assets\Lib\BMFont\Editor\BetterList.cs" />
+     <Compile Include="Assets\Lib\BMFont\Editor\ByteReader.cs" />
+     <Compile Include="Assets\Lib\MobileMovieTexture\Editor\StreamingAssetsLinkDrawer.cs" />
+     <Compile Include="Assets\Lib\MobileMovieTexture\Editor\YCbCrDrawer.cs" />
+     <Compile Include="Assets\Lib\MobileMovieTexture\Editor\YCbCrPriority.cs" />
+     <Compile Include="Assets\Lib\iTween\Editor\iTweenEventDataEditor.cs" />
+     <Compile Include="Assets\Lib\iTween\Editor\iTweenPathEditor.cs" />
+     <None Include="Assets\Lib\Apshai Arts\CodeGuard\Editor\Compatibility.txt" />
+     <None Include="Assets\Sample\Resources\Table\TBBuff.txt" />
+     <None Include="Assets\Lib\MobileMovieTexture\Shaders\YCrCbtoRGBChromaKey.shader" />
+     <None Include="Assets\Sample\Resources\BT\zhengtaiRT.txt" />
+     <None Include="Assets\Sample\Resources\Table\TBMonster.txt" />
+     <None Include="Assets\Sample\Resources\Shader\Mo_Charactor_Show.shader" />
+     <None Include="Assets\Sample\Resources\Shader\SurfaceShader7.shader" />
+     <None Include="Assets\Lib\DOTween\readme.txt" />
+     <None Include="Assets\Sample\Resources\Shader\MobileBloom.shader" />
+     <None Include="Assets\Lib\Apshai Arts\CodeGuard\Editor\Mobile.txt" />
+     <None Include="Assets\Sample\Resources\Table\TBSkill.txt" />
+     <None Include="Assets\Lib\MobileMovieTexture\Instructions.txt" />
+     <None Include="Assets\Lib\MobileMovieTexture\legal.txt" />
+     <None Include="Assets\builddoc.xml" />
+     <None Include="Assets\Sample\Resources\Shader\SurfaceShader5.shader" />
+     <None Include="Assets\Sample\Resources\Shader\SurfaceShader2.shader" />
+     <None Include="Assets\Lib\MobileMovieTexture\Shaders\YCrCbtoRGBTrans.shader" />
+     <None Include="Assets\Sample\Resources\Shader\Shader4.shader" />
+     <None Include="Assets\Lib\iTween\README.txt" />
+     <None Include="Assets\Sample\Resources\Shader\Shader5.shader" />
+     <None Include="Assets\Engine\Core\NetWork\protobuf-net\Web\TODO.txt" />
+     <None Include="Assets\Lib\3DLib\Resources\TCtrlShader.shader" />
+     <None Include="Assets\Sample\Resources\Table\TBBullet.txt" />
+     <None Include="Assets\Lib\DOTween\DOTween50.xml" />
+     <None Include="Assets\Sample\Resources\Table\TBPlayer.txt" />
+     <None Include="Assets\Sample\Resources\Shader\SurfaceShader1.shader" />
+     <None Include="Assets\Sample\Resources\Shader\ImageShader2.shader" />
+     <None Include="Assets\Lib\HUD Text\ReadMe - 1.9.txt" />
+     <None Include="Assets\Lib\Apshai Arts\CodeGuard\Editor\Web Player.txt" />
+     <None Include="Assets\Lib\Apshai Arts\CodeGuard\Editor\Quick Start.txt" />
+     <None Include="Assets\Sample\Resources\Shader\SurfaceShader6.shader" />
+     <None Include="Assets\Sample\Resources\Shader\Shader2.shader" />
+     <None Include="Assets\Sample\Resources\Sitcom\test.xml.txt" />
+     <None Include="Assets\Lib\Apshai Arts\CodeGuard\Editor\Read Me.txt" />
+     <None Include="Assets\Sample\Resources\Table\TBSound.txt" />
+     <None Include="Assets\Lib\JsonDotNet\ReadMe.txt" />
+     <None Include="Assets\Sample\Resources\Shader\HLSLShader1.shader" />
+     <None Include="Assets\Lib\DOTween\DOTween46.xml" />
+     <None Include="Assets\Sample\Resources\Shader\Shader1.shader" />
+     <None Include="Assets\Lib\MobileMovieTexture\Shaders\YCrCbtoRGB.shader" />
+     <None Include="Assets\Lib\DOTween\DOTween43.xml" />
+     <None Include="Assets\DllExport.xml" />
+     <None Include="Assets\Lib\MobileMovieTexture\Shaders\YCrCbtoRGBSplitAlpha.shader" />
+     <None Include="Assets\Sample\Resources\Shader\HLSLShader2.shader" />
+     <None Include="Assets\Sample\Resources\Shader\SurfaceShader3.shader" />
+     <None Include="Assets\Sample\Resources\Shader\SurfaceShader4.shader" />
+     <None Include="Assets\Lib\MobileMovieTexture\Shaders\YCbCrtoRGB.cginc" />
+     <None Include="Assets\Sample\Resources\Shader\ImageShader1.shader" />
+     <None Include="Assets\Sample\Resources\Shader\Shader3.shader" />
+ <Reference Include="UnityEditor.Advertisements">
+ <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Advertisements/Editor/UnityEditor.Advertisements.dll</HintPath>
+ </Reference>
+ <Reference Include="nunit.framework">
+ <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/EditorTestsRunner/Editor/nunit.framework.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEditor.EditorTestsRunner">
+ <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/EditorTestsRunner/Editor/UnityEditor.EditorTestsRunner.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEngine.UI">
+ <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEditor.UI">
+ <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/Editor/UnityEditor.UI.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEngine.Networking">
+ <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEditor.Networking">
+ <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Networking/Editor/UnityEditor.Networking.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEditor.TreeEditor">
+ <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/TreeEditor/Editor/UnityEditor.TreeEditor.dll</HintPath>
+ </Reference>
+ <Reference Include="ApshaiArts.CodeGuard">
+ <HintPath>D:/pro/ProjectSettings1/Assets/Lib/Apshai Arts/CodeGuard/Editor/ApshaiArts.CodeGuard.dll</HintPath>
+ </Reference>
+ <Reference Include="Mono.Cecil">
+ <HintPath>D:/pro/ProjectSettings1/Assets/Lib/Apshai Arts/CodeGuard/Editor/Mono.Cecil/Mono.Cecil.dll</HintPath>
+ </Reference>
+ <Reference Include="Mono.Cecil.Rocks">
+ <HintPath>D:/pro/ProjectSettings1/Assets/Lib/Apshai Arts/CodeGuard/Editor/Mono.Cecil/Mono.Cecil.Rocks.dll</HintPath>
+ </Reference>
+ <Reference Include="DOTween">
+ <HintPath>D:/pro/ProjectSettings1/Assets/Lib/DOTween/DOTween.dll</HintPath>
+ </Reference>
+ <Reference Include="DOTween43">
+ <HintPath>D:/pro/ProjectSettings1/Assets/Lib/DOTween/DOTween43.dll</HintPath>
+ </Reference>
+ <Reference Include="DOTween46">
+ <HintPath>D:/pro/ProjectSettings1/Assets/Lib/DOTween/DOTween46.dll</HintPath>
+ </Reference>
+ <Reference Include="DOTween50">
+ <HintPath>D:/pro/ProjectSettings1/Assets/Lib/DOTween/DOTween50.dll</HintPath>
+ </Reference>
+ <Reference Include="DOTweenEditor">
+ <HintPath>D:/pro/ProjectSettings1/Assets/Lib/DOTween/Editor/DOTweenEditor.dll</HintPath>
+ </Reference>
+ <Reference Include="Mono.Data.Sqlite">
+ <HintPath>D:/pro/ProjectSettings1/Assets/Lib/SQLite/Plugins/Mono.Data.Sqlite.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEditor.Graphs">
+ <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEditor.Graphs.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEditor.Android.Extensions">
+ <HintPath>C:/Program Files/Unity/Editor/Data/PlaybackEngines/AndroidPlayer/UnityEditor.Android.Extensions.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEditor.iOS.Extensions">
+ <HintPath>C:/Program Files/Unity/Editor/Data/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEditor.WindowsStandalone.Extensions">
+ <HintPath>C:/Program Files/Unity/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll</HintPath>
+ </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Assembly-CSharp.csproj">
+      <Project>{BBA6245C-1AEA-CA3D-CC3F-A7EAA11D35A9}</Project>      <Name>Assembly-CSharp</Name>    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  
+</Project>
