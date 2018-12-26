@@ -730,11 +730,9 @@
      <None Include="Assets\Demo\Resources\Table\TBMonster.txt" />
      <None Include="Assets\Demo\Resources\Skill\leigong.txt" />
      <None Include="Assets\Demo\Resources\Table\TBMove.txt" />
-     <None Include="Assets\Sample\Resources\Table\TBBuff.txt" />
      <None Include="Assets\Lib\MobileMovieTexture\Shaders\YCrCbtoRGBChromaKey.shader" />
      <None Include="Assets\Demo\Resources\Table\TBSkill.txt" />
      <None Include="Assets\Sample\Resources\BT\zhengtaiRT.txt" />
-     <None Include="Assets\Sample\Resources\Table\TBMonster.txt" />
      <None Include="Assets\Sample\Resources\Shader\Mo_Charactor_Show.shader" />
      <None Include="Assets\Demo\Resources\Skill\houyi.txt" />
      <None Include="Assets\Sample\Resources\Shader\SurfaceShader7.shader" />
@@ -744,7 +742,6 @@
      <None Include="Assets\Sample\Resources\Shader\MobileBloom.shader" />
      <None Include="Assets\Demo\Resources\Table\TBEffect.txt" />
      <None Include="Assets\Lib\Apshai Arts\CodeGuard\Editor\Mobile.txt" />
-     <None Include="Assets\Sample\Resources\Table\TBSkill.txt" />
      <None Include="Assets\Lib\MobileMovieTexture\Instructions.txt" />
      <None Include="Assets\Demo\Resources\Skill\lingyuan.txt" />
      <None Include="Assets\Lib\MobileMovieTexture\legal.txt" />
@@ -759,9 +756,7 @@
      <None Include="Assets\Sample\Resources\Shader\Shader5.shader" />
      <None Include="Assets\Engine\Core\NetWork\protobuf-net\Web\TODO.txt" />
      <None Include="Assets\Lib\3DLib\Resources\TCtrlShader.shader" />
-     <None Include="Assets\Sample\Resources\Table\TBBullet.txt" />
      <None Include="Assets\Lib\DOTween\DOTween50.xml" />
-     <None Include="Assets\Sample\Resources\Table\TBPlayer.txt" />
      <None Include="Assets\Sample\Resources\Shader\SurfaceShader1.shader" />
      <None Include="Assets\Sample\Resources\Shader\ImageShader2.shader" />
      <None Include="Assets\Lib\HUD Text\ReadMe - 1.9.txt" />
@@ -773,7 +768,6 @@
      <None Include="Assets\Sample\Resources\Shader\Shader2.shader" />
      <None Include="Assets\Sample\Resources\Sitcom\test.xml.txt" />
      <None Include="Assets\Lib\Apshai Arts\CodeGuard\Editor\Read Me.txt" />
-     <None Include="Assets\Sample\Resources\Table\TBSound.txt" />
      <None Include="Assets\Lib\JsonDotNet\ReadMe.txt" />
      <None Include="Assets\Sample\Resources\Shader\HLSLShader1.shader" />
      <None Include="Assets\Lib\DOTween\DOTween46.xml" />
@@ -797,6 +791,9 @@
  <Reference Include="UnityEngine.Networking">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
  </Reference>
+ <Reference Include="Log">
+ <HintPath>D:/myGitHub/AraleEngine/AraleEngine/Assets/Engine/Core/Log/Log.dll</HintPath>
+ </Reference>
  <Reference Include="DOTween">
  <HintPath>D:/myGitHub/AraleEngine/AraleEngine/Assets/Lib/DOTween/DOTween.dll</HintPath>
  </Reference>
@@ -811,9 +808,6 @@
  </Reference>
  <Reference Include="Mono.Data.Sqlite">
  <HintPath>D:/myGitHub/AraleEngine/AraleEngine/Assets/Lib/SQLite/Plugins/Mono.Data.Sqlite.dll</HintPath>
- </Reference>
- <Reference Include="Log">
- <HintPath>D:/myGitHub/AraleEngine/AraleEngine/Assets/Engine/Core/Log/Log.dll</HintPath>
  </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,2 +1,0 @@
-{"_id":1,"type":1,"skillBuff":2,"distance":5,"cd":3}
-{"_id":2,"type":1,"skillBuff":4,"distance":5,"cd":1}
