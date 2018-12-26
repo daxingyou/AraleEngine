@@ -21,14 +21,23 @@ namespace Arale.Engine
 
         //即使processLuaEvent什么不做,因c#与lua交互调用也将耗时,当lua没有事件处理时应当将hasEvent置为false
         public static bool hasEvent = false;
+		public static LuaRoot single{get{ return mThis;}}
         void Awake() {
-    		LUA_PATH = Application.dataPath + "/lua/";
+			LUA_PATH = Application.dataPath + "/lua/";
     		mThis = this;
             DontDestroyOnLoad(gameObject);
+			Init ();
+        }
 
-    		Log.i ("lua init begin");
-    		mL = new LuaState();
-    		bindLuaClass(this);
+		public void Init()
+		{
+			Log.i ("lua init begin path="+LUA_PATH, Log.Tag.Default);
+			if (mL != null)
+			{
+				mL.Dispose (true);
+			}
+			mL = new LuaState();
+			bindLuaClass(this);
 			//添加lua查找路径,并执行入口脚本main.lua
     		mL.DoString ("package.path = package.path .. ';' .. '" + LUA_PATH + "?.lua';require 'main';");
     		mNewLuaObject    = (LuaFunction)mL["newLuaObject"];
@@ -38,9 +47,7 @@ namespace Arale.Engine
             ((LuaFunction)mL["main"]).Call();
     		Log.i ("lua init end");
         }
-
-    	public static LuaRoot single{get{ return mThis;}}
-
+	
     	#region lua辅助接口
     	//定义一个注解属性,实现自动注册Lua函数,lua可以调用这个注解了的函数[RegLuaFunc("luaFuncName")]
     	public class RegLuaFunc:Attribute

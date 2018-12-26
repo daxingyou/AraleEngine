@@ -1,0 +1,20 @@
+﻿{
+	"skill":[
+		{"action":[
+			{"anim":"attack"},
+			{"delay":0.5, "area":"3,4.00,72.00", "harm":10}
+		]},
+		{"action":[
+			{"anim":"skill01"},
+			{"delay":1.3, "area":"2,2.00,6.00", "bullet":601, "harm":10}
+		]},
+		{"action":[
+			{"anim":"skill02"},
+			{"delay":1.5, "area":"2,2.00,3.20", "bullet":602, "buff":1009}
+		]},
+		{"action":[
+			{"anim":"skill04"},
+			{"delay":2, "area":"2,2.00,3.20", "bullet":603, "harm":50}
+		]}
+	]
+}

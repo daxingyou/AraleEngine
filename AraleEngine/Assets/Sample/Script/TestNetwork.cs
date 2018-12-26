@@ -19,7 +19,7 @@ public class TestNetwork : GRoot
     protected override void gameExit()
     {
         NetworkMgr.single.Deinit ();
-        EventMgr.single.UnAddListener(NetworkMgr.EventConnect, onEventConnect);
+		EventMgr.single.RemoveListener(NetworkMgr.EventConnect, onEventConnect);
     }
 
     protected override void gameUpdate()

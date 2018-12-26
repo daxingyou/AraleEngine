@@ -14,17 +14,18 @@ namespace Arale.Engine
     public class TableMgr : MgrBase<TableMgr>
     {
         public const string TestTablePath = "/Engine/Sample/Resources/Table/";
-        public static bool  testModel;
+        public static bool  TestModel;
         Dictionary<Type, TableData> DataPoolDic = new Dictionary<Type, TableData>();
         Dictionary<Type, ITableBuilder> builders = new Dictionary<Type, ITableBuilder>();
         public override void Init()
     	{
+			builders.Add(typeof(TBPlayer), new TableBuilder<TBPlayer>());
+			builders.Add(typeof(TBMonster), new TableBuilder<TBMonster>());
             builders.Add(typeof(TBBuff), new TableBuilder<TBBuff>());
             builders.Add(typeof(TBSkill), new TableBuilder<TBSkill>());
-            builders.Add(typeof(TBPlayer), new TableBuilder<TBPlayer>());
-            builders.Add(typeof(TBMonster), new TableBuilder<TBMonster>());
-            builders.Add(typeof(TBBullet), new TableBuilder<TBBullet>());
             builders.Add(typeof(TBSound), new TableBuilder<TBSound>());
+			builders.Add(typeof(TBEffect), new TableBuilder<TBEffect>());
+			builders.Add(typeof(TBMove), new TableBuilder<TBMove>());
             mDirty = true;
     	}
 
@@ -35,11 +36,11 @@ namespace Arale.Engine
     		//Released to reload
     		if(!mDirty)return;
     		DataPoolDic.Clear ();
-    		GRoot.single.StartCoroutine(PreBuildTable());
+    		GRoot.single.StartCoroutine(preBuildTable());
     		mDirty=false;
     	}
 
-    	IEnumerator PreBuildTable()
+    	IEnumerator preBuildTable()
     	{
     		WaitForEndOfFrame w = new WaitForEndOfFrame ();
             yield return w;
@@ -66,7 +67,7 @@ namespace Arale.Engine
                 }
             }
 
-    		Log.e(type + "配表没有找到对应的id：" + key + ". 谁该请吃可爱多啊?");
+    		Log.e(type + "配表没有找到对应的id：" + key);
     		return null;
     	}
 
@@ -82,6 +83,7 @@ namespace Arale.Engine
                 }
 
             }
+			Log.e(typeof(T) + "配表没有找到对应的id：" + key);
             return null;
         }
 
@@ -122,6 +124,15 @@ namespace Arale.Engine
                 DataPoolDic.Add(type, data_pool);
             }
         }
+
+		public void ReloadData(Type type)
+		{
+			if (DataPoolDic.ContainsKey (type))
+			{
+				DataPoolDic.Remove (type);
+			}
+			GetDataPool (type);
+		}
     }
 
 }

@@ -11,8 +11,11 @@ namespace Arale.Engine
 
     public class TBMonster: TableBase
     {
+		public string name="";
         public string model="";
-        public string btPath="";
+		public float  speed=0f;
+        public string ai="";
+		public string skills="";
 
         public override void Init(string[] value)
         {
@@ -20,8 +23,8 @@ namespace Arale.Engine
 
             model = value[1];
             model = model.Replace("\\n", "\n");
-            btPath = value[2];
-            btPath = btPath.Replace("\\n", "\n"); 
+            ai = value[2];
+            ai = ai.Replace("\\n", "\n"); 
         }
     }
 

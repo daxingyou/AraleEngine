@@ -1,0 +1,39 @@
+{"_id":100,"move":1,"model":"effect/houyi/huoyi_ba_active01","srcMount":"Bone001","desc":"后羿箭"}
+{"_id":101,"move":1,"model":"effect/houyi/huoyi_s01_active02","srcMount":"Bone001","desc":"后羿箭(强化)"}
+{"_id":200,"move":2,"model":"effect/ehuang/ehuang_BA_zidan01","srcMount":"Bone001","desc":"娥皇大魔法球"}
+{"_id":201,"move":2,"model":"effect/ehuang/ehuang_BA_zs01","srcMount":"Bone001","desc":"娥皇小魔法球"}
+{"_id":202,"move":3,"model":"effect/ehuang/ehuang_BA_zs02","srcMount":"Bone001","desc":"娥皇拖尾魔法球"}
+{"_id":601,"move":4,"model":"effect/leigong/leigong_S01_active02","life":3.0,"desc":"雷公闪电1"}
+{"_id":602,"move":4,"model":"effect/leigong/leigong_S02_active01","life":20.0,"desc":"雷公闪电2"}
+{"_id":603,"move":4,"model":"effect/leigong/leigong_S04_active02","life":3.0,"desc":"雷公闪电3"}
+{"_id":601080,"model":"Effect/lingyuan/lingyuan_S01_active01","life":3.0}
+{"_id":107002,"model":"Effect/lingyuan/lingyuan_S01_active01","life":3.0}
+{"_id":107003,"model":"Effect/lingyuan/lingyuan_S02_active01","life":3.0}
+{"_id":148002,"model":"Effect/yuxiaoxue/yuxiaoxue_S01_active01","life":3.0}
+{"_id":148003,"model":"Effect/yuxiaoxue/yuxiaoxue_S01_active02","life":3.0}
+{"_id":148016,"model":"Effect/yuxiaoxue/yuxiaoxue_S01_active03","life":3.0}
+{"_id":148004,"model":"Effect/yuxiaoxue/yuxiaoxue_S02_active01","life":3.0}
+{"_id":148005,"model":"Effect/yuxiaoxue/yuxiaoxue_S02_active02","life":3.0}
+{"_id":148015,"model":"Effect/yuxiaoxue/yuxiaoxue_S02_active03","life":3.0}
+{"_id":148006,"model":"Effect/yuxiaoxue/yuxiaoxue_S04_active01","life":3.0}
+{"_id":148007,"model":"Effect/yuxiaoxue/yuxiaoxue_S04_active02","life":3.0}
+{"_id":102004,"model":"Effect/sunwukong/sunwukong_S01_a1","life":3.0}
+{"_id":102015,"model":"Effect/sunwukong/sunwukong_S01_a2","life":3.0}
+{"_id":102006,"model":"Effect/sunwukong/sunwukong_S02_a1","life":3.0}
+{"_id":102003,"model":"Effect/sunwukong/sunwukong_S03_a1","life":3.0}
+{"_id":102002,"model":"Effect/sunwukong/sunwukong_S04_a1","life":3.0}
+{"_id":118002,"model":"Effect/ehuang/ehuang_S04_active01","life":3.0}
+{"_id":118003,"model":"Effect/ehuang/ehuang_S01_active01","life":3.0}
+{"_id":118006,"model":"Effect/ehuang/ehuang_S02_active01","life":3.0}
+{"_id":109001,"model":"Effect/nezha/nezha_S02_active01","life":3.0,"srcMount":"Bip001 R Hand","srcPos":{"x":0.0,"y":0.0,"z":2.0}}
+{"_id":109003,"model":"Effect/nezha/nezha_S02_active02","life":3.0}
+{"_id":109002,"model":"Effect/nezha/nezha_S01_active01","life":3.0}
+{"_id":109004,"model":"Effect/nezha/nezha_S02_active01","life":3.0,"srcMount":"Bip001 R Hand","srcPos":{"x":0.0,"y":0.0,"z":2.0}}
+{"_id":109005,"model":"Effect/nezha/nezha_S04_active04","life":3.0,"srcPos":{"x":0.0,"y":0.0,"z":1.0}}
+{"_id":109006,"model":"Effect/nezha/nezha_S04_active02","life":3.0,"srcMount":"Bip001 R Hand","srcPos":{"x":0.0,"y":0.0,"z":0.0}}
+{"_id":109015,"model":"Effect/nezha/nezha_S04_active04","life":3.0,"srcPos":{"x":0.0,"y":0.0,"z":1.0}}
+{"_id":109007,"model":"Effect/nezha/nezha_S04_active01","life":3.0,"srcPos":{"x":0.0,"y":0.0,"z":2.0}}
+{"_id":109008,"model":"Effect/nezha/nezha_S04_active03","life":3.0,"srcMount":"Bip001 R Hand","srcPos":{"x":0.0,"y":0.0,"z":2.0}}
+{"_id":104001,"model":"Effect/leigong/leigong_S01_active01","life":3.0,"srcMount":"Bip001 L Hand","desc":"2"}
+{"_id":104002,"model":"Effect/leigong/leigong_S01_hit01","life":3.0,"srcMount":"Bip001 L Hand","desc":"3"}
+{"_id":104003,"model":"Effect/leigong/leigong_S01_hit03","life":3.0,"srcMount":"Bip001 L Hand","desc":"4"}

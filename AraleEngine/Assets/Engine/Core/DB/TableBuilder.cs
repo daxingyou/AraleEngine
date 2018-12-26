@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System.IO;
+using System;
 
 namespace Arale.Engine
 {
@@ -18,15 +19,23 @@ public class TableBuilder<T> : ITableBuilder where T:TableBase, new()
 	public override Dictionary<int, TableBase> build()
 	{
         Dictionary<int, TableBase> dic = new Dictionary<int, TableBase>();
-        if (TableMgr.testModel)
+        if (TableMgr.TestModel)
         {
             string path = string.Format("Table/{0}", typeof(T).Name);
             TextAsset ta = ResLoad.get(path).asset<TextAsset>();
             string[] datas = ta.text.Split(new char[]{'\n'}, System.StringSplitOptions.RemoveEmptyEntries);
             for (int i = 0; i < datas.Length; ++i)
             {
-                TableBase record = JsonUtility.FromJson(datas[i], typeof(T)) as TableBase;
-                dic.Add(record.id, record);
+				if(string.IsNullOrEmpty(datas[i]))continue;
+				try
+				{
+            		TableBase record = JsonUtility.FromJson(datas[i], typeof(T)) as TableBase;
+					dic.Add(record.id, record);
+				}
+				catch(Exception e)
+				{
+					Log.e ("fmt error:" + datas [i]);
+				}
             }
         }
         else
@@ -43,7 +52,7 @@ public class TableBuilder<T> : ITableBuilder where T:TableBase, new()
 
                 if (true == dic.ContainsKey(_t.id))
                 {
-                    Log.e("表 " + typeof(T) + " 中有重复id: " + _t.id + " 【谁该请吃可爱多啊？】", Log.Tag.DB);
+                    Log.e("表[" + typeof(T) + "]有重复id:" + _t.id, Log.Tag.DB);
                     continue;
                 }
                 dic.Add(_t.id, _t);

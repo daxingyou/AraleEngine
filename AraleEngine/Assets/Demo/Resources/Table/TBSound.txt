@@ -1,0 +1,4 @@
+{"_id":1,"asset":"Sound/login","loop":1,"duration":0.0,"volume":1.0}
+{"_id":2,"asset":"Sound/main","loop":1,"duration":0.0,"volume":1.0}
+{"_id":3,"asset":"Sound/battle","loop":1,"duration":0.0,"volume":1.0}
+{"_id":4,"asset":"Sound/youshang","loop":1,"duration":0.0,"volume":1.0}

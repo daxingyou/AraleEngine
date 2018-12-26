@@ -1,0 +1,86 @@
+fileFormatVersion: 2
+guid: 46e30c513d6d411489800a2547adc09a
+ModelImporter:
+  serializedVersion: 16
+  fileIDToRecycleName:
+    100000: body_bone
+    100002: head_bone
+    100004: //RootNode
+    100006: Phoenix_mesh
+    100008: Phoenix_root
+    100010: tile01_Bone
+    100012: tile02_Bone
+    100014: tile03_Bone
+    100016: wing01_L
+    100018: wing01_R
+    100020: wing02_L
+    100022: wing02_R
+    400000: body_bone
+    400002: head_bone
+    400004: //RootNode
+    400006: Phoenix_mesh
+    400008: Phoenix_root
+    400010: tile01_Bone
+    400012: tile02_Bone
+    400014: tile03_Bone
+    400016: wing01_L
+    400018: wing01_R
+    400020: wing02_L
+    400022: wing02_R
+    4300000: Phoenix_mesh
+    9500000: //RootNode
+    13700000: Phoenix_mesh
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: .00999999978
+    meshCompression: 3
+    addColliders: 0
+    importBlendShapes: 0
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 2
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  additionalBone: 0
+  userData: 

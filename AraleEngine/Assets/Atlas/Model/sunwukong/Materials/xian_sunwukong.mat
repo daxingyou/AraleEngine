@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: xian_sunwukong
+  m_Shader: {fileID: 4800000, guid: 67fd320283a1a39469de20008e26c2b3, type: 3}
+  m_ShaderKeywords: []
+  m_CustomRenderQueue: -1
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+      data:
+        first:
+          name: _MainTex
+        second:
+          m_Texture: {fileID: 2800000, guid: dcb6a26f60700f042a8aba54e3b41e96, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+    m_Floats:
+      data:
+        first:
+          name: _Cutoff
+        second: .150000006
+      data:
+        first:
+          name: _Shininess
+        second: 2.79999995
+      data:
+        first:
+          name: _Warp
+        second: 1.66999996
+      data:
+        first:
+          name: _Ambient
+        second: 1.48000002
+      data:
+        first:
+          name: _Outline
+        second: .00400000019
+      data:
+        first:
+          name: _ZSmooth
+        second: -.5
+    m_Colors:
+      data:
+        first:
+          name: _LightDir
+        second: {r: .680000007, g: 3.49000001, b: -9.96000004, a: 0}
+      data:
+        first:
+          name: _LightColor
+        second: {r: .301470578, g: .285877287, b: .23496972, a: 1}
+      data:
+        first:
+          name: _Color
+        second: {r: .448529422, g: .448529422, b: .448529422, a: 1}
+      data:
+        first:
+          name: _SpecularColor
+        second: {r: .17560555, g: .20588237, b: .183174774, a: 1}
+      data:
+        first:
+          name: _OutlineColor
+        second: {r: 0, g: 0, b: 0, a: 1}

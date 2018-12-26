@@ -6,18 +6,28 @@ print(package.path)
 require "common/LClass"
 require "common/LObject"
 --=====================your code begin=================
---WHelper = luanet.import_type("WHelper");
---local a = newLuaObject("LPrefabItem");
+--==============unity
+Matrix4x4 = luanet.import_type("UnityEngine.Matrix4x4");
+Quaternion = luanet.import_type("UnityEngine.Quaternion");
+Vector3 = luanet.import_type("UnityEngine.Vector3");
+Vector2 = luanet.import_type("UnityEngine.Vector2");
+--==============引擎
 GRoot = luanet.import_type("Arale.Engine.GRoot")
+AssetRef = luanet.import_type("Arale.Engine.AssetRef")
 WindowMgr = luanet.import_type("Arale.Engine.WindowMgr")
 EventListener = luanet.import_type("Arale.Engine.EventListener")
 SceneMgr = luanet.import_type("Arale.Engine.SceneMgr")
 EventMgr = luanet.import_type("Arale.Engine.EventMgr")
-AssetRef = luanet.import_type("Arale.Engine.AssetRef")
+TimeMgr = luanet.import_type("Arale.Engine.TimeMgr");
+NetworkMgr = luanet.import_type("Arale.Engine.NetworkMgr");
 UISwitch = luanet.import_type("UISwitch")
 LHelp    = luanet.import_type("LHelp")
+ProtoWriter = luanet.import_type("ProtoBuf.ProtoWriter");
+WireType = luanet.import_type("ProtoBuf.WireType");
+--==============模板
 --通过Debug.Log(typeof(List<object>)模板类的真实名称
 List_object= luanet.import_type("System.Collections.Generic.List`1[System.Object]")
+--==============
 require "game/ui/LStartWindow"
 require "game/ui/LLoginWindow"
 require "game/ui/LMainWindow"
@@ -33,7 +43,6 @@ require "game/ui/bag/LBagItem"
 require "game/ui/bag/LItemSlot"
 require "game/ui/LRoleCreateWindow"
 require "game/ui/LRoleCreateWindowItem"
-
 print("require all ok");
 --=====================================================
 function  main( ... )
@@ -52,6 +61,7 @@ function  main( ... )
 
 	LBag:Init()
 
+	if GRoot.single.mLaunchFlag~=0 then return end
 	EventMgr.single:AddListener(GRoot.EventSceneLoad, onSceneLoaded)
 	SceneMgr.single:LoadScene("Login")
 	print("main.lua ok");

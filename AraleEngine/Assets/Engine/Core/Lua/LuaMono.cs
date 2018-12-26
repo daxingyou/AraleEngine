@@ -72,6 +72,7 @@ namespace Arale.Engine
         [NonSerialized]public Action<LuaTable> luaOnUpdate;
         [NonSerialized]public Action<LuaTable> luaOnDisable;
         [NonSerialized]public Action<LuaTable> luaOnDestroy;
+		[NonSerialized]public Func<int,object,bool> luaOnEvent;
     	#endregion
 
 
@@ -114,6 +115,16 @@ namespace Arale.Engine
         protected virtual void onDestroy(){}
         protected virtual void onEnable(){}
         protected virtual void onDisable(){}
+
+		protected virtual bool onEvent(int evt, object param, object sender)
+		{
+			if (luaOnEvent != null)return luaOnEvent (evt, param);
+			return false;
+		}
+		public void sendEvent(int evt, object param)
+		{
+			onEvent (evt,param,this);
+		}
     }
 
 }

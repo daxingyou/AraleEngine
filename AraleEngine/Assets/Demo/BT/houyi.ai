@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<BTTree version="0" guid="67622a7885ac45f49be5c63325ba7adc">
+	<BTNode type="Root" id="0" pos="485,26" title="" class="">
+		<BTLink type="Loop" id="6" flag="0" />
+	</BTNode>
+	<BTNode type="Action" id="1" pos="319,508" title="" fslot="doPatrol" vslot="" />
+	<BTNode type="Action" id="2" pos="1108,471" title="" fslot="doFlee" vslot="" />
+	<BTNode type="Action" id="3" pos="772,509" title="" fslot="doSkill" vslot="" />
+	<BTNode type="Condition" id="4" pos="540,195" title="">
+		<BTLink type="Action" id="5" flag="0" />
+		<BTLink type="Condition" id="9" flag="0" />
+		<BTLink type="Condition" id="10" flag="1" />
+		<VSlot name="hasTarget" cmp="0" val="1" />
+	</BTNode>
+	<BTNode type="Action" id="5" pos="542,416" title="" fslot="doTarget" vslot="" />
+	<BTNode type="Loop" id="6" pos="769,2" title="" vslot="_time0" looptype="Frame" loopcount="0" delay="0" interval="1">
+		<BTLink type="Condition" id="7" flag="0" />
+	</BTNode>
+	<BTNode type="Condition" id="7" pos="770,196" title="">
+		<BTLink type="Condition" id="8" flag="0" />
+		<BTLink type="Condition" id="4" flag="1" />
+		<VSlot name="HP" cmp="3" val="20" />
+	</BTNode>
+	<BTNode type="Condition" id="8" pos="1105,197" title="">
+		<BTLink type="SetValue" id="11" flag="1" />
+		<BTLink type="Action" id="2" flag="1" />
+		<VSlot name="fleeing" cmp="0" val="0" />
+	</BTNode>
+	<BTNode type="Condition" id="9" pos="318,323" title="">
+		<BTLink type="SetValue" id="13" flag="0" />
+		<BTLink type="Action" id="1" flag="1" />
+		<VSlot name="patroling" cmp="0" val="0" />
+	</BTNode>
+	<BTNode type="Condition" id="10" pos="770,325" title="">
+		<BTLink type="SetValue" id="12" flag="0" />
+		<BTLink type="Action" id="3" flag="1" />
+		<VSlot name="skilling" cmp="0" val="0" />
+	</BTNode>
+	<BTNode type="SetValue" id="11" pos="1000,346" title="">
+		<VSlot name="skilling" op="0" val="1" />
+		<VSlot name="patroling" op="0" val="1" />
+	</BTNode>
+	<BTNode type="SetValue" id="12" pos="599,512" title="">
+		<VSlot name="fleeing" op="0" val="0" />
+		<VSlot name="patroling" op="0" val="0" />
+	</BTNode>
+	<BTNode type="SetValue" id="13" pos="469,514" title="">
+		<VSlot name="skilling" op="0" val="0" />
+		<VSlot name="fleeing" op="0" val="0" />
+	</BTNode>
+</BTTree>

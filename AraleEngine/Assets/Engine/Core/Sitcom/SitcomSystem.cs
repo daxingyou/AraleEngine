@@ -110,7 +110,7 @@ namespace Arale.Engine
 			public string  sendEvetn;
 			void OnWaitEvent(EventMgr.EventData eb)
 			{
-                EventMgr.single.UnAddListener ("Sitcom."+waitEvent, OnWaitEvent);
+				EventMgr.single.RemoveListener ("Sitcom."+waitEvent, OnWaitEvent);
 				waitEvent = null;
 				RunNextAction ();
 			}

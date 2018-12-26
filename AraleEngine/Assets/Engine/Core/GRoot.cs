@@ -12,6 +12,7 @@ namespace Arale.Engine
         public const string EventGameFocus = "Game.Focus";
         public static GRoot single;
         public int mLaunchFlag;
+		public Transform uiRoot;
         [System.NonSerialized]
         public GConfig mConfig;
         [System.NonSerialized]

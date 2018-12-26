@@ -1,0 +1,122 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: chjingchou_yihuajiemu02
+  m_Shader: {fileID: 4800000, guid: 82c70846a0d5fc54999b229a7bb5cd17, type: 3}
+  m_ShaderKeywords: []
+  m_CustomRenderQueue: -1
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+      data:
+        first:
+          name: _MainTex
+        second:
+          m_Texture: {fileID: 2800000, guid: 3291f1118dfe4ba49ad4f707bb042c18, type: 3}
+          m_Scale: {x: .300000012, y: 1}
+          m_Offset: {x: 0, y: 0}
+      data:
+        first:
+          name: _InterlacePattern
+        second:
+          m_Texture: {fileID: 2800000, guid: 96130b3ff63dbf94391cedd5bc64a42e, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 1, y: 1}
+      data:
+        first:
+          name: _DetailTex
+        second:
+          m_Texture: {fileID: 2800000, guid: 3291f1118dfe4ba49ad4f707bb042c18, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+    m_Floats:
+      data:
+        first:
+          name: _InvFade
+        second: 1
+      data:
+        first:
+          name: _Shininess
+        second: .699999988
+      data:
+        first:
+          name: _CloudSpeed
+        second: .821428597
+      data:
+        first:
+          name: _CloudPower
+        second: 1
+      data:
+        first:
+          name: _ScrollX
+        second: 1
+      data:
+        first:
+          name: _ScrollY
+        second: 0
+      data:
+        first:
+          name: _Scroll2X
+        second: 0
+      data:
+        first:
+          name: _Scroll2Y
+        second: 0
+      data:
+        first:
+          name: _SineAmplX
+        second: 0
+      data:
+        first:
+          name: _SineAmplY
+        second: 0
+      data:
+        first:
+          name: _SineFreqX
+        second: 0
+      data:
+        first:
+          name: _SineFreqY
+        second: 0
+      data:
+        first:
+          name: _SineAmplX2
+        second: 0
+      data:
+        first:
+          name: _SineAmplY2
+        second: 0
+      data:
+        first:
+          name: _SineFreqX2
+        second: 0
+      data:
+        first:
+          name: _SineFreqY2
+        second: 0
+      data:
+        first:
+          name: _MMultiplier
+        second: 3
+    m_Colors:
+      data:
+        first:
+          name: _Color
+        second: {r: .353211492, g: .745294452, b: 1, a: 1}
+      data:
+        first:
+          name: _TintColor
+        second: {r: 1, g: .974645019, b: .963235319, a: .501960814}
+      data:
+        first:
+          name: _SpecColor
+        second: {r: 1, g: 1, b: 1, a: 1}
+      data:
+        first:
+          name: _Emission
+        second: {r: 0, g: 0, b: 0, a: 0}

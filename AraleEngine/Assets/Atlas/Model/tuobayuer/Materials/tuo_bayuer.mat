@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: tuo_bayuer
+  m_Shader: {fileID: 4800000, guid: 67fd320283a1a39469de20008e26c2b3, type: 3}
+  m_ShaderKeywords: []
+  m_CustomRenderQueue: -1
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+      data:
+        first:
+          name: _MainTex
+        second:
+          m_Texture: {fileID: 2800000, guid: e0fbd3656675c4242bb42dadd3c1195f, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+    m_Floats:
+      data:
+        first:
+          name: _Cutoff
+        second: .5
+      data:
+        first:
+          name: _Shininess
+        second: 8.21000004
+      data:
+        first:
+          name: _Warp
+        second: 1.09000003
+      data:
+        first:
+          name: _Ambient
+        second: .819999993
+    m_Colors:
+      data:
+        first:
+          name: _LightDir
+        second: {r: 1.13999999, g: 2.80999994, b: -.270000011, a: 0}
+      data:
+        first:
+          name: _LightColor
+        second: {r: .117647052, g: .117647052, b: .117647052, a: 1}
+      data:
+        first:
+          name: _Color
+        second: {r: .588235259, g: .588235259, b: .588235259, a: 1}
+      data:
+        first:
+          name: _SpecularColor
+        second: {r: .0294117928, g: .0287630036, b: .0287630036, a: 1}

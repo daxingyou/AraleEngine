@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: nezha
+  m_Shader: {fileID: 4800000, guid: 67fd320283a1a39469de20008e26c2b3, type: 3}
+  m_ShaderKeywords: []
+  m_CustomRenderQueue: -1
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+      data:
+        first:
+          name: _MainTex
+        second:
+          m_Texture: {fileID: 2800000, guid: 06f4f73f160a2344e893c1a4756fb1b0, type: 3}
+          m_Scale: {x: 1, y: 1}
+          m_Offset: {x: 0, y: 0}
+    m_Floats:
+      data:
+        first:
+          name: _Cutoff
+        second: .5
+      data:
+        first:
+          name: _Shininess
+        second: 2.28999996
+      data:
+        first:
+          name: _Warp
+        second: 1.74000001
+      data:
+        first:
+          name: _Ambient
+        second: .25999999
+    m_Colors:
+      data:
+        first:
+          name: _LightDir
+        second: {r: 7.6500001, g: 16.7999992, b: -33.6300011, a: -.25}
+      data:
+        first:
+          name: _LightColor
+        second: {r: .448529422, g: .448529422, b: .448529422, a: 1}
+      data:
+        first:
+          name: _Color
+        second: {r: .963235319, g: .963235319, b: .963235319, a: 1}
+      data:
+        first:
+          name: _SpecularColor
+        second: {r: .0220588446, g: .0204368699, b: .0204368699, a: 1}

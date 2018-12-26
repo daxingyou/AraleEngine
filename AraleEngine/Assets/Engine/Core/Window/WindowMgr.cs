@@ -21,7 +21,7 @@ namespace Arale.Engine
 
         public override void Deinit()
         {
-            EventMgr.single.UnAddListener ("Window", onWindowMessage);
+			EventMgr.single.RemoveListener ("Window", onWindowMessage);
         }
 
 

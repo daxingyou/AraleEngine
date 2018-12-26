@@ -38,7 +38,7 @@ namespace Arale.Engine
 		
 		public void deinit()
 		{
-            EventMgr.single.UnAddListener("UpdateEvent",updateCallBack);
+			EventMgr.single.RemoveListener("UpdateEvent",updateCallBack);
 		}
 		//==========================================================================
 		public enum Event

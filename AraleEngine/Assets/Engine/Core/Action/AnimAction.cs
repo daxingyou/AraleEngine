@@ -123,7 +123,7 @@ namespace Arale.Engine
 
 		void OnDestroy()
 		{
-            EventMgr.single.UnAddListener (mActionName, onAnimActionMessage);
+			EventMgr.single.RemoveListener (mActionName, onAnimActionMessage);
 		}
 
         void onAnimActionMessage(EventMgr.EventData eb)

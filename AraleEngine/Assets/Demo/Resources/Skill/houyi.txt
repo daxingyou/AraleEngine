@@ -1,0 +1,23 @@
+﻿{
+	"skill":[
+		{"action":[
+			{"anim":"attack"},
+			{"delay":1, "bullet":-100, "harm":10}
+		]},
+		{"action":[
+			{"anim":"skill01"},
+			{"delay":0.5, "bullet":-100, "harm":10},
+			{"delay":1, "bullet":-100, "harm":10},
+			{"delay":1.5, "bullet":-101, "harm":10}
+		]},
+		{"action":[
+			{"anim":"skill02"},
+			{"delay":1.5, "bullet":-100, "harm":101}
+		]},
+		{"action":[
+			{"anim":"skill04"},
+			{"delay":2, "bullet":-100, "harm":10},
+			{"delay":2.2, "bullet":-100, "harm":10},
+			{"delay":2.5, "bullet":-101, "harm":10}
+		]}
+]}

@@ -41,9 +41,9 @@ public class TestNetWork : GRoot {
 	protected override void gameExit(){
 		NetworkMgr.single.getHandler (1).unregHandler (onPacketCallback);
 		EventMgr.single.AddListener (NetworkMgr.EventSendError, onSendError);
-		EventMgr.single.UnAddListener (NetworkMgr.EventRecvError, onReciveError);
-		EventMgr.single.UnAddListener (NetworkMgr.EventConnect, onNetConnect);
-		EventMgr.single.UnAddListener (NetworkMgr.EventDisconnect, onNetDisconnet);
+		EventMgr.single.RemoveListener (NetworkMgr.EventRecvError, onReciveError);
+		EventMgr.single.RemoveListener (NetworkMgr.EventConnect, onNetConnect);
+		EventMgr.single.RemoveListener (NetworkMgr.EventDisconnect, onNetDisconnet);
 		NetworkMgr.single.Deinit ();
 	}
 

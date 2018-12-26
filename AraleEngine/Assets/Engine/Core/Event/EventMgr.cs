@@ -33,7 +33,7 @@ namespace Arale.Engine
 			} 
 		}
 		
-        public void UnAddListener(string id, EventCallback callback)
+        public void RemoveListener(string id, EventCallback callback)
 		{
 			lock (this)
 			{

@@ -50,6 +50,9 @@
      <Compile Include="Assets\Engine\Core\Scene\Editor\SceneToolEditor.cs" />
      <Compile Include="Assets\Engine\DevelopTools\Editor\MenuItems.cs" />
      <Compile Include="Assets\Engine\DevelopTools\Editor\NGUIEditorTools.cs" />
+     <Compile Include="Assets\Engine\Game\Area\Editor\GameAreaInsp.cs" />
+     <Compile Include="Assets\Engine\Game\Skill\Editor\SkillEvent.cs" />
+     <Compile Include="Assets\Engine\Game\Skill\Editor\SkillWindow.cs" />
      <Compile Include="Assets\Lib\AIBone\Editor\AIBoneInspector.cs" />
      <Compile Include="Assets\Lib\Apshai Arts\CodeGuard\Editor\CodeGuard.cs" />
      <Compile Include="Assets\Lib\Apshai Arts\CodeGuard\Editor\CodeGuardWindow.cs" />
@@ -64,20 +67,31 @@
      <Compile Include="Assets\Lib\iTween\Editor\iTweenEventDataEditor.cs" />
      <Compile Include="Assets\Lib\iTween\Editor\iTweenPathEditor.cs" />
      <None Include="Assets\Lib\Apshai Arts\CodeGuard\Editor\Compatibility.txt" />
+     <None Include="Assets\Demo\Resources\Table\TBMonster.txt" />
+     <None Include="Assets\Demo\Resources\Skill\leigong.txt" />
+     <None Include="Assets\Demo\Resources\Table\TBMove.txt" />
      <None Include="Assets\Sample\Resources\Table\TBBuff.txt" />
      <None Include="Assets\Lib\MobileMovieTexture\Shaders\YCrCbtoRGBChromaKey.shader" />
+     <None Include="Assets\Demo\Resources\Table\TBSkill.txt" />
      <None Include="Assets\Sample\Resources\BT\zhengtaiRT.txt" />
      <None Include="Assets\Sample\Resources\Table\TBMonster.txt" />
      <None Include="Assets\Sample\Resources\Shader\Mo_Charactor_Show.shader" />
+     <None Include="Assets\Demo\Resources\Skill\houyi.txt" />
      <None Include="Assets\Sample\Resources\Shader\SurfaceShader7.shader" />
+     <None Include="Assets\Demo\Resources\Table\TBSound.txt" />
      <None Include="Assets\Lib\DOTween\readme.txt" />
+     <None Include="Assets\Demo\Resources\Skill\sunwukong.txt" />
      <None Include="Assets\Sample\Resources\Shader\MobileBloom.shader" />
+     <None Include="Assets\Demo\Resources\Table\TBEffect.txt" />
      <None Include="Assets\Lib\Apshai Arts\CodeGuard\Editor\Mobile.txt" />
      <None Include="Assets\Sample\Resources\Table\TBSkill.txt" />
      <None Include="Assets\Lib\MobileMovieTexture\Instructions.txt" />
+     <None Include="Assets\Demo\Resources\Skill\lingyuan.txt" />
      <None Include="Assets\Lib\MobileMovieTexture\legal.txt" />
+     <None Include="Assets\Demo\Resources\Skill\yuxiaoxue.txt" />
      <None Include="Assets\builddoc.xml" />
      <None Include="Assets\Sample\Resources\Shader\SurfaceShader5.shader" />
+     <None Include="Assets\Demo\Resources\Table\TBBuff.txt" />
      <None Include="Assets\Sample\Resources\Shader\SurfaceShader2.shader" />
      <None Include="Assets\Lib\MobileMovieTexture\Shaders\YCrCbtoRGBTrans.shader" />
      <None Include="Assets\Sample\Resources\Shader\Shader4.shader" />
@@ -91,6 +105,8 @@
      <None Include="Assets\Sample\Resources\Shader\SurfaceShader1.shader" />
      <None Include="Assets\Sample\Resources\Shader\ImageShader2.shader" />
      <None Include="Assets\Lib\HUD Text\ReadMe - 1.9.txt" />
+     <None Include="Assets\Demo\Resources\Skill\ehuang.txt" />
+     <None Include="Assets\Demo\BT\houyiRT.txt" />
      <None Include="Assets\Lib\Apshai Arts\CodeGuard\Editor\Web Player.txt" />
      <None Include="Assets\Lib\Apshai Arts\CodeGuard\Editor\Quick Start.txt" />
      <None Include="Assets\Sample\Resources\Shader\SurfaceShader6.shader" />
@@ -102,7 +118,9 @@
      <None Include="Assets\Sample\Resources\Shader\HLSLShader1.shader" />
      <None Include="Assets\Lib\DOTween\DOTween46.xml" />
      <None Include="Assets\Sample\Resources\Shader\Shader1.shader" />
+     <None Include="Assets\Demo\Resources\Table\TBPlayer.txt" />
      <None Include="Assets\Lib\MobileMovieTexture\Shaders\YCrCbtoRGB.shader" />
+     <None Include="Assets\Demo\BT\zhengtaiRT.txt" />
      <None Include="Assets\Lib\DOTween\DOTween43.xml" />
      <None Include="Assets\DllExport.xml" />
      <None Include="Assets\Lib\MobileMovieTexture\Shaders\YCrCbtoRGBSplitAlpha.shader" />
@@ -111,6 +129,7 @@
      <None Include="Assets\Sample\Resources\Shader\SurfaceShader4.shader" />
      <None Include="Assets\Lib\MobileMovieTexture\Shaders\YCbCrtoRGB.cginc" />
      <None Include="Assets\Sample\Resources\Shader\ImageShader1.shader" />
+     <None Include="Assets\Demo\Resources\Skill\nezha.txt" />
      <None Include="Assets\Sample\Resources\Shader\Shader3.shader" />
  <Reference Include="UnityEditor.Advertisements">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Advertisements/Editor/UnityEditor.Advertisements.dll</HintPath>
@@ -174,6 +193,9 @@
  </Reference>
  <Reference Include="UnityEditor.WindowsStandalone.Extensions">
  <HintPath>C:/Program Files/Unity/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll</HintPath>
+ </Reference>
+ <Reference Include="Log">
+ <HintPath>D:/myGitHub/AraleEngine/AraleEngine/Assets/Engine/Core/Log/Log.dll</HintPath>
  </Reference>
   </ItemGroup>
   <ItemGroup>
