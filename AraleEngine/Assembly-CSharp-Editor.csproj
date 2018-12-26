@@ -6,7 +6,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{46899280-5E31-84E4-E6B0-287351D735CE}</ProjectGuid>
+    <ProjectGuid>{CCA2D417-0610-62D6-827F-6C9F9CBB7521}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp-Editor</AssemblyName>
@@ -137,31 +137,31 @@
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/TreeEditor/Editor/UnityEditor.TreeEditor.dll</HintPath>
  </Reference>
  <Reference Include="ApshaiArts.CodeGuard">
- <HintPath>D:/pro/ProjectSettings1/Assets/Lib/Apshai Arts/CodeGuard/Editor/ApshaiArts.CodeGuard.dll</HintPath>
+ <HintPath>D:/myGitHub/AraleEngine/AraleEngine/Assets/Lib/Apshai Arts/CodeGuard/Editor/ApshaiArts.CodeGuard.dll</HintPath>
  </Reference>
  <Reference Include="Mono.Cecil">
- <HintPath>D:/pro/ProjectSettings1/Assets/Lib/Apshai Arts/CodeGuard/Editor/Mono.Cecil/Mono.Cecil.dll</HintPath>
+ <HintPath>D:/myGitHub/AraleEngine/AraleEngine/Assets/Lib/Apshai Arts/CodeGuard/Editor/Mono.Cecil/Mono.Cecil.dll</HintPath>
  </Reference>
  <Reference Include="Mono.Cecil.Rocks">
- <HintPath>D:/pro/ProjectSettings1/Assets/Lib/Apshai Arts/CodeGuard/Editor/Mono.Cecil/Mono.Cecil.Rocks.dll</HintPath>
+ <HintPath>D:/myGitHub/AraleEngine/AraleEngine/Assets/Lib/Apshai Arts/CodeGuard/Editor/Mono.Cecil/Mono.Cecil.Rocks.dll</HintPath>
  </Reference>
  <Reference Include="DOTween">
- <HintPath>D:/pro/ProjectSettings1/Assets/Lib/DOTween/DOTween.dll</HintPath>
+ <HintPath>D:/myGitHub/AraleEngine/AraleEngine/Assets/Lib/DOTween/DOTween.dll</HintPath>
  </Reference>
  <Reference Include="DOTween43">
- <HintPath>D:/pro/ProjectSettings1/Assets/Lib/DOTween/DOTween43.dll</HintPath>
+ <HintPath>D:/myGitHub/AraleEngine/AraleEngine/Assets/Lib/DOTween/DOTween43.dll</HintPath>
  </Reference>
  <Reference Include="DOTween46">
- <HintPath>D:/pro/ProjectSettings1/Assets/Lib/DOTween/DOTween46.dll</HintPath>
+ <HintPath>D:/myGitHub/AraleEngine/AraleEngine/Assets/Lib/DOTween/DOTween46.dll</HintPath>
  </Reference>
  <Reference Include="DOTween50">
- <HintPath>D:/pro/ProjectSettings1/Assets/Lib/DOTween/DOTween50.dll</HintPath>
+ <HintPath>D:/myGitHub/AraleEngine/AraleEngine/Assets/Lib/DOTween/DOTween50.dll</HintPath>
  </Reference>
  <Reference Include="DOTweenEditor">
- <HintPath>D:/pro/ProjectSettings1/Assets/Lib/DOTween/Editor/DOTweenEditor.dll</HintPath>
+ <HintPath>D:/myGitHub/AraleEngine/AraleEngine/Assets/Lib/DOTween/Editor/DOTweenEditor.dll</HintPath>
  </Reference>
  <Reference Include="Mono.Data.Sqlite">
- <HintPath>D:/pro/ProjectSettings1/Assets/Lib/SQLite/Plugins/Mono.Data.Sqlite.dll</HintPath>
+ <HintPath>D:/myGitHub/AraleEngine/AraleEngine/Assets/Lib/SQLite/Plugins/Mono.Data.Sqlite.dll</HintPath>
  </Reference>
  <Reference Include="UnityEditor.Graphs">
  <HintPath>C:/Program Files/Unity/Editor/Data/Managed/UnityEditor.Graphs.dll</HintPath>
@@ -178,7 +178,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Assembly-CSharp.csproj">
-      <Project>{BBA6245C-1AEA-CA3D-CC3F-A7EAA11D35A9}</Project>      <Name>Assembly-CSharp</Name>    </ProjectReference>
+      <Project>{E426D957-D5D3-F0C3-9ED0-9AF5EF1A30E5}</Project>      <Name>Assembly-CSharp</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

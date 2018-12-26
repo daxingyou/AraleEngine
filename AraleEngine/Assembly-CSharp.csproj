@@ -6,7 +6,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{BBA6245C-1AEA-CA3D-CC3F-A7EAA11D35A9}</ProjectGuid>
+    <ProjectGuid>{E426D957-D5D3-F0C3-9ED0-9AF5EF1A30E5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <AssemblyName>Assembly-CSharp</AssemblyName>
@@ -84,6 +84,7 @@
      <Compile Include="Assets\Engine\Core\HeadInfo\HeadInfo.cs" />
      <Compile Include="Assets\Engine\Core\Log\Log.cs" />
      <Compile Include="Assets\Engine\Core\Lua\LuaEvent.cs" />
+     <Compile Include="Assets\Engine\Core\Lua\LuaHelp.cs" />
      <Compile Include="Assets\Engine\Core\Lua\LuaMono.cs" />
      <Compile Include="Assets\Engine\Core\Lua\LuaObject.cs" />
      <Compile Include="Assets\Engine\Core\Lua\LuaProto.cs" />
@@ -744,19 +745,19 @@
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
  </Reference>
  <Reference Include="DOTween">
- <HintPath>D:/pro/ProjectSettings1/Assets/Lib/DOTween/DOTween.dll</HintPath>
+ <HintPath>D:/myGitHub/AraleEngine/AraleEngine/Assets/Lib/DOTween/DOTween.dll</HintPath>
  </Reference>
  <Reference Include="DOTween43">
- <HintPath>D:/pro/ProjectSettings1/Assets/Lib/DOTween/DOTween43.dll</HintPath>
+ <HintPath>D:/myGitHub/AraleEngine/AraleEngine/Assets/Lib/DOTween/DOTween43.dll</HintPath>
  </Reference>
  <Reference Include="DOTween46">
- <HintPath>D:/pro/ProjectSettings1/Assets/Lib/DOTween/DOTween46.dll</HintPath>
+ <HintPath>D:/myGitHub/AraleEngine/AraleEngine/Assets/Lib/DOTween/DOTween46.dll</HintPath>
  </Reference>
  <Reference Include="DOTween50">
- <HintPath>D:/pro/ProjectSettings1/Assets/Lib/DOTween/DOTween50.dll</HintPath>
+ <HintPath>D:/myGitHub/AraleEngine/AraleEngine/Assets/Lib/DOTween/DOTween50.dll</HintPath>
  </Reference>
  <Reference Include="Mono.Data.Sqlite">
- <HintPath>D:/pro/ProjectSettings1/Assets/Lib/SQLite/Plugins/Mono.Data.Sqlite.dll</HintPath>
+ <HintPath>D:/myGitHub/AraleEngine/AraleEngine/Assets/Lib/SQLite/Plugins/Mono.Data.Sqlite.dll</HintPath>
  </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -29,11 +29,12 @@ namespace Arale.Engine
     		Log.i ("lua init begin");
     		mL = new LuaState();
     		bindLuaClass(this);
-    		//添加lua查找路径,并执行入口脚本main.lua
+			//添加lua查找路径,并执行入口脚本main.lua
     		mL.DoString ("package.path = package.path .. ';' .. '" + LUA_PATH + "?.lua';require 'main';");
     		mNewLuaObject    = (LuaFunction)mL["newLuaObject"];
     		mPushLuaEvent    = (LuaFunction)mL["pushEvent"];
     		mProcessLuaEvent = (LuaFunction)mL["processEvent"];
+			LuaHelp.ExportToLua ();
             ((LuaFunction)mL["main"]).Call();
     		Log.i ("lua init end");
         }

@@ -2,6 +2,7 @@ if not LMainWindow then
 
 local M =
 {
+	_hero;
 }
 
 function M:new(csobj)
@@ -15,6 +16,12 @@ function M:Start()
 	EventListener.Get(self.luaShop):AddOnClick(function(evt)  WindowMgr.single:GetWindow("ShopWindow", true) end)
 	EventListener.Get(self.luaForgin):AddOnClick(function(evt)  WindowMgr.single:GetWindow("ForginWindow", true) end)
 	EventListener.Get(self.luaSkill):AddOnClick(function(evt)  WindowMgr.single:GetWindow("SkillWindow", true) end)
+
+	EventListener.Get(self.luaHero):AddOnClick(function(evt)  WindowMgr.single:GetWindow("RoleCreateWindow", true) end)
+
+	if _hero == nil then
+		WindowMgr.single:GetWindow("RoleCreateWindow", true)
+	end
 end
 --========================
 LMainWindow = M

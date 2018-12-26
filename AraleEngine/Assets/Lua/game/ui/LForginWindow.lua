@@ -9,7 +9,6 @@ function M:new(csobj)
 end
 
 function M:Start()
-	print("Start:"..self.test..self.Cube.name);
 end
 --========================
 LForginWindow = M
