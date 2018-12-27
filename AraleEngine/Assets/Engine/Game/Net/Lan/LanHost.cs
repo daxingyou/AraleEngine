@@ -28,6 +28,7 @@ public class LanHost : NetworkDiscovery//局域网发现,两端的端口设置�
         NetworkServer.RegisterHandler ((short)MyMsgId.Time, onTime);
 		NetworkServer.RegisterHandler ((short)MyMsgId.ReqUnit, onReqUnit);
         NetworkServer.RegisterHandler ((short)MyMsgId.ReqEnterBattle, OnReqEnterBattle);
+		NetworkServer.RegisterHandler ((short)MyMsgId.ReqCreateHero, OnReqCreateHero);
 
 		//unit message begin
 		NetworkServer.RegisterHandler ((short)MyMsgId.State,    onUnitMsg);
@@ -157,26 +158,33 @@ public class LanHost : NetworkDiscovery//局域网发现,两端的端口设置�
     void OnReqEnterBattle(NetworkMessage msg)
     {
         Log.i("LanHost OnReqEnterBattle", Log.Tag.Net);
-		Player u = createPlayer (1001, Vector3.zero, Vector3.forward, mClients [msg.conn.connectionId].accoundId);
+		//同步其他玩家信息
+    }
+
+	void OnReqCreateHero(NetworkMessage msg)
+	{
+		Log.i("LanHost OnReqCreateHero", Log.Tag.Net);
+		MsgReqCreateHero m = msg.ReadMessage<MsgReqCreateHero> ();
+		Player u = createPlayer (m.heroID, Vector3.zero, Vector3.forward, mClients [msg.conn.connectionId].accoundId);
 		getClient (msg.conn).playerGUID = u.guid;
 
-        //同步其周围玩家信息
-        List<Unit> units = mUnitMgr.getUnitInSphere(1, u.pos, 1000);
-        for (int i = 0; i < units.Count; ++i)
-        {
-            Unit o = units[i];
-            if (o.guid == u.guid)continue;
+		//同步其周围玩家信息
+		List<Unit> units = mUnitMgr.getUnitInSphere(1, u.pos, 1000);
+		for (int i = 0; i < units.Count; ++i)
+		{
+			Unit o = units[i];
+			if (o.guid == u.guid)continue;
 			MsgCreate reply = new MsgCreate();
-            reply.agentId = o.agentId;
-            reply.guid    = o.guid;
-            reply.pos     = o.pos;
-            reply.dir     = o.dir;
-            reply.state   = o.state;
+			reply.agentId = o.agentId;
+			reply.guid    = o.guid;
+			reply.pos     = o.pos;
+			reply.dir     = o.dir;
+			reply.state   = o.state;
 			reply.tid     = o.tid;
-            reply.unitType = o.type;
-            sendTo(msg.conn.connectionId, (short)MyMsgId.Create, reply);
-        }
-    }
+			reply.unitType = o.type;
+			sendTo(msg.conn.connectionId, (short)MyMsgId.Create, reply);
+		}
+	}
 
 	public Monster createMonster(int tid, Vector3 dir, Vector3 pos, uint agentId=0)
     {

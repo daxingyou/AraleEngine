@@ -12,6 +12,7 @@ end
 
 function M:Start()
 	self.luaContent = self.luaContent:GetComponent("UISList");
+	EventListener.Get(self.luaCreate):AddOnClick(function(evt)  self:OnCreateClick() end)
 	self:ShowItems()
 end
 
@@ -32,6 +33,16 @@ function M:ShowItems()
 		end
 		it.mLO.mLT:SetData(Role[i])
 	end
+end
+
+function M:OnCreateClick()
+	local sel = self.luaContent:getFirstSelected()
+	local heroID = sel.mLO.mLT.role.id
+
+	local msg = MsgReqCreateHero()
+	msg.heroID = heroID
+	NetMgr.client:sendMsg(Enum.MyMsgId.ReqCreateHero, msg)
+	self._cs:Close(true)
 end
 
 --=======================

@@ -89,7 +89,7 @@ public class Player : Unit, PoolMgr<int>.IPoolObject
 	public static PoolMgr<int> Pool = new PoolMgr<int> (delegate(int param) {
 		TBPlayer tb = TableMgr.single.GetData<TBPlayer>(param);
 		GameObject go = ResLoad.get(tb.model, ResideType.InScene).gameObject();
-		Player o = go.GetComponent<Player>();
+		Player o = go.AddComponent<Player>();
 		o.table = tb;
 		return o;
 	});

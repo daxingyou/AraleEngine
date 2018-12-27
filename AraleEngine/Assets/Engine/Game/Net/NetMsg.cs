@@ -19,6 +19,7 @@ public enum MyMsgId
 	Skill  = 1009,
 	ReqUnit= 2007,
     ReqEnterBattle=3009,
+	ReqCreateHero=3010,
 	CreateBullet=4010,
 }
 
@@ -372,6 +373,11 @@ public class MsgMove : MsgState
 #region 战场
 public class MsgReqEnterBattle : MessageBase
 {
-    public int    sceneID;
+    public int sceneID;
+}
+
+public class MsgReqCreateHero : MessageBase
+{
+	public int heroID;
 }
 #endregion

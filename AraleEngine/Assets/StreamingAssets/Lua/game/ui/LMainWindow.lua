@@ -6,7 +6,7 @@ local M =
 }
 
 function M:new(csobj)
-	csobj.luaOnStart = function() self:Start(); end
+	csobj.luaOnStart = self.Start
 end
 
 function M:Start()
@@ -18,6 +18,7 @@ function M:Start()
 	EventListener.Get(self.luaSkill):AddOnClick(function(evt)  WindowMgr.single:GetWindow("SkillWindow", true) end)
 
 	EventListener.Get(self.luaHero):AddOnClick(function(evt)  WindowMgr.single:GetWindow("RoleCreateWindow", true) end)
+	EventListener.Get(self.luaLogout):AddOnClick(function(evt)  EventMgr.single:SendEvent("Game.Logout") end)
 
 	if _hero == nil then
 		WindowMgr.single:GetWindow("RoleCreateWindow", true)

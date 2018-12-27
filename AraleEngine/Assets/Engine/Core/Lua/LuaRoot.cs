@@ -235,7 +235,7 @@ namespace Arale.Engine
 		{
 			string luaCode = "--Auto Gen,Don't modify"+RET;
 			luaCode += "Enum={}" + RET;
-			//luaCode += Enum2Lua(typeof(YourEnumType))+RET;
+			luaCode += Enum2Lua(typeof(MyMsgId))+RET;
 			File.WriteAllText(Application.streamingAssetsPath + "/Lua/LuaEnum.lua", luaCode);
 		}
 

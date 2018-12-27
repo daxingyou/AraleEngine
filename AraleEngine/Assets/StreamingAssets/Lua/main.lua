@@ -27,6 +27,7 @@ EventListener = CS.Arale.Engine.EventListener
 SceneMgr = CS.Arale.Engine.SceneMgr
 EventMgr = CS.Arale.Engine.EventMgr
 TimeMgr = CS.Arale.Engine.TimeMgr
+TableMgr = CS.Arale.Engine.TableMgr
 NetworkMgr = CS.Arale.Engine.NetworkMgr
 Window = CS.Arale.Engine.Window
 UISwitch = CS.UISwitch
@@ -34,9 +35,12 @@ LuaHelp    = CS.LuaHelp
 ProtoWriter = CS.ProtoBuf.ProtoWriter
 WireType = CS.ProtoBuf.WireType
 NetMgr = CS.NetMgr
+--===============协议
+MsgReqCreateHero = CS.MsgReqCreateHero
 --==============模板
 --通过Debug.Log(typeof(List<object>)获取模板类的真实名称
 --==============
+require "LuaEnum"
 require "game/ui/LStartWindow"
 require "game/ui/LLoginWindow"
 require "game/ui/LLanLoginWindow"
@@ -70,6 +74,8 @@ function  main( ... )
 	WindowMgr.SetWindowRes ("BagWindow", "UI/BagWindow")
 	WindowMgr.SetWindowRes ("RoleCreateWindow", "UI/RoleCreateWindow")
 
+	TableMgr.TestModel = true
+
 	EventMgr.single:AddListener(GRoot.EventSceneLoad, onSceneLoaded)
 	EventMgr.single:AddListener("Game.Login", onLogin)
 	EventMgr.single:AddListener("Game.Logout", onLogout)
@@ -96,7 +102,7 @@ function onLogin(evt)
 end
 
 function onLogout(evt)
-	NetMgr.single:deinit();
+	NetMgr.single:Deinit();
 	SceneMgr.single:LoadScene("Login")
 end
 --====================================================

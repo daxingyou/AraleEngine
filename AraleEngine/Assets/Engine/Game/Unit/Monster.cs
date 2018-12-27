@@ -118,7 +118,7 @@ public class Monster : Unit, PoolMgr<int>.IPoolObject
 	public static PoolMgr<int> Pool = new PoolMgr<int> (delegate(int param) {
 		TBMonster tb = TableMgr.single.GetData<TBMonster>(param);
 		GameObject go = ResLoad.get(tb.model, ResideType.InScene).gameObject();
-		Monster o = go.GetComponent<Monster>();
+		Monster o = go.AddComponent<Monster>();
 		o.table = tb;
 		return o;
 	});
