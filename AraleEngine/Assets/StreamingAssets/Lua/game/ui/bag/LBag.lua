@@ -30,7 +30,7 @@ function M:GetItems(itemType)
 end
 
 function M:Init()
-	self._items = List_object()
+	self._items = LuaHelp.List_object
 	local it = newLuaObject("LBagItem")
 	it._id = 1001
 	it._type= 0

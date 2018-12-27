@@ -6,6 +6,12 @@ print(package.path)
 require "common/LClass"
 require "common/LObject"
 --=====================your code begin=================
+--==============工具库
+--local util = require 'lib/xlua/util'--不完整版，无lua导出delegate的接口
+Json = require 'rapidjson'
+Proto= require 'common/protoc'
+PB   = require 'pb'
+Lpeg = require 'lpeg'
 --==============unity
 CU = CS.UnityEngine
 UI = CU.UI
@@ -24,19 +30,12 @@ TimeMgr = CS.Arale.Engine.TimeMgr
 NetworkMgr = CS.Arale.Engine.NetworkMgr
 Window = CS.Arale.Engine.Window
 UISwitch = CS.UISwitch
-LHelp    = CS.LHelp
+LuaHelp    = CS.LuaHelp
 ProtoWriter = CS.ProtoBuf.ProtoWriter
 WireType = CS.ProtoBuf.WireType
 NetMgr = CS.NetMgr
-typeof(EventMgr)
 --==============模板
---通过Debug.Log(typeof(List<object>)模板类的真实名称
---List_object= CS.System.Collections.Generic.List`1[System.Object]
---==============第三方库
-Json = require 'rapidjson'
-Proto= require 'common/protoc'
-PB   = require 'pb'
-Lpeg = require 'lpeg'
+--通过Debug.Log(typeof(List<object>)获取模板类的真实名称
 --==============
 require "game/ui/LStartWindow"
 require "game/ui/LLoginWindow"
@@ -75,7 +74,7 @@ function  main( ... )
 	EventMgr.single:AddListener("Game.Login", onLogin)
 	EventMgr.single:AddListener("Game.Logout", onLogout)
 
-	--LBag:Init()
+	LBag:Init()
 
 	if GRoot.single.mLaunchFlag~=0 then return end
 	SceneMgr.single:LoadScene("Login")

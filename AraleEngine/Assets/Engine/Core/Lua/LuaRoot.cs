@@ -92,6 +92,7 @@ namespace Arale.Engine
 			mL.AddBuildin("pb", XLua.LuaDLL.Lua.LoadLuaProfobuf);
 			//mL.AddBuildin("ffi", XLua.LuaDLL.Lua.LoadFFI);存在兼容问题
 			#endif
+			LuaHelp.ExportToLua ();
 			byte[] tags = mReadLuaFile (LUA_PATH+"main.lua", false);
 			mEncode = tags [2] == 0x3d ? false : true;
 			//====================
