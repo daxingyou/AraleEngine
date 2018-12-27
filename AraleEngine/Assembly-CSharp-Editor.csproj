@@ -46,6 +46,10 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Engine\Core\Action\Editor\AnimActionInspector.cs" />
+     <Compile Include="Assets\Engine\Core\Lua\XLua\Src\Editor\Generator.cs" />
+     <Compile Include="Assets\Engine\Core\Lua\XLua\Src\Editor\Hotfix.cs" />
+     <Compile Include="Assets\Engine\Core\Lua\XLua\Src\Editor\LinkXmlGen\LinkXmlGen.cs" />
+     <Compile Include="Assets\Engine\Core\Lua\XLua\Src\Editor\TemplateRef.cs" />
      <Compile Include="Assets\Engine\Core\Scene\Editor\ActorCreatorEditor.cs" />
      <Compile Include="Assets\Engine\Core\Scene\Editor\SceneToolEditor.cs" />
      <Compile Include="Assets\Engine\DevelopTools\Editor\MenuItems.cs" />
@@ -74,6 +78,7 @@
      <None Include="Assets\Demo\Resources\Table\TBSkill.txt" />
      <None Include="Assets\Sample\Resources\BT\zhengtaiRT.txt" />
      <None Include="Assets\Sample\Resources\Shader\Mo_Charactor_Show.shader" />
+     <None Include="Assets\Engine\Core\Lua\XLua\Src\Editor\LinkXmlGen\LinkXmlGen.tpl.txt" />
      <None Include="Assets\Demo\Resources\Skill\houyi.txt" />
      <None Include="Assets\Sample\Resources\Shader\SurfaceShader7.shader" />
      <None Include="Assets\Demo\Resources\Table\TBSound.txt" />
@@ -92,6 +97,8 @@
      <None Include="Assets\Sample\Resources\Shader\SurfaceShader2.shader" />
      <None Include="Assets\Lib\MobileMovieTexture\Shaders\YCrCbtoRGBTrans.shader" />
      <None Include="Assets\Sample\Resources\Shader\Shader4.shader" />
+     <None Include="Assets\Engine\Core\Lua\XLua\Src\Editor\Template\LuaWrapPusher.tpl.txt" />
+     <None Include="Assets\Engine\Core\Lua\XLua\Src\Editor\Template\LuaDelegateBridge.tpl.txt" />
      <None Include="Assets\Lib\iTween\README.txt" />
      <None Include="Assets\Sample\Resources\Shader\Shader5.shader" />
      <None Include="Assets\Engine\Core\NetWork\protobuf-net\Web\TODO.txt" />
@@ -100,26 +107,34 @@
      <None Include="Assets\Sample\Resources\Shader\SurfaceShader1.shader" />
      <None Include="Assets\Sample\Resources\Shader\ImageShader2.shader" />
      <None Include="Assets\Lib\HUD Text\ReadMe - 1.9.txt" />
+     <None Include="Assets\Engine\Core\Lua\XLua\Src\Editor\Template\TemplateCommon.lua.txt" />
+     <None Include="Assets\Engine\Core\Lua\XLua\Src\Editor\Template\LuaEnumWrap.tpl.txt" />
      <None Include="Assets\Demo\Resources\Skill\ehuang.txt" />
      <None Include="Assets\Demo\BT\houyiRT.txt" />
      <None Include="Assets\Lib\Apshai Arts\CodeGuard\Editor\Web Player.txt" />
      <None Include="Assets\Lib\Apshai Arts\CodeGuard\Editor\Quick Start.txt" />
      <None Include="Assets\Sample\Resources\Shader\SurfaceShader6.shader" />
+     <None Include="Assets\Engine\Core\Lua\XLua\Src\Editor\Template\LuaDelegateWrap.tpl.txt" />
      <None Include="Assets\Sample\Resources\Shader\Shader2.shader" />
      <None Include="Assets\Sample\Resources\Sitcom\test.xml.txt" />
      <None Include="Assets\Lib\Apshai Arts\CodeGuard\Editor\Read Me.txt" />
      <None Include="Assets\Lib\JsonDotNet\ReadMe.txt" />
+     <None Include="Assets\Engine\Core\Lua\XLua\Src\Editor\Template\LuaRegister.tpl.txt" />
+     <None Include="Assets\Engine\Core\Lua\XLua\Src\Editor\Template\LuaInterfaceBridge.tpl.txt" />
+     <None Include="Assets\Engine\Core\Lua\XLua\Src\Editor\Template\LuaClassWrap.tpl.txt" />
      <None Include="Assets\Sample\Resources\Shader\HLSLShader1.shader" />
      <None Include="Assets\Lib\DOTween\DOTween46.xml" />
      <None Include="Assets\Sample\Resources\Shader\Shader1.shader" />
      <None Include="Assets\Demo\Resources\Table\TBPlayer.txt" />
      <None Include="Assets\Lib\MobileMovieTexture\Shaders\YCrCbtoRGB.shader" />
+     <None Include="Assets\Engine\Core\Lua\XLua\CHANGELOG.txt" />
      <None Include="Assets\Demo\BT\zhengtaiRT.txt" />
      <None Include="Assets\Lib\DOTween\DOTween43.xml" />
      <None Include="Assets\DllExport.xml" />
      <None Include="Assets\Lib\MobileMovieTexture\Shaders\YCrCbtoRGBSplitAlpha.shader" />
      <None Include="Assets\Sample\Resources\Shader\HLSLShader2.shader" />
      <None Include="Assets\Sample\Resources\Shader\SurfaceShader3.shader" />
+     <None Include="Assets\Engine\Core\Lua\XLua\Src\Editor\Template\PackUnpack.tpl.txt" />
      <None Include="Assets\Sample\Resources\Shader\SurfaceShader4.shader" />
      <None Include="Assets\Lib\MobileMovieTexture\Shaders\YCbCrtoRGB.cginc" />
      <None Include="Assets\Sample\Resources\Shader\ImageShader1.shader" />

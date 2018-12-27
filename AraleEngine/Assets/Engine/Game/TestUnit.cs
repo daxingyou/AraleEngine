@@ -142,7 +142,7 @@ public class TestUnit : GRoot
 			}
 			if (GUI.Button (new Rect (200, 0, 100, 30), "重载Lua"))
 			{
-				LuaRoot.single.Init ();
+				LuaRoot.single.Init();
 			}
 			unitId = GUI.TextField (new Rect (100, 30, 100, 30), unitId);
 			if (GUI.Button (new Rect (0, 30, 100, 30), "创建敌人"))

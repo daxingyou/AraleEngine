@@ -1,29 +1,14 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Engine\Game\Skill\Editor\SkillWindow.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Engine\Core\Lua\LuaHelp.cs">
     <Files>
-      <File FileName="Assets\Engine\Game\TestUnit.cs" Line="1" Column="1" />
-      <File FileName="Assets\Engine\Game\Net\Unit.cs" Line="1" Column="1" />
-      <File FileName="Assets\Engine\Core\Lua\LuaMono.cs" Line="1" Column="1" />
-      <File FileName="Assets\Engine\Game\Plugin\AI\BTAI.cs" Line="1" Column="1" />
-      <File FileName="Assets\Engine\Game\Net\NetMgr.cs" Line="1" Column="1" />
-      <File FileName="Assets\Engine\Game\Unit\Bullet.cs" Line="1" Column="1" />
-      <File FileName="Assets\Engine\Game\Unit\Monster.cs" Line="1" Column="1" />
-      <File FileName="Assets\Engine\Game\Unit\Player.cs" Line="1" Column="1" />
-      <File FileName="Assets\Engine\Game\Net\Lan\LanClient.cs" Line="1" Column="1" />
-      <File FileName="Assets\Engine\Game\Plugin\AI\LuaAI.cs" Line="1" Column="1" />
-      <File FileName="Assets\Engine\Game\Plugin\BuffPlugin.cs" Line="1" Column="1" />
-      <File FileName="Assets\Engine\Game\Plugin\EffectPlugin.cs" Line="1" Column="1" />
-      <File FileName="Assets\Engine\Game\Plugin\Buff\SkillBuff.cs" Line="1" Column="1" />
-      <File FileName="Assets\Engine\Core\Event\EventMgr.cs" Line="1" Column="1" />
-      <File FileName="Assets\Engine\Core\Action\AnimAction.cs" Line="1" Column="1" />
-      <File FileName="Assets\Engine\Core\NetWork\TestNetWork.cs" Line="1" Column="1" />
-      <File FileName="Assets\Engine\Core\Sitcom\SitcomSystem.cs" Line="1" Column="1" />
-      <File FileName="Assets\Engine\Core\Update\ZUpdate.cs" Line="1" Column="1" />
+      <File FileName="Assets\Engine\Core\Event\EventMgr.cs" Line="16" Column="35" />
       <File FileName="Assets\Engine\Core\Lua\LuaRoot.cs" Line="1" Column="1" />
-      <File FileName="Assets\Sample\Script\TestNetwork.cs" Line="1" Column="1" />
-      <File FileName="Assets\Engine\Game\Skill\Editor\SkillWindow.cs" Line="40" Column="90" />
-      <File FileName="Assets\Engine\Game\Skill\Editor\SkillEvent.cs" Line="1" Column="1" />
+      <File FileName="Assets\Engine\Core\Lua\LuaObject.cs" Line="1" Column="1" />
+      <File FileName="Assets\Engine\Game\TestUnit.cs" Line="1" Column="1" />
+      <File FileName="Assets\Engine\Core\Res\ResLoad.cs" Line="1" Column="1" />
+      <File FileName="Assets\Engine\Core\Lua\LuaMono.cs" Line="131" Column="49" />
+      <File FileName="Assets\Engine\Core\Lua\LuaHelp.cs" Line="18" Column="3" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

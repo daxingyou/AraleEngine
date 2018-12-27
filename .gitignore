@@ -2,3 +2,5 @@ AraleEngine/Library/
 AraleEngine/Temp/
 AraleEngine/AraleEngine.sln
 AraleEngine/*.csproj
+AraleEngine/Assets/XLua/
+AraleEngine/Assets/XLua.meta

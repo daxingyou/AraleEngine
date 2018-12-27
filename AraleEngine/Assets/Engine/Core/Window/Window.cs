@@ -128,7 +128,7 @@ namespace Arale.Engine
     	{
             if (mLO != null) 
     		{
-                mLO.call ("onWindowEvent", eventId);
+                mLO.call ("OnWindowEvent", eventId);
     			return;
     		}
     	}
@@ -137,7 +137,7 @@ namespace Arale.Engine
         {
             if (mLO != null) 
             {
-                mLO.call ("onActionEvent", actionId);
+                mLO.call ("OnActionEvent", actionId);
                 return;
             }
         }
@@ -146,7 +146,7 @@ namespace Arale.Engine
     	{
             if (mLO != null) 
             {
-                mLO.call ("onWindowMessage", metho, param);
+                mLO.call ("OnWindowMessage", metho, param);
                 return;
             }
 

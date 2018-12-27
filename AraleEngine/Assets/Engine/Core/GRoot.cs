@@ -49,7 +49,7 @@ namespace Arale.Engine
             }
         }
 
-        void OnDesotry ()
+        void OnDestroy ()
         {
             gameExit();
             ResLoad.deinit();

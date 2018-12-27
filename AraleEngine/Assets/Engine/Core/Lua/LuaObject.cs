@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
-using LuaInterface;
 using System;
 using System.Reflection;
 using System.IO;
 using System.Text;
+using XLua;
 
 namespace Arale.Engine
 {
@@ -20,7 +20,7 @@ namespace Arale.Engine
     	public static LuaObject newObject(string luaClassName, object csObject=null)
     	{
     		if (string.IsNullOrEmpty (luaClassName))return null;
-    		LuaTable luaTable = LuaRoot.newLuaTable(luaClassName,csObject);
+			LuaTable luaTable = LuaRoot.single.newTable(luaClassName,csObject);
     		if (luaTable == null)return null;
 
     		return new LuaObject (luaTable);

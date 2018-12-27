@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System;
 using System.Collections.Generic;
-using LuaInterface;
+using XLua;
 
 namespace Arale.Engine
 {
@@ -66,7 +66,7 @@ namespace Arale.Engine
     	public string mLuaClassName;
     	[NonSerialized]public LuaObject mLO;
     	[NonSerialized]public object mUserData;
-        [NonSerialized]public Action<LuaTable> luaOnAwake;
+		[NonSerialized]public Action<LuaTable> luaOnAwake;
         [NonSerialized]public Action<LuaTable> luaOnEnable;
         [NonSerialized]public Action<LuaTable> luaOnStart;
         [NonSerialized]public Action<LuaTable> luaOnUpdate;
@@ -124,6 +124,24 @@ namespace Arale.Engine
 		public void sendEvent(int evt, object param)
 		{
 			onEvent (evt,param,this);
+		}
+
+		public Coroutine startLuaCoroutine(LuaTable lt)
+		{
+			return this.StartCoroutine(luaCoroutine(lt));
+		}
+
+		IEnumerator luaCoroutine(LuaTable lt)
+		{
+			LuaFunction f = (LuaFunction)lt[0];
+			object[] o = null;
+			do
+			{
+				o = f.Call(lt);
+				if(o==null)break;
+				f = (LuaFunction)o[0];
+				yield return o[1];
+			}while(true);
 		}
     }
 

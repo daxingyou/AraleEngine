@@ -17,8 +17,8 @@ namespace Arale.Engine
                 this.data    = data;
 			}
 		}
+
         public delegate void EventCallback(EventData ed);
-		
 		private Dictionary<string, List<EventCallback>> mCallbacks = new Dictionary<string, List<EventCallback>>();
         public void AddListener(string id, EventCallback callback)
 		{
@@ -29,7 +29,7 @@ namespace Arale.Engine
                 {
                     mCallbacks.Add(id, callbacks = new List<EventCallback>());
                 }
-                callbacks.Add(callback);
+				callbacks.Add(callback);
 			} 
 		}
 		
@@ -40,7 +40,7 @@ namespace Arale.Engine
                 List<EventCallback> callbacks;
                 if(mCallbacks.TryGetValue(id, out callbacks))
                 {
-                    callbacks.Remove(callback);
+					callbacks.Remove(callback);
                 }
 			}
 		}
