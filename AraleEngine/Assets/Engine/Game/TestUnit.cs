@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿#if UNITY_EDITOR
+using UnityEngine;
 using System.Collections;
 using Arale.Engine;
 using UnityEditor;
@@ -156,3 +157,4 @@ public class TestUnit : GRoot
 		}
 	}
 }
+#endif

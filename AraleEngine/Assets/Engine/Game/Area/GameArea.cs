@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using System.Collections.Generic;
 
 
@@ -26,12 +28,16 @@ public class CircleArea : IArea
 
 	public void debugDraw()
 	{
+		#if UNITY_EDITOR
 		UnityEditor.Handles.DrawWireDisc (Vector3.zero, Vector3.up, r);
+		#endif
 	}
 
 	public void inspDraw()
 	{
+		#if UNITY_EDITOR
 		r = EditorGUILayout.FloatField ("半径", r);
+		#endif
 	}
 
 	public string toString()
@@ -61,12 +67,16 @@ public class SquareArea : IArea {
 		vs [2] = new Vector3 (-inR, 0, -inR);
 		vs [3] = new Vector3 (-inR, 0, inR);
 		vs [4] = new Vector3 (inR, 0, inR);
+		#if UNITY_EDITOR
 		UnityEditor.Handles.DrawPolyLine (vs);
+		#endif
 	}
 
 	public void inspDraw()
 	{
+		#if UNITY_EDITOR
 		inR = EditorGUILayout.FloatField ("内切圆半径", inR);
+		#endif
 	}
 
 	public string toString()
@@ -97,13 +107,17 @@ public class RectangleArea : IArea {
 		vs [2] = new Vector3 (-w/2, 0, l);
 		vs [3] = new Vector3 (w/2, 0, l);
 		vs [4] = new Vector3 (w/2, 0, 0);
+		#if UNITY_EDITOR
 		UnityEditor.Handles.DrawPolyLine (vs);
+		#endif
 	}
 
 	public void inspDraw()
 	{
+		#if UNITY_EDITOR
 		w = EditorGUILayout.FloatField ("径宽", w);
 		l = EditorGUILayout.FloatField ("径深", l);
+		#endif
 	}
 
 	public string toString()
@@ -140,15 +154,19 @@ public class FanArea : IArea {
 		Vector3 dir = Vector3.forward;
 		Vector3 left  = Quaternion.AngleAxis (ang/2, Vector3.up) * dir;
 		Vector3 right = Quaternion.AngleAxis (-ang/2, Vector3.up) * dir;
+		#if UNITY_EDITOR
 		UnityEditor.Handles.DrawWireArc(pos, Vector3.up, right, ang, r);
 		UnityEditor.Handles.DrawLine (pos, pos + left * (r+1));
 		UnityEditor.Handles.DrawLine (pos, pos + right * r);
+		#endif
 	}
 
 	public void inspDraw()
 	{
+		#if UNITY_EDITOR
 		r = EditorGUILayout.FloatField ("半径", r);
 		ang = EditorGUILayout.FloatField ("夹角", ang);
+		#endif
 	}
 
 	public string toString()

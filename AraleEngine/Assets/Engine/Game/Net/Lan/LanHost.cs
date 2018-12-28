@@ -133,6 +133,7 @@ public class LanHost : NetworkDiscovery//局域网发现,两端的端口设置�
 		Log.i("LanHost onUnitMsg:"+msg.msgType, Log.Tag.Net);
 		MsgUnit m = msg.ReadMessage<MsgUnit> ();
 		msg.reader.SeekZero ();
+		Log.i("LanHost guid:"+m.guid, Log.Tag.Net);
 		Unit u = mUnitMgr.getUnit (m.guid);
 		if (u != null)u.onSync (msg);
     }
@@ -164,16 +165,22 @@ public class LanHost : NetworkDiscovery//局域网发现,两端的端口设置�
 	void OnReqCreateHero(NetworkMessage msg)
 	{
 		Log.i("LanHost OnReqCreateHero", Log.Tag.Net);
+		Client client = getClient (msg.conn);
+		if (client.playerGUID != 0)
+		{//删除上个角色
+			Unit lu = mUnitMgr.getUnit(client.playerGUID);
+			if (lu != null)lu.decState (UnitState.Exist,true);
+		}
 		MsgReqCreateHero m = msg.ReadMessage<MsgReqCreateHero> ();
 		Player u = createPlayer (m.heroID, Vector3.zero, Vector3.forward, mClients [msg.conn.connectionId].accoundId);
-		getClient (msg.conn).playerGUID = u.guid;
+		client.playerGUID = u.guid;
 
 		//同步其周围玩家信息
 		List<Unit> units = mUnitMgr.getUnitInSphere(1, u.pos, 1000);
 		for (int i = 0; i < units.Count; ++i)
 		{
 			Unit o = units[i];
-			if (o.guid == u.guid)continue;
+			if (o.guid == u.guid || !o.isState(UnitState.Exist))continue;
 			MsgCreate reply = new MsgCreate();
 			reply.agentId = o.agentId;
 			reply.guid    = o.guid;

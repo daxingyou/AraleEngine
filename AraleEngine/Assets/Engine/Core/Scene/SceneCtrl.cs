@@ -1,14 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Arale.Engine;
 
-public class SceneCtrl : MonoBehaviour
+public class SceneCtrl : LuaMono
 {
-	// Use this for initialization
-	void Start () {
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 }

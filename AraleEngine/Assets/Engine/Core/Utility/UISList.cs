@@ -10,7 +10,7 @@ namespace Arale.Engine
     {
         List<UISListItem> mItems = new List<UISListItem>();
         UISListItem mPrefab;
-        public VoidDelegate onSelectedChange=null;
+		public UISListItem.OnSelectChange onSelectedChange=null;
         public bool mMultiSelect;
         void Awake()
         {
@@ -65,7 +65,7 @@ namespace Arale.Engine
                 }
                 sel.selected = true;
             }
-            if(null!=onSelectedChange)onSelectedChange();
+            if(null!=onSelectedChange)onSelectedChange(sel);
         }
 
         public UISListItem addItem(object data, bool sort=false)

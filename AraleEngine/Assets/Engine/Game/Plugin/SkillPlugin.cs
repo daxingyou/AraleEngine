@@ -97,6 +97,7 @@ public class Skill
 		public Unit targetUnit;   //当前技能目标单位
 		public uint targetGUID{get{return targetUnit == null ? 0 : targetUnit.guid;}}
 		List<Skill> mSkills = new List<Skill>();
+		public List<Skill> skills{get{return mSkills;}} 
 		public Plug(Unit unit):base(unit){}
 
 		public void addSkills(int[] skillTIDs)

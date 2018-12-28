@@ -20,24 +20,29 @@ Quaternion = CS.UnityEngine.Quaternion
 Vector3 = CS.UnityEngine.Vector3
 Vector2 = CS.UnityEngine.Vector2
 --==============引擎
-GRoot = CS.Arale.Engine.GRoot
 AssetRef = CS.Arale.Engine.AssetRef
+GRoot = CS.Arale.Engine.GRoot
 WindowMgr = CS.Arale.Engine.WindowMgr
+CameraMgr = CS.Arale.Engine.CameraMgr
 EventListener = CS.Arale.Engine.EventListener
 SceneMgr = CS.Arale.Engine.SceneMgr
 EventMgr = CS.Arale.Engine.EventMgr
 TimeMgr = CS.Arale.Engine.TimeMgr
 TableMgr = CS.Arale.Engine.TableMgr
 NetworkMgr = CS.Arale.Engine.NetworkMgr
+NetMgr = CS.NetMgr
 Window = CS.Arale.Engine.Window
+Log = CS.Arale.Engine.Log
 UISwitch = CS.UISwitch
 LuaHelp    = CS.LuaHelp
+UnitState = CS.UnitState
+--===============配表
+TBSkill = CS.Arale.Engine.TBSkill
+--===============协议
 ProtoWriter = CS.ProtoBuf.ProtoWriter
 WireType = CS.ProtoBuf.WireType
-NetMgr = CS.NetMgr
---===============协议
 MsgReqCreateHero = CS.MsgReqCreateHero
---==============模板
+MsgReqEnterBattle = CS.MsgReqEnterBattle
 --通过Debug.Log(typeof(List<object>)获取模板类的真实名称
 --==============
 require "LuaEnum"
@@ -57,6 +62,8 @@ require "game/ui/bag/LBagItem"
 require "game/ui/bag/LItemSlot"
 require "game/ui/LRoleCreateWindow"
 require "game/ui/LRoleCreateWindowItem"
+require "game/battle/LBattleSceneCtrl"
+require "game/ui/main/LSKillButton"
 print("require all ok");
 --=====================================================
 function  main( ... )

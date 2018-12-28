@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿#if UNITY_EDITOR
+using UnityEngine;
 using System.Collections;
 using System.IO;
 using System;
@@ -519,3 +520,5 @@ public class LuaProto : MonoBehaviour
 }
 
 }
+
+#endif

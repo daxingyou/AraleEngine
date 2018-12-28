@@ -4,6 +4,7 @@ using System.Collections;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
+using XLua;
 
 namespace Arale.Engine
 {
@@ -14,7 +15,7 @@ public class TableBase
     public int id { get { return _id; } }
     public TableBase()
     {
-
+		
     }
     public virtual void Init(string[] value)
     {
