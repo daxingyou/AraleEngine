@@ -67,6 +67,7 @@ require "game/ui/main/LSKillButton"
 print("require all ok");
 --=====================================================
 function  main( ... )
+	if GRoot.single.mLaunchFlag~=0 then return end
 	WindowMgr.SetWindowRes ("StartWindow", "UI/StartWindow")
 	WindowMgr.SetWindowRes ("UpdateWindow", "UI/UpdateWindow")
 	WindowMgr.SetWindowRes ("LoginWindow", "UI/LoginWindow")
@@ -89,7 +90,6 @@ function  main( ... )
 
 	LBag:Init()
 
-	if GRoot.single.mLaunchFlag~=0 then return end
 	SceneMgr.single:LoadScene("Login")
 	print("main.lua ok");
 end

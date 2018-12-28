@@ -10,9 +10,11 @@ public class GameRoot : GRoot {
 
     protected override void gameExit()
     {
+		
     }
 
     protected override void gameUpdate()
     {
+		
     }
 }

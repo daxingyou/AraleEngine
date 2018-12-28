@@ -63,7 +63,11 @@ function M:OnUpdate()
 	dir.z = joystick.mDir.y
 	dir.x = joystick.mDir.x
 	dir = dir.normalized
-    hero.nav:move (dir);
+	if dir.z == 0 and dir.x==0 then
+		hero.nav:stopMove ()
+	else
+    	hero.nav:move (dir)
+    end
 end
 
 --========================

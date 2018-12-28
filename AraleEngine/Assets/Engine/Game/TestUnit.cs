@@ -100,9 +100,9 @@ public class TestUnit : GRoot
 
 	void onLogin(EventMgr.EventData ed)
 	{
-		MsgReqEnterBattle m = new MsgReqEnterBattle ();
-		m.sceneID = 1001;
-		NetMgr.client.sendMsg ((short)MyMsgId.ReqEnterBattle, m);
+		MsgReqCreateHero m = new MsgReqCreateHero ();
+		m.heroID = 1001;
+		NetMgr.client.sendMsg ((short)MyMsgId.ReqCreateHero, m);
 	}
 
 	void onPlayer(EventMgr.EventData ed)

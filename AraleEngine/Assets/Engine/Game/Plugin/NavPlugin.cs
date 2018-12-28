@@ -105,7 +105,7 @@ public class NavPlugin : Plugin
 			Step step = mSteps [0];
 			if (Vector3.Distance (mUnit.pos, step.pos) <= Time.deltaTime * speed)
 			{
-				//Debug.LogError ("del");
+				Debug.LogError ("del");
 				mSteps.RemoveAt (0);
 				mUnit.pos = step.pos;
 				mUnit.dir = step.dir;
@@ -126,7 +126,7 @@ public class NavPlugin : Plugin
 				mDelay = 0.001f*(RTime.R.utcTickMs - step.time);
 				float dt = mDelay<=0.5f?0:Time.deltaTime/0.5f*mDelay;
 				mNavDir = (step.pos - mUnit.pos).normalized;
-				//Debug.LogError ("dt:"+dt+",c="+mSteps.Count+",dir="+mNavDir.ToString()+",state="+mNavState);
+				Debug.LogError ("dt:"+dt+",c="+mSteps.Count+",dir="+mNavDir.ToString()+",state="+mNavState);
 				updatePos (Time.deltaTime+dt);//dt逐帧补偿延迟时间
 				mDelay -= dt;
 			}
