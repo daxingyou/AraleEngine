@@ -6,11 +6,11 @@ LHero =
 	new= function(self,cs)
 		self._cs = cs;
 		local ta = self._cs.timer
-		action = ta:addAction(TimeMgr.Action());
+		action = ta:AddAction(TimeMgr.Action());
 		action.doTime = 0;
 		action.onAction = function(act)
 			self:doAI();
-			act:loop(0.1);
+			act:Loop(0.1);
 		end
 	end;
 	--========================

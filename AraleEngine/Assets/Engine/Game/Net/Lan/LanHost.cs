@@ -195,7 +195,7 @@ public class LanHost : NetworkDiscovery//局域网发现,两端的端口设置�
 
 	public Monster createMonster(int tid, Vector3 dir, Vector3 pos, uint agentId=0)
     {
-        Monster u = mUnitMgr.getUnit(0, 2, tid) as Monster;
+		Monster u = mUnitMgr.getUnit(0, UnitType.Monster, tid) as Monster;
 		if (u == null)return null;
 		u.agentId = agentId;
 		u.setParam(pos, dir);
@@ -216,7 +216,7 @@ public class LanHost : NetworkDiscovery//局域网发现,两端的端口设置�
 
 	public Player createPlayer(int tid, Vector3 pos, Vector3 dir, uint agentId=0)
 	{
-		Player u = mUnitMgr.getUnit(0, 1, tid) as Player;
+		Player u = mUnitMgr.getUnit(0, UnitType.Player, tid) as Player;
 		u.agentId = agentId;
 		u.setParam(pos, dir);
 

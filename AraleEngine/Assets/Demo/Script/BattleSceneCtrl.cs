@@ -27,6 +27,27 @@ public class BattleSceneCtrl : SceneCtrl {
 			player.nav.startNav (hit.point);
 		}
 
+		if (Input.GetMouseButtonDown (1))
+		{//技能目标选择
+			Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
+			RaycastHit hit;
+			if (Physics.Raycast (ray, out hit))
+			{
+				Unit u = hit.collider.gameObject.GetComponent<Unit> ();
+				if (u != null)
+				{
+					player.skill.targetPos  = u.pos;
+					player.skill.targetUnit = u;
+				}
+				else if(hit.collider.gameObject.name == "AgentMesh")
+				{
+					player.skill.targetPos = hit.point;
+				}
+				player.forward (player.skill.targetPos);
+				player.addState (0, true);
+			}
+		}
+
 		if (Input.GetKeyDown (KeyCode.F1)) {
 			player.skill.playIndex(0);
 		}

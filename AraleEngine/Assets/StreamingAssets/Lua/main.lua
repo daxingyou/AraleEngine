@@ -36,6 +36,7 @@ Log = CS.Arale.Engine.Log
 UISwitch = CS.UISwitch
 LuaHelp    = CS.LuaHelp
 UnitState = CS.UnitState
+UnitType = CS.UnitType
 --===============配表
 TBSkill = CS.Arale.Engine.TBSkill
 --===============协议
@@ -64,6 +65,8 @@ require "game/ui/LRoleCreateWindow"
 require "game/ui/LRoleCreateWindowItem"
 require "game/battle/LBattleSceneCtrl"
 require "game/ui/main/LSKillButton"
+require "game/ai/LHero"
+require "game/ai/LMonster"
 print("require all ok");
 --=====================================================
 function  main( ... )

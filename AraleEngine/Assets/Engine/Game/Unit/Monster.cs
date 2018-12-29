@@ -66,6 +66,11 @@ public class Monster : Unit, PoolMgr<int>.IPoolObject
 		}
     }
 
+	protected override void onUnitParam(object param)
+	{
+		if(isAgent)mAI.startAI (table.ai);
+	}
+
 	protected override void onUnitUpdate()
 	{
 		mAI.update ();

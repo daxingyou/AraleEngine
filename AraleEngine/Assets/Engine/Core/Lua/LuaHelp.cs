@@ -28,6 +28,7 @@ public static class LuaHelp
 		typeof(UISwitch.OnValueChange),
 		typeof(UISListItem.OnSelectChange),
 		typeof(Unit.OnStateChange),
+		typeof(TimeMgr.Action.OnAction),
 		typeof(VoidDelegate),
 		typeof(BoolDelegateI)
 	};

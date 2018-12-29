@@ -188,10 +188,10 @@ public class LanClient : NetworkDiscovery//局域网发现,两端的端口设置
         MsgCreate m  = msg.ReadMessage<MsgCreate> ();
         switch (m.unitType)
         {
-            case 1:
+		case UnitType.Player:
                 createPlayer(m);
                 break;
-            case 2:
+		case UnitType.Monster:
                 createMonster(m);
                 break;
         }
@@ -200,7 +200,7 @@ public class LanClient : NetworkDiscovery//局域网发现,两端的端口设置
 
     void createPlayer(MsgCreate m)
     {
-		Player u = mUnitMgr.getUnit(m.guid, 1, m.tid) as Player;
+		Player u = mUnitMgr.getUnit(m.guid, UnitType.Player, m.tid) as Player;
 		u.setParam(m.pos,m.dir);
         u.agentId = m.agentId;
 		if(u.isAgent)EventMgr.single.SendEvent("Game.Player", u);
@@ -208,14 +208,14 @@ public class LanClient : NetworkDiscovery//局域网发现,两端的端口设置
 
     void createMonster(MsgCreate m)
     {
-		Monster u = mUnitMgr.getUnit(m.guid, 2, m.tid) as Monster;
+		Monster u = mUnitMgr.getUnit(m.guid, UnitType.Monster, m.tid) as Monster;
 		u.setParam(m.pos,m.dir);
         u.agentId = m.agentId;
     }
 
 	void createBullet(MsgCreateBullet m)
 	{
-		Bullet u = mUnitMgr.getUnit (m.guid, 3, m.tid) as Bullet;
+		Bullet u = mUnitMgr.getUnit (m.guid, UnitType.Bullet, m.tid) as Bullet;
 		u.setParam (m.pos, m.dir);
 		u.play (m.vTarget,m.uTarget);
 	}
