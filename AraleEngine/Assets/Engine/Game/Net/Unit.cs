@@ -60,12 +60,14 @@ public class Unit : LuaMono
 	public void addState(int mask, bool sync=false)
 	{
 		state |= mask;
+		if (null!=mOnStateChange)mOnStateChange (this);
 		if (sync)syncState ();
 	}
 
 	public void decState(int mask, bool sync=false)
 	{
 		state &= (~mask);
+		if (null!=mOnStateChange)mOnStateChange (this);
 		if (sync)syncState ();
 	}
 
@@ -79,6 +81,7 @@ public class Unit : LuaMono
 		pos = msg.pos;
 		dir = msg.dir;
 		state = msg.state;
+		if (null!=mOnStateChange)mOnStateChange (this);
 	}
 
 	public void syncState()
@@ -90,6 +93,11 @@ public class Unit : LuaMono
 		msg.state = state;
 		sendMsg((short)MyMsgId.State, msg);
 	}
+
+	public delegate void OnStateChange (Unit u);
+	protected OnStateChange mOnStateChange;
+	public void AddStateListener (OnStateChange callback){mOnStateChange += callback;}
+	public void RemoveStateListener (OnStateChange callback){mOnStateChange -= callback;}
 
 	uint mAgentID;
 	public uint  agentId
@@ -526,6 +534,7 @@ public class Unit : LuaMono
 					{
 						mUnits.Remove(it.guid);
 					}
+					it.mOnStateChange = null;
 					it.onUnitDeinit();
 				}
 				else

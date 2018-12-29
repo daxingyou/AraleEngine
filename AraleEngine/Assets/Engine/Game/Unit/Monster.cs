@@ -45,7 +45,7 @@ public class Monster : Unit, PoolMgr<int>.IPoolObject
 		mBuff   = new Buff.Plug(this);
 		mEffect = new EffectPlugin(this);
 		mNav    = new NavPlugin(this); 
-		//mAI     = new BTAI(this);
+		mAI     = new LuaAI(this);
 		mMove   = new Move.Plug (this);
 	}
 

@@ -4,3 +4,4 @@ AraleEngine/AraleEngine.sln
 AraleEngine/*.csproj
 AraleEngine/Assets/XLua/
 AraleEngine/Assets/XLua.meta
+AraleEngine/*.userprefs

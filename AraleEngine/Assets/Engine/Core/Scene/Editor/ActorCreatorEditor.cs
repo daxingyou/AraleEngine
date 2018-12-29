@@ -41,6 +41,6 @@ public class ActorCreatorEditor : Editor
 		}
 
 		string hotControl = GUI.GetNameOfFocusedControl();
-		Debug.LogError (hotControl);
+		//Debug.LogError (hotControl);
 	}
 }

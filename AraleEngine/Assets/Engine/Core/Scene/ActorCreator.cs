@@ -12,7 +12,6 @@ public class ActorCreator : MonoBehaviour
 	public class ActorInfo
 	{
 		public int actorId;  //角色id
-		public int count;    //角色数量
 		public int userData; //自定义数据
 		public Vector3 pos;  //角色出生位置
 		public virtual void Serialize(XmlDocument xml, XmlNode n)
@@ -20,9 +19,6 @@ public class ActorCreator : MonoBehaviour
 			XmlAttribute at = null;
 			at = xml.CreateAttribute("id");
 			at.Value = actorId.ToString ();
-			n.Attributes.Append (at);
-			at = xml.CreateAttribute("count");
-			at.Value = count.ToString ();
 			n.Attributes.Append (at);
 			at = xml.CreateAttribute("userdata");
 			at.Value = userData.ToString ();
@@ -37,24 +33,34 @@ public class ActorCreator : MonoBehaviour
 	public int mWaves;       //刷新波次,0无限
 	public int mRefreshType; //刷新类型
 	public List<ActorInfo> mActorInfo = new List<ActorInfo>(); //角色刷新信息列表
-	public List<Vector3>   mBornPos   = new List<Vector3>();   //随机出生点 
+	public List<Vector3>   mBornPos   = new List<Vector3>();   //随机出生点
+	int mUnitCount;
 	// Use this for initialization
-	void Start () {
-	}
-	
-	// Update is called once per frame
-	void Update () {
-
-	}
-
     void OnTriggerEnter()
     {
-        for (int i = 0; i < mActorInfo.Count; ++i)
-        {
-            ActorInfo a = mActorInfo[i];
-            //NetMgr.server.createMonster(a.actorId, Vector3.right, a.pos);
-        }
+		Debug.LogError ("OnTriggerEnter");
+		if (NetMgr.server == null)return;//不是服务器
+		if (mUnitCount > 0)return;//刷新点怪没有清光
+		StartCoroutine(CreateActor());
     }
+
+	IEnumerator CreateActor()
+	{
+		mUnitCount = mActorInfo.Count;
+		for (int i = 0; i < mActorInfo.Count; ++i)
+		{
+			ActorInfo a = mActorInfo [i];
+			Unit u = NetMgr.server.createMonster(a.actorId, Vector3.right, a.pos);
+			u.AddStateListener (OnUnitStateChange);
+			yield return null;
+		}
+	}
+
+	void OnUnitStateChange(Unit u)
+	{
+		if (u.isState (UnitState.Exist))return;
+		--mUnitCount;
+	}
 
 	void OnDrawGizmosSelected()
 	{
