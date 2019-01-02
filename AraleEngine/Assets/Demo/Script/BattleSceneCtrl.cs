@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Arale.Engine;
+using UnityEngine.EventSystems;
 
 public class BattleSceneCtrl : SceneCtrl {
 	public Unit player{ get; protected set;}
@@ -16,8 +17,10 @@ public class BattleSceneCtrl : SceneCtrl {
 
 	protected override void onUpdate()
 	{
+		//点中ui
+		if (EventSystem.current.IsPointerOverGameObject ())return;
 		if (player == null)return;
-		if (Input.GetMouseButtonDown (0))
+		/*if (Input.GetMouseButtonDown (0))
 		{//行走目标选择
 			if(GUIUtility.hotControl!=0)return;//点在GUI上了
 			if(Camera.main==null)return;
@@ -25,7 +28,7 @@ public class BattleSceneCtrl : SceneCtrl {
 			RaycastHit hit;
 			if (!Physics.Raycast (ray, out hit) || hit.collider.name != "NavMesh")return;
 			player.nav.startNav (hit.point);
-		}
+		}*/
 
 		if (Input.GetMouseButtonDown (1))
 		{//技能目标选择

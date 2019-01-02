@@ -58,11 +58,8 @@ end
 function M:OnUpdate()
 	local  hero = self._hero
 	if hero == nil then return end
-	local  joystick = self.luaJoyStick 
-	local  dir = Vector3.zero
-	dir.z = joystick.mDir.y
-	dir.x = joystick.mDir.x
-	dir = dir.normalized
+	local  joystick = self.luaJoyStick
+	local  dir = Vector3(joystick.mDir.x, 0.0, joystick.mDir.y).normalized
 	if dir.z == 0 and dir.x==0 then
 		hero.nav:stopMove ()
 	else

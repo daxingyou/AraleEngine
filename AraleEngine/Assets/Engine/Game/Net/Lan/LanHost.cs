@@ -113,7 +113,7 @@ public class LanHost : NetworkDiscovery//局域网发现,两端的端口设置�
 		if (c==null)return;
         Log.i("LanHost onDisconnected accountId="+c.accoundId+",connecttionId="+msg.conn.connectionId, Log.Tag.Net);
 		Unit u = mUnitMgr.getUnit (c.playerGUID);
-		if (u != null)u.decState(UnitState.Exist);
+		if (u != null)u.decState(UnitState.Exist,true);
         mClients.Remove (msg.conn.connectionId);
         c.deinit ();
     }
