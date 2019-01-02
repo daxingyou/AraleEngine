@@ -7,6 +7,7 @@ using System;
 
 public class NavPlugin : Plugin
 {
+	public const float FollowDelay = 0.1f;//值越小跟随越紧
 	public const float G = -10f;//重力加速度
 	enum State
 	{
@@ -103,9 +104,13 @@ public class NavPlugin : Plugin
 		if (mSteps.Count > 0)
 		{//0.5s内采样完成 
 			Step step = mSteps [0];
-			if (Vector3.Distance (mUnit.pos, step.pos) <= Time.deltaTime * speed)
+			mDelay = 0.001f*(RTime.R.utcTickMs - step.time);
+			float dt = mDelay<=FollowDelay?0:Time.deltaTime/FollowDelay*mDelay;
+			float detalTime = Time.deltaTime+dt;
+			mNavDir = (step.pos - mUnit.pos).normalized;
+			mDelay -= dt;
+			if (Vector3.Distance (mUnit.pos, step.pos) <= detalTime * speed)
 			{
-				Debug.LogError ("del");
 				mSteps.RemoveAt (0);
 				mUnit.pos = step.pos;
 				mUnit.dir = step.dir;
@@ -120,15 +125,10 @@ public class NavPlugin : Plugin
 					mNavDir = Vector3.zero;
 					break;
 				}
-			} 
+			}
 			else
 			{
-				mDelay = 0.001f*(RTime.R.utcTickMs - step.time);
-				float dt = mDelay<=0.5f?0:Time.deltaTime/0.5f*mDelay;
-				mNavDir = (step.pos - mUnit.pos).normalized;
-				Debug.LogError ("dt:"+dt+",c="+mSteps.Count+",dir="+mNavDir.ToString()+",state="+mNavState);
-				updatePos (Time.deltaTime+dt);//dt逐帧补偿延迟时间
-				mDelay -= dt;
+				updatePos (detalTime);
 			}
 		}
 		else
