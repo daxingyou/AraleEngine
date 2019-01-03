@@ -50,7 +50,9 @@ public class BattleSceneCtrl : SceneCtrl {
 				player.addState (0, true);
 			}
 		}
-
+		if(Input.GetKeyDown (KeyCode.Space)) {
+			player.nav.jump ();
+		}
 		if (Input.GetKeyDown (KeyCode.F1)) {
 			player.skill.playIndex(0);
 		}

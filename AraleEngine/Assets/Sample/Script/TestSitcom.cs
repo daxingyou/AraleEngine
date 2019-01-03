@@ -28,7 +28,7 @@ public class TestSitcom : GRoot
 				SitcomSystem.single.Stop ();
 				return;
 			}
-			string path = GHelper.getLoadPathFromAssetObject (mSitcomFile);
+			string path = GHelper.GetLoadPathFromAssetObject (mSitcomFile);
 			SitcomSystem.single.Play (path, onSitcomComplete);
 		}
 	}

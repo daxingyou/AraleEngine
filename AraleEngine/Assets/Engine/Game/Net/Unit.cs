@@ -454,7 +454,7 @@ public class Unit : LuaMono
 			unit.mTran = unit.transform;
 			unit.mTran.SetParent(unit.mgr.unitRoot, false);
 			unit.mTran.localScale = Vector3.one;
-			GHelper.setLayer (unit.mTran, isServer ? LayerMask.NameToLayer ("Server") : LayerMask.NameToLayer ("Client"));
+			GHelper.SetLayer (unit.mTran, isServer ? LayerMask.NameToLayer ("Server") : LayerMask.NameToLayer ("Client"));
 			//=======================
 			Log.i((isServer?"S ":"C ")+"create unit type=" + unit.type + ",guid=" + unit.guid, Log.Tag.Unit);
 			unit.onUnitInit ();

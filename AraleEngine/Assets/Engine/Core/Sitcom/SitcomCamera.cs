@@ -13,7 +13,7 @@ public class SitcomCamera : SitcomSystem.Action
     public void onEvent (TimeMgr.Action a)
 	{
 		Log.i ("camera act="+act+","+id, Log.Tag.Sitcom);
-		if(actor!=null)mCam = GHelper.getGameObjectByName(actor.Split(','));
+		if(actor!=null)mCam = GHelper.GetGameObjectByName(actor.Split(','));
 		switch (act)
 		{
 		case "shake":

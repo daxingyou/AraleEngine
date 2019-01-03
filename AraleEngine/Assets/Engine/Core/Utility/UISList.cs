@@ -92,6 +92,7 @@ namespace Arale.Engine
             }
             it.setData(data);
             it.gameObject.SetActive(true);
+			it.transform.SetAsLastSibling ();
             return it;
         }
 

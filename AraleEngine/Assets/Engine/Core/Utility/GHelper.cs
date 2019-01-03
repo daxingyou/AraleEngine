@@ -26,7 +26,7 @@ namespace Arale.Engine
     		return null;
     	}
 
-    	public static GameObject getSubGameObjectByPath(GameObject go, string path)
+    	public static GameObject GetSubGameObjectByPath(GameObject go, string path)
     	{
     		if(path[0] == '/')
     		{
@@ -56,7 +56,7 @@ namespace Arale.Engine
     		}
     	}
 
-    	public static GameObject[] getGameObjectByName(string[] name)
+    	public static GameObject[] GetGameObjectByName(string[] name)
     	{
     		List<GameObject> ls = new List<GameObject> ();
     		GameObject go;
@@ -74,7 +74,7 @@ namespace Arale.Engine
     		return null;
     	}
 
-    	public static string toString<T>(T[] array)
+    	public static string ToString<T>(T[] array)
     	{
     		string s = "";
     		if (array == null)return s;
@@ -178,7 +178,7 @@ namespace Arale.Engine
 
 
     	//销毁所有子节点
-    	public static void destroyChilds(Transform root)
+    	public static void DestroyChilds(Transform root)
     	{
     		for(int i=0,max=root.childCount;i<max;++i)
     		{
@@ -186,26 +186,26 @@ namespace Arale.Engine
     		}
     	}
 
-    	public static void setLayer(Transform root, LayerMask lm)
+    	public static void SetLayer(Transform root, LayerMask lm)
     	{
     		root.gameObject.layer = lm;
     		for (int i=0; i<root.childCount; ++i) 
     		{
-    			setLayer(root.GetChild(i), lm);
+    			SetLayer(root.GetChild(i), lm);
     		}
     	}
 
-    	public static long remoteTick2Local(long tick)
+    	public static long RemoteTick2Local(long tick)
     	{
     		return tick * 10000 + utcTicks;
     	}
 
-    	public static long localTick2Remote(long tick)
+    	public static long LocalTick2Remote(long tick)
     	{
     		return (tick - utcTicks) / 10000;
     	}
 
-    	public static long tick2minute(long tick)
+    	public static long Tick2minute(long tick)
     	{
     		return tick/600000000;
     	}
@@ -219,13 +219,13 @@ namespace Arale.Engine
     		}
     	}
 
-    	public static void playAnim(GameObject go, string clip, bool unscaleTime=false, AnimationEx.OnComplite onComplite=null)
+    	public static void PlayAnim(GameObject go, string clip, bool unscaleTime=false, AnimationEx.OnComplite onComplite=null)
     	{
     		AnimationEx ae = go.AddComponent<AnimationEx>();
     		ae.Play(clip,onComplite,unscaleTime);
     	}
 
-    	public static string getLoadPathFromAssetObject(Object asset)
+    	public static string GetLoadPathFromAssetObject(Object asset)
     	{
     #if UNITY_EDITOR
     		string path = UnityEditor.AssetDatabase.GetAssetPath(asset);

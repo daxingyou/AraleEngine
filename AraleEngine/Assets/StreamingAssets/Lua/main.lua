@@ -15,6 +15,7 @@ Lpeg = require 'lpeg'
 --==============unity
 CU = CS.UnityEngine
 UI = CU.UI
+GameObject = CS.UnityEngine.GameObject
 Matrix4x4 = CS.UnityEngine.Matrix4x4
 Quaternion = CS.UnityEngine.Quaternion
 Vector3 = CS.UnityEngine.Vector3
@@ -34,6 +35,7 @@ NetworkMgr = CS.Arale.Engine.NetworkMgr
 NetMgr = CS.NetMgr
 Window = CS.Arale.Engine.Window
 Log = CS.Arale.Engine.Log
+GHelper = CS.Arale.Engine.GHelper
 UISwitch = CS.UISwitch
 LuaHelp    = CS.LuaHelp
 UnitState = CS.UnitState
@@ -41,6 +43,7 @@ UnitType = CS.UnitType
 Unit = CS.Unit
 Buff = CS.Buff
 GameArea = CS.GameArea
+UIItemSlot = CS.UIItemSlot
 --===============配表
 TBSkill = CS.Arale.Engine.TBSkill
 --===============协议
@@ -59,6 +62,8 @@ require "game/ui/LPlayerWindow"
 require "game/ui/LTaskWindow"
 require "game/ui/LSkillWindow"
 require "game/ui/LShopWindow"
+require "game/ui/LMailWindow"
+require "game/ui/mail/LMailItem"
 require "game/ui/shop/LShopItem"
 require "game/ui/LForginWindow"
 require "game/ui/LBagWindow"
@@ -99,6 +104,7 @@ function  main( ... )
 	WindowMgr.SetWindowRes ("ImbedWindow", "UI/ImbedWindow")
 	WindowMgr.SetWindowRes ("BagWindow", "UI/BagWindow")
 	WindowMgr.SetWindowRes ("RoleCreateWindow", "UI/RoleCreateWindow")
+	WindowMgr.SetWindowRes ("MailWindow", "UI/MailWindow")
 
 	TableMgr.TestModel = true
 

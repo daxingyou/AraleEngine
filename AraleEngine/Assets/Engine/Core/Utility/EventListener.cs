@@ -7,25 +7,7 @@ namespace Arale.Engine
         
     public class EventListener : EventTrigger
     {
-    	public enum EventType
-    	{
-    		PointerClick,
-    		PointerDown,
-    		PointerUp,
-    		PointerEnter,
-    		PointerExit,
-    		Select,
-    		Deselect,
-    		UpdateSelected,
-    		BeginDrag,
-    		EndDrag,
-    		Drag,
-    		Drop,
-    		Scroll,
-    		Cancel,
-    	}
-
-    	public delegate void VoidDelegate (EventType et, BaseEventData eventData);
+    	public delegate void VoidDelegate (BaseEventData eventData);
     	public static EventListener Get (GameObject go)
         {
     		EventListener listener = go.GetComponent<EventListener>();
@@ -43,6 +25,8 @@ namespace Arale.Engine
         public VoidDelegate onSelect;
         public VoidDelegate onUpdateSelected;
         public VoidDelegate onBeginDrag;
+		public void AddOnBeginDrag(VoidDelegate callback){onBeginDrag += callback;}
+		public void RemoveOnBeginDrag(VoidDelegate callback){onBeginDrag -= callback;}
         public VoidDelegate onScroll;
         public VoidDelegate onCancel;
         public VoidDelegate onDeselect;
@@ -51,58 +35,58 @@ namespace Arale.Engine
         public VoidDelegate onEndDrag;
     	public override void OnPointerClick(PointerEventData eventData)
         {
-            if(onClick != null) onClick(EventType.PointerClick, eventData);
+            if(onClick != null) onClick(eventData);
     	}
     	public override void OnPointerDown (PointerEventData eventData)
     	{
-            if(onPointDown != null) onPointDown(EventType.PointerDown, eventData);
+            if(onPointDown != null) onPointDown(eventData);
     	}
     	public override void OnPointerEnter (PointerEventData eventData)
     	{
-            if(onPointerEnter != null) onPointerEnter(EventType.PointerEnter, eventData);
+            if(onPointerEnter != null) onPointerEnter(eventData);
     	}
     	public override void OnPointerExit (PointerEventData eventData)
     	{
-            if(onPointerExit != null) onPointerExit(EventType.PointerExit, eventData);
+            if(onPointerExit != null) onPointerExit(eventData);
     	}
     	public override void OnPointerUp (PointerEventData eventData)
     	{
-            if(onPointerUp != null) onPointerUp(EventType.PointerUp, eventData);
+            if(onPointerUp != null) onPointerUp(eventData);
     	}
     	public override void OnSelect (BaseEventData eventData)
     	{
-            if(onSelect != null) onSelect(EventType.Select, eventData);
+            if(onSelect != null) onSelect(eventData);
     	}
     	public override void OnUpdateSelected (BaseEventData eventData)
     	{
-            if(onUpdateSelected != null) onUpdateSelected(EventType.UpdateSelected, eventData);
+            if(onUpdateSelected != null) onUpdateSelected(eventData);
     	}
     	public override void OnBeginDrag (PointerEventData eventData)
     	{
-            if(onBeginDrag != null) onBeginDrag(EventType.BeginDrag, eventData);
+            if(onBeginDrag != null) onBeginDrag(eventData);
     	}
     	public override void OnScroll (PointerEventData eventData){
-            if(onScroll != null) onScroll(EventType.Scroll, eventData);
+            if(onScroll != null) onScroll(eventData);
     	}
     	public override void OnCancel (BaseEventData eventData)
     	{
-            if(onCancel != null) onCancel(EventType.Cancel, eventData);
+            if(onCancel != null) onCancel(eventData);
     	}
     	public override void OnDeselect (BaseEventData eventData)
     	{
-            if(onDeselect != null) onDeselect(EventType.Deselect, eventData);
+            if(onDeselect != null) onDeselect(eventData);
     	}
     	public override void OnDrag (PointerEventData eventData)
     	{
-            if(onDrag != null) onDrag(EventType.Drag, eventData);
+            if(onDrag != null) onDrag(eventData);
     	}
     	public override void OnDrop (PointerEventData eventData)
     	{
-            if(onDrop != null) onDrop(EventType.Drop, eventData);
+            if(onDrop != null) onDrop(eventData);
     	}
     	public override void OnEndDrag (PointerEventData eventData)
     	{
-            if(onEndDrag != null) onEndDrag(EventType.EndDrag, eventData);
+            if(onEndDrag != null) onEndDrag(eventData);
     	}
     }
 
