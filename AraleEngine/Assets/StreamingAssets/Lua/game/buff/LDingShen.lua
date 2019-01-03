@@ -1,46 +1,51 @@
 if not LDingShen then
 
-LDingShen = 
+local M = 
 {
 	_cs  = nil;
 	_unit= nil;
 	_param=nil;
-	new= function(this,cs)
-		this._cs = cs;
-		this._cs.luaOnEvent = function(evt,param) this:onEvent(evt,param); end
-		this._param = BuffParam.DingShen[cs.table.param];
-	end;
-	--========================
-	onEvent = function(this, evt, param)
-		this[evt](this, evt, param);
-	end;
 
-	[0] = function(this, evt, param)
+	[0] = function(this, param)
 		this._unit = param;
-		this._unit:addState(Unit.STMove);
-		this._unit:addState(Unit.STAnim);
-		this._unit:addState(Unit.STSkill,true);
+		this._unit:addState(UnitState.Move);
+		this._unit:addState(UnitState.Anim);
+		this._unit:addState(UnitState.Skill,true);
 		this._unit.attr.speed = 0;
 		this._unit.attr:sync();
 		this._cs.state = 1;
 		local ta = this._cs.timer
-		action = ta:addAction(TimeMgr.Action());
+		action = ta:AddAction(TimeMgr.Action());
 		action.doTime = this._param.duration;
 		action.onAction = function()
 			this._cs.state = 0;
 		end
 	end;
 
-	[1] = function(this, evt, param)
-		this._unit:decState(Unit.STMove);
-		this._unit:decState(Unit.STAnim);
-		this._unit:decState(Unit.STSkill,true);
+	[1] = function(this, param)
+		this._unit:decState(UnitState.Move);
+		this._unit:decState(UnitState.Anim);
+		this._unit:decState(UnitState.Skill,true);
 		this._unit.attr.speed = 1;
 		this._unit.attr:sync();
 	end;
 }
 
+function M:new(cs)
+	self._cs = cs
+	this._param = BuffParam.DingShen[cs.table.param]
+	cs.luaOnEvent = self.OnEvent
+end
+
+function M:OnEvent(evt, param)
+		local func = self[evt]
+		if func == nil then return false end
+		func(self, param)
+		return true
+end
 --must--
+--========================
+LDingShen = M
 createClass("LDingShen",LDingShen)
 --======
 BuffParam.DingShen=

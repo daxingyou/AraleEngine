@@ -19,6 +19,7 @@ Matrix4x4 = CS.UnityEngine.Matrix4x4
 Quaternion = CS.UnityEngine.Quaternion
 Vector3 = CS.UnityEngine.Vector3
 Vector2 = CS.UnityEngine.Vector2
+Time = CS.UnityEngine.Time
 --==============引擎
 AssetRef = CS.Arale.Engine.AssetRef
 GRoot = CS.Arale.Engine.GRoot
@@ -37,6 +38,9 @@ UISwitch = CS.UISwitch
 LuaHelp    = CS.LuaHelp
 UnitState = CS.UnitState
 UnitType = CS.UnitType
+Unit = CS.Unit
+Buff = CS.Buff
+GameArea = CS.GameArea
 --===============配表
 TBSkill = CS.Arale.Engine.TBSkill
 --===============协议
@@ -67,6 +71,17 @@ require "game/battle/LBattleSceneCtrl"
 require "game/ui/main/LSKillButton"
 require "game/ai/LHero"
 require "game/ai/LMonster"
+BuffParam={}
+require "game/buff/LChenMo"
+require "game/buff/LDingShen"
+require "game/buff/LHuiXue"
+require "game/buff/LJianSu"
+require "game/buff/LJianXue"
+require "game/buff/LJinGang"
+require "game/buff/LJingHua"
+require "game/buff/LJinGu"
+require "game/buff/LSkillHarm"
+require "game/buff/LLeiGongBaoFeng"
 print("require all ok");
 --=====================================================
 function  main( ... )

@@ -18,7 +18,7 @@ public class BattleSceneCtrl : SceneCtrl {
 	protected override void onUpdate()
 	{
 		//点中ui
-		if (EventSystem.current.IsPointerOverGameObject ())return;
+		//if (EventSystem.current==null || EventSystem.current.IsPointerOverGameObject ())return;
 		if (player == null)return;
 		/*if (Input.GetMouseButtonDown (0))
 		{//行走目标选择

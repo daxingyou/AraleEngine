@@ -1,16 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Arale.Engine;
+using XLua;
 
 public class LuaBuff : Buff
 {
 	LuaObject mL;
-	public delegate bool OnEvent (int evt, object param);
+	public delegate bool OnEvent (LuaTable table, int evt, object param);
 	public OnEvent luaOnEvent;
 
 	protected override bool onEvent(int evt, object param)
 	{
-		return luaOnEvent (evt, param);
+		return luaOnEvent (mL.mLT, evt, param);
 	}
 
 	protected override void onInit(Unit unit)

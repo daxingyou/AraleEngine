@@ -1,28 +1,19 @@
 if not LSkillHarm then
 
-LSkillHarm = 
+local M = 
 {
 	_cs  = nil;
 	_unit= nil;
 	_param=nil;
-	new= function(this,cs)
-		this._cs = cs;
-		this._cs.luaOnEvent = function(evt,param) this:onEvent(evt,param); end
-		this._param = BuffParam.SkillHarm[cs.table.param];
-	end;
-	--========================
-	onEvent = function(this, evt, param)
-		this[evt](this, evt, param);
-	end;
 
-	[0] = function(this, evt, param)
+	[0] = function(this, param)
 		this._unit = param;
 		this._unit:forward(this._unit.skill.targetPos);
-		this._unit:addState(Unit.STMove);
+		this._unit:addState(UnitState.Move);
 		this._unit.anim:sendEvent(AnimPlugin.PlayAnim, this._param.anim);
 
 		local ta = this._cs.timer
-		action = ta:addAction(TimeMgr.Action());
+		action = ta:AddAction(TimeMgr.Action());
 		action.doTime = this._param.delay;
 		action.onAction = function()
 			local area  = GameArea.fromString(this._param.area);
@@ -42,12 +33,26 @@ LSkillHarm =
 		end
 	end;
 
-	[1] = function(this, evt, param)
-		this._unit:decState(Unit.STMove,true);
+	[1] = function(this, param)
+		this._unit:decState(UnitState.Move,true);
 	end;
 }
 
+function M:new(cs)
+	self._cs = cs
+	self._param = BuffParam.SkillHarm[cs.table.param]
+	cs.luaOnEvent = self.OnEvent
+end
+
+function M:OnEvent(evt, param)
+		local func = self[evt]
+		if func == nil then return false end
+		func(self, param)
+		return true
+end
 --must--
+--========================
+LSkillHarm = M
 createClass("LSkillHarm",LSkillHarm)
 --======
 BuffParam.SkillHarm=

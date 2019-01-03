@@ -22,7 +22,7 @@ public class TestUnit : GRoot
 			if(go==null)return;
 			Unit u = go.GetComponent<Unit>();
 			if(u==null)return;
-			if((u.type==1||u.type==2) && u.name.StartsWith("*"))mPlayer=u;
+			if((u.type==UnitType.Monster||u.type==UnitType.Player) && u.name.StartsWith("*"))mPlayer=u;
 		};
 			
 	}

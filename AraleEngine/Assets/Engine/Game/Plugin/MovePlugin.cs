@@ -72,6 +72,7 @@ public class Move
 				mMove = new JumpMove ();
 				break;
 			default:
+				Log.e ("unsupport move type=" + tb.type, Log.Tag.Unit);
 				return;
 			}
 			mMove.table = tb;

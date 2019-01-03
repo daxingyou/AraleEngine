@@ -7,7 +7,7 @@ using System;
 
 public class NavPlugin : Plugin
 {
-	public const float FollowDelay = 0.1f;//值越小跟随越紧
+	public const float FollowDelay = 0.3f;//值越小跟随越紧
 	public const float G = -10f;//重力加速度
 	enum State
 	{

@@ -34,7 +34,7 @@ public class TableBuilder<T> : ITableBuilder where T:TableBase, new()
 				}
 				catch(Exception e)
 				{
-					Log.e ("fmt error:" + datas [i]);
+					Log.e ("fmt error:" + datas [i]+",path="+path);
 				}
             }
         }

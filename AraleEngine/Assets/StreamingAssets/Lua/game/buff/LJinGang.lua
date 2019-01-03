@@ -1,29 +1,17 @@
 if not LJinGang then
 
-LJinGang = 
+local M = 
 {
 	_cs  = nil;
 	_unit= nil;
 	_param=nil;
-	new= function(this,cs)
-		this._cs = cs;
-		this._cs.luaOnEvent = function(evt,param) return this:onEvent(evt,param); end
-		this._param = BuffParam.JinGang[cs.table.param];
-	end;
-	--========================
-	onEvent = function(this, evt, param)
-		local func = this[evt];
-		if func == nil then return false end;
-		func(this, evt, param);
-		return true;
-	end;
 
-	[0] = function(this, evt, param)
+	[0] = function(this, param)
 		this._unit = param;
 		this._unit.buff:clearBuff(0x0000ffff);
 		this._cs.state = 1;
 		local ta = this._cs.timer
-		action = ta:addAction(TimeMgr.Action());
+		action = ta:AddAction(TimeMgr.Action());
 		action.doTime = this._param.duration;
 		action.onAction = function()
 			this._cs.state = 0;
@@ -31,7 +19,21 @@ LJinGang =
 	end;
 }
 
+function M:new(cs)
+	self._cs = cs
+	self._param = BuffParam.JinGang[cs.table.param]
+	cs.luaOnEvent = self.OnEvent
+end
+
+function M:OnEvent(evt, param)
+		local func = self[evt]
+		if func == nil then return false end
+		func(self, param)
+		return true
+end
 --must--
+--========================
+LJinGang = M
 createClass("LJinGang",LJinGang)
 --======
 BuffParam.JinGang=

@@ -1,21 +1,12 @@
 if not LJinGu then
 
-LJinGu = 
+local M = 
 {
 	_cs  = nil;
 	_unit= nil;
 	_param=nil;
-	new= function(this,cs)
-		this._cs = cs;
-		this._cs.luaOnEvent = function(evt,param) this:onEvent(evt,param); end
-		this._param = BuffParam.JinGu[cs.table.param];
-	end;
-	--========================
-	onEvent = function(this, evt, param)
-		this[evt](this, evt, param);
-	end;
 
-	[0] = function(this, evt, param)
+	[0] = function(this, param)
 		this._unit = param;
 		this._unit:addState(Unit.STMove);
 		this._unit:addState(Unit.STAnim);
@@ -29,14 +20,28 @@ LJinGu =
 		end
 	end;
 
-	[1] = function(this, evt, param)
+	[1] = function(this, param)
 		this._unit:decState(Unit.STMove);
 		this._unit:decState(Unit.STAnim);
 		this._unit:decState(Unit.STSkill,true);
 	end;
 }
 
+function M:new(cs)
+	self._cs = cs
+	self._param = BuffParam.JinGu[cs.table.param]
+	cs.luaOnEvent = self.OnEvent
+end
+
+function M:OnEvent(evt, param)
+		local func = self[evt]
+		if func == nil then return false end
+		func(self, param)
+		return true
+end
 --must--
+--========================
+LJinGu = M
 createClass("LJinGu",LJinGu)
 --======
 BuffParam.JinGu=

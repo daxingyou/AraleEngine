@@ -38,4 +38,3 @@
 {"_id":10008,"type":0,"param":0,"kind":18,"mutex":31,"lua":"LJingHua","flag":"净化","priority":32,"desc":"净化buff"}
 {"_id":10009,"type":0,"param":1,"kind":18,"mutex":31,"lua":"LJingHua","flag":"净化","priority":32,"desc":"净化buff"}
 {"_id":10011,"type":0,"param":1,"kind":1,"mutex":0,"lua":"LJianSu","flag":"残废","desc":"加减速buff"}
-

@@ -1,27 +1,18 @@
 if not LJianXue then
 
-LJianXue = 
+local M = 
 {
 	_cs  = nil;
 	_unit= nil;
 	_param=nil;
 	_times=0;
-	new= function(this,cs)
-		this._cs = cs;
-		this._cs.luaOnEvent = function(evt,param) this:onEvent(evt,param); end
-		this._param = BuffParam.JianXue[cs.table.param];
-	end;
-	--========================
-	onEvent = function(this, evt, param)
-		this[evt](this, evt, param);
-	end;
 
-	[0] = function(this, evt, param)
+	[0] = function(this, param)
 		this._unit = param;
-		this._unit:addState(Unit.STSkill,true);
+		this._unit:addState(UnitState.Skill,true);
 		local ta = this._cs.timer
 		
-		action = ta:addAction(TimeMgr.Action());
+		action = ta:AddAction(TimeMgr.Action());
 		action.doTime = this._param.duration;
 		action.onAction = function(act)
 			this._unit.attr.HP = this._unit.attr.HP + this._param.hp;
@@ -30,17 +21,31 @@ LJianXue =
 			if this._times >= this._param.times then
 				this._cs.state = 0;
 			else
-				act:loop(this._param.interval);
+				act:Loop(this._param.interval);
 			end
 		end
 	end;
 
-	[1] = function(this, evt, param)
-		this._unit:decState(Unit.STSkill,true);
+	[1] = function(this, param)
+		this._unit:decState(UnitState.Skill,true);
 	end;
 }
 
+function M:new(cs)
+	self._cs = cs
+	self._param = BuffParam.JianXue[cs.table.param]
+	cs.luaOnEvent = self.OnEvent
+end
+
+function M:OnEvent(evt, param)
+		local func = self[evt]
+		if func == nil then return false end
+		func(self, param)
+		return true
+end
 --must--
+--========================
+LJianXue = M
 createClass("LJianXue",LJianXue)
 --======
 BuffParam.JianXue=

@@ -23,11 +23,13 @@ public static class LuaHelp
 	public static List<Type> cs_call_lua = new List<Type>(){
 		typeof(Action),
 		typeof(Action<LuaTable>),
+		typeof(Func<LuaTable,int,object,bool>),
 		typeof(EventMgr.EventCallback),
 		typeof(EventListener.VoidDelegate),
 		typeof(UISwitch.OnValueChange),
 		typeof(UISListItem.OnSelectChange),
 		typeof(Unit.OnStateChange),
+		typeof(LuaBuff.OnEvent),
 		typeof(TimeMgr.Action.OnAction),
 		typeof(VoidDelegate),
 		typeof(BoolDelegateI)

@@ -2,22 +2,22 @@ if not LClass then
 
 --code imp class inherit--
 function newLuaObject(className,...)
-	--print("newLuaObject:"..className);
-	if nil==className then print("newLuaObject c# object is null"); end
-	local f=load("return instantiate("..className..",...)");
-	return f(...);--call instantiate
+	print("newLuaObject:"..className);
+	local luaTable = load("return "..className)
+	if nil==luaTable then print("newLuaObject failed className="..className); end
+	return instantiate(luaTable(), ...)
 end
 
 function instantiate(a,...)
 	if not a then
-		error("new a invalid Class");
+		error("instantiate table is nil")
 		return nil
 	end
 
-	local result = {__index=result;test="test"};
-	setmetatable(result,a);
-	result:___new(...);
-	return result;
+	local result = {__index=result;}
+	setmetatable(result,a)
+	result:___new(...)
+	return result
 end
 
 function createClass(subClassName,subClass,baseClass)

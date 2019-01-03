@@ -3,6 +3,7 @@ if not LMainWindow then
 local M =
 {
 	_hero;
+	_timeGap = 0;
 }
 
 function M:new(cs)
@@ -56,6 +57,10 @@ function M:OnBindPlayer(evt)
 end
 
 function M:OnUpdate()
+	self._timeGap = self._timeGap + Time.deltaTime
+	if self._timeGap < 0.1 then return end
+	self._timeGap = self._timeGap - 0.1
+
 	local  hero = self._hero
 	if hero == nil then return end
 	local  joystick = self.luaJoyStick
