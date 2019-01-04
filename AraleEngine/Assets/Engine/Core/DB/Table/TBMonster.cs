@@ -16,6 +16,7 @@ namespace Arale.Engine
 		public float  speed=0f;
         public string ai="";
 		public string skills="";
+		public int aggression=0;
 
         public override void Init(string[] value)
         {

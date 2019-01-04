@@ -186,6 +186,11 @@ namespace Arale.Engine
     		}
     	}
 
+		public static void SetLayer(Transform root, string layerName)
+		{
+			SetLayer (root, LayerMask.NameToLayer (layerName));
+		}
+
     	public static void SetLayer(Transform root, LayerMask lm)
     	{
     		root.gameObject.layer = lm;

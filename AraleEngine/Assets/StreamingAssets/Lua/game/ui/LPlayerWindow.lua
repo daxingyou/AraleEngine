@@ -2,19 +2,35 @@ if not LPlayerWindow then
 
 local M =
 {
+	_player;
 }
 
-function M:new(csobj)
-	csobj.luaOnStart = function() self:Start(); end
+function M:new(cs)
+	cs.luaOnStart = self.Start
 end
 
 function M:Start()
-	--EventListener.Get(self.luaPlayer):AddOnClick(function(evt)  WindowMgr.single:GetWindow("PlayerWindow", true) end)
-	--EventListener.Get(self.luaTask):AddOnClick(function(evt)  WindowMgr.single:GetWindow("TaskWindow", true) end)
-	--EventListener.Get(self.luaBag):AddOnClick(function(evt)  WindowMgr.single:GetWindow("BagWindow", true) end)
-	--EventListener.Get(self.luaShop):AddOnClick(function(evt)  WindowMgr.single:GetWindow("ShopWindow", true) end)
-	--EventListener.Get(self.luaForgin):AddOnClick(function(evt)  WindowMgr.single:GetWindow("ForginWindow", true) end)
-	--EventListener.Get(self.luaSkill):AddOnClick(function(evt)  WindowMgr.single:GetWindow("SkillWindow", true) end)
+	local csTB  = TableMgr.single:GetDataByKey(typeof(TBPlayer), self._player.tid)
+	local luaTB = LTBPlayer[self._player.tid]
+	local mod = ResLoad.get(csTB.model):gameObject()
+	GameObject.Destroy(mod:GetComponent(typeof(Rigidbody)))
+	GameObject.Destroy(mod:GetComponent(typeof(NavMeshAgent)))
+	GameObject.Destroy(mod:GetComponent(typeof(Collider)))
+	mod.transform:SetParent(self.luaModel.transform, false)
+	GHelper.SetLayer(mod.transform, "UI")
+
+	EventListener.Get(self.luaE1):AddOnClick(function(evt)  self:OnEquipClick(evt) end)
+	EventListener.Get(self.luaE2):AddOnClick(function(evt)  self:OnEquipClick(evt) end)
+	EventListener.Get(self.luaE3):AddOnClick(function(evt)  self:OnEquipClick(evt) end)
+	EventListener.Get(self.luaE4):AddOnClick(function(evt)  self:OnEquipClick(evt) end)
+	EventListener.Get(self.luaE5):AddOnClick(function(evt)  self:OnEquipClick(evt) end)
+	EventListener.Get(self.luaE6):AddOnClick(function(evt)  self:OnEquipClick(evt) end)
+	EventListener.Get(self.luaE7):AddOnClick(function(evt)  self:OnEquipClick(evt) end)
+	EventListener.Get(self.luaE8):AddOnClick(function(evt)  self:OnEquipClick(evt) end)
+end
+
+function M:OnEquipClick(evt)
+	WindowMgr.single:GetWindow("BagWindow", true)
 end
 --========================
 LPlayerWindow = M

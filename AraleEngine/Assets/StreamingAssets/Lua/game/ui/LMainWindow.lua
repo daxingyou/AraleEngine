@@ -14,8 +14,9 @@ function M:new(cs)
 end
 
 function M:Start()
+	self.luaPlayer:SetActive(false)
 	EventMgr.single:AddListener("Game.Player", self._onBindPlayer);
-	EventListener.Get(self.luaPlayer):AddOnClick(function(evt)  WindowMgr.single:GetWindow("PlayerWindow", true) end)
+	EventListener.Get(self.luaPlayer):AddOnClick(function(evt)   WindowMgr.single:GetWindow("PlayerWindow", true).mLO.mLT._player = self._hero end)
 	EventListener.Get(self.luaTask):AddOnClick(function(evt)  WindowMgr.single:GetWindow("TaskWindow", true) end)
 	EventListener.Get(self.luaBag):AddOnClick(function(evt)  WindowMgr.single:GetWindow("BagWindow", true) end)
 	EventListener.Get(self.luaShop):AddOnClick(function(evt)  WindowMgr.single:GetWindow("ShopWindow", true) end)
@@ -55,6 +56,14 @@ function M:OnBindPlayer(evt)
     	local it = list:addItem(skill)
     	it.mLO.mLT:SetData(skill)
     end
+
+    self:SetPlayer()
+end
+
+function M:SetPlayer()
+	self.luaPlayer:SetActive(true)
+	local tb = LTBPlayer[self._hero.tid]
+	self.luaPlayer:GetComponent(typeof(PlayerHeader)):SetData(tb.name, tb.icon, 1)
 end
 
 function M:OnUpdate()

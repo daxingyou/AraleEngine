@@ -1,5 +1,5 @@
-{"_id":1001,"name":"后羿","model":"Model/houyi","speed":"3","ai":"LMonster","skills":"100,101,102,103"}
-{"_id":1002,"name":"娥皇","model":"Model/ehuang","speed":"3","ai":"LMonster","skills":"200,201,202,203"}
-{"_id":1003,"name":"孙悟空","model":"Model/sunwukong","speed":"3","ai":"LMonster","skills":"300,301,302,303"}
-{"_id":1004,"name":"哪吒","model":"Model/nezha","speed":"3","ai":"LMonster","skills":"400,401,402,403"}
-{"_id":1006,"name":"雷公","model":"Model/leigong","speed":"3","ai":"LMonster","skills":"600,601,602,603"}
+{"_id":1001,"name":"后羿","model":"Model/houyi","speed":"3","aggression":0,"ai":"LMonster","skills":"100,101,102,103"}
+{"_id":1002,"name":"娥皇","model":"Model/ehuang","speed":"3","aggression":0,"ai":"LMonster","skills":"200,201,202,203"}
+{"_id":1003,"name":"孙悟空","model":"Model/sunwukong","speed":"aggression":2,"3","ai":"LMonster","skills":"300,301,302,303"}
+{"_id":1004,"name":"哪吒","model":"Model/nezha","speed":"3","aggression":0,"ai":"LMonster","skills":"400,401,402,403"}
+{"_id":1006,"name":"雷公","model":"Model/leigong","speed":"3","aggression":1,"ai":"LMonster","skills":"600,601,602,603"}

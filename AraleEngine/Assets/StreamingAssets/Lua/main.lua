@@ -21,7 +21,11 @@ Quaternion = CS.UnityEngine.Quaternion
 Vector3 = CS.UnityEngine.Vector3
 Vector2 = CS.UnityEngine.Vector2
 Time = CS.UnityEngine.Time
+Rigidbody = CS.UnityEngine.Rigidbody
+NavMeshAgent = CS.UnityEngine.NavMeshAgent
+Collider = CS.UnityEngine.Collider
 --==============引擎
+ResLoad  = CS.Arale.Engine.ResLoad
 AssetRef = CS.Arale.Engine.AssetRef
 GRoot = CS.Arale.Engine.GRoot
 WindowMgr = CS.Arale.Engine.WindowMgr
@@ -44,8 +48,11 @@ Unit = CS.Unit
 Buff = CS.Buff
 GameArea = CS.GameArea
 UIItemSlot = CS.UIItemSlot
+PlayerHeader = CS.PlayerHeader
 --===============配表
 TBSkill = CS.Arale.Engine.TBSkill
+TBMonster = CS.Arale.Engine.TBMonster
+TBPlayer = CS.Arale.Engine.TBPlayer
 --===============协议
 ProtoWriter = CS.ProtoBuf.ProtoWriter
 WireType = CS.ProtoBuf.WireType
@@ -87,6 +94,8 @@ require "game/buff/LJingHua"
 require "game/buff/LJinGu"
 require "game/buff/LSkillHarm"
 require "game/buff/LLeiGongBaoFeng"
+
+require "game/config/LTBPlayer"
 print("require all ok");
 --=====================================================
 function  main( ... )

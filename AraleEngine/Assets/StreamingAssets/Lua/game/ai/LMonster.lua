@@ -3,10 +3,12 @@ if not LMonster then
 local M=
 {
 	_cs;
+	_table;
 }
 
 function M:new(cs)
 	self._cs = cs;
+	self._table = TableMgr.single:GetDataByKey(typeof(TBMonster), cs.unit.tid)
 	local ta = self._cs.timer
 	local action = ta:AddAction(TimeMgr.Action())
 	action.doTime = 0
@@ -24,12 +26,14 @@ function M:DoAI()
 		 	--反向逃离
 		 	cs:doFlee(1)
 		 else
-		 	if cs.target == nil then
-		 		--没有目标查找目标
-		 		cs:doTarget(1)
-		 	else
-		 		--攻击目标
-		 		cs:doSkill(1)
+		 	if self._table.aggression > 0 then
+			 	if cs.target == nil then
+			 		--没有目标查找目标
+			 		cs:doTarget(1)
+			 	else
+			 		--攻击目标
+			 		cs:doSkill(1)
+			 	end
 		 	end
 		 end
 	end;
