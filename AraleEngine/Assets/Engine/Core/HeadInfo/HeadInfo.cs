@@ -59,6 +59,7 @@ namespace Arale.Engine
 
         static void Recycle(HeadInfo hi)
         {
+			hi.gameObject.SetActive (false);
             mHeadInfos.Remove(hi);
             mHeadInfos.Insert(0, hi);
         }

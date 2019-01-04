@@ -49,6 +49,7 @@ public class Monster : Unit, PoolMgr<int>.IPoolObject
 		mMove   = new Move.Plug (this);
 	}
 
+	HeadInfo mHeadInfo;
     protected override void onUnitInit()
     {
 		base.onUnitInit ();
@@ -57,7 +58,7 @@ public class Monster : Unit, PoolMgr<int>.IPoolObject
 
 		if (!isServer)
 		{
-			HeadInfo.Bind (this.transform, this); 
+			mHeadInfo = HeadInfo.Bind (this.transform, this); 
 		}
     }
 
@@ -78,6 +79,7 @@ public class Monster : Unit, PoolMgr<int>.IPoolObject
 
 	protected override void onUnitDeinit()
 	{
+		if (mHeadInfo != null)mHeadInfo.Unbind ();
 		mAI.stopAI ();
 		Pool.recyle (this);
 	}

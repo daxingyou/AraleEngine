@@ -34,6 +34,7 @@ public class Player : Unit, PoolMgr<int>.IPoolObject
 		mAI     = new LuaAI (this);
 	}
 
+	HeadInfo mHeadInfo;
     protected override void onUnitInit()
     {
         base.onUnitInit();
@@ -42,7 +43,7 @@ public class Player : Unit, PoolMgr<int>.IPoolObject
 
 		if (!isServer)
 		{
-			HeadInfo.Bind (this.transform, this); 
+			mHeadInfo = HeadInfo.Bind (this.transform, this); 
 		}
     }
 
@@ -58,6 +59,7 @@ public class Player : Unit, PoolMgr<int>.IPoolObject
 
 	protected override void onUnitDeinit()
 	{
+		if (mHeadInfo != null)mHeadInfo.Unbind ();
 		Pool.recyle (this);
 	}
 
