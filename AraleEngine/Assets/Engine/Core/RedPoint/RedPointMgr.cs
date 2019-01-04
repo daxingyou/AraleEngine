@@ -24,10 +24,8 @@ namespace Arale.Engine
     	{
     		DateTime  dt = System.DateTime.Now;
     		int  date  = (dt.Year<<16)|(dt.Month<<8)|(dt.Day);
-    		int  sdate = UnityEngine.PlayerPrefs.GetInt ("RedPoint.Activity",0);
-    		if (sdate < date)Set ("Activity", 1);
-    		sdate = UnityEngine.PlayerPrefs.GetInt ("RedPoint.HWZB",0);
-    		if (sdate < date)Set ("HWZB", 1);
+    		//int  sdate = UnityEngine.PlayerPrefs.GetInt ("RedPoint.Test",0);
+    		//if (sdate < date)Set ("Test", 1);
     	}
 
         public override void Deinit()
@@ -45,19 +43,39 @@ namespace Arale.Engine
     		Set (key, 0);
     	}
 
-    	public void Set(string key, int count)
-    	{
-    		_Reds [key] = count;
-    		Notify (0, key);
-    	}
+	    public bool HasRead(string key)
+	    {
+	        if (string.IsNullOrEmpty (key))return false;
+	        int count = 0;
+	        if (_Reds.TryGetValue (key, out count))return count>0?false:true;
 
-    	public int Get(string key)
-    	{
-    		if (string.IsNullOrEmpty (key))return 0;
-    		int count = 0;
-    		if (_Reds.TryGetValue (key, out count))return count;
-    		return 0;
-    	}
+	        DateTime  dt = System.DateTime.Now;
+	        int  date  = (dt.Year<<16)|(dt.Month<<8)|(dt.Day);
+	        int  sdate = UnityEngine.PlayerPrefs.GetInt ("RedPoint." + key, 0);
+	        if (sdate < date)
+	        {//no read
+	            Set(key, 1);
+	            return false;
+	        }
+	        else
+	        {//has read
+	            return true;
+	        }
+	    }
+
+		public void Set(string key, int count)
+		{
+			_Reds [key] = count;
+			Notify (0, key);
+		}
+
+		public int Get(string key)
+		{
+			if (string.IsNullOrEmpty (key))return 0;
+			int count = 0;
+			if (_Reds.TryGetValue (key, out count))return count;
+			return 0;
+		}
     }
 
 }

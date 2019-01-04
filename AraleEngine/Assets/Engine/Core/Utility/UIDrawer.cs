@@ -4,35 +4,51 @@ using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine.EventSystems;
 
-//脚本绑定在抽屉按钮上
+//脚本绑定在抽屉按钮上,_contents节点与DrawerButton为兄弟节点
 public class UIDrawer : MonoBehaviour , IPointerClickHandler{
-    public Transform _content;
+    public Transform[] _contents;//如果设置1个以上，则为切换型抽屉
     public Vector3   _offset;
     public Vector2   _cellSize;
     public float     _speed=0.5f;
     public bool      _autoExpand;
+    public float     _autoContraceTime;
     bool _expand;
     bool _tweening;
     bool _needAdjust;
+    Transform _content;
     CanvasGroup _group;
+    int _flipIdx;
 	// Use this for initialization
+    void Awake()
+    {
+        _content = _contents[_flipIdx];
+    }
+
 	void Start ()
     {
         _group = _content.GetComponent<CanvasGroup>();
-        int count = _content.childCount;
-        for (int i = 0; i < count; ++i)
+        for (int m = 0; m < _contents.Length; ++m)
         {
-            Transform c = _content.GetChild(i);
-            c.localPosition = Vector3.zero;
-            c.localScale    = Vector3.zero;
+            Transform c = _contents[m];
+            int count = c.childCount;
+            for (int i = 0; i < count; ++i)
+            {
+                Transform t = c.GetChild(i);
+                t.localPosition = Vector3.zero;
+                t.localScale = Vector3.zero;
+            }
         }
 
-        if (_autoExpand)Expand();
+        if (_autoExpand)
+        {
+            Expand();
+            if(_autoContraceTime>0)Invoke("Contrace", _autoContraceTime);
+        }
 	}
 
-   void Expand()
+   public void Expand()
     {
-        if (_expand)return;
+        if (_expand || _tweening)return;
         _expand = true;
         _tweening = true;
         Sequence seq = DOTween.Sequence ();
@@ -60,9 +76,9 @@ public class UIDrawer : MonoBehaviour , IPointerClickHandler{
         seq.Play();
     }
 
-    void Contrace()
+    public void Contrace()
     {
-        if (!_expand)return;
+        if (!_expand || _tweening)return;
         _expand = false;
         _tweening = true;
         Sequence seq = DOTween.Sequence ();
@@ -79,13 +95,20 @@ public class UIDrawer : MonoBehaviour , IPointerClickHandler{
         seq.AppendCallback(delegate
             {
                _tweening = false;
+               if(_contents.Length>1)
+                {//可以切换显示的抽屉
+                    _flipIdx=++_flipIdx%_contents.Length;
+                    _content = _contents[_flipIdx];
+                    _content.gameObject.SetActive(true);
+                    Expand();
+                }
             });
         seq.Play();
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if (_tweening)return;
+        CancelInvoke("Contrace");
         if (_expand)
             Contrace();
         else
