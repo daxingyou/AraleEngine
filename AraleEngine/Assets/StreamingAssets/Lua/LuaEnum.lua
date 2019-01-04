@@ -18,3 +18,32 @@ Enum.MyMsgId={
 	CreateBullet=4010,
 }
 
+Enum.Tag={
+	Default=1,
+	RES=2,
+	Net=4,
+	BT=8,
+	DB=16,
+	UI=32,
+	Update=64,
+	Sitcom=128,
+	Unit=256,
+	Scene=512,
+	Skill=1024,
+}
+
+Enum.UnitEvent={
+	NavBegin=100,
+	NavEnd=101,
+	SkillBegin=102,
+	SkillEnd=103,
+	BuffAdd=104,
+	BuffDec=105,
+	BuffClear=106,
+	AIStart=107,
+	AIStop=108,
+	HeadInfoInit=109,
+	HeadInfoDeinit=110,
+	Max=111,
+}
+

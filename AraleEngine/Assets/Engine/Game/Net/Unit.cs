@@ -21,6 +21,8 @@ public enum UnitEvent
 	BuffClear,
 	AIStart,
 	AIStop,
+	HeadInfoInit,
+	HeadInfoDeinit,
 	Max,
 }
 #endregion

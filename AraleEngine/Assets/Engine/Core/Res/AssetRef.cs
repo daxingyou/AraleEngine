@@ -74,15 +74,17 @@ namespace Arale.Engine
 
 		public static bool setImage(Image image, string path)
 		{
+			if (string.IsNullOrEmpty(path))return false;
 			using (ResLoad rl = ResLoad.get (path)) 
 			{
-				rl.asset<GameObject> ();
+                if (null == rl.asset<GameObject>()) return false;
 				return setImage (image, rl);
 			}
 		}
 
 		public static bool setImage(Image image, ResLoad rl)
 		{
+            if (image == null) return false;
 			AssetRef ar = image.GetComponent<AssetRef> ();
 			if (ar == null)ar = image.gameObject.AddComponent<AssetRef> ();
 			ar.copyRef (rl.depends ());

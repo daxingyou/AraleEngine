@@ -8,10 +8,9 @@ using UnityEngine.UI;
 namespace Arale.Engine
 {
 
-    public class HeadInfo : MonoBehaviour
+	public class HeadInfo : LuaMono
     {
         #region HeadInfo管理
-        public delegate void OnHeadInfoInit(HeadInfo hi);
         static List<HeadInfo> mHeadInfos;
         static Transform mMount;
         public static Transform root{get{return mMount;}}
@@ -19,9 +18,10 @@ namespace Arale.Engine
         {
             mHeadInfos = new List<HeadInfo>();
             GameObject go = new GameObject("HeadInfo");
-            go.transform.SetParent(cam.transform,false);
             Canvas canvas = go.AddComponent<Canvas>();
             canvas.worldCamera = cam;
+			canvas.renderMode = RenderMode.ScreenSpaceCamera;
+			canvas.planeDistance = 10;
             if (enableEvent)
             {
                 go.AddComponent<GraphicRaycaster>();
@@ -47,12 +47,12 @@ namespace Arale.Engine
             }
             else
             {
-                GameObject go = ResLoad.get("UI/Main/HeadInfo", ResideType.InScene).gameObject();
+                GameObject go = ResLoad.get("UI/HeadInfo", ResideType.InScene).gameObject();
                 go.transform.SetParent(mMount, false);
                 hi = go.GetComponent<HeadInfo>();
                 mHeadInfos.Add(hi);
             }
-            hi.target = trans;
+			hi.target = trans;
             hi.Init(data);
             return hi;
         }
@@ -65,17 +65,10 @@ namespace Arale.Engine
         #endregion
 
 
-        public float mYOffset = 1;
-        Transform mTarget;
-        public Transform target
-        {
-            set
-            {
-                mTarget = value;
-                Update();
-            }
-            get{ return mTarget; }
-        }
+        public float mYOffset = 3;
+		RectTransform mRT;
+		Transform mTarget;
+		public Transform target{get{return mTarget;} set{mTarget = value;Update ();}}
 
         public void Unbind()
         {
@@ -85,17 +78,27 @@ namespace Arale.Engine
             Recycle(this);
         }
 
-    	// Update is called once per frame
+		protected override void onAwake()
+		{
+			mRT = transform as RectTransform;
+		}
+
     	void Update ()
         {
             if (mTarget == null)return;
             Vector3 v = mTarget.position;
             v.y += mYOffset;
-            transform.position = v; 
+			mRT.position = v;
     	}
             
-        protected virtual void Init(object data){}
-        protected virtual void Deinit(){}
+        protected virtual void Init(object data)
+		{
+			sendEvent ((int)UnitEvent.HeadInfoInit, data);
+		}
+        protected virtual void Deinit()
+		{
+			sendEvent ((int)UnitEvent.HeadInfoDeinit, null);
+		}
     }
 
 }

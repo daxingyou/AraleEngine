@@ -2,7 +2,7 @@ if not LClass then
 
 --code imp class inherit--
 function newLuaObject(className,...)
-	print("newLuaObject:"..className);
+	--print("newLuaObject:"..className);
 	local luaTable = load("return "..className)
 	if nil==luaTable then print("newLuaObject failed className="..className); end
 	return instantiate(luaTable(), ...)

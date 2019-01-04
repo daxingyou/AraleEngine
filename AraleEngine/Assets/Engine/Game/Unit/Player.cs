@@ -42,11 +42,7 @@ public class Player : Unit, PoolMgr<int>.IPoolObject
 
 		if (!isServer)
 		{
-			GameObject go = ResLoad.get ("UI/HeadInfo").gameObject ();
-			HeadInfo hi = go.GetComponent<HeadInfo> ();
-			hi.mTarget = transform;
-			hi.mName.text = "玩家";
-			go.transform.SetParent (GRoot.single.uiRoot, false);
+			HeadInfo.Bind (this.transform, this); 
 		}
     }
 

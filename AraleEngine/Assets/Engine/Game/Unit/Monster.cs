@@ -57,12 +57,7 @@ public class Monster : Unit, PoolMgr<int>.IPoolObject
 
 		if (!isServer)
 		{
-			GameObject go = ResLoad.get ("UI/HeadInfo").gameObject ();
-			HeadInfo h = go.GetComponent<HeadInfo> ();
-			h.mTarget = transform;
-			h.mName.text = table.name;
-			go.transform.SetParent (GRoot.single.uiRoot, false);
-			headInfo = h;
+			HeadInfo.Bind (this.transform, this); 
 		}
     }
 
@@ -100,13 +95,13 @@ public class Monster : Unit, PoolMgr<int>.IPoolObject
 		case (int)UnitEvent.BuffAdd:
 			{
 				TBBuff tb = TableMgr.single.GetData<TBBuff> ((short)param);
-				headInfo.mName.text += tb.flag;
+				//headInfo.mName.text += tb.flag;
 			}
 			return true;
 		case (int)UnitEvent.BuffDec:
 			{
 				TBBuff tb = TableMgr.single.GetData<TBBuff> ((short)param);
-				headInfo.mName.text = headInfo.mName.text.Replace(tb.flag,"");
+				//headInfo.mName.text = headInfo.mName.text.Replace(tb.flag,"");
 			}
 			return true;
 		}

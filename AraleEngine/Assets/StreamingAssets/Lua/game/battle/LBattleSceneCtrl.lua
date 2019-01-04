@@ -7,13 +7,19 @@ local M=
 
 function M:new(cs)
 	self._cs = cs;
-	cs.luaOnStart = self.Start()
+	cs.luaOnStart = self.Start
+	cs.luaOnDestroy = self.Destroy
 end
 
 function M:Start()
 	local msg = MsgReqEnterBattle()
     msg.sceneID = 1
     NetMgr.client:sendMsg(Enum.MyMsgId.ReqEnterBattle, msg)
+    HeadInfo.Create(CameraMgr.single:GetCamera("MainCamera"))
+end
+
+function M:Destroy()
+	HeadInfo.Destroy()
 end
 
 

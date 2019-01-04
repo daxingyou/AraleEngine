@@ -40,6 +40,7 @@ NetMgr = CS.NetMgr
 Window = CS.Arale.Engine.Window
 Log = CS.Arale.Engine.Log
 GHelper = CS.Arale.Engine.GHelper
+HeadInfo = CS.Arale.Engine.HeadInfo
 UISwitch = CS.UISwitch
 LuaHelp    = CS.LuaHelp
 UnitState = CS.UnitState
@@ -81,6 +82,7 @@ require "game/ui/LRoleCreateWindow"
 require "game/ui/LRoleCreateWindowItem"
 require "game/battle/LBattleSceneCtrl"
 require "game/ui/main/LSKillButton"
+require "game/ui/main/LHeadInfo"
 require "game/ai/LHero"
 require "game/ai/LMonster"
 BuffParam={}

@@ -237,6 +237,7 @@ namespace Arale.Engine
 			luaCode += "Enum={}" + RET;
 			luaCode += Enum2Lua(typeof(MyMsgId))+RET;
 			luaCode += Enum2Lua(typeof(Log.Tag))+RET;
+			luaCode += Enum2Lua(typeof(UnitEvent))+RET;
 			File.WriteAllText(Application.streamingAssetsPath + "/Lua/LuaEnum.lua", luaCode);
 		}
 
