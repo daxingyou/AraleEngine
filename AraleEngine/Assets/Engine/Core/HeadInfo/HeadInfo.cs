@@ -28,6 +28,7 @@ namespace Arale.Engine
             }
             //必须放在添加Canvas之后，因为Add之后原Transform被销毁变成了RectTransform,导致mMount为空
             mMount = go.transform;
+            GameObject.DontDestroyOnLoad(go);
         }
 
         public static void Destroy()

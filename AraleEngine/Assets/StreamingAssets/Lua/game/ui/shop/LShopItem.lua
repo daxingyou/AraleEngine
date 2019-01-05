@@ -17,7 +17,7 @@ end
 function M:SetData(goods)
 
 	self.goods = goods;
-	self.luaItem:SetData("",goods.name,goods.price)
+	self.luaItem:SetData(goods.icon,goods.name,goods.price)
 end
 --========================
 LShopItem = M

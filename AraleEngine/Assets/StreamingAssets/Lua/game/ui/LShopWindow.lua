@@ -27,16 +27,16 @@ end
 function M:initPage(tabId)
 	local goods1 = 
 	{
-		[1]={id="1001";name="金币";price=500;};
-		[2]={id="1002";name="钻石";price=500;};
+		[1]={id="1001";name="金币";price=500;icon="ui/icon/shop/jinbi";};
+		[2]={id="1002";name="钻石";price=500;icon="ui/icon/shop/zuanshi";};
 		
 	}
 	local goods2 = 
 	{
-		[1]={id="2001";name="红宝石";price=100;};
-		[2]={id="2002";name="蓝宝石";price=100;};
-		[3]={id="2003";name="绿宝石";price=100;};
-		[4]={id="2004";name="紫宝石";price=1000;};
+		[1]={id="2001";name="赤铁矿";price=100;icon="ui/icon/shop/chitie";};
+		[2]={id="2002";name="黑铁矿";price=100;icon="ui/icon/shop/heitie";};
+		[3]={id="2003";name="褐铁矿";price=100;icon="ui/icon/shop/hetie";};
+		[4]={id="2004";name="黄铁矿";price=1000;icon="ui/icon/shop/huangtie";};
 	}
 	local goods = goods1
 	if tabId == 1 then goods = goods2 end
