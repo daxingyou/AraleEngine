@@ -31,7 +31,10 @@ end
 
 function M:OnCreateClick()
 	local sel = self.luaContent:getFirstSelected()
-	if sel == nil then return end
+	if sel == nil then 
+		WindowMgr.SendWindowMessage("NoticeWindow","ShowNotice","请选择你要创建的英雄")
+		return 
+	end
 	local heroID = sel.mLO.mLT.role.id
 
 	local msg = MsgReqCreateHero()

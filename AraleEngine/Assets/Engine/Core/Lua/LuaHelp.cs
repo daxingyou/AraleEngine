@@ -14,8 +14,29 @@ public static class LuaHelp
 
 	//类型导出
 	[LuaCallCSharp]
+    [ReflectionUse]
 	public static List<Type> lua_call_cs = new List<Type>(){
 		typeof(List<object>),
+        typeof(DG.Tweening.AutoPlay),
+        typeof(DG.Tweening.AxisConstraint),
+        typeof(DG.Tweening.Ease),
+        typeof(DG.Tweening.LoopType),
+        typeof(DG.Tweening.TweenType),
+        typeof(DG.Tweening.PathMode),
+        typeof(DG.Tweening.PathType),
+        typeof(DG.Tweening.RotateMode),
+        typeof(DG.Tweening.DOTween),
+        typeof(DG.Tweening.Tweener),
+        typeof(DG.Tweening.Tween),
+        typeof(DG.Tweening.Sequence),
+        typeof(DG.Tweening.TweenParams),
+        typeof(DG.Tweening.TweenCallback),
+        typeof(DG.Tweening.TweenExtensions),
+        typeof(DG.Tweening.TweenSettingsExtensions),
+        typeof(DG.Tweening.ShortcutExtensions),
+        typeof(DG.Tweening.ShortcutExtensions43),
+        typeof(DG.Tweening.ShortcutExtensions46),
+        typeof(DG.Tweening.ShortcutExtensions50),
 	};
 
 	//delegate导出
@@ -32,7 +53,8 @@ public static class LuaHelp
 		typeof(LuaBuff.OnEvent),
 		typeof(TimeMgr.Action.OnAction),
 		typeof(VoidDelegate),
-		typeof(BoolDelegateI)
+		typeof(BoolDelegateI),
+        typeof(DG.Tweening.TweenCallback),
 	};
 
 	//黑名单

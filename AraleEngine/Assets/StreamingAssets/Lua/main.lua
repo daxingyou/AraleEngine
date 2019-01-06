@@ -66,6 +66,7 @@ require "game/ui/LStartWindow"
 require "game/ui/LLoginWindow"
 require "game/ui/LLanLoginWindow"
 require "game/ui/LMainWindow"
+require "game/ui/LNoticeWindow"
 require "game/ui/LPlayerWindow"
 require "game/ui/LTaskWindow"
 require "game/ui/LSkillWindow"
@@ -102,6 +103,7 @@ print("require all ok");
 --=====================================================
 function  main( ... )
 	if GRoot.single.mLaunchFlag~=0 then return end
+	WindowMgr.SetWindowRes ("NoticeWindow", "UI/NoticeWindow")
 	WindowMgr.SetWindowRes ("StartWindow", "UI/StartWindow")
 	WindowMgr.SetWindowRes ("UpdateWindow", "UI/UpdateWindow")
 	WindowMgr.SetWindowRes ("LoginWindow", "UI/LoginWindow")
@@ -116,6 +118,7 @@ function  main( ... )
 	WindowMgr.SetWindowRes ("BagWindow", "UI/BagWindow")
 	WindowMgr.SetWindowRes ("RoleCreateWindow", "UI/RoleCreateWindow")
 	WindowMgr.SetWindowRes ("MailWindow", "UI/MailWindow")
+	WindowMgr.single:GetWindow("NoticeWindow", true)
 
 	TableMgr.TestModel = true
 

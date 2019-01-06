@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using System;
 using System.Collections.Generic;
 using XLua;
+using DG.Tweening;
 
 namespace Arale.Engine
 {
@@ -15,7 +16,7 @@ namespace Arale.Engine
     	[ContextMenu("AutoBind")]
     	#endif
     	public void AutoBind()
-    	{
+        {
     		List<GameObject> ls = new List<GameObject> ();
     		for (int i = 0; i < transform.childCount; ++i)AutoBind (ls, transform.GetChild (i));
     		mBinds = ls.ToArray ();
@@ -36,7 +37,7 @@ namespace Arale.Engine
 
     	#region bindlua
         public void bindLua(string luaClassName=null)
-    	{
+        {
             if (luaClassName != null)mLuaClassName = luaClassName;
             mLO = LuaObject.newObject (mLuaClassName, this);
             if (mLO == null)return;

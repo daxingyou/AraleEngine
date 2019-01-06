@@ -16,12 +16,12 @@ namespace Arale.Engine
         public override void Init()
         {
             mWinRoot = GRoot.single.transform.FindChild("WinRoot");
-            EventMgr.single.AddListener ("Window", onWindowMessage);
+            EventMgr.single.AddListener ("Window", OnWindowMessage);
         }
 
         public override void Deinit()
         {
-			EventMgr.single.RemoveListener ("Window", onWindowMessage);
+			EventMgr.single.RemoveListener ("Window", OnWindowMessage);
         }
 
 
@@ -63,7 +63,7 @@ namespace Arale.Engine
     		return null;
     	}
 
-    	public void bringToTop(Window win)
+    	public void BringToTop(Window win)
     	{
     		if(mZOrder.Remove (win))
     		{
@@ -72,7 +72,7 @@ namespace Arale.Engine
     		}
     	}
 
-    	public void closeWindow(string name, bool immediate = false)
+    	public void CloseWindow(string name, bool immediate = false)
     	{
     		if(!mWindows.ContainsKey(name))return;
     		Window win = mWindows [name];
@@ -81,7 +81,7 @@ namespace Arale.Engine
     		win.Close (immediate);
     	}
 
-    	public void closeAllWindow()
+    	public void CloseAllWindow()
     	{
     		ArrayList ls = new ArrayList ();
     		foreach (Window item in mWindows.Values) 
@@ -92,7 +92,7 @@ namespace Arale.Engine
     		}
     		for (int i = 0; i < ls.Count; ++i)
     		{
-    			closeWindow (ls [i] as string);
+    			CloseWindow (ls [i] as string);
     		}
     	}
 
@@ -106,7 +106,7 @@ namespace Arale.Engine
     		}
     	}
 
-    	public void showUI(bool bshow)
+    	public void ShowUI(bool bshow)
     	{
     		mWinRoot.gameObject.SetActive (bshow);
     	}
@@ -120,7 +120,7 @@ namespace Arale.Engine
     		public object param;
     	}
 
-        public static void postWindowMessage(string winName, string metho, object param)
+        public static void PostWindowMessage(string winName, string metho, object param)
     	{
     		WinMsg wm = new WinMsg ();
     		wm.winName = winName;
@@ -129,7 +129,7 @@ namespace Arale.Engine
             EventMgr.single.PostEvent("Window", wm);
     	}
 
-        public static void sendWindowMessage(string winName, string metho, object param)
+        public static void SendWindowMessage(string winName, string metho, object param)
         {
             WinMsg wm = new WinMsg ();
             wm.winName = winName;
@@ -138,7 +138,7 @@ namespace Arale.Engine
             EventMgr.single.SendEvent("Window", wm);
         }
 
-        void onWindowMessage(EventMgr.EventData eb)
+        void OnWindowMessage(EventMgr.EventData eb)
         {
     		WinMsg wm = eb.data as WinMsg;
     		if (wm.winName == null)

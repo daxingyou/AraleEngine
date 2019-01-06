@@ -58,7 +58,7 @@ namespace Arale.Engine
 
         void OnLevelWasLoaded(int level)
         {
-            WindowMgr.single.closeAllWindow();
+            WindowMgr.single.CloseAllWindow();
             string name = SceneManager.GetActiveScene().name;
             EventMgr.single.SendEvent(EventSceneLoad, name);
         }

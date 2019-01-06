@@ -41,7 +41,7 @@ namespace Arale.Engine
     		}
 
     		mUserData = null;
-    		WindowMgr.single.closeWindow (winName);
+    		WindowMgr.single.CloseWindow (winName);
     	}
 
         internal void UpdateZOrder(ref int startDepth, ref int startZ)
