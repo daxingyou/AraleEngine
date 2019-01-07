@@ -47,3 +47,13 @@ Enum.UnitEvent={
 	Max=111,
 }
 
+Enum.AttrID={
+	Name=1,
+	HP=2,
+	MP=3,
+	BuffEffect=4,
+	State=5,
+	LV=6,
+	Speed=7,
+}
+

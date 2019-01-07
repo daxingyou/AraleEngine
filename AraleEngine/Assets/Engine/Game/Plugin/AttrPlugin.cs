@@ -7,8 +7,10 @@ public class AttrPlugin : Plugin
 {
     public delegate void OnAttrChanged(int mask, object val=null);
     public OnAttrChanged onAttrChanged;
+	public void AddAttrListener(OnAttrChanged callback){onAttrChanged += callback;}
+	public void RemoveAttrListener(OnAttrChanged callback){onAttrChanged -= callback;}
     public virtual void notify(int attrID, object val=null)
-    {
+	{
         if (mUnit.isServer)
         {
             changes.Add(new Attr(attrID, val));

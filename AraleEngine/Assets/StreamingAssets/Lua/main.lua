@@ -99,6 +99,7 @@ require "game/buff/LSkillHarm"
 require "game/buff/LLeiGongBaoFeng"
 
 require "game/config/LTBPlayer"
+require "game/config/LTBMonster"
 print("require all ok");
 --=====================================================
 function  main( ... )

@@ -11,7 +11,6 @@ namespace Arale.Engine
 
     public class TBMonster: TableBase
     {
-		public string name="";
         public string model="";
 		public float  speed=0f;
         public string ai="";

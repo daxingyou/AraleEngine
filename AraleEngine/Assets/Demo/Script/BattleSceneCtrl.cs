@@ -34,7 +34,7 @@ public class BattleSceneCtrl : SceneCtrl {
 		{//技能目标选择
 			Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
 			RaycastHit hit;
-			if (Physics.Raycast (ray, out hit))
+			if (Physics.Raycast (ray, out hit, float.MaxValue, (1<<LayerMask.NameToLayer("Client")|1<<LayerMask.NameToLayer("Ground"))))
 			{
 				Unit u = hit.collider.gameObject.GetComponent<Unit> ();
 				if (u != null)
@@ -42,7 +42,7 @@ public class BattleSceneCtrl : SceneCtrl {
 					player.skill.targetPos  = u.pos;
 					player.skill.targetUnit = u;
 				}
-				else if(hit.collider.gameObject.name == "AgentMesh")
+				else if(hit.collider.gameObject.name == "NavMesh")
 				{
 					player.skill.targetPos = hit.point;
 				}

@@ -4,6 +4,7 @@ local M =
 {
 	_hero;
 	_timeGap = 0;
+	_onAttrChanged;
 }
 
 function M:new(cs)
@@ -11,10 +12,20 @@ function M:new(cs)
 	cs.luaOnDestroy=self.OnDestroy
 	cs.luaOnUpdate=self.OnUpdate
 	self._onBindPlayer = function(evt) self:OnBindPlayer(evt) end
+	self._onAttrChanged = function(mask, val)
+		if Enum.AttrID.HP == mask then
+			self.luaHP.value = val/100;
+		end
+		if Enum.AttrID.MP == mask then
+			self.luaMP.value = val/100;
+		end
+	end
 end
 
 function M:Start()
 	self.luaPlayer:SetActive(false)
+	self.luaHP = self.luaHP:GetComponent(typeof(UI.Slider))
+	self.luaMP = self.luaMP:GetComponent(typeof(UI.Slider))
 	EventMgr.single:AddListener("Game.Player", self._onBindPlayer);
 	EventListener.Get(self.luaPlayer):AddOnClick(function(evt)   WindowMgr.single:GetWindow("PlayerWindow", true).mLO.mLT._player = self._hero end)
 	EventListener.Get(self.luaTask):AddOnClick(function(evt)  WindowMgr.single:GetWindow("TaskWindow", true) end)
@@ -44,12 +55,13 @@ function M:OnDestroy()
 end
 
 function M:OnBindPlayer(evt)
-	local list = self.luaSkillBtn
-	list:clearItem()
+	self:UnBindPlayer(self._hero)
     self._hero = evt.data
     local cameraCtr = CameraMgr.single:GetCamera("MainCamera"):GetComponent("CameraController")
     cameraCtr.mTarget = self._hero.transform
 
+	local list = self.luaSkillBtn
+	list:clearItem()
     local skills = self._hero.skill.skills;
     for i=1,skills.Count do
     	local skill = skills[i-1]
@@ -58,12 +70,21 @@ function M:OnBindPlayer(evt)
     end
 
     self:SetPlayer()
+    self._hero.attr:AddAttrListener(self._onAttrChanged)
+end
+
+function M:UnBindPlayer(unit)
+	if unit == nil then return end
+	unit.attr:RemoveAttrListener(self._onAttrChanged)
 end
 
 function M:SetPlayer()
 	self.luaPlayer:SetActive(true)
 	local tb = LTBPlayer[self._hero.tid]
 	self.luaPlayer:GetComponent(typeof(PlayerHeader)):SetData(tb.name, tb.icon, 1)
+	local attr = self._hero.attr
+	self.luaHP.value = attr.HP/100;
+	self.luaMP.value = attr.MP/100;
 end
 
 function M:OnUpdate()

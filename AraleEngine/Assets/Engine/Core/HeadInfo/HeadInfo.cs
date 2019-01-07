@@ -34,12 +34,14 @@ namespace Arale.Engine
         public static void Destroy()
         {
             mHeadInfos = null;
+			if (mMount == null)return;
             GameObject.Destroy(mMount.gameObject);
             mMount = null;
         }
 
         public static HeadInfo Bind(Transform trans, object data)
-        {
+		{
+			if (mMount == null)return null;//for test
             HeadInfo hi = null;
             if (mHeadInfos.Count > 0 && mHeadInfos[0].target == null)
             {
@@ -77,6 +79,7 @@ namespace Arale.Engine
             if (mTarget == null)return;
             mTarget = null;
             Unbind();
+			Deinit ();
             Recycle(this);
         }
 

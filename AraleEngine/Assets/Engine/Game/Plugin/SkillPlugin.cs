@@ -170,7 +170,7 @@ public class Skill
 		public void drawDebug()
 		{
 			DebugLine.drawCircle(targetPos, 0.7f, Color.red);
-			if (targetUnit != null)DebugLine.drawCircle(targetUnit.pos, 0.7f, Color.red);
+			if (targetUnit != null)DebugLine.drawCircle(targetUnit.pos, 0.7f, Color.magenta);
 		}
 	}
 	#endregion

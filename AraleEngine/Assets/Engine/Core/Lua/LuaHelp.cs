@@ -17,14 +17,18 @@ public static class LuaHelp
     [ReflectionUse]
 	public static List<Type> lua_call_cs = new List<Type>(){
 		typeof(List<object>),
+		typeof(Dictionary<int, TableBase>),
         typeof(DG.Tweening.AutoPlay),
         typeof(DG.Tweening.AxisConstraint),
         typeof(DG.Tweening.Ease),
+		typeof(DG.Tweening.EaseFactory),
         typeof(DG.Tweening.LoopType),
         typeof(DG.Tweening.TweenType),
+		typeof(DG.Tweening.UpdateType),
         typeof(DG.Tweening.PathMode),
         typeof(DG.Tweening.PathType),
         typeof(DG.Tweening.RotateMode),
+		typeof(DG.Tweening.DOVirtual),
         typeof(DG.Tweening.DOTween),
         typeof(DG.Tweening.Tweener),
         typeof(DG.Tweening.Tween),
@@ -37,6 +41,8 @@ public static class LuaHelp
         typeof(DG.Tweening.ShortcutExtensions43),
         typeof(DG.Tweening.ShortcutExtensions46),
         typeof(DG.Tweening.ShortcutExtensions50),
+		typeof(DG.Tweening.Core.TweenerCore<Vector3, Vector3, DG.Tweening.Plugins.Options.VectorOptions>),
+		typeof(DG.Tweening.Core.TweenerCore<Quaternion, Vector3, DG.Tweening.Plugins.Options.QuaternionOptions>),
 	};
 
 	//delegate导出
@@ -50,11 +56,11 @@ public static class LuaHelp
 		typeof(UISwitch.OnValueChange),
 		typeof(UISListItem.OnSelectChange),
 		typeof(Unit.OnStateChange),
+		typeof(AttrPlugin.OnAttrChanged),
 		typeof(LuaBuff.OnEvent),
 		typeof(TimeMgr.Action.OnAction),
 		typeof(VoidDelegate),
 		typeof(BoolDelegateI),
-        typeof(DG.Tweening.TweenCallback),
 	};
 
 	//黑名单

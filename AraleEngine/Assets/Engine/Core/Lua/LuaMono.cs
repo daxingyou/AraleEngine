@@ -16,7 +16,7 @@ namespace Arale.Engine
     	[ContextMenu("AutoBind")]
     	#endif
     	public void AutoBind()
-        {
+		{
     		List<GameObject> ls = new List<GameObject> ();
     		for (int i = 0; i < transform.childCount; ++i)AutoBind (ls, transform.GetChild (i));
     		mBinds = ls.ToArray ();
