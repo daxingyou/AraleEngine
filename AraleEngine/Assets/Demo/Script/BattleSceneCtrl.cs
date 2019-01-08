@@ -18,10 +18,11 @@ public class BattleSceneCtrl : SceneCtrl {
 	protected override void onUpdate()
 	{
 		//点中ui
-		if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject () && (!UIStick.isHit))return;
+		bool hitUI = (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject () && (!UIStick.isHit));
 		if (player == null)return;
 		if (Input.GetMouseButtonDown (0))
 		{//行走目标选择
+			if(hitUI)return;
 			if(GUIUtility.hotControl!=0)return;//点在GUI上了
 			if(Camera.main==null)return;
 			Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
@@ -36,6 +37,7 @@ public class BattleSceneCtrl : SceneCtrl {
 
 		if (Input.GetMouseButtonDown (1))
 		{//技能目标选择
+			if(hitUI)return;
 			Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
 			RaycastHit hit;
 			if (Physics.Raycast (ray, out hit, float.MaxValue, (1<<LayerMask.NameToLayer("Client")|1<<LayerMask.NameToLayer("Ground"))))
@@ -54,6 +56,7 @@ public class BattleSceneCtrl : SceneCtrl {
 				player.addState (0, true);
 			}
 		}
+
 		if(Input.GetKeyDown (KeyCode.Space)) {
 			player.nav.jump ();
 		}
