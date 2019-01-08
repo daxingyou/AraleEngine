@@ -18,17 +18,21 @@ public class BattleSceneCtrl : SceneCtrl {
 	protected override void onUpdate()
 	{
 		//点中ui
-		//if (EventSystem.current==null || EventSystem.current.IsPointerOverGameObject ())return;
+		if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject () && (!UIStick.isHit))return;
 		if (player == null)return;
-		/*if (Input.GetMouseButtonDown (0))
+		if (Input.GetMouseButtonDown (0))
 		{//行走目标选择
 			if(GUIUtility.hotControl!=0)return;//点在GUI上了
 			if(Camera.main==null)return;
 			Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
 			RaycastHit hit;
-			if (!Physics.Raycast (ray, out hit) || hit.collider.name != "NavMesh")return;
+			if (!Physics.Raycast (ray, out hit) || hit.collider.name != "NavMesh")
+			{
+				Debug.LogError (hit.collider.name);
+				return;
+			}
 			player.nav.startNav (hit.point);
-		}*/
+		}
 
 		if (Input.GetMouseButtonDown (1))
 		{//技能目标选择

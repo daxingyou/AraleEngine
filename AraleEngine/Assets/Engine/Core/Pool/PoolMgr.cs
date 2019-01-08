@@ -51,9 +51,6 @@ public class PoolMgr<T>
 
 	public void recyle(IPoolObject o)
 	{
-		//Unit u = o as Unit;
-		//GameObject.Destroy (u.gameObject);
-		//对象回收时,plugin还在运行，导致重用状态错误，暂时关闭
 		o.onRecycle ();
 		List<IPoolObject> ls;
 		if (!mPool.TryGetValue (o.getKey (), out ls))

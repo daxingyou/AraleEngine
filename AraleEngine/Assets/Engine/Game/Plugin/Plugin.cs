@@ -8,6 +8,7 @@ public class Plugin
 	public Unit unit{get{return mUnit;}}
     public Plugin(Unit unit){ mUnit = unit; }
 
+	public virtual void reset (){}
     public virtual void update(){}
 	public virtual void onSync(MessageBase msg){}
 }

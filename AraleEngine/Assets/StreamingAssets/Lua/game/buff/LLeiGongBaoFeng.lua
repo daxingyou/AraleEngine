@@ -29,6 +29,9 @@ local M =
 					u:backward(self._unit.pos)
 					u.pos = Vector3.MoveTowards(u.pos, self._unit.pos, 0.2)
 					u:syncState()
+					local ap = u.attr
+					ap.HP = ap.HP - self._param.harm
+					ap:sync()
 				end
 			end
 			act:Loop(self._param.interval)
@@ -62,14 +65,16 @@ BuffParam.LeiGongBaoFeng=
 	[0]=
 	{
 		area = "0,4.00";
-		interval = 0.1;
-		duration = 20,
+		interval = 0.2;
+		duration = 10;
+		harm = 1;
 	};
 	[1]=
 	{
 		area = "0,4.00";
-		interval = 0.1;
-		duration = 20;
+		interval = 0.2;
+		duration = 10;
+		harm = 2;
 	};
 }
 end

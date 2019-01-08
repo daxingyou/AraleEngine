@@ -71,6 +71,12 @@ public class Buff
 		{
 		}
 
+		public override void reset ()
+		{
+			isReject = false;
+			clearBuff (int.MinValue);
+		}
+
 		//creator是buff的创建者,用于计算动态伤害参数
 		public void addBuff(int buffTID, Unit creator=null)
 		{

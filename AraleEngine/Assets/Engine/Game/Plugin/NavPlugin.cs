@@ -39,6 +39,17 @@ public class NavPlugin : Plugin
 		mScale = (float)val;
 	}
 
+	public override void reset ()
+	{
+		mNavCallback = null;
+		mAgent.Stop ();
+		mAgent.enabled = false;
+		mNavState  = State.None;
+		mNavDir = Vector3.zero;
+		mNaving = false;
+		mTarget = null;
+	}
+
     bool arrive()
     {
 		if(!mAgent.enabled || mAgent.pathPending)

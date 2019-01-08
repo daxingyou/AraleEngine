@@ -7,8 +7,9 @@ using UnityEngine.EventSystems;
 namespace Arale.Engine
 {
         
-    public class UIStick : MonoBehaviour,IDragHandler,IBeginDragHandler,IEndDragHandler
+	public class UIStick : MonoBehaviour,IDragHandler,IBeginDragHandler,IEndDragHandler,IPointerDownHandler
     {
+		public static bool isHit;
     	[System.NonSerialized]public Vector2 mDir;
     	Vector2 mBeginDragPos;
     	public Image mStick;
@@ -25,6 +26,7 @@ namespace Arale.Engine
 
     	void FixedUpdate()
     	{
+			isHit = false;
     		if (!Input.anyKey) {
     			mDir = Vector2.zero;
     			return;
@@ -39,6 +41,11 @@ namespace Arale.Engine
     		else if (Input.GetKey (KeyCode.W))
     			mDir = Vector2.up;
     	}
+
+		public void OnPointerDown (PointerEventData eventData)
+		{
+			isHit = true;
+		}
 
     	public void OnBeginDrag (PointerEventData eventData)
     	{

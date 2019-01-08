@@ -41,6 +41,7 @@ public class LanHost : NetworkDiscovery//局域网发现,两端的端口设置�
 
     void OnDestroy()
     {
+		mUnitMgr.dispose ();
         this.StopBroadcast();
         NetworkServer.Shutdown();
     }

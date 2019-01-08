@@ -36,6 +36,41 @@ public class Bullet : Unit, PoolMgr<int>.IPoolObject
 		}
 		else if (evt == Move.Event.Arrive)
 		{
+			if (!isServer)
+			{
+				Invoke ("dispear", table.life);
+				return;
+			}
+
+			Move mv = param as Move;
+			switch (mv.table.type)
+			{
+			case 1:
+				IArea area = GameArea.fromString ("0,1.0");
+				Matrix4x4 mt = Matrix4x4.TRS (pos, Quaternion.LookRotation (dir), Vector3.one).inverse;
+				List<Unit> units = mgr.getUnitInArea (UnitType.Monster|UnitType.Player, area, mt);
+				Unit ower = mgr.getUnit (mOwner);
+				for (int i = 0; i < units.Count; ++i)
+				{
+					Unit u = units[i];
+					if(u.relation(ower)>=0)continue;
+					u.anim.sendEvent (AnimPlugin.Hit);
+					AttrPlugin ap = u.attr;
+					ap.HP -= mHarm;
+					ap.sync ();
+				}
+				break;
+			case 3:
+				Unit target = mgr.getUnit (move.uTarget);
+				if (target != null)
+				{
+					target.anim.sendEvent (AnimPlugin.Hit);
+					AttrPlugin ap = target.attr;
+					ap.HP -= mHarm;
+					ap.sync ();
+				}
+				break;
+			}
 			Invoke ("dispear", table.life);
 		}
 	}

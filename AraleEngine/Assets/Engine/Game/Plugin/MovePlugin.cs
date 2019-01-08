@@ -16,7 +16,7 @@ public class Move
 	
 	public delegate void OnMoveEvent(Event evt, object param);
 	protected OnMoveEvent   onEvent;
-	protected TBMove    table;
+	public TBMove table{ get; protected set;}
 	protected Vector3   vTarget;
 	protected uint      uTarget;
 	protected bool isOver{ get; set;}
@@ -27,13 +27,13 @@ public class Move
 	protected void arrived()
 	{
 		isOver = true;
-		if (null != onEvent)onEvent(Event.Arrive, 0);
+		if (null != onEvent)onEvent(Event.Arrive, this);
 	}
 
 	protected void stop()
 	{
 		isOver = true;
-		if (null != onEvent)onEvent(Event.Stop, 0);
+		if (null != onEvent)onEvent(Event.Stop, this);
 	}
 
 	public class Plug : Plugin

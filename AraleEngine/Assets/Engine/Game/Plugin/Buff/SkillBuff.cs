@@ -102,6 +102,7 @@ public class SkillBuff : Buff
 			Bullet bt = mUnit.mgr.getUnit (0, UnitType.Bullet, Mathf.Abs(a.bullet)) as Bullet;
 			bt.setParam (mUnit.pos, mUnit.dir, mUnit);
 			bt.mHarm = a.harm;
+			bt.mOwner = mUnit.guid;
 			if (a.buff != 0)
 			{//子弹上绑定buff
 				bt.buff.addBuff (a.buff);

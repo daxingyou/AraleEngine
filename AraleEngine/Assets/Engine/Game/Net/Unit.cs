@@ -505,12 +505,7 @@ public class Unit : LuaMono
 			}
 			else
 			{//距离最近
-				ls.Sort (delegate(Unit x, Unit y){
-					float d = Vector3.SqrMagnitude(self.pos-y.pos) - Vector3.SqrMagnitude(self.pos-x.pos);
-					if(d<0)return -1;
-					else if(d>0)return 1;
-					else return 0;
-				});
+				ls.Sort(new DistanceComp(self));
 			}
 			return ls;
 		}
@@ -518,6 +513,22 @@ public class Unit : LuaMono
 		public static int minHPComp(Unit x, Unit y)
 		{
 			return y.attr.HP - x.attr.HP;
+		}
+
+		public class DistanceComp : IComparer<Unit>
+		{
+			public Unit self;
+			public DistanceComp(Unit self)
+			{
+				this.self = self;
+			}
+			public int Compare(Unit x, Unit y)
+			{
+				float d = Vector3.SqrMagnitude(self.pos-y.pos) - Vector3.SqrMagnitude(self.pos-x.pos);
+				if(d<0)return -1;
+				else if(d>0)return 1;
+				else return 0;
+			}
 		}
 		#endregion
 

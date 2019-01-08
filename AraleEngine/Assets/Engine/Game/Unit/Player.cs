@@ -38,6 +38,11 @@ public class Player : Unit, PoolMgr<int>.IPoolObject
     protected override void onUnitInit()
     {
         base.onUnitInit();
+		mAttr.reset ();
+		mSkill.reset ();
+		mBuff.reset ();
+		mNav.reset ();
+
 		mNav.speedCfg = table.speed;
 		mSkill.addSkills (GHelper.toIntArray (table.skills));
 
@@ -45,6 +50,8 @@ public class Player : Unit, PoolMgr<int>.IPoolObject
 		{
 			mHeadInfo = HeadInfo.Bind (this.transform, this); 
 		}
+
+		mAttr.onAttrChanged += onAttrChanged;
     }
 
 	protected override void onUnitUpdate()
@@ -59,6 +66,7 @@ public class Player : Unit, PoolMgr<int>.IPoolObject
 
 	protected override void onUnitDeinit()
 	{
+		mAttr.onAttrChanged -= onAttrChanged;
 		if (mHeadInfo != null)mHeadInfo.Unbind ();
 		Pool.recyle (this);
 	}
@@ -81,6 +89,21 @@ public class Player : Unit, PoolMgr<int>.IPoolObject
 	{
 		if (u.type != type)return -1;
 		return 0;
+	}
+
+	void onAttrChanged(int mask, object val)
+	{
+		if (!isState (UnitState.Alive))return;
+		if (mask == (int)AttrID.HP)
+		{
+			int hp = (int)val;
+			if (hp <= 0)
+			{
+				decState (UnitState.Alive);
+				addState (UnitState.Skill | UnitState.MoveCtrl);
+				mAnim.sendEvent (AnimPlugin.Die);
+			}
+		}
 	}
 
 	#region 对象池

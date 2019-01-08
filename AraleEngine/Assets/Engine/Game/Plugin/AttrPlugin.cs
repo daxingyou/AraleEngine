@@ -42,14 +42,7 @@ public class AttrPlugin : Plugin
     int mHP;
     public int HP
     {
-        set{
-			mHP = value;
-			notify((int)AttrID.HP, value);
-			if (mHP <= 0)
-			{
-				mUnit.decState (UnitState.Alive|UnitState.Exist,true);
-			}
-		}
+        set{mHP = value;notify((int)AttrID.HP, value);}
         get{return mHP;}
     }
 
@@ -78,10 +71,15 @@ public class AttrPlugin : Plugin
     int[] mStrangeS;
     public AttrPlugin(Unit unit):base(unit)
     {
-        mHP = 100;
-        mMP = 100;
-		mSpeed = 1f;
+		reset ();
     }
+
+	public override void reset ()
+	{
+		mHP = 100;
+		mMP = 100;
+		mSpeed = 1f;
+	}
 
     void setAttr(Attr attr)
     {

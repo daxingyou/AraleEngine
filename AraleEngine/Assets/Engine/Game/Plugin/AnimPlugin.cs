@@ -12,6 +12,7 @@ public class AnimPlugin : Plugin
 	public const int Hit      = 5;
 	public const int Jump     = 6;
 	public const int Climb    = 7;
+	public const int Die      = 8;
 
     public Animation mAnim;
 	public Animator  mAnimtor;
@@ -67,7 +68,11 @@ public class AnimPlugin : Plugin
 			if (mAnim != null)mAnim.Play ("hit", PlayMode.StopAll);
 			needSync=true;
 			break;
-
+		case Die:
+			if (mAnimtor != null)mAnimtor.SetTrigger("Die");
+			if (mAnim != null)mAnim.Play ("die", PlayMode.StopAll);
+			needSync=true;
+			break;
 		}
 	}
 

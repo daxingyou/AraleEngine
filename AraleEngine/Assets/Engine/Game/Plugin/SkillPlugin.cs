@@ -100,6 +100,14 @@ public class Skill
 		public List<Skill> skills{get{return mSkills;}} 
 		public Plug(Unit unit):base(unit){}
 
+		public override void reset ()
+		{
+			skill = null;
+			targetPos = Vector3.zero;
+			targetUnit = null;
+			mSkills.Clear ();
+		}
+
 		public void addSkills(int[] skillTIDs)
 		{
 			for (int i = 0; i < skillTIDs.Length; ++i)addSkill (skillTIDs [i]);

@@ -4,7 +4,7 @@
 {"_id":201,"move":2,"model":"effect/ehuang/ehuang_BA_zs01","srcMount":"Bone001","desc":"娥皇小魔法球"}
 {"_id":202,"move":3,"model":"effect/ehuang/ehuang_BA_zs02","srcMount":"Bone001","desc":"娥皇拖尾魔法球"}
 {"_id":601,"move":4,"model":"effect/leigong/leigong_S01_active02","life":3.0,"desc":"雷公闪电1"}
-{"_id":602,"move":4,"model":"effect/leigong/leigong_S02_active01","life":20.0,"desc":"雷公闪电2"}
+{"_id":602,"move":4,"model":"effect/leigong/leigong_S02_active01","life":10.0,"desc":"雷公闪电2"}
 {"_id":603,"move":4,"model":"effect/leigong/leigong_S04_active02","life":3.0,"desc":"雷公闪电3"}
 {"_id":601080,"model":"Effect/lingyuan/lingyuan_S01_active01","life":3.0}
 {"_id":107002,"model":"Effect/lingyuan/lingyuan_S01_active01","life":3.0}
