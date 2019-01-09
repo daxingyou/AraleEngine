@@ -18,6 +18,7 @@ public enum MyMsgId
 	Event  = 1008,
 	Skill  = 1009,
 	ReqUnit= 2007,
+	ReqPick= 2008,
     ReqEnterBattle=3009,
 	ReqCreateHero=3010,
 	CreateBullet=4010,
@@ -143,6 +144,12 @@ public class MsgSkill : MsgState
 		targetPos = r.ReadVector3 ();
 		targetGUID = r.ReadUInt32 ();
 	}
+}
+
+public class MsgPick : MessageBase
+{
+	public uint dropGuid;
+	public uint pickerGuid;
 }
 #endregion
 

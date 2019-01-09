@@ -32,6 +32,7 @@ public class LanClient : NetworkDiscovery//局域网发现,两端的端口设置
         mClient.RegisterHandler ((short)MyMsgId.Login, onLogin);
         mClient.RegisterHandler ((short)MyMsgId.Create,onUnitCreate);
 		mClient.RegisterHandler ((short)MyMsgId.CreateBullet, onCreateBullet);
+		mClient.RegisterHandler ((short)MyMsgId.ReqPick, OnReqPick);
 
 		//unit message begin
 		mClient.RegisterHandler ((short)MyMsgId.State, onUnitMsg);
@@ -189,11 +190,14 @@ public class LanClient : NetworkDiscovery//局域网发现,两端的端口设置
         switch (m.unitType)
         {
 		case UnitType.Player:
-                createPlayer(m);
-                break;
+            createPlayer(m);
+            break;
 		case UnitType.Monster:
-                createMonster(m);
-                break;
+            createMonster(m);
+            break;
+		case UnitType.Drop:
+			createDropItems(m);
+			break;
         }
 
     }
@@ -218,6 +222,12 @@ public class LanClient : NetworkDiscovery//局域网发现,两端的端口设置
 		Bullet u = mUnitMgr.getUnit (m.guid, UnitType.Bullet, m.tid) as Bullet;
 		u.setParam (m.pos, m.dir);
 		u.play (m.vTarget,m.uTarget);
+	}
+
+	void createDropItems(MsgCreate m)
+	{
+		DropItems u = mUnitMgr.getUnit(m.guid, UnitType.Drop, m.tid) as DropItems;
+		u.setParam(m.pos, m.dir);
 	}
 
 	void onUnitMsg(NetworkMessage msg)
@@ -247,6 +257,15 @@ public class LanClient : NetworkDiscovery//局域网发现,两端的端口设置
         msg.guid  = guid;
         mConn.Send ((short)MyMsgId.ReqUnit, msg);
     }
+
+	void OnReqPick(NetworkMessage msg)
+	{
+		Log.i("LanHost OnReqPick", Log.Tag.Net);
+		MsgPick m = msg.ReadMessage<MsgPick> ();
+		DropItems u = mUnitMgr.getUnit (m.dropGuid) as DropItems;
+		u.decState (UnitState.Alive | UnitState.Exist);
+		WindowMgr.SendWindowMessage ("MainWindow", "ShowDrop", 1001);
+	}
     #endregion
 }
 

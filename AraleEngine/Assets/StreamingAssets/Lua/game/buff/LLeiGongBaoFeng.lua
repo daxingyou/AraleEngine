@@ -67,7 +67,7 @@ BuffParam.LeiGongBaoFeng=
 		area = "0,4.00";
 		interval = 0.2;
 		duration = 10;
-		harm = 1;
+		harm = 8;
 	};
 	[1]=
 	{

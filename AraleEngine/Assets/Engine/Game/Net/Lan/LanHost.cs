@@ -29,6 +29,7 @@ public class LanHost : NetworkDiscovery//局域网发现,两端的端口设置�
 		NetworkServer.RegisterHandler ((short)MyMsgId.ReqUnit, onReqUnit);
         NetworkServer.RegisterHandler ((short)MyMsgId.ReqEnterBattle, OnReqEnterBattle);
 		NetworkServer.RegisterHandler ((short)MyMsgId.ReqCreateHero, OnReqCreateHero);
+		NetworkServer.RegisterHandler ((short)MyMsgId.ReqPick, OnReqPick);
 
 		//unit message begin
 		NetworkServer.RegisterHandler ((short)MyMsgId.State,    onUnitMsg);
@@ -163,6 +164,15 @@ public class LanHost : NetworkDiscovery//局域网发现,两端的端口设置�
 		//同步其他玩家信息
     }
 
+	void OnReqPick(NetworkMessage msg)
+	{
+		Log.i("LanHost OnReqPick", Log.Tag.Net);
+		MsgPick m = msg.ReadMessage<MsgPick> ();
+		DropItems u    = mUnitMgr.getUnit (m.dropGuid) as DropItems;
+		Client client = getClient (msg.conn);
+		if (u != null)u.pick (client.playerGUID);
+	}
+
 	void OnReqCreateHero(NetworkMessage msg)
 	{
 		Log.i("LanHost OnReqCreateHero", Log.Tag.Net);
@@ -224,8 +234,25 @@ public class LanHost : NetworkDiscovery//局域网发现,两端的端口设置�
 		MsgCreate reply = new MsgCreate();
 		reply.agentId = u.agentId;
 		reply.guid  = u.guid;
-		reply.pos   = u.dir;
-		reply.dir   = u.pos;
+		reply.pos   = u.pos;
+		reply.dir   = u.dir;
+		reply.state = u.type;
+		reply.tid   = u.tid;
+		reply.unitType = u.type;
+		sendToAll((short)MyMsgId.Create, reply);
+		return u;
+	}
+
+	public DropItems createDropItems(int tid, Vector3 pos, Vector3 dir, uint instanceID=0)
+	{
+		DropItems u = mUnitMgr.getUnit(0, UnitType.Drop, tid) as DropItems;
+		u.setParam(pos, dir,instanceID );
+
+		MsgCreate reply = new MsgCreate();
+		reply.agentId = u.agentId;
+		reply.guid  = u.guid;
+		reply.pos   = u.pos;
+		reply.dir   = u.dir;
 		reply.state = u.type;
 		reply.tid   = u.tid;
 		reply.unitType = u.type;

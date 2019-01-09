@@ -49,6 +49,7 @@ public class UnitType
 	public const int Monster=0x0002;//怪物
 	public const int NPC    =0x0004;//NPC
 	public const int Bullet =0x0008;//子弹
+	public const int Drop   =0x0010;//掉落
 }
 #endregion
 
@@ -426,6 +427,9 @@ public class Unit : LuaMono
 				break;
 			case UnitType.Bullet:
 				unit = Bullet.Pool.alloc(tid) as Unit;
+				break;
+			case UnitType.Drop:
+				unit = DropItems.Pool.alloc (tid) as Unit;
 				break;
 			default:
 				Log.e("not surpport unit type="+unitType);

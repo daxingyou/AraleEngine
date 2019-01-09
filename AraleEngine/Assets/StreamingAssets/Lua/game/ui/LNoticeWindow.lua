@@ -13,12 +13,6 @@ end
 function M:Awake()
 end
 
-function M:OnWindowMessage(metho,param)
-	local f = self[metho]
-	if f==nil then return end
-	f(self, param)
-end
-
 function M:ShowNotice(notice)
 	local tip = GameObject.Instantiate(self.luaTip):GetComponent(typeof(UI.Text))
 	tip.gameObject:SetActive(true)
@@ -31,5 +25,5 @@ end
 
 --=======================
 LNoticeWindow = M
-createClass("LNoticeWindow",LNoticeWindow);
+createClass("LNoticeWindow",LNoticeWindow,LWindow);
 end

@@ -89,6 +89,10 @@ public class Monster : Unit, PoolMgr<int>.IPoolObject
 		if (mHeadInfo != null)mHeadInfo.Unbind ();
 		mAI.stopAI ();
 		mAnim.sendEvent (AnimPlugin.Die);
+		if (isServer)
+		{
+			DropItems u = NetMgr.server.createDropItems (1, pos, Vector3.right, 0);
+		}
 		Invoke ("recyle", 5f);
 	}
 

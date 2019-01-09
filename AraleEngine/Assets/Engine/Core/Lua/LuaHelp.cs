@@ -87,4 +87,9 @@ public static class LuaHelp
 		new List<string>(){"System.IO.DirectoryInfo", "Create", "System.Security.AccessControl.DirectorySecurity"},
 		new List<string>(){"UnityEngine.MonoBehaviour", "runInEditMode"},
 	};
+
+	//[AdditionalProperties]
+	//public static Dictionary<Type, List<string>> AdditionalProperties = new Dictionary<Type, List<string>>(){
+	//	{ typeof(DG.Tweening.TweenExtensions), new List<string>() { "Play"} },
+	//};
 }

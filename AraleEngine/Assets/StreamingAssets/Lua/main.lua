@@ -24,6 +24,8 @@ Time = CS.UnityEngine.Time
 Rigidbody = CS.UnityEngine.Rigidbody
 NavMeshAgent = CS.UnityEngine.NavMeshAgent
 Collider = CS.UnityEngine.Collider
+--==============DoTween
+DOTween = CS.DG.Tweening.DOTween
 --==============引擎
 ResLoad  = CS.Arale.Engine.ResLoad
 AssetRef = CS.Arale.Engine.AssetRef
@@ -62,6 +64,7 @@ MsgReqEnterBattle = CS.MsgReqEnterBattle
 --通过Debug.Log(typeof(List<object>)获取模板类的真实名称
 --==============
 require "LuaEnum"
+require "game/ui/LWindow"
 require "game/ui/LStartWindow"
 require "game/ui/LLoginWindow"
 require "game/ui/LLanLoginWindow"

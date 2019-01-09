@@ -27,12 +27,21 @@ public class BattleSceneCtrl : SceneCtrl {
 			if(Camera.main==null)return;
 			Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
 			RaycastHit hit;
-			if (!Physics.Raycast (ray, out hit) || hit.collider.name != "NavMesh")
+			if (Physics.Raycast (ray, out hit, Mathf.Infinity, (1<<LayerMask.NameToLayer("Client")|1<<LayerMask.NameToLayer("Ground"))))
 			{
-				Debug.LogError (hit.collider.name);
-				return;
+				if (hit.collider.name == "NavMesh")
+				{
+					player.nav.startNav (hit.point);
+				}
+				else
+				{
+					Unit u = hit.collider.gameObject.GetComponent<Unit> ();
+					if (u != null && u.type == UnitType.Drop)
+					{
+						(u as DropItems).pick (0);
+					}
+				}
 			}
-			player.nav.startNav (hit.point);
 		}
 
 		if (Input.GetMouseButtonDown (1))
