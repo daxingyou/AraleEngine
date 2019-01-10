@@ -100,9 +100,6 @@ require "game/buff/LJingHua"
 require "game/buff/LJinGu"
 require "game/buff/LSkillHarm"
 require "game/buff/LLeiGongBaoFeng"
-
-require "game/config/LTBPlayer"
-require "game/config/LTBMonster"
 print("require all ok");
 --=====================================================
 function  main( ... )
@@ -125,6 +122,8 @@ function  main( ... )
 	WindowMgr.single:GetWindow("NoticeWindow", true)
 
 	TableMgr.TestModel = true
+	load(TableMgr.single:GenLuaExtend(typeof(TBPlayer)))();
+	load(TableMgr.single:GenLuaExtend(typeof(TBMonster)))();
 
 	EventMgr.single:AddListener(GRoot.EventSceneLoad, onSceneLoaded)
 	EventMgr.single:AddListener("Game.Login", onLogin)

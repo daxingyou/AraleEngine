@@ -19,7 +19,7 @@ function M:ShowNotice(notice)
 	tip.transform:SetParent(self._cs.transform, false)
 	tip.text = notice;
 	tip.transform:DOLocalMoveY(100,1)
-	GameObject.Destroy(tip.gameObject,1.5) 
+	GameObject.Destroy(tip.gameObject,1.5)
 	WindowMgr.single:BringToTop(self._cs)
 end
 

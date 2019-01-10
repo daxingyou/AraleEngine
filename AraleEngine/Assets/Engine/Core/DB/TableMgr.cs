@@ -133,6 +133,24 @@ namespace Arale.Engine
 			}
 			GetDataPool (type);
 		}
+
+		public string GenLuaExtend(Type type)
+		{//导出lua表字符串
+			TableData td = GetDataPool (type);
+			StringBuilder sb = new StringBuilder(string.Format("L{0}", type.Name));
+			sb.Append ("={");
+			TableData.Enumerator  e = td.GetEnumerator ();
+			while (e.MoveNext ())
+			{
+				int id = e.Current.Key;
+				string extend = (e.Current.Value as TableBase)._extend;
+				if (string.IsNullOrEmpty (extend))continue;
+				sb.AppendFormat ("[{0}]={1}", id, "{id="+id+";"+extend+"};");
+			}
+			sb.Append ("}");
+			Debug.LogError (sb.ToString ());
+			return sb.ToString();
+		}
     }
 
 }

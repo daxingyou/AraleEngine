@@ -110,13 +110,12 @@ function M:ShowDrop(dropID)
 	local t = fly.transform
 	t:SetParent(self._cs.transform, false)
 
-	t:DOScale(0.5, 1):Complete()--:OnComplete(function() print("DoTween OnComplete") end)
+	t:DOScale(0.5, 1):Complete()
 	local seq = DOTween.Sequence()
 	seq:Append(t:DOScale(1, 0.3))
 	seq:Insert(0.8, t:DOMove(self.luaBag.transform.position, 1))
 	seq:Insert(1.3, t:DOScale(0.5, 0.5))
-	seq:PlayForward()
-	GameObject.Destroy(fly,1.8)
+	seq:LPlay():LOnComplete(function() GameObject.Destroy(fly) end)
 end
 --========================
 LMainWindow = M

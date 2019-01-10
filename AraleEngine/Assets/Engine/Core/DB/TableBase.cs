@@ -13,6 +13,7 @@ public class TableBase
 {
     public int _id;
     public int id { get { return _id; } }
+	public string _extend;
     public TableBase()
     {
 		

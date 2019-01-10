@@ -1,4 +1,4 @@
-{"_id":1001,"model":"Model/lingyuan","speed":"4","ai":"LHero","skills":"10,11,12,13"}
-{"_id":1002,"model":"Model/yuxiaoxue","speed":"4","ai":"LHero","skills":"20,21,22,23"}
-{"_id":1003,"model":"Model/leigong","speed":"3","ai":"LHero","skills":"600,601,602,603"}
-{"_id":1004,"model":"Model/houyi","speed":"3","ai":"LHero","skills":"100,101,102,103"}
+{"_id":1001,"model":"Model/lingyuan","speed":"4","ai":"LHero","skills":"10,11,12,13","_extend":"icon='ui/icon/header/lingyuan';name='阿拉蕾1号'; typename='战士';"}
+{"_id":1002,"model":"Model/yuxiaoxue","speed":"4","ai":"LHero","skills":"20,21,22,23","_extend":"icon='ui/icon/header/xiaoxue';name='阿拉蕾2号'; typename='奶妈';"}
+{"_id":1003,"model":"Model/leigong","speed":"3","ai":"LHero","skills":"600,601,602,603","_extend":"icon='ui/icon/header/leigong';name='阿拉蕾3号'; typename='法师';"}
+{"_id":1004,"model":"Model/houyi","speed":"3","ai":"LHero","skills":"100,101,102,103","_extend":"icon='ui/icon/header/houyi';name='阿拉蕾4号'; typename='射手';"}

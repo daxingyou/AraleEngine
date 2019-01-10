@@ -24,8 +24,6 @@ function M:ShowItems()
 	while keys:MoveNext() do
 		local key = keys.Current
 		local luaTB = LTBPlayer[key]
-
-		luaTB.id = key
 		local it = list:addItem(luaTB)
 		if i == 1 then
 			it.selected = true
