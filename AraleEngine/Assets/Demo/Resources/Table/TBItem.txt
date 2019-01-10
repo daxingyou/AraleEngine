@@ -1,0 +1,5 @@
+{"_id":1,"_extend":"name='金币';icon='UI/Icon/Shop/jinbi';","type":1,"dropModel":"Model/dropitem","dropRate":0.3}
+{"_id":2,"_extend":"name='钻石';icon='UI/Icon/Shop/zuanshi';","type":1,"dropModel":"Model/dropitem","dropRate":0.1}
+{"_id":1001,"_extend":"name='狂暴之刃';icon='UI/Icon/Equp/dao';","type":2,"dropModel":"Model/dropitem","dropRate":0.5}
+{"_id":1002,"_extend":"name='金刚护盾';icon='UI/Icon/Equp/dun';","type":2,"dropModel":"Model/dropitem","dropRate":0.5}
+{"_id":1003,"_extend":"name='血色铠甲';icon='UI/Icon/Equp/yifu';","type":2,"dropModel":"Model/dropitem","dropRate":0.5}

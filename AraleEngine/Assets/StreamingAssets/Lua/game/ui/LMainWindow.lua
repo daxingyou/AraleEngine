@@ -106,7 +106,11 @@ function M:OnUpdate()
 end
 
 function M:ShowDrop(dropID)
+	local item = LTBItem[dropID]
+	if item == nil then return end
 	local fly = ResLoad.get("UI/FlyItem"):gameObject()
+	print(item.icon)
+	AssetRef.setImage(fly:GetComponent("Image"), item.icon)
 	local t = fly.transform
 	t:SetParent(self._cs.transform, false)
 

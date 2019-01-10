@@ -264,7 +264,7 @@ public class LanClient : NetworkDiscovery//局域网发现,两端的端口设置
 		MsgPick m = msg.ReadMessage<MsgPick> ();
 		DropItems u = mUnitMgr.getUnit (m.dropGuid) as DropItems;
 		u.decState (UnitState.Alive | UnitState.Exist);
-		WindowMgr.SendWindowMessage ("MainWindow", "ShowDrop", 1001);
+		WindowMgr.SendWindowMessage ("MainWindow", "ShowDrop", u.tid);
 	}
     #endregion
 }

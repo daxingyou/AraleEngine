@@ -19,6 +19,7 @@ public class Monster : Unit, PoolMgr<int>.IPoolObject
     public const int CMD_NAV_POS = 15;   //导航到位置
     public const int CMD_NAV_STOP = 16;  //停止导航
 	public TBMonster table{get;protected set;}
+	public int[] drops;
 
     AnimPlugin   mAnim;
 	public override AnimPlugin anim{get{return mAnim;}}
@@ -91,7 +92,11 @@ public class Monster : Unit, PoolMgr<int>.IPoolObject
 		mAnim.sendEvent (AnimPlugin.Die);
 		if (isServer)
 		{
-			DropItems u = NetMgr.server.createDropItems (1, pos, Vector3.right, 0);
+			if (drops != null)
+			{
+				int len = drops.Length;
+				DropItems u = NetMgr.server.createDropItems (drops[Random.Range(0,len)], pos, Vector3.right, 0);
+			}
 		}
 		Invoke ("recyle", 5f);
 	}

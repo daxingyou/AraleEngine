@@ -13,7 +13,7 @@ namespace Arale.Engine
     using TableData = System.Collections.Generic.Dictionary<int, TableBase>;
     public class TableMgr : MgrBase<TableMgr>
     {
-        public const string TestTablePath = "/Engine/Sample/Resources/Table/";
+        public const string TestTablePath = "/Demo/Resources/Table/";
         public static bool  TestModel;
         Dictionary<Type, TableData> DataPoolDic = new Dictionary<Type, TableData>();
         Dictionary<Type, ITableBuilder> builders = new Dictionary<Type, ITableBuilder>();
@@ -26,6 +26,7 @@ namespace Arale.Engine
             builders.Add(typeof(TBSound), new TableBuilder<TBSound>());
 			builders.Add(typeof(TBEffect), new TableBuilder<TBEffect>());
 			builders.Add(typeof(TBMove), new TableBuilder<TBMove>());
+			builders.Add(typeof(TBItem), new TableBuilder<TBItem>());
             mDirty = true;
     	}
 
@@ -148,7 +149,6 @@ namespace Arale.Engine
 				sb.AppendFormat ("[{0}]={1}", id, "{id="+id+";"+extend+"};");
 			}
 			sb.Append ("}");
-			Debug.LogError (sb.ToString ());
 			return sb.ToString();
 		}
     }

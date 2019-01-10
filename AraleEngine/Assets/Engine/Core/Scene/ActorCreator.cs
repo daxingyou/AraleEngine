@@ -14,6 +14,7 @@ public class ActorCreator : MonoBehaviour
 		public int actorId;  //角色id
 		public int userData; //自定义数据
 		public Vector3 pos;  //角色出生位置
+		public string drop;  //掉落
 		public virtual void Serialize(XmlDocument xml, XmlNode n)
 		{
 			XmlAttribute at = null;
@@ -27,6 +28,12 @@ public class ActorCreator : MonoBehaviour
 			Vector3 v = pos;
 			at.Value = string.Format("{0},{1},{2}",v.x,v.y,v.z);
 			n.Attributes.Append (at);
+			if (!string.IsNullOrEmpty (drop))
+			{
+				at = xml.CreateAttribute ("drop");
+				at.Value = drop;
+				n.Attributes.Append (at);
+			}
 		}
 	}
 
@@ -51,6 +58,7 @@ public class ActorCreator : MonoBehaviour
 		{
 			ActorInfo a = mActorInfo [i];
 			Unit u = NetMgr.server.createMonster(a.actorId, Vector3.right, a.pos);
+			(u as Monster).drops = GHelper.toIntArray (a.drop);
 			u.AddStateListener (OnUnitStateChange);
 			yield return null;
 		}

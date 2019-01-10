@@ -4,6 +4,7 @@ using Arale.Engine;
 
 public class DropItems : Unit, PoolMgr<int>.IPoolObject
 {
+	public TBItem table{get;protected set;}
 	public void pick (uint pickerGUID)
 	{
 		if (!isState (UnitState.Alive))return;
@@ -41,8 +42,10 @@ public class DropItems : Unit, PoolMgr<int>.IPoolObject
 
 	#region 对象池
 	public static PoolMgr<int> Pool = new PoolMgr<int> (delegate(int param) {
+		TBItem tb = TableMgr.single.GetData<TBItem>(param);
 		GameObject go = ResLoad.get("Model/dropitem", ResideType.InScene).gameObject();
 		DropItems o = go.AddComponent<DropItems>();
+		o.table = tb;
 		return o;
 	});
 

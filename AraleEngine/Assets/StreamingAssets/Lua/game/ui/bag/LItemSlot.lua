@@ -17,7 +17,6 @@ function M:Awake()
 end
 
 function M:SetData( data )
-	print("=============")
 	if self.luaIcon ~= nil then
 		AssetRef.setImage(self.luaIcon, data._icon);
 	end

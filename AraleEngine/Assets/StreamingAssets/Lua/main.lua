@@ -56,6 +56,7 @@ PlayerHeader = CS.PlayerHeader
 TBSkill = CS.Arale.Engine.TBSkill
 TBMonster = CS.Arale.Engine.TBMonster
 TBPlayer = CS.Arale.Engine.TBPlayer
+TBItem = CS.Arale.Engine.TBItem
 --===============协议
 ProtoWriter = CS.ProtoBuf.ProtoWriter
 WireType = CS.ProtoBuf.WireType
@@ -124,6 +125,7 @@ function  main( ... )
 	TableMgr.TestModel = true
 	load(TableMgr.single:GenLuaExtend(typeof(TBPlayer)))();
 	load(TableMgr.single:GenLuaExtend(typeof(TBMonster)))();
+	load(TableMgr.single:GenLuaExtend(typeof(TBItem)))();
 
 	EventMgr.single:AddListener(GRoot.EventSceneLoad, onSceneLoaded)
 	EventMgr.single:AddListener("Game.Login", onLogin)
