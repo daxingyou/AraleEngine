@@ -13,7 +13,7 @@ public class UISListItem : LuaMono, IPointerClickHandler
     {
         set
         {
-            if(null!=mOn)mOn.gameObject.SetActive(value);
+			if (null != mOn)mOn.gameObject.SetActive (value);
         }
         get
         {

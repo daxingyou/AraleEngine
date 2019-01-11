@@ -8,6 +8,7 @@ namespace Arale.Engine
     //挂list根节点上
     public class UISList : MonoBehaviour
     {
+		List<UISListItem> mCach  = new List<UISListItem>();
         List<UISListItem> mItems = new List<UISListItem>();
         UISListItem mPrefab;
 		public UISListItem.OnSelectChange onSelectedChange=null;
@@ -59,11 +60,8 @@ namespace Arale.Engine
                 for (int i = 0,max=mItems.Count; i < max; ++i)
                 {
                     UISListItem it = mItems[i];
-                    if (!it.gameObject.activeSelf)
-                        continue;
-                    it.selected = false;
+					it.selected = object.ReferenceEquals (it, sel);
                 }
-                sel.selected = true;
             }
             if(null!=onSelectedChange)onSelectedChange(sel);
         }
@@ -71,16 +69,12 @@ namespace Arale.Engine
         public UISListItem addItem(object data, bool sort=false)
         {
             UISListItem it=null;
-            for (int i = mItems.Count-1; i>=0; --i)
-            {
-                if (!mItems[i].gameObject.activeSelf)
-                {
-                    it = mItems[i];
-                    mItems.RemoveAt(i);
-                    mItems.Insert(0, it);
-                    break;
-                }
-            }
+			if (mCach.Count > 0)
+			{
+				it = mCach[0];
+				mCach.RemoveAt (0);
+				mItems.Add (it);
+			}
 
             if (it == null)
             {
@@ -101,15 +95,28 @@ namespace Arale.Engine
             for (int i = mItems.Count-1; i>=0; --i)
             {
                 UISListItem it = mItems[i];
-                if(it.isSame(data))
-                {
-                    it.gameObject.SetActive(false);
-                    mItems.RemoveAt(i);
-                    mItems.Add(it);
-                    return;
-                }
+				if (!it.isSame (data))continue;
+                it.gameObject.SetActive(false);
+                mItems.RemoveAt(i);
+				mCach.Add(it);
+                return;
             }
         }
+
+		public UISListItem getItem(int idx)
+		{
+			return mItems[idx];
+		}
+
+		public UISListItem getItem(object data)
+		{
+			for (int i = 0,max=mItems.Count; i < max; ++i)
+			{
+				UISListItem it = mItems[i];
+				if (it.isSame (data))return it;
+			}
+			return null;
+		}
 
         public void clearItem()
         {
@@ -119,6 +126,8 @@ namespace Arale.Engine
                 it.selected = false;
                 it.gameObject.SetActive(false);
             }
+			mCach.AddRange (mItems);
+			mItems.Clear ();
         }
     }
 

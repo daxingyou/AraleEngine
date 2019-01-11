@@ -19,10 +19,13 @@ public class Bag
 		public virtual void use(uint num){}
 	}
 
+	public int bagSize = 32;
+	public bool isFull{get{return mItems.Count >= bagSize;}}
 	List<Item> mItems = new List<Item>();
 	public Item addItem(int id, uint num)
 	{
 		Item it = getItem (id, true);
+		if (it == null)return null;
 		it.count += num;
 		return it;
 	}
@@ -64,6 +67,7 @@ public class Bag
 		Item it = mItems.Find(delegate(Item o) {return o.id == id;});
 		if(!create)return it;
 		if (it != null)return it;
+		if (isFull)return null;
 		it = new Item (id);
 		mItems.Add (it);
 		return it;

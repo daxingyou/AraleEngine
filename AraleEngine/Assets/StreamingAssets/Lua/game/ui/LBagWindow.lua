@@ -1,24 +1,26 @@
 if not LBagWindow then
 --======================
-local M=
-{
-	_cs;
-}
-
+local M={}
 function M:new(cs)
-	self._cs = cs;
-	cs.luaOnStart = function() self:Start(); end
+	cs.luaOnStart =self.Start
 end
 
 function M:Start()
+	self.luaName = self.luaName:GetComponent("Text");
+	self.luaDesc = self.luaDesc:GetComponent("Text");
+	self.luaIcon = self.luaIcon:GetComponent("Image");
+	EventListener.Get(self.luaUse):AddOnClick(function(evt)  self:UseItem() end)
 	self.luaContent = self.luaContent:GetComponent("UISList");
-	
+	self.luaContent.onSelectedChange = function(selItem)
+		local item = selItem.mLO.mLT._item
+		self:ShowItemDesc(item)
+	end
+
 	local sbs = UISwitch.getGroupSwitch ("bag1");
 	for i=1, sbs.Count do
 		sbs[i-1].onValueChange = function(sb) self:OnSwitchChange(sb) end
 	end
 	sbs[0].isOn = true
-	--self.luaPaiming:GetComponent(typeof(CU.UI.Text)).text = "未上榜"
 end
 
 function M:OnSwitchChange(sb)
@@ -28,17 +30,39 @@ end
 
 function M:ShowItems(itemType)
 	local list = self.luaContent
-	list:clearItem()
 	local bag = NetMgr.client.bag
 	local items = bag:getItems(itemType)
-	for i=1,items.Count do
-		local item = items[i-1]
-		local it = list:addItem(item)
-		if i == 1 then it.selected = true end
-		it.mLO.mLT:SetData(item)
+	local count = items.Count
+	list:clearItem()
+	for i=1,bag.bagSize do
+		local it = list:addItem(nil)
+		if i>count then
+			it.mLO.mLT:Show(false)
+		else
+			local item = items[i-1]
+			it.mLO.mLT:SetData(item)
+			it.mLO.mLT:Show(true)
+			
+			if i == 1 then
+			 	it.selected = true 
+			 	self:ShowItemDesc(item)
+			end
+		end
 	end
 end
 
+function M:ShowItemDesc(bagItem)
+	self.luaSelItem:SetActive(bagItem~=nil)
+	if bagItem == nil then return end
+	local item = LTBItem[bagItem.id]
+	self.luaName.text = item.name
+	self.luaDesc.text = item.desc
+	AssetRef.setImage(self.luaIcon, item.icon);
+end
+
+function M:UseItem()
+	WindowMgr.single:GetWindow("ForginWindow", true)
+end
 --=======================
 LBagWindow = M
 createClass("LBagWindow",LBagWindow);
