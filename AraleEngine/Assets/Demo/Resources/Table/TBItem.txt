@@ -3,3 +3,7 @@
 {"_id":1001,"_extend":"name='狂暴之刃';icon='UI/Icon/Equp/dao';","type":2,"dropModel":"Model/dropitem","dropRate":0.5}
 {"_id":1002,"_extend":"name='金刚护盾';icon='UI/Icon/Equp/dun';","type":2,"dropModel":"Model/dropitem","dropRate":0.5}
 {"_id":1003,"_extend":"name='血色铠甲';icon='UI/Icon/Equp/yifu';","type":2,"dropModel":"Model/dropitem","dropRate":0.5}
+{"_id":2001,"_extend":"name='赤铁矿';icon='UI/Icon/shop/chitie';","type":3}
+{"_id":2002,"_extend":"name='黑铁矿';icon='UI/Icon/shop/heitie';","type":3}
+{"_id":2003,"_extend":"name='褐铁矿';icon='UI/Icon/shop/hetie';","type":3}
+{"_id":2004,"_extend":"name='黄铁矿';icon='UI/Icon/shop/huangtie';","type":3}

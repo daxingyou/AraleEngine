@@ -6,8 +6,11 @@ using Arale.Engine;
 
 public enum MyMsgId
 {
+	//时间同步
     Time   = 998,
-    Login  = 999,
+    //登录
+	Login  = 999,
+	//Unit
 	State  = 1000,
 	Anim   = 1001,
 	Create = 1002,  
@@ -18,7 +21,14 @@ public enum MyMsgId
 	Event  = 1008,
 	Skill  = 1009,
 	ReqUnit= 2007,
+	//拾取
 	ReqPick= 2008,
+	//道具
+	ItemChange= 2100,
+	ReqUseItem= 2101,
+	ReqDropItem=2102,
+	ReqBuyItem=2103,
+	//战斗
     ReqEnterBattle=3009,
 	ReqCreateHero=3010,
 	CreateBullet=4010,
@@ -150,6 +160,25 @@ public class MsgPick : MessageBase
 {
 	public uint dropGuid;
 	public uint pickerGuid;
+}
+
+public class MsgItem : MessageBase
+{
+	public int  itemId;
+	public uint count;
+	public override void Serialize(NetworkWriter w)
+	{
+		base.Serialize (w);
+		w.Write (itemId);
+		w.Write (count);
+	}
+
+	public override void Deserialize(NetworkReader r)
+	{
+		base.Deserialize (r);
+		itemId   = r.ReadInt32 ();
+		count = r.ReadUInt32 ();
+	}
 }
 #endregion
 

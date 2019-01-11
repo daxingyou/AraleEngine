@@ -49,6 +49,7 @@ UnitState = CS.UnitState
 UnitType = CS.UnitType
 Unit = CS.Unit
 Buff = CS.Buff
+Bag  = CS.Bag
 GameArea = CS.GameArea
 UIItemSlot = CS.UIItemSlot
 PlayerHeader = CS.PlayerHeader
@@ -62,15 +63,18 @@ ProtoWriter = CS.ProtoBuf.ProtoWriter
 WireType = CS.ProtoBuf.WireType
 MsgReqCreateHero = CS.MsgReqCreateHero
 MsgReqEnterBattle = CS.MsgReqEnterBattle
+MsgItem = CS.MsgItem
 --通过Debug.Log(typeof(List<object>)获取模板类的真实名称
 --==============
 require "LuaEnum"
+require "game/data/LClient"
 require "game/ui/LWindow"
 require "game/ui/LStartWindow"
 require "game/ui/LLoginWindow"
 require "game/ui/LLanLoginWindow"
 require "game/ui/LMainWindow"
 require "game/ui/LNoticeWindow"
+require "game/ui/LMessageWindow"
 require "game/ui/LPlayerWindow"
 require "game/ui/LTaskWindow"
 require "game/ui/LSkillWindow"
@@ -80,8 +84,6 @@ require "game/ui/mail/LMailItem"
 require "game/ui/shop/LShopItem"
 require "game/ui/LForginWindow"
 require "game/ui/LBagWindow"
-require "game/ui/bag/LBag"
-require "game/ui/bag/LBagItem"
 require "game/ui/bag/LItemSlot"
 require "game/ui/LRoleCreateWindow"
 require "game/ui/LRoleCreateWindowItem"
@@ -106,6 +108,7 @@ print("require all ok");
 function  main( ... )
 	if GRoot.single.mLaunchFlag~=0 then return end
 	WindowMgr.SetWindowRes ("NoticeWindow", "UI/NoticeWindow")
+	WindowMgr.SetWindowRes ("MessageWindow", "UI/MessageWindow")
 	WindowMgr.SetWindowRes ("StartWindow", "UI/StartWindow")
 	WindowMgr.SetWindowRes ("UpdateWindow", "UI/UpdateWindow")
 	WindowMgr.SetWindowRes ("LoginWindow", "UI/LoginWindow")
@@ -126,13 +129,12 @@ function  main( ... )
 	load(TableMgr.single:GenLuaExtend(typeof(TBPlayer)))();
 	load(TableMgr.single:GenLuaExtend(typeof(TBMonster)))();
 	load(TableMgr.single:GenLuaExtend(typeof(TBItem)))();
+	print(LTBItem)
 
 	EventMgr.single:AddListener(GRoot.EventSceneLoad, onSceneLoaded)
 	EventMgr.single:AddListener("Game.Login", onLogin)
 	EventMgr.single:AddListener("Game.Logout", onLogout)
-
-	LBag:Init()
-
+	
 	SceneMgr.single:LoadScene("Login")
 	print("main.lua ok");
 end
@@ -148,10 +150,12 @@ function onSceneLoaded(evt)
 end
 
 function onLogin(evt)
+	LClient:Login()
 	SceneMgr.single:LoadScene("Main")
 end
 
 function onLogout(evt)
+	LClient:Logout()
 	NetMgr.single:Deinit();
 	SceneMgr.single:LoadScene("Login")
 end

@@ -5,9 +5,9 @@ using Arale.Engine;
 public class DropItems : Unit, PoolMgr<int>.IPoolObject
 {
 	public TBItem table{get;protected set;}
-	public void pick (uint pickerGUID)
+	public bool pick (uint pickerGUID)
 	{
-		if (!isState (UnitState.Alive))return;
+		if (!isState (UnitState.Alive))return false;
 		if (isServer)
 		{
 			MsgPick msg = new MsgPick ();
@@ -15,12 +15,14 @@ public class DropItems : Unit, PoolMgr<int>.IPoolObject
 			msg.pickerGuid = pickerGUID;
 			sendMsg ((short)MyMsgId.ReqPick, msg);
 			dispear ();
+			return true;
 		}
 		else
 		{
 			MsgPick msg = new MsgPick ();
 			msg.dropGuid = guid;
 			sendMsg ((short)MyMsgId.ReqPick, msg);
+			return true;
 		}
 	}
 

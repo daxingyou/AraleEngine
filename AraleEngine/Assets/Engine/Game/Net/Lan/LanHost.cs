@@ -30,6 +30,7 @@ public class LanHost : NetworkDiscovery//局域网发现,两端的端口设置�
         NetworkServer.RegisterHandler ((short)MyMsgId.ReqEnterBattle, OnReqEnterBattle);
 		NetworkServer.RegisterHandler ((short)MyMsgId.ReqCreateHero, OnReqCreateHero);
 		NetworkServer.RegisterHandler ((short)MyMsgId.ReqPick, OnReqPick);
+		NetworkServer.RegisterHandler ((short)MyMsgId.ReqBuyItem, OnReqBuyItem);
 
 		//unit message begin
 		NetworkServer.RegisterHandler ((short)MyMsgId.State,    onUnitMsg);
@@ -102,6 +103,7 @@ public class LanHost : NetworkDiscovery//局域网发现,两端的端口设置�
         msg.conn.SetMaxDelay(0.01f);
         //加载对应的账号数据
 		Client nc = getClient(msg.conn, ACCOUNTID++);
+		nc.init ();
         Log.i("LanHost onConnected accountId="+nc.accoundId+",connecttionId="+msg.conn.connectionId, Log.Tag.Net);
 		//通知客户端登陆成功并返回账号ID
         SCLogin m = new SCLogin();
@@ -170,7 +172,27 @@ public class LanHost : NetworkDiscovery//局域网发现,两端的端口设置�
 		MsgPick m = msg.ReadMessage<MsgPick> ();
 		DropItems u    = mUnitMgr.getUnit (m.dropGuid) as DropItems;
 		Client client = getClient (msg.conn);
-		if (u != null)u.pick (client.playerGUID);
+		if (u != null)
+		{
+			if (!u.pick (client.playerGUID))return;
+			Bag.Item it = client.bag.addItem (u.tid, 1);
+			MsgItem reply = new MsgItem();
+			reply.itemId = it.id;
+			reply.count = it.count;
+			sendTo(msg.conn.connectionId, (short)MyMsgId.ItemChange, reply);
+		}
+	}
+
+	void OnReqBuyItem(NetworkMessage msg)
+	{
+		Log.i("LanHost OnReqBuyItem", Log.Tag.Net);
+		MsgItem m = msg.ReadMessage<MsgItem> ();
+		Client client = getClient (msg.conn);
+		Bag.Item it = client.bag.addItem (m.itemId, m.count);
+		MsgItem reply = new MsgItem();
+		reply.itemId = it.id;
+		reply.count = it.count;
+		sendTo(msg.conn.connectionId, (short)MyMsgId.ItemChange, reply);
 	}
 
 	void OnReqCreateHero(NetworkMessage msg)

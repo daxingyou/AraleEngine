@@ -16,12 +16,13 @@ function M:Awake()
 	end
 end
 
-function M:SetData( data )
+function M:SetData( bagItem )
+	local item = LTBItem[bagItem.id]
 	if self.luaIcon ~= nil then
-		AssetRef.setImage(self.luaIcon, data._icon);
+		AssetRef.setImage(self.luaIcon, item.icon);
 	end
 	if self.luaNum ~= nil then
-		self.luaNum.text = tostring(data._count)
+		self.luaNum.text = tostring(bagItem.count)
 	end
 end
 --=======================

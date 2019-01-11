@@ -29,13 +29,13 @@ end
 function M:ShowItems(itemType)
 	local list = self.luaContent
 	list:clearItem()
-	local items = LBag:GetItems(itemType)
-	for i=1,#items do
-		local it = list:addItem(items[i])
-		if i == 1 then
-			it.selected = true
-		end
-		it.mLO.mLT:SetData(items[i])
+	local bag = NetMgr.client.bag
+	local items = bag:getItems(itemType)
+	for i=1,items.Count do
+		local item = items[i-1]
+		local it = list:addItem(item)
+		if i == 1 then it.selected = true end
+		it.mLO.mLT:SetData(item)
 	end
 end
 

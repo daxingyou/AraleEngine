@@ -14,6 +14,7 @@ public class LanClient : NetworkDiscovery//局域网发现,两端的端口设置
     NetworkClient  mClient;//客户端
 	Unit.Mgr       mUnitMgr;
 	public Unit.Mgr unitMgr{get{return mUnitMgr;}}
+	public Bag bag{ get; protected set;}
     //==========
     void Awake ()
     {
@@ -26,6 +27,7 @@ public class LanClient : NetworkDiscovery//局域网发现,两端的端口设置
 
 		mUnitMgr= new Unit.Mgr(false);
         mClient = new NetworkClient ();
+		bag = new Bag ();
         mClient.RegisterHandler (MsgType.Connect, onConnected);
         mClient.RegisterHandler (MsgType.Disconnect, onDisConnect);
         mClient.RegisterHandler ((short)MyMsgId.Time,  onTime);
@@ -33,6 +35,7 @@ public class LanClient : NetworkDiscovery//局域网发现,两端的端口设置
         mClient.RegisterHandler ((short)MyMsgId.Create,onUnitCreate);
 		mClient.RegisterHandler ((short)MyMsgId.CreateBullet, onCreateBullet);
 		mClient.RegisterHandler ((short)MyMsgId.ReqPick, OnReqPick);
+		mClient.RegisterHandler ((short)MyMsgId.ItemChange, OnItemChange);
 
 		//unit message begin
 		mClient.RegisterHandler ((short)MyMsgId.State, onUnitMsg);
@@ -265,6 +268,17 @@ public class LanClient : NetworkDiscovery//局域网发现,两端的端口设置
 		DropItems u = mUnitMgr.getUnit (m.dropGuid) as DropItems;
 		u.decState (UnitState.Alive | UnitState.Exist);
 		WindowMgr.SendWindowMessage ("MainWindow", "ShowDrop", u.tid);
+	}
+
+	void OnItemChange(NetworkMessage msg)
+	{
+		Log.i("LanHost OnItemChange", Log.Tag.Net);
+		MsgItem m = msg.ReadMessage<MsgItem> ();
+		bag.SetItem (m.itemId, m.count);
+		if (m.itemId < 10)
+		{//测试,物品转属性
+			EventMgr.single.SendEvent("Player.Prop", m);
+		}
 	}
     #endregion
 }
