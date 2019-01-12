@@ -6,11 +6,11 @@ local M=
 	_mail;
 	mails = 
 	{
-		[1]={id=1001; state=0; playerid=1000; nick="系统"; title="五一送礼"; content="阿拉蕾的馈赠"; rewards={[1]={id=1;name="金币";num=500;}; [2]={id=2;name="钻石";num=500;};};};
-		[2]={id=1002; state=1; playerid=1000; nick="系统"; title="六一送礼"; content="阿拉蕾的馈赠"; rewards={[1]={id=1;name="金币";num=500;};};};
-		[3]={id=1003; state=2; playerid=1000; nick="系统"; title="七夕送礼"; content="阿拉蕾的馈赠"; rewards={[1]={id=1;name="金币";num=500;}; [2]={id=2;name="钻石";num=500;};};};
+		[1]={id=1001; state=0; playerid=1000; nick="系统"; title="五一送礼"; content="阿拉蕾的馈赠"; rewards={[1]={id=1;num=500;}; [2]={id=2;num=500;};};};
+		[2]={id=1002; state=1; playerid=1000; nick="系统"; title="六一送礼"; content="阿拉蕾的馈赠"; rewards={[1]={id=1;num=500;};};};
+		[3]={id=1003; state=2; playerid=1000; nick="系统"; title="七夕送礼"; content="阿拉蕾的馈赠"; rewards={[1]={id=1;num=500;}; [2]={id=2;num=500;};};};
 		[4]={id=1004; state=0; playerid=1000; nick="系统"; title="停服公告"; content="阿拉蕾休假一天"; };
-		[5]={id=1005; state=0; playerid=1001; nick="阿拉蕾"; title="见面礼"; content="阿拉蕾的馈赠"; rewards={[1]={id=1;name="金币";num=500;}; [2]={id=2;name="钻石";num=500;};};};
+		[5]={id=1005; state=0; playerid=1001; nick="阿拉蕾"; title="见面礼"; content="阿拉蕾的馈赠"; rewards={[1]={id=1;num=500;}; [2]={id=2;num=500;};};};
 	};
 }
 
@@ -96,7 +96,8 @@ function M:ShowMailDesc(mail)
 			local reward = mail.rewards[i]
 			local it = GameObject.Instantiate(self.luaItem)
 			it.transform:SetParent(mount, false)
-			it:GetComponent(typeof(UIItemSlot)):SetData(tostring(reward.id),reward.name,reward.num)
+			local item = LTBItem[reward.id]
+			it:GetComponent(typeof(UIItemSlot)):SetData(item.icon,item.name,reward.num)
 		end
 	end
 end

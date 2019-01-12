@@ -30,7 +30,8 @@ function M:SetData(mail,itemprefab)
 			local reward = mail.rewards[i]
 			local it = GameObject.Instantiate(itemprefab)
 			it.transform:SetParent(mount, false)
-			it:GetComponent(typeof(UIItemSlot)):SetData(tostring(reward.id),reward.name,reward.num)
+			local item = LTBItem[reward.id]
+			it:GetComponent(typeof(UIItemSlot)):SetData(item.icon,item.name,reward.num)
 		end
 	end
 end
