@@ -6,10 +6,10 @@
 {"_id":21,"type":1,"skillBuff":21,"distance":4,"cd":3,"icon":"ui/icon/skill/sk_huoyujian","desc":"小雪2"}
 {"_id":22,"type":1,"skillBuff":22,"distance":4,"cd":3,"icon":"ui/icon/skill/sk_jioumieling","desc":"小雪3"}
 {"_id":23,"type":1,"skillBuff":23,"distance":4,"cd":3,"icon":"ui/icon/skill/sk_leitingguanghua","desc":"小雪4"}
-{"_id":100,"type":1,"skillBuff":100,"distance":4,"cd":1,"desc":"后羿技能1"}
-{"_id":101,"type":1,"skillBuff":101,"distance":4,"cd":1,"desc":"后羿技能2"}
-{"_id":102,"type":2,"skillBuff":102,"distance":4,"cd":1,"desc":"后羿技能3"}
-{"_id":103,"type":1,"skillBuff":103,"distance":4,"cd":1,"desc":"后羿技能4"}
+{"_id":100,"type":1,"skillBuff":100,"distance":4,"cd":1,"icon":"ui/icon/skill/sk_zuoyouzhuaji","desc":"后羿技能1"}
+{"_id":101,"type":1,"skillBuff":101,"distance":4,"cd":1,"icon":"ui/icon/skill/sk_huoyujian","desc":"后羿技能2"}
+{"_id":102,"type":2,"skillBuff":102,"distance":4,"cd":1,"icon":"ui/icon/skill/sk_jioumieling","desc":"后羿技能3"}
+{"_id":103,"type":1,"skillBuff":103,"distance":4,"cd":1,"icon":"ui/icon/skill/sk_leitingguanghua","desc":"后羿技能4"}
 {"_id":200,"type":1,"skillBuff":200,"distance":4,"cd":1,"desc":"娥皇技能1"}
 {"_id":201,"type":1,"skillBuff":201,"distance":4,"cd":1,"desc":"娥皇技能2"}
 {"_id":202,"type":1,"skillBuff":202,"distance":4,"cd":1,"desc":"娥皇技能3"}

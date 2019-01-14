@@ -60,6 +60,7 @@ public static class LuaHelp
 		typeof(AttrPlugin.OnAttrChanged),
 		typeof(LuaBuff.OnEvent),
 		typeof(TimeMgr.Action.OnAction),
+		typeof(UIDrag.OnDragReceived),
 		typeof(VoidDelegate),
 		typeof(BoolDelegateI),
 		typeof(DG.Tweening.TweenCallback),

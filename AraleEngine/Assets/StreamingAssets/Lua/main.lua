@@ -53,6 +53,7 @@ Bag  = CS.Bag
 GameArea = CS.GameArea
 UIItemSlot = CS.UIItemSlot
 PlayerHeader = CS.PlayerHeader
+UISListItem = CS.UISListItem
 --===============配表
 TBSkill = CS.Arale.Engine.TBSkill
 TBMonster = CS.Arale.Engine.TBMonster
