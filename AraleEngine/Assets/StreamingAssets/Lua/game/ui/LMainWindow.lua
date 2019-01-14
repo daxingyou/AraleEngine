@@ -62,14 +62,7 @@ function M:OnBindPlayer(evt)
     local cameraCtr = CameraMgr.single:GetCamera("MainCamera"):GetComponent("CameraController")
     cameraCtr.mTarget = self._hero.transform
 
-	local list = self.luaSkillBtn
-	list:clearItem()
-    local skills = self._hero.skill.skills;
-    for i=1,skills.Count do
-    	local skill = skills[i-1]
-    	local it = list:addItem(skill)
-    	it.mLO.mLT:SetData(skill)
-    end
+	self:UpdateSkills()
 
     self:SetPlayer()
     self._hero.attr:AddAttrListener(self._onAttrChanged)
@@ -120,6 +113,17 @@ function M:ShowDrop(dropID)
 	seq:Insert(0.8, t:DOMove(self.luaBag.transform.position, 1))
 	seq:Insert(1.3, t:DOScale(0.5, 0.5))
 	seq:LPlay():LOnComplete(function() GameObject.Destroy(fly) end)
+end
+
+function M:UpdateSkills()
+	local list = self.luaSkillBtn
+	list:clearItem()
+    local skills = self._hero.skill.skills;
+    for i=1,skills.Count do
+    	local skill = skills[i-1]
+    	local it = list:addItem(skill)
+    	it.mLO.mLT:SetData(skill)
+    end
 end
 --========================
 LMainWindow = M

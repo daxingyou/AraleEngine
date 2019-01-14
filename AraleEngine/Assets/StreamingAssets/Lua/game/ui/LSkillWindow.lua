@@ -105,6 +105,7 @@ function M:OnSkillSlot(dragItem,receiver)
 			slot2.gameObject:SetActive(false)
 		end
 	end
+	WindowMgr.SendWindowMessage ("MainWindow", "UpdateSkills", nil);
 end
 --========================
 LSkillWindow = M

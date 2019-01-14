@@ -1,6 +1,7 @@
 ﻿//挂在拖拽物体根节点上，这样可以避免每个拖拽物体都绑定一个DragItem,影响性能
 //需要拖动的物体上绑定脚本UIDragItem,需要接收拖动物体的槽上绑定脚本UIDragReceiver
 //如果想拖动自身节点，也可以在自身节点上同时绑定UIDrag和UIDragItem
+//挂一个mask=0的UIDragReceiver可以拦截上层的UIDragReceiver
 using UnityEngine;
 using System.Collections;
 using UnityEngine.EventSystems;
@@ -28,9 +29,7 @@ public class UIDrag : MonoBehaviour,IDragHandler,IBeginDragHandler,IEndDragHandl
 	{
 		GameObject go = eventData.pointerEnter;
 		if (go == null)return;
-		Debug.LogError (go.name);
-		//获取子节点,这样可以拖动UIDragReceiver内的UIDragItem,UIDragReceiver的子物体不能设置响应事件,否则检测不到UIDragReceiver物体
-		UIDragItem di = go.GetComponentInChildren<UIDragItem> ();
+		UIDragItem di = go.GetComponent<UIDragItem> ();
 		if (di == null || di.enabled == false)return;
 		mLocalBeginlPos = di.transform.localPosition;
 		mTarget = mClone ? GameObject.Instantiate<UIDragItem> (di) : di;
@@ -59,7 +58,7 @@ public class UIDrag : MonoBehaviour,IDragHandler,IBeginDragHandler,IEndDragHandl
 		if (mTarget == null)return;
 		GameObject go = eventData.pointerEnter;//鼠标下的物体
 		if (go == null)return;
-		UIDragReceiver dr = go.GetComponent<UIDragReceiver> ();
+        UIDragReceiver dr = go.GetComponentInParent<UIDragReceiver> ();//向上取解决UIDragReceiver被拦截的问题
 		if (dr == null || dr.enabled == false || (dr.recvMask&mTarget.typeMask)==0 || object.ReferenceEquals(mTarget.GetComponentInParent<UIDragReceiver> (),dr))
 		{
 			if(mFallback)StartCoroutine (Fallback (mTarget.transform, mLocalBeginlPos));
