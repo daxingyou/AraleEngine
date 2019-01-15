@@ -42,9 +42,8 @@ function M:Start()
 	self.luaJoyStick = self.luaJoyStick:GetComponent("UIStick")
 	self.luaSkillBtn = self.luaSkillBtn:GetComponent("UISList")
 	self.luaSkillBtn.onSelectedChange = function(selItem)
-			local skill = selItem.mLO.mLT._skill
-			if skill == nil then return end
-			self._hero.skill:play(skill.mTID)
+		local btn = selItem.mLO.mLT
+		btn:Play(self._hero)
 	end
 
 	if _hero == nil then

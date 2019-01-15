@@ -22,7 +22,7 @@ function M:SetData(mail,itemprefab)
 		self.luaGain:SetActive(false)
 		self.luaReward:SetActive(false)
 	else
-		self.luaGain:SetActive(true)
+		self.luaGain:SetActive(mail.state~=2)
 		self.luaReward:SetActive(true)
 		local mount = self.luaReward.transform
 		GHelper.DestroyChilds(mount)
@@ -37,8 +37,8 @@ function M:SetData(mail,itemprefab)
 end
 
 function M:OnMailGainClick( ... )
-	if self._mail.state == 2 then return end
-	print("gain reward mailid="..self._mail.id)
+	local win = WindowMgr.single:GetWindow("MailWindow").mLO.mLT
+	win:GainReward(self._mail)
 end
 --========================
 LMailItem = M

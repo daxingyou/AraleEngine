@@ -136,6 +136,7 @@ namespace Arale.Engine
 
 		public LuaTable newTable(string luaTableName, object csObject=null)
 		{
+			if (luaTableName [0] == '*')return mL.NewTable ();//有时不想为item数组编写lua类
 			object[] t = mNewLuaObject.Call(luaTableName, csObject);
 			return (LuaTable)t[0];
 		}

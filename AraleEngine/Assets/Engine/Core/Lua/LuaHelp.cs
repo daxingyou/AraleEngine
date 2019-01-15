@@ -11,7 +11,6 @@ public static class LuaHelp
 	{
 	}
 	public static List<object> List_object{get{return new List<object>();}}
-
 	//类型导出
 	[LuaCallCSharp]
     [ReflectionUse]
@@ -51,6 +50,7 @@ public static class LuaHelp
 	public static List<Type> cs_call_lua = new List<Type>(){
 		typeof(Action),
 		typeof(Action<LuaTable>),
+		typeof(IData.OnDataChanged),
 		typeof(Func<LuaTable,int,object,bool>),
 		typeof(EventMgr.EventCallback),
 		typeof(EventListener.VoidDelegate),

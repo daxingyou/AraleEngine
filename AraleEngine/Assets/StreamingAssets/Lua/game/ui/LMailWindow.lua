@@ -88,7 +88,7 @@ function M:ShowMailDesc(mail)
 		self.luaGain2:SetActive(false)
 		self.luaReward2:SetActive(false)
 	else
-		self.luaGain2:SetActive(true)
+		self.luaGain2:SetActive(mail.state~=2)
 		self.luaReward2:SetActive(true)
 		local mount = self.luaReward2.transform
 		GHelper.DestroyChilds(mount)
@@ -103,8 +103,19 @@ function M:ShowMailDesc(mail)
 end
 
 function M:OnMailGainClick( ... )
-	if self._mail.state == 2 then return end
-	print("gain reward mailid="..self._mail.id)
+	self:GainReward(self._mail)
+end
+
+function M:GainReward(mail)
+	if mail.state == 2 then return end
+	print("gain reward mailid="..mail.id)
+	local ls = LuaHelp.List_object
+	for i=1,#mail.rewards do
+		local reward = mail.rewards[i]
+		ls:Add(reward.id)
+		ls:Add(reward.num)
+	end
+	LRewardWindow.Show(ls)
 end
 --=======================
 LMailWindow = M

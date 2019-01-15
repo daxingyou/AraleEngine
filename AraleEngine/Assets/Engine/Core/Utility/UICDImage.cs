@@ -4,17 +4,26 @@ using UnityEngine.UI;
 
 public class UICDImage : Image
 {
-    float mDur=1f;
+    float mDur;
     float mTime;
-    public void play(float dur, float start = 0f)
+	public void Play(float dur, float elapse = 0f)
     {
-        
+		enabled = true;
+		mTime = elapse;
+		mDur = dur;
+		Update ();
     }
 
     void Update ()
     {
-        if (mTime < 0)return;
-        this.fillAmount = mTime / mDur;
-        mTime -= Time.unscaledDeltaTime;
+		if (mTime >= mDur)
+		{
+			enabled = false;
+			return;
+		}
+        this.fillAmount = 1 - mTime / mDur;
+        mTime += Time.unscaledDeltaTime;
     }
+
+	public bool isCD{get{return mTime < mDur;}}
 }

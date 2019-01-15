@@ -6,11 +6,10 @@ using System.Collections.Generic;
 public class IData{
 	public delegate void OnDataChanged(int mask, object val=null);
 	public OnDataChanged onDataChanged;
+	public void AddOnDataChanged(OnDataChanged callback){onDataChanged += callback;}
+	public void RemoveOnDataChanged(OnDataChanged callback){onDataChanged -= callback;}
 	public virtual void Notify(int mask, object val=null)
 	{
-        if (onDataChanged != null)
-        {
-           onDataChanged(mask, val);
-        }
+        if (onDataChanged != null)onDataChanged(mask, val);
 	}
 }

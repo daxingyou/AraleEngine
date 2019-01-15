@@ -92,6 +92,7 @@ require "game/ui/LRoleCreateWindowItem"
 require "game/battle/LBattleSceneCtrl"
 require "game/ui/main/LSKillButton"
 require "game/ui/main/LHeadInfo"
+require "game/ui/LRewardWindow"
 require "game/ai/LHero"
 require "game/ai/LMonster"
 BuffParam={}
@@ -125,6 +126,7 @@ function  main( ... )
 	WindowMgr.SetWindowRes ("BagWindow", "UI/BagWindow")
 	WindowMgr.SetWindowRes ("RoleCreateWindow", "UI/RoleCreateWindow")
 	WindowMgr.SetWindowRes ("MailWindow", "UI/MailWindow")
+	WindowMgr.SetWindowRes ("RewardWindow", "UI/RewardWindow")
 	WindowMgr.single:GetWindow("NoticeWindow", true)
 
 	TableMgr.TestModel = true

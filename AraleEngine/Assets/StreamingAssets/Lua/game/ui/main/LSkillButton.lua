@@ -11,14 +11,19 @@ end
 
 function M:Awake()
 	self.luaIcon = self.luaIcon:GetComponent("Image")
-	self.luaMask = self.luaIcon:GetComponent("Image")
+	self.luaMask = self.luaMask:GetComponent("UICDImage")
 end
 
 function M:SetData(skill)
 	local tb = TableMgr.single:GetDataByKey(typeof(TBSkill), skill.mTID)
 	AssetRef.setImage(self.luaIcon, tb.icon)
-	self.luaMask.fillAmount = 1
 	self._skill = skill
+end
+
+function M:Play(hero)
+	if self.luaMask.isCD then return end
+	self.luaMask:Play(3)
+	hero.skill:play(self._skill.mTID)
 end
 --========================
 LSkillButton = M
