@@ -1,4 +1,4 @@
-if not LTaskWindow then
+if not LTaskWindow then print("same lua, reload ignore!!!") end
 
 local M =
 {
@@ -18,4 +18,3 @@ end
 --========================
 LTaskWindow = M
 createClass("LTaskWindow",LTaskWindow)
-end

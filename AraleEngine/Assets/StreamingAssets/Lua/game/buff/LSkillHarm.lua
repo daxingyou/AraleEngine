@@ -1,4 +1,4 @@
-if not LSkillHarm then
+if not LSkillHarm then print("same lua, reload ignore!!!") end
 
 local M = 
 {
@@ -78,4 +78,3 @@ BuffParam.SkillHarm=
 		}
 	};
 }
-end

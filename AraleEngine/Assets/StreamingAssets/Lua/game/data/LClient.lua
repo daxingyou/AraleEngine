@@ -1,4 +1,4 @@
-if not LClient then
+if not LClient then print("same lua, reload ignore!!!") end
 --=================
 LClient = {}
 function LClient:Login()
@@ -20,6 +20,4 @@ end
 function LClient:OnPropChange(evt)
 	local item = evt.data
 	self.prop[item.itemId] = item.count
-end
---=================
 end

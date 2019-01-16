@@ -1,4 +1,4 @@
-if not LRewardWindow then
+if not LRewardWindow then print("same lua, reload ignore!!!") end
 
 local M =
 {
@@ -48,4 +48,3 @@ function LRewardWindow.Show(rewards)--rewards为List<int>，偶数位id，奇数
 	win:ShowRewards(rewards)
 end
 createClass("LRewardWindow",LRewardWindow)
-end

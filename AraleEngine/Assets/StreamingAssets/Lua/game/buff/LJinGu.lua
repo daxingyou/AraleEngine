@@ -1,4 +1,4 @@
-if not LJinGu then
+if not LJinGu then print("same lua, reload ignore!!!") end
 
 local M = 
 {
@@ -55,4 +55,3 @@ BuffParam.JinGu=
 		duration = 1;
 	};
 }
-end

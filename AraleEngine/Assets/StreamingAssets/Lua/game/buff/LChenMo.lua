@@ -1,4 +1,4 @@
-if not LChenMo then
+if not LChenMo then print("same lua, reload ignore!!!") end
 
 local M = 
 {
@@ -51,4 +51,3 @@ BuffParam.ChenMo=
 		duration = 1;
 	};
 }
-end

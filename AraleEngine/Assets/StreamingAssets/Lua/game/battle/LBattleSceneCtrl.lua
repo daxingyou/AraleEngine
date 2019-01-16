@@ -1,5 +1,5 @@
-if not LBattleSceneCtrl then
---======================
+if not LBattleSceneCtrl then print("same lua, reload ignore!!!") end
+
 local M=
 {
 	_cs;
@@ -26,4 +26,3 @@ end
 --=======================
 LBattleSceneCtrl = M
 createClass("LBattleSceneCtrl",LBattleSceneCtrl)
-end

@@ -1,4 +1,4 @@
-if not LImbedWindow then
+if not LImbedWindow then print("same lua, reload ignore!!!") end
 
 local M =
 {
@@ -14,4 +14,3 @@ end
 --========================
 LImbedWindow = M
 createClass("LImbedWindow",LImbedWindow)
-end

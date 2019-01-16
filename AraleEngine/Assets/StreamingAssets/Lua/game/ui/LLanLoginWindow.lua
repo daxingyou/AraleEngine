@@ -1,3 +1,5 @@
+if not LLanLoginWindow then print("same lua, reload ignore!!!") end
+
 local M =
 {
 	_onAddHost;

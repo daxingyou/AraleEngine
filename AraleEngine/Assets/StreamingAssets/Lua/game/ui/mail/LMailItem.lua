@@ -1,4 +1,4 @@
-if not LMailItem then
+if not LMailItem then print("same lua, reload ignore!!!") end
 
 local M =
 {
@@ -43,4 +43,3 @@ end
 --========================
 LMailItem = M
 createClass("LMailItem",LMailItem)
-end

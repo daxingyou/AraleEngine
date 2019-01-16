@@ -1,4 +1,4 @@
-if not LJianXue then
+if not LJianXue then  print("same lua, reload ignore!!!") end
 
 local M = 
 {
@@ -63,4 +63,3 @@ BuffParam.JianXue=
 		times    = 10,
 	};
 }
-end

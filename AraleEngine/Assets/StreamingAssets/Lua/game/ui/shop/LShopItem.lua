@@ -1,4 +1,4 @@
-if not LShopItem then
+if not LShopItem then print("same lua, reload ignore!!!") end
 
 local M =
 {
@@ -47,4 +47,3 @@ end
 --========================
 LShopItem = M
 createClass("LShopItem",LShopItem)
-end

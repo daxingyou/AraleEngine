@@ -1,4 +1,4 @@
-if not LSkillWindow then
+if not LSkillWindow then print("same lua, reload ignore!!!") end
 
 local M =
 {
@@ -110,4 +110,3 @@ end
 --========================
 LSkillWindow = M
 createClass("LSkillWindow",LSkillWindow)
-end

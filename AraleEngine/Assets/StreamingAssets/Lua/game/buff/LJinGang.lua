@@ -1,4 +1,4 @@
-if not LJinGang then
+if not LJinGang then print("same lua, reload ignore!!!") end
 
 local M = 
 {
@@ -47,4 +47,3 @@ BuffParam.JinGang=
 		duration = 1;
 	};
 }
-end

@@ -1,4 +1,4 @@
-if not LRoleCreateWindow then
+if not LRoleCreateWindow then print("same lua, reload ignore!!!") end
 --======================
 local M=
 {
@@ -59,4 +59,3 @@ end
 --=======================
 LRoleCreateWindow = M
 createClass("LRoleCreateWindow",LRoleCreateWindow);
-end

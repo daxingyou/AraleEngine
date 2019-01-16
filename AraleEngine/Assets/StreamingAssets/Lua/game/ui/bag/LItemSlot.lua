@@ -1,4 +1,4 @@
-if not LItemSlot then
+if not LItemSlot then print("same lua, reload ignore!!!") end
 --======================
 local M=
 {
@@ -36,4 +36,3 @@ end
 --=======================
 LItemSlot = M
 createClass("LItemSlot",LItemSlot);
-end

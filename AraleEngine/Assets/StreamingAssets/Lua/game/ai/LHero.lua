@@ -1,4 +1,4 @@
-if not LHero then
+if not LHero then print("same lua, reload ignore!!!") end
 
 LHero = 
 {
@@ -32,7 +32,6 @@ LHero =
 	end;
 }
 
---must--
+--=======================
 createClass("LHero",LHero)
 --======
-end

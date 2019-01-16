@@ -1,4 +1,4 @@
-if not LShopWindow then
+if not LShopWindow then print("same lua, reload ignore!!!") end
 
 local M =
 {
@@ -74,4 +74,3 @@ end
 --========================
 LShopWindow = M
 createClass("LShopWindow",LShopWindow)
-end

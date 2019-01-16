@@ -1,4 +1,4 @@
-if not LForginWindow then
+if not LForginWindow then print("same lua, reload ignore!!!") end
 
 local M =
 {
@@ -13,4 +13,3 @@ end
 --========================
 LForginWindow = M
 createClass("LForginWindow",LForginWindow)
-end

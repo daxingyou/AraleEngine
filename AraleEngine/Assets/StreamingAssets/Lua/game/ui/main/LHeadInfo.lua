@@ -1,4 +1,4 @@
-if not LHeadInfo then
+if not LHeadInfo then print("same lua, reload ignore!!!") end
 
 local M =
 {
@@ -47,4 +47,3 @@ end
 --========================
 LHeadInfo = M
 createClass("LHeadInfo",LHeadInfo)
-end

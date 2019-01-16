@@ -1,4 +1,4 @@
-if not LLeiGongBaoFeng then
+if not LLeiGongBaoFeng then print("same lua, reload ignore!!!") end
 
 local M = 
 {
@@ -77,4 +77,3 @@ BuffParam.LeiGongBaoFeng=
 		harm = 2;
 	};
 }
-end

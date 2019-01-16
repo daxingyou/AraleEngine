@@ -1,4 +1,4 @@
-if not LPlayerWindow then
+if not LPlayerWindow then print("same lua, reload ignore!!!") end
 
 local M =
 {
@@ -35,4 +35,3 @@ end
 --========================
 LPlayerWindow = M
 createClass("LPlayerWindow",LPlayerWindow)
-end

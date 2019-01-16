@@ -1,4 +1,4 @@
-if not LJingHua then
+if not LJingHua then print("same lua, reload ignore!!!") end
 
 local M = 
 {
@@ -51,4 +51,3 @@ BuffParam.JingHua=
 		duration=10;
 	};
 }
-end

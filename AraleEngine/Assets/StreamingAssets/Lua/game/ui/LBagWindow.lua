@@ -1,4 +1,4 @@
-if not LBagWindow then
+if not LBagWindow then print("same lua, reload ignore!!!") end
 --======================
 local M={}
 function M:new(cs)
@@ -66,4 +66,3 @@ end
 --=======================
 LBagWindow = M
 createClass("LBagWindow",LBagWindow);
-end

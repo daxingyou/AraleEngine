@@ -1,4 +1,4 @@
-if not LHuiXue then
+if not LHuiXue then print("same lua, reload ignore!!!") end
 
 local M = 
 {
@@ -62,4 +62,3 @@ BuffParam.HuiXue=
 		times    = 10,
 	};
 }
-end

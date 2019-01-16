@@ -1,4 +1,4 @@
-if not LLoginWindow then
+if not LLoginWindow then print("same lua, reload ignore!!!") end
 
 local M =
 {
@@ -20,4 +20,3 @@ end
 --========================
 LLoginWindow = M
 createClass("LLoginWindow",LLoginWindow)
-end

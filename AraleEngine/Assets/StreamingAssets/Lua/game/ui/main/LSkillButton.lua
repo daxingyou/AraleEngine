@@ -1,4 +1,4 @@
-if not LSkillButton then
+if not LSkillButton then print("same lua, reload ignore!!!") end
 
 local M =
 {
@@ -28,4 +28,3 @@ end
 --========================
 LSkillButton = M
 createClass("LSkillButton",LSkillButton)
-end

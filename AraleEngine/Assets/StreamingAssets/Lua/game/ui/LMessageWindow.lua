@@ -1,4 +1,4 @@
-if not LMessageWindow then
+if not LMessageWindow then print("same lua, reload ignore!!!") end
 --======================
 local M=
 {
@@ -35,4 +35,3 @@ end
 --=======================
 LMessageWindow = M
 createClass("LMessageWindow",LMessageWindow);
-end

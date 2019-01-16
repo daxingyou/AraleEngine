@@ -1,4 +1,4 @@
-if not LMailWindow then
+if not LMailWindow then print("same lua, reload ignore!!!") end
 --======================
 local M=
 {
@@ -120,4 +120,3 @@ end
 --=======================
 LMailWindow = M
 createClass("LMailWindow",LMailWindow);
-end

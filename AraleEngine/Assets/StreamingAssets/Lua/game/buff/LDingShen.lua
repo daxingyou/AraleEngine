@@ -1,4 +1,4 @@
-if not LDingShen then
+if not LDingShen then print("same lua, reload ignore!!!") end
 
 local M = 
 {
@@ -59,4 +59,3 @@ BuffParam.DingShen=
 		duration = 1;
 	};
 }
-end

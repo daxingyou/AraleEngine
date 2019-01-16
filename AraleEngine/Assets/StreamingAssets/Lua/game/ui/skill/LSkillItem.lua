@@ -1,4 +1,4 @@
-if not LSkillItem then
+if not LSkillItem then print("same lua, reload ignore!!!") end
 --======================
 local M=
 {
@@ -17,4 +17,3 @@ end
 --=======================
 LSkillItem = M
 createClass("LSkillItem",LSkillItem);
-end

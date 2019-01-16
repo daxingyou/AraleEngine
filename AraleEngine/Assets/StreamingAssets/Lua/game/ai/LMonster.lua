@@ -1,5 +1,5 @@
-if not LMonster then
---======================
+if not LMonster then print("same lua, reload ignore!!!") end
+
 local M=
 {
 	_cs;
@@ -18,7 +18,6 @@ function M:new(cs)
 	end
 end
 
-	--========================
 function M:DoAI()
 		local cs = self._cs
 		local su = cs.unit
@@ -41,4 +40,3 @@ function M:DoAI()
 --=======================
 LMonster = M
 createClass("LMonster",LMonster)
-end
