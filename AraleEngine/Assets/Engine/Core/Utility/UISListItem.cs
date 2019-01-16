@@ -7,7 +7,6 @@ using Arale.Engine;
 //list中的子item,配合UIList使用
 public class UISListItem : LuaMono, IPointerClickHandler
 {
-    public delegate void OnSelectChange(UISListItem sel);
     public Image mOn;
     public bool selected
     {
@@ -20,26 +19,19 @@ public class UISListItem : LuaMono, IPointerClickHandler
             return null==mOn?false:mOn.gameObject.activeSelf;       
         }
     }
-    public OnSelectChange onSelectChange{ set; get;}
+	public UISList.OnSelectChange onSelectChange{ set; get;}
     public void OnPointerClick(PointerEventData eventData)
     {
         if (null != onSelectChange)onSelectChange(this);
     }
 
     protected object mData;
-    public object data{get{return mData;}}
-    // Use this for initialization
-    void Start ()
+	public object data{get{return mData;}}
+	protected int    mID;
+	public int id{get{return mID;}}
+	public virtual void setData(object data,int id)
     {
-    }
-
-    public virtual void setData(object data)
-    {
+		mID = id;
         mData = data;
-    }
-
-    public virtual bool isSame(object data)
-    {
-        return false;
     }
 }

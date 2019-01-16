@@ -7,8 +7,8 @@ local M=
 	mails = 
 	{
 		[1]={id=1001; state=0; playerid=1000; nick="系统"; title="五一送礼"; content="阿拉蕾的馈赠"; rewards={[1]={id=1;num=500;}; [2]={id=2;num=500;};};};
-		[2]={id=1002; state=1; playerid=1000; nick="系统"; title="六一送礼"; content="阿拉蕾的馈赠"; rewards={[1]={id=1;num=500;};};};
-		[3]={id=1003; state=2; playerid=1000; nick="系统"; title="七夕送礼"; content="阿拉蕾的馈赠"; rewards={[1]={id=1;num=500;}; [2]={id=2;num=500;};};};
+		[2]={id=1002; state=0; playerid=1000; nick="系统"; title="六一送礼"; content="阿拉蕾的馈赠"; rewards={[1]={id=1;num=500;};};};
+		[3]={id=1003; state=0; playerid=1000; nick="系统"; title="七夕送礼"; content="阿拉蕾的馈赠"; rewards={[1]={id=1;num=500;}; [2]={id=2;num=500;};};};
 		[4]={id=1004; state=0; playerid=1000; nick="系统"; title="停服公告"; content="阿拉蕾休假一天"; };
 		[5]={id=1005; state=0; playerid=1001; nick="阿拉蕾"; title="见面礼"; content="阿拉蕾的馈赠"; rewards={[1]={id=1;num=500;}; [2]={id=2;num=500;};};};
 	};
@@ -22,8 +22,9 @@ end
 function M:Start()
 	self.luaContent = self.luaContent:GetComponent("UISList");
 	self.luaContent.onSelectedChange = function(selItem)
-		local mail = selItem.mLO.mLT._mail
-		self:ShowMailDesc(mail)
+		local mailItem=selItem.mLO.mLT
+		self:ShowMailDesc(mailItem._mail)
+		mailItem:SetState(1)
 	end
 
 	local sbs = UISwitch.getGroupSwitch ("mail1");
@@ -60,7 +61,7 @@ function M:ShowSystemMail(list)
 	for i=1,#mails do
 		local mail = mails[i]
 		if mail.playerid == 1000 then
-			local it = list:addItem(mail)
+			local it = list:addItem(mail,mail.id)
 			it.mLO.mLT:SetData(mail,self.luaItem)
 		end
 	end
@@ -71,7 +72,7 @@ function M:ShowPlayerMail(list)
 	for i=1,#mails do
 		local mail = mails[i]
 		if mail.playerid ~= 1000 then
-			local it = list:addItem(mail)
+			local it = list:addItem(mail,mail.id)
 			it.mLO.mLT:SetData(mail,self.luaItem)
 		end
 	end
@@ -109,6 +110,9 @@ end
 function M:GainReward(mail)
 	if mail.state == 2 then return end
 	print("gain reward mailid="..mail.id)
+	local mailItem=self.luaContent:getItem(mail.id)
+	local mailItem=mailItem.mLO.mLT
+	mailItem:SetState(2)
 	local ls = LuaHelp.List_object
 	for i=1,#mail.rewards do
 		local reward = mail.rewards[i]

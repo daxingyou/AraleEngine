@@ -18,6 +18,7 @@ function M:SetData(mail,itemprefab)
 	self._mail = mail
 	self.luaNick:GetComponent("Text").text = mail.nick
 	self.luaTitle:GetComponent("Text").text = mail.title
+	self.luaState:SetActive(mail.state~=0)
 	if mail.rewards==nil or #mail.rewards < 1 then
 		self.luaGain:SetActive(false)
 		self.luaReward:SetActive(false)
@@ -34,6 +35,14 @@ function M:SetData(mail,itemprefab)
 			it:GetComponent(typeof(UIItemSlot)):SetData(item.icon,item.name,reward.num)
 		end
 	end
+end
+
+function M:SetState(state)
+	local mail = self._mail
+	if mail.state >= state then return end
+	mail.state = state
+	self.luaState:SetActive(state~=0)
+	self.luaGain:SetActive(mail.state~=2 and mail.rewards~=nil and #mail.rewards > 0)
 end
 
 function M:OnMailGainClick( ... )
