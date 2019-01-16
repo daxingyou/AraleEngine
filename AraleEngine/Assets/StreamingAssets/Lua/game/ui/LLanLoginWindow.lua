@@ -1,5 +1,3 @@
-if not LLanLoginWindow then
-
 local M =
 {
 	_onAddHost;
@@ -80,4 +78,3 @@ end
 --========================
 LLanLoginWindow = M
 createClass("LLanLoginWindow",LLanLoginWindow)
-end

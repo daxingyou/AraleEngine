@@ -43,4 +43,9 @@ function createClass(subClassName,subClass,baseClass)
 	return subClass;
 end
 
+function reloadLua(path)
+	package.loaded[path] = nil
+	require(path)
+end
+
 end

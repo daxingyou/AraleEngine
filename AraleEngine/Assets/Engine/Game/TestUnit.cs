@@ -130,17 +130,6 @@ public class TestUnit : GRoot
 				NetMgr.single.destroyLanClient();
 				mPlayer = null;
 			}
-			if (GUI.Button (new Rect (100, 0, 100, 30), "重载配表"))
-			{
-				string tableName = Selection.activeObject.name;
-				System.Type t = System.Type.GetType ("Arale.Engine." + tableName);
-				if (t == null)
-				{
-					Debug.LogError ("请选中要重加载的配表文件");
-					return;
-				}
-				TableMgr.single.ReloadData (t);
-			}
 			if (GUI.Button (new Rect (200, 0, 100, 30), "重载Lua"))
 			{
 				LuaRoot.single.Init();

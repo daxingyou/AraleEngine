@@ -1,4 +1,4 @@
-
+--lua对象到字符串的序列化和反序列化
 serialize = {}
 
 local loadstring = loadstring

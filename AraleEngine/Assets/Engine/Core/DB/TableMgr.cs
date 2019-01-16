@@ -6,6 +6,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace Arale.Engine
 {
@@ -151,6 +154,22 @@ namespace Arale.Engine
 			sb.Append ("}");
 			return sb.ToString();
 		}
+
+		#if UNITY_EDITOR
+		//运行时重新加载选中的lua文件
+		[MenuItem("Assets/DevelopTools/Reload Table")]
+		public static void reload()
+		{
+			string tableName = Selection.activeObject.name;
+			System.Type t = System.Type.GetType ("Arale.Engine." + tableName);
+			if (t == null)
+			{
+				Debug.LogError ("请选中要重加载的配表文件");
+				return;
+			}
+			single.ReloadData (t);
+		}
+		#endif
     }
 
 }

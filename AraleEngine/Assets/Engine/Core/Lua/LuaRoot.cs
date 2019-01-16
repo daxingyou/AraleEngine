@@ -45,6 +45,7 @@ namespace Arale.Engine
 		#endif
 		delegate byte[] ReadLuaFile(string path, bool encode=false);
 		private static LuaFunction mNewLuaObject    = null;
+		private static LuaFunction mReloadLua       = null;
 		private static LuaFunction mPushLuaEvent    = null;
 		private static LuaFunction mProcessLuaEvent = null;
 		private static ReadLuaFile mReadLuaFile     = null;
@@ -100,6 +101,7 @@ namespace Arale.Engine
 			mL.DoString ("package.path = package.path .. ';' .. '"+LUA_PATH+"?.lua';require 'main';");
 			//====================
 			mNewLuaObject    = (LuaFunction)mL["newLuaObject"];
+			mReloadLua       = (LuaFunction)mL["reloadLua"];
 			mPushLuaEvent    = (LuaFunction)mL["pushLuaEvent"];
 			mProcessLuaEvent = (LuaFunction)mL["processLuaEvent"];
 			mGameConfig      = (LuaTable)mL["LGameConfig"];
@@ -227,8 +229,8 @@ namespace Arale.Engine
 		#endregion
 
 
-		#region 导出枚举
 		#if UNITY_EDITOR
+		#region 导出枚举
 		const string RET = "\r\n";
 		const string TAB = "\t"; 
 		[MenuItem("DevelopTools/Lua/Gen Enum")]
@@ -256,8 +258,23 @@ namespace Arale.Engine
 			s+="}"+RET;
 			return s;
 		}
-		#endif
 		#endregion
+
+		//运行时重新加载选中的lua文件
+		[MenuItem("Assets/DevelopTools/Reload Lua")]
+		public static void reload()
+		{
+			string path = AssetDatabase.GetAssetPath (Selection.activeObject);
+			if(!path.EndsWith(".lua"))
+			{
+				Debug.LogError ("请选中要重加载的.lua文件");
+				return;
+			}
+			path = path.Substring (FileUtils.toAssetsPath (mThis.LUA_PATH).Length);
+			path = path.Remove(path.Length - 4);
+			mReloadLua.Call (path);
+		}
+		#endif
 	}
 
 }
