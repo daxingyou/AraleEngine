@@ -1,4 +1,4 @@
-if not LMonster then print("same lua, reload ignore!!!") end
+if LMonster then print("same lua, reload ignore!!!") end
 
 local M=
 {

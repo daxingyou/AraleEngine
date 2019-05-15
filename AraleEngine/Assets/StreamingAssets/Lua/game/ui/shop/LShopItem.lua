@@ -1,4 +1,4 @@
-if not LShopItem then print("same lua, reload ignore!!!") end
+if LShopItem then print("same lua, reload ignore!!!") end
 
 local M =
 {

@@ -1,4 +1,4 @@
-if not LMainWindow then print("same lua, reload ignore!!!") end
+if LMainWindow then print("same lua, reload ignore!!!") end
 
 local M =
 {
@@ -37,6 +37,7 @@ function M:Start()
 	EventListener.Get(self.luaSkill):AddOnClick(function(evt)  WindowMgr.single:GetWindow("SkillWindow", true).mLO.mLT._player = self._hero end)
 
 	EventListener.Get(self.luaMail):AddOnClick(function(evt)  WindowMgr.single:GetWindow("MailWindow", true) end)
+	EventListener.Get(self.luaChat):AddOnClick(function(evt)  WindowMgr.single:GetWindow("ChatWindow", true) end)
 	EventListener.Get(self.luaHero):AddOnClick(function(evt)  WindowMgr.single:GetWindow("RoleCreateWindow", true) end)
 	EventListener.Get(self.luaLogout):AddOnClick(function(evt)  EventMgr.single:SendEvent("Game.Logout") end)
 	self.luaJoyStick = self.luaJoyStick:GetComponent("UIStick")

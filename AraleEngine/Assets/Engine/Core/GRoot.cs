@@ -5,16 +5,17 @@ using System.Collections.Generic;
 
 namespace Arale.Engine
 {
-    [RequireComponent (typeof (GConfig))]
     public abstract class GRoot : MonoBehaviour
     {
         public const string EventSceneLoad = "Game.SceneLoad";
         public const string EventGameFocus = "Game.Focus";
         public static GRoot single;
         public int mLaunchFlag;
-		public Transform uiRoot;
-        [System.NonSerialized]
-        public GConfig mConfig;
+        public bool mUseLua;
+        public Log.Tag mLogTag;
+        public Log.Type mLogLevel;
+        public string mGameServer="127.0.0.1:80";
+        public string mResServer="http://127.0.0.1:8080/update/";
         [System.NonSerialized]
         public GDevice mDevice;
 
@@ -23,13 +24,17 @@ namespace Arale.Engine
         {
             single = this;
             Log.init ();
-            mConfig = GetComponent<GConfig> ();
+            Log.mFilter = (int)mLogTag;
+            Log.mDebugLevel = (int)mLogLevel;
+                
             mDevice = new GDevice ();
             DontDestroyOnLoad (this);   
         }
 
         void Start ()
         {
+            if(mUseLua)gameObject.AddComponent<LuaRoot>();
+            Application.targetFrameRate = 60;
             Application.runInBackground = true;
             if (EventSystem.current != null)
             {

@@ -1,4 +1,4 @@
-if not LSkillButton then print("same lua, reload ignore!!!") end
+if LSkillButton then print("same lua, reload ignore!!!") end
 
 local M =
 {

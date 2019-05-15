@@ -1,4 +1,4 @@
-if not LImbedWindow then print("same lua, reload ignore!!!") end
+if LImbedWindow then print("same lua, reload ignore!!!") end
 
 local M =
 {

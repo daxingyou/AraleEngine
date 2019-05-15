@@ -82,6 +82,7 @@ require "game/ui/LSkillWindow"
 require "game/ui/skill/LSkillItem"
 require "game/ui/LShopWindow"
 require "game/ui/LMailWindow"
+require "game/ui/LChatWindow"
 require "game/ui/mail/LMailItem"
 require "game/ui/shop/LShopItem"
 require "game/ui/LForginWindow"
@@ -126,6 +127,7 @@ function  main( ... )
 	WindowMgr.SetWindowRes ("BagWindow", "UI/BagWindow")
 	WindowMgr.SetWindowRes ("RoleCreateWindow", "UI/RoleCreateWindow")
 	WindowMgr.SetWindowRes ("MailWindow", "UI/MailWindow")
+	WindowMgr.SetWindowRes ("ChatWindow", "UI/ChatWindow")
 	WindowMgr.SetWindowRes ("RewardWindow", "UI/RewardWindow")
 	WindowMgr.single:GetWindow("NoticeWindow", true)
 

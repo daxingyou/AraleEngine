@@ -1,4 +1,4 @@
-if not LTaskWindow then print("same lua, reload ignore!!!") end
+if LTaskWindow then print("same lua, reload ignore!!!") end
 
 local M =
 {

@@ -1,4 +1,4 @@
-if not LItemSlot then print("same lua, reload ignore!!!") end
+if LItemSlot then print("same lua, reload ignore!!!") end
 --======================
 local M=
 {

@@ -1,4 +1,4 @@
-if not LWindow then print("same lua, reload ignore!!!") end
+if LWindow then print("same lua, reload ignore!!!") end
 --======================
 local M=
 {

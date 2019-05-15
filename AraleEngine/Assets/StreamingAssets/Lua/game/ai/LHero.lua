@@ -1,4 +1,4 @@
-if not LHero then print("same lua, reload ignore!!!") end
+if LHero then print("same lua, reload ignore!!!") end
 
 LHero = 
 {

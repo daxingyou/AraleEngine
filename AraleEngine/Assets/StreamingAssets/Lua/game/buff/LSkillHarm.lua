@@ -1,4 +1,4 @@
-if not LSkillHarm then print("same lua, reload ignore!!!") end
+if LSkillHarm then print("same lua, reload ignore!!!") end
 
 local M = 
 {

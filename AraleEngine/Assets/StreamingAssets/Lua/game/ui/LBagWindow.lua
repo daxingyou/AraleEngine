@@ -1,4 +1,4 @@
-if not LBagWindow then print("same lua, reload ignore!!!") end
+if LBagWindow then print("same lua, reload ignore!!!") end
 --======================
 local M={}
 function M:new(cs)

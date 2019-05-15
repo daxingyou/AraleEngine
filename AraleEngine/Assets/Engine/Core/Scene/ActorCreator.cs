@@ -58,7 +58,7 @@ public class ActorCreator : MonoBehaviour
 		{
 			ActorInfo a = mActorInfo [i];
 			Unit u = NetMgr.server.createMonster(a.actorId, Vector3.right, a.pos);
-			(u as Monster).drops = GHelper.toIntArray (a.drop);
+            if(!string.IsNullOrEmpty(a.drop))(u as Monster).drops = GHelper.toIntArray (a.drop);
 			u.AddStateListener (OnUnitStateChange);
 			yield return null;
 		}

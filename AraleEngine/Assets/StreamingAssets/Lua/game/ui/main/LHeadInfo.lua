@@ -1,4 +1,4 @@
-if not LHeadInfo then print("same lua, reload ignore!!!") end
+if LHeadInfo then print("same lua, reload ignore!!!") end
 
 local M =
 {

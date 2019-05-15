@@ -1,4 +1,4 @@
-if not LChenMo then print("same lua, reload ignore!!!") end
+if LChenMo then print("same lua, reload ignore!!!") end
 
 local M = 
 {

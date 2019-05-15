@@ -1,4 +1,4 @@
-if not LJingHua then print("same lua, reload ignore!!!") end
+if LJingHua then print("same lua, reload ignore!!!") end
 
 local M = 
 {

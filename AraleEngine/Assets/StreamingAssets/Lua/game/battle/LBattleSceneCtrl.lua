@@ -1,4 +1,4 @@
-if not LBattleSceneCtrl then print("same lua, reload ignore!!!") end
+if LBattleSceneCtrl then print("same lua, reload ignore!!!") end
 
 local M=
 {

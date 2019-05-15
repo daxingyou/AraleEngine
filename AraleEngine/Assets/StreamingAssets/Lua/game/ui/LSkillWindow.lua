@@ -1,4 +1,4 @@
-if not LSkillWindow then print("same lua, reload ignore!!!") end
+if LSkillWindow then print("same lua, reload ignore!!!") end
 
 local M =
 {

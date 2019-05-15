@@ -1,5 +1,5 @@
 {"_id":1001,"model":"Model/houyi","speed":"3","aggression":0,"ai":"LMonster","skills":"100,101,102,103","_extend":"name='后羿';"}
 {"_id":1002,"model":"Model/ehuang","speed":"3","aggression":0,"ai":"LMonster","skills":"200,201,202,203","_extend":"name='娥皇';"}
-{"_id":1003,"model":"Model/sunwukong","speed":"aggression":2,"3","ai":"LMonster","skills":"300,301,302,303","_extend":"name='孙悟空';"}
+{"_id":1003,"model":"Model/sunwukong","speed":"3","aggression":2,"ai":"LMonster","skills":"300,301,302,303","_extend":"name='孙悟空';"}
 {"_id":1004,"model":"Model/nezha","speed":"3","aggression":0,"ai":"LMonster","skills":"400,401,402,403","_extend":"name='哪吒';"}
 {"_id":1006,"model":"Model/leigong","speed":"3","aggression":1,"ai":"LMonster","skills":"600,601,602,603","_extend":"name='雷公';"}

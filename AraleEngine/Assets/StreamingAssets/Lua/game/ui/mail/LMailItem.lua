@@ -1,4 +1,4 @@
-if not LMailItem then print("same lua, reload ignore!!!") end
+if LMailItem then print("same lua, reload ignore!!!") end
 
 local M =
 {

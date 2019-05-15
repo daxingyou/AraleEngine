@@ -1,4 +1,4 @@
-if not LJianSu then print("same lua, reload ignore!!!") end
+if LJianSu then print("same lua, reload ignore!!!") end
 --叠加时启用最大减速效果
 local M = 
 {

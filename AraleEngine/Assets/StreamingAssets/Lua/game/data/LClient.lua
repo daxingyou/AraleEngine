@@ -1,4 +1,4 @@
-if not LClient then print("same lua, reload ignore!!!") end
+if LClient then print("same lua, reload ignore!!!") end
 --=================
 LClient = {}
 function LClient:Login()

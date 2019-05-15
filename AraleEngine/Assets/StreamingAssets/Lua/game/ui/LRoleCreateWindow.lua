@@ -1,4 +1,4 @@
-if not LRoleCreateWindow then print("same lua, reload ignore!!!") end
+if LRoleCreateWindow then print("same lua, reload ignore!!!") end
 --======================
 local M=
 {
