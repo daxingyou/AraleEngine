@@ -37,7 +37,6 @@ public class Player : Unit, PoolMgr<int>.IPoolObject
 	HeadInfo mHeadInfo;
     protected override void onUnitInit()
     {
-        base.onUnitInit();
 		mAttr.reset ();
 		mSkill.reset ();
 		mBuff.reset ();

@@ -28,9 +28,12 @@ public class DropItems : Unit, PoolMgr<int>.IPoolObject
 
 	protected override void onUnitInit()
 	{
-		base.onUnitInit ();
 		Invoke ("dispear", 60f);
 	}
+
+    protected override void onUnitUpdate()
+    {
+    }
 
 	protected override void onUnitDeinit()
 	{

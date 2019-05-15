@@ -53,7 +53,7 @@ public class UnitType
 }
 #endregion
 
-public class Unit : LuaMono
+public abstract class Unit : LuaMono
 {
 	public uint  guid{ get; private set;}//单位编号
 	public int   type{ get; private set;}//单位类型
@@ -289,10 +289,10 @@ public class Unit : LuaMono
 		}
 	}
 		
-    protected virtual void onUnitInit(){}
+    protected abstract void onUnitInit();
 	protected virtual void onUnitParam(object param){}
-    protected virtual void onUnitUpdate(){}
-    protected virtual void onUnitDeinit(){}
+    protected abstract void onUnitUpdate();
+    protected abstract void onUnitDeinit();
 	public virtual int relation(Unit u){return 0;}
 	public virtual AnimPlugin   anim{get{ return null;}}
 	public virtual AttrPlugin   attr{get{ return null;}}

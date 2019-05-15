@@ -1,4 +1,5 @@
-﻿右键点击lua文件，可运行时重加载lua代码
+﻿点击菜单DevelopTools/Proto/Gen导出proto协议，请根据自己项目修改命令路径，.proto文件尽量放在protoc.exe目录或子目录，避免提示--proto_path设置
+右键点击lua文件，可运行时重加载lua代码
 右键点击配表文件，可运行时重加载配表
 
 1，继承GRoot创建自己的游戏根节点

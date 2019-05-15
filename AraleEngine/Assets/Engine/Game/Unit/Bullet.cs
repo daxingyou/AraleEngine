@@ -89,6 +89,12 @@ public class Bullet : Unit, PoolMgr<int>.IPoolObject
 		}
 	}
 
+    protected override void onUnitInit()
+    {
+        mMove.reset();
+        mBuff.reset();
+    }
+
 	protected override void onUnitUpdate()
 	{
 		mMove.update ();

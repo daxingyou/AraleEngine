@@ -419,7 +419,7 @@ public class LuaProto : MonoBehaviour
         gameObject.AddComponent<LuaRoot>();
     }
 
-    [MenuItem("DevelopTools/GenLuaPB")]
+    [MenuItem("DevelopTools/Proto/Gen Lua")]
     public static void genLuaPB()
     {
         string path = Application.dataPath + "/StreamingAssets/Lua/PB/";

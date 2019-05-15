@@ -118,6 +118,11 @@ public class Move
 			//if (null != onEvent)onEvent(Event.Resume, this);
 		}
 
+        public override void reset ()
+        {
+            mMoves.Clear();
+        }
+
 		void sync()
 		{
 			MsgMove msg = new MsgMove ();

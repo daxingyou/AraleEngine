@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using Arale.Engine;
 
 public class MenuItems{
+    #region lua
 	[MenuItem("DevelopTools/Lua/Build")]
 	public static void buildLua()
 	{
@@ -23,6 +24,30 @@ public class MenuItems{
 		string srcPath = Application.dataPath + "/../Data/lua";
 		Crypt.UnDirectoryCrypt (new DirectoryInfo(srcPath), new DirectoryInfo(outPath), "wanghuan");
 	}
+    #endregion
+
+    #region protobuf
+    [MenuItem("DevelopTools/Proto/Gen CS")]
+    public static void genProtoCS()
+    {//导出cs协议
+        string outPath = Application.dataPath + "/Demo/Script/Proto/";
+        System.Diagnostics.Process p = new System.Diagnostics.Process();
+        p.StartInfo.WorkingDirectory = Application.dataPath + "/../../Tools/ProtoGen";
+        p.StartInfo.FileName = "proto-net.exe";
+        p.StartInfo.Arguments = "-i:Proto/test.proto -o:"+outPath+"Test.cs";
+        p.Start();
+    }
+
+    [MenuItem("DevelopTools/Proto/Gen Java")]
+    public static void genProtoJava()
+    {//导出java协议
+        System.Diagnostics.Process p = new System.Diagnostics.Process();
+        p.StartInfo.WorkingDirectory = Application.dataPath + "/../../Tools/ProtoGen";
+        p.StartInfo.FileName = "protoc.exe";
+        p.StartInfo.Arguments = "--java_out=Proto Proto/test.proto";
+        p.Start();
+    }
+    #endregion
 
 	#region assetbundle
 	[MenuItem("DevelopTools/AB/Build")]
@@ -155,7 +180,7 @@ public class MenuItems{
 		c.overrideSorting = true;
 		go.AddComponent<GraphicRaycaster> ();
 	}
-
+        
     [MenuItem("DevelopTools/CopyCode")]
     static void CopyCode()
     {
