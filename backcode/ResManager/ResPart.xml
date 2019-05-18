@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Root>
+  <Config>
+    <Part0 name="初始包" part="1,0" />
+    <Part3 name="豹子王" part="2" />
+    <Part4 name="水果机" part="2" />
+    <Part5 name="百人场" part="2" />
+    <Part1000 name="全包" part="0,1,2,3,4,5,6,7,8,9" />
+  </Config>
+  <atlas part="1">
+    <Data name="battle_base_ui.data" part="0" />
+    <Data name="common2.data" part="0" />
+    <Data name="fishes_min.data" part="0" />
+    <Data name="icon2.data" part="0" />
+    <Data name="icon3.data" part="0" />
+    <Data name="leverup.data" part="0" />
+    <Data name="loading.data" part="0" />
+    <Data name="options.data" part="0" />
+    <Data name="scenewarhead.data" part="0" />
+    <Data name="smallgame.data" part="2" />
+    <Data name="shaizi.data" part="3" />
+    <Data name="fruit.data" part="4" />
+    <Data name="fruitpool.data" part="4" />
+    <Data name="slots.data" part="4" />
+    <Data name="zjh.data" part="5" />
+  </atlas>
+  <battle part="1">
+    <bg>
+      <Data name="bg.data" part="0" />
+    </bg>
+    <bullet part="0" />
+    <hit part="0" />
+    <light part="0" />
+  </battle>
+  <models>
+    <fish>
+      <Data name="1101_bosshaima.data" part="1" />
+      <Data name="1111_bosshaima_jy.data" part="1" />
+      <Data name="1102_bosshaixiang.data" part="1" />
+      <Data name="1112_bosshaixiang_jy.data" part="1" />
+      <Data name="4201_zuanshiting.data" part="1" />
+      <Data name="1201_zhadanyu.data" part="1" />
+      <Data name="1121_meirenyu.data" part="1" />
+      <Data name="3501_bossshayu.data" part="1" />
+      <Data name="3502_meirenyu.data" part="1" />
+      <Data name="3601_pipixia.data" part="1" />
+      <Data name="3602_shuimu.data" part="1" />
+      <Data name="3603_shuimurenzhe.data" part="1" />
+    </fish>
+  </models>
+  <table part="1" />
+  <ui part="1">
+    <advertisementrobot part="0" />
+    <battlebase part="0" />
+    <battlebillboard part="0" />
+    <broadcast part="0" />
+    <bubble part="0" />
+    <charactor part="0" />
+    <common part="0" />
+    <fever part="0" />
+    <fx part="0" /> 
+    <icon part="0" />
+    <items part="0" />
+    <levelupreward part="0" />
+    <newplayer part="0" />
+    <options part="0" />
+    <skill part="0" />
+    <sysmenu part="0" />
+    <shaizi part="3" />
+    <fruits part="4" />
+    	<Data name="fruitbarrage.data" part="2" />
+    	<Data name="fruitchat.data" part="2" />
+    <zhajinhua part="5" />
+  </ui>
+  <sounds part="9">
+  	<Data name="baozi.data" part="3"  />
+    <Data name="baozi_dice3.data" part="3" />
+    <Data name="baozi_dice6.data" part="3" />
+    <Data name="baozi_dice9.data" part="3" />
+    <Data name="baozi_dice12.data" part="3" />
+    <Data name="baozi_dice15.data" part="3" />
+    <Data name="baozi_dice18.data" part="3" />
+    <Data name="bigwin_hongbao1.data" part="3" />
+    <Data name="bigwin_hongbao2.data" part="3" />
+    <Data name="dice4.data" part="3" />
+    <Data name="dice5.data" part="3" />
+    <Data name="dice6.data" part="3" />
+    <Data name="dice7.data" part="3" />
+    <Data name="dice8.data" part="3" />
+    <Data name="dice9.data" part="3" />
+    <Data name="dice10.data" part="3" />
+    <Data name="dice11.data" part="3" />
+    <Data name="dice12.data" part="3" />
+    <Data name="dice13.data" part="3" />
+    <Data name="dice14.data" part="3" />
+    <Data name="dice15.data" part="3" />
+    <Data name="dice16.data" part="3" />
+    <Data name="dice17.data" part="3" />
+    <Data name="kpTip.data" part="3" />
+    <Data name="laugh_hongbao.data" part="3" />
+    <Data name="laugh1.data" part="3" />
+    <Data name="laugh2.data" part="3" />
+    <Data name="laugh3.data" part="3" />
+    <Data name="light.data" part="3" />
+    <Data name="lose1.data" part="3" />
+    <Data name="lose2.data" part="3" />
+    <Data name="openCup0.data" part="3" />
+    <Data name="openCup1.data" part="3" />
+    <Data name="openCup2.data" part="3" />
+    <Data name="player_hongbao1.data" part="3" />
+    <Data name="player_hongbao2.data" part="3" />
+    <Data name="roll.data" part="3" />
+    <Data name="xz1.data" part="3" />
+    <Data name="xz2.data" part="3" />
+    <Data name="xz3.data" part="3" />
+    <Data name="xz4.data" part="3" />
+    <Data name="xz5.data" part="3" />
+    <Data name="xz6.data" part="3" />
+    <Data name="xz7.data" part="3" />
+    <Data name="xzTip.data" part="3" />
+    <Data name="ttz_chip_me.data" part="3" />
+    <Data name="ybao_bg.data" part="3" />
+    <Data name="bet.data" part="2" />
+    <Data name="rollslot_roll.data" part="4" />
+    <Data name="slot_begin.data" part="4" />
+    <Data name="slot_fast.data" part="4" />
+    <Data name="slot_slowdown.data" part="4" />
+    <Data name="slot_end.data" part="4" />
+    <Data name="slot_guess_right.data" part="4" />
+    <Data name="slot_guess_wrong.data" part="4" />
+    <Data name="prize.data" part="4" />
+    <Data name="pop_coin.data" part="4" />
+    <Data name="s_start_bet.data"  part="5" />
+    <Data name="s_stop_bet.data" part="5" />
+    <Data name="s_sendPoke.data" part="5" />
+    <Data name="s_fanpai.data" part="5" />
+  </sounds>
+</Root>
