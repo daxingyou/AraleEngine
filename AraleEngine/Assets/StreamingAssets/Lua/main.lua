@@ -24,6 +24,7 @@ Time = CS.UnityEngine.Time
 Rigidbody = CS.UnityEngine.Rigidbody
 NavMeshAgent = CS.UnityEngine.NavMeshAgent
 Collider = CS.UnityEngine.Collider
+WaitForSeconds = CS.UnityEngine.WaitForSeconds
 --==============DoTween
 DOTween = CS.DG.Tweening.DOTween
 --==============引擎
@@ -36,6 +37,7 @@ EventListener = CS.Arale.Engine.EventListener
 SceneMgr = CS.Arale.Engine.SceneMgr
 EventMgr = CS.Arale.Engine.EventMgr
 TimeMgr = CS.Arale.Engine.TimeMgr
+RTime   = CS.Arale.Engine.RTime
 TableMgr = CS.Arale.Engine.TableMgr
 NetworkMgr = CS.Arale.Engine.NetworkMgr
 NetMgr = CS.NetMgr
@@ -54,6 +56,7 @@ GameArea = CS.GameArea
 UIItemSlot = CS.UIItemSlot
 PlayerHeader = CS.PlayerHeader
 UISListItem = CS.UISListItem
+UIImageText = CS.UIImageText
 --===============配表
 TBSkill = CS.Arale.Engine.TBSkill
 TBMonster = CS.Arale.Engine.TBMonster

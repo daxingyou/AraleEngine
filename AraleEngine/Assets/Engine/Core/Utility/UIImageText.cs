@@ -5,6 +5,9 @@ using UnityEngine.EventSystems;
 using System.Collections.Generic;
 using System;
 using Arale.Engine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class UIImageText : Text, IPointerClickHandler{
     List<Image> cach = new List<Image>();
@@ -63,49 +66,54 @@ public class UIImageText : Text, IPointerClickHandler{
         }
     }
 
-    public int imageSize;
+    public int imageSize=32;
+    public LayoutElement layout;
     List<Item> mItems = new List<Item>();
     float mHeight;
     public override float preferredHeight{ get{ return mHeight; } }
-
+    public override string text
+    {
+        get{return base.text; }
+        set{base.text = parseText(value);}
+    }
 	// Use this for initialization
 	void Start ()
     {
-        imageSize = 32;
-        //text = "123456789.1234567890http:\\www.arale.com123456789.1234567890";
-        text = "⊕1a⊕0123456789.123456789012345⊕1a⊕06789012345⊕2http:\\www.arale.com";
-        parseText();
+        //text = "⊕1a⊕0123456789.123456789012345⊕1a⊕06789012345⊕2http:\\www.arale.com";
         //字体大小必须用fontSize,而不是font.fontSize,因为前者是需要显示的大小，而后者是加载的字体大小
+        this.verticalOverflow = VerticalWrapMode.Overflow;//必须，否则cachedTextGenerator.characters只有截取后的字符
         this.font.RequestCharactersInTexture(m_Text, fontSize);
 	}
 
-    protected virtual void parseText()
+    protected string parseText(string txt)
     {
         mItems.Clear();
-        string[] txs = text.Split(new char[]{'⊕'}, StringSplitOptions.RemoveEmptyEntries);
-        text = "";
-        for (int i = 0; i < txs.Length; ++i)
+        if (string.IsNullOrEmpty(txt))return "";
+        string[] txs = txt.Split(new char[]{'⊕'}, StringSplitOptions.RemoveEmptyEntries);
+        int i = 0; txt = txt[0]=='⊕'?"":txs[i++];
+        for (; i < txs.Length; ++i)
         {
             string s = txs[i];
             switch (s[0])
             {
                 case '0':
-                    text += s.Substring(1);
+                    txt += s.Substring(1);
                     break;
                 case '1':
-                    mItems.Add(new Item(text.Length, 0, 1, s.Substring(1)));
+                    mItems.Add(new Item(txt.Length, 0, 1, s.Substring(1)));
                     break;
                 case '2':
                     string ctx = s.Substring(1);
-                    int begin = text.Length;
-                    text += "<color=#0000ff>"+ctx+"</color>";
-                    mItems.Add(new Item(begin, text.Length-1, 2, ctx));
+                    int begin = txt.Length;
+                    txt += "<color=#0000ff>"+ctx+"</color>";
+                    mItems.Add(new Item(begin, txt.Length-1, 2, ctx));
                     break;
                 case '3':
-                    mItems.Add(new Item(text.Length, 0, 3, s.Substring(1)));
+                    mItems.Add(new Item(txt.Length, 0, 3, s.Substring(1)));
                     break; 
             }
         }
+        return txt;
     }
 
     struct LineInfo
@@ -180,8 +188,11 @@ public class UIImageText : Text, IPointerClickHandler{
             }
             w += charWidth;
         }
-        lines.Add(new LineInfo(m_Text.Length,getLineStart(w,lineHight)));
-        mHeight += lineHight; lineHight = textHight;
+        if(w>0)
+        {
+            lines.Add(new LineInfo(m_Text.Length,getLineStart(w,lineHight)));
+            mHeight += lineHight; lineHight = textHight;
+        }
         #endregion
        
         #region 逐行调整位置
@@ -235,6 +246,10 @@ public class UIImageText : Text, IPointerClickHandler{
         }
         #endregion
         updateItems = true;
+        if (layout != null)
+        {
+            layout.preferredHeight = layout.minHeight + mHeight;
+        }
         //Debug.LogError("end");
     }
 
@@ -307,3 +322,8 @@ public class UIImageText : Text, IPointerClickHandler{
         Debug.LogError("click="+item.ctx);
     }
 }
+
+#if UNITY_EDITOR
+[CustomEditor(typeof(UIImageText))]
+public class UIImageTextInspector : Editor {}
+#endif

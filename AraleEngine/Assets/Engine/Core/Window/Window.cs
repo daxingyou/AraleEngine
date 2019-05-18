@@ -22,7 +22,6 @@ namespace Arale.Engine
     	public int  mThink; //窗口厚度,模型夹层使用
     	public bool mReside;//驻留,不会因调用closeAll关闭
     	public int depth{ set; get;}
-        protected object mUserData;
 
     	public void Show(bool show)
     	{
@@ -40,7 +39,6 @@ namespace Arale.Engine
     			Destroy (gameObject);
     		}
 
-    		mUserData = null;
     		WindowMgr.single.CloseWindow (winName);
     	}
 

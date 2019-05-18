@@ -230,6 +230,11 @@ namespace Arale.Engine
     		ae.Play(clip,onComplite,unscaleTime);
     	}
 
+        public static Rect GetRectTransformAABB(RectTransform trans)
+        {
+            return Rect.MinMaxRect(0,0,0,0);
+        }
+
     	public static string GetLoadPathFromAssetObject(Object asset)
     	{
     #if UNITY_EDITOR

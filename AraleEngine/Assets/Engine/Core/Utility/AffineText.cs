@@ -39,3 +39,8 @@ public class AffineText: Text
         }
     } 
 }
+
+#if UNITY_EDITOR
+[CustomEditor(typeof(AffineText))]
+public class AffineTextInspector : Editor {}
+#endif

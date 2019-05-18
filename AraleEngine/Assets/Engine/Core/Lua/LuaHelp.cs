@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using Arale.Engine;
 using XLua;
 using System;
+using UnityEngine.UI;
+using UnityEngine.Events;
 
 public static class LuaHelp
 {
@@ -50,6 +52,7 @@ public static class LuaHelp
 	public static List<Type> cs_call_lua = new List<Type>(){
 		typeof(Action),
 		typeof(Action<LuaTable>),
+        typeof(UnityAction<float>),
 		typeof(Comparison<UISListItem>),
 		typeof(IData.OnDataChanged),
 		typeof(Func<LuaTable,int,object,bool>),
@@ -58,12 +61,13 @@ public static class LuaHelp
 		typeof(UISwitch.OnValueChange),
 		typeof(UISList.OnSelectChange),
 		typeof(Unit.OnStateChange),
-		typeof(AttrPlugin.OnAttrChanged),
+        typeof(AttrPlugin.OnAttrChanged),
 		typeof(LuaBuff.OnEvent),
 		typeof(TimeMgr.Action.OnAction),
 		typeof(UIDrag.OnDragReceived),
 		typeof(VoidDelegate),
 		typeof(BoolDelegateI),
+        typeof(VoidDelegateF),
 		typeof(DG.Tweening.TweenCallback),
 	};
 

@@ -114,7 +114,7 @@ namespace Arale.Engine
         }
 
 		public void sort(System.Comparison<UISListItem> comp)
-		{
+        {
 			mItems.Sort(comp);
 			for (int i = 0,max=mItems.Count; i < max; ++i)mItems[i].transform.SetAsLastSibling();
 		}
