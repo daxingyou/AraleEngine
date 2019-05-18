@@ -1,4 +1,4 @@
-#define CDN_UPDATE
+/*#define CDN_UPDATE
 using UnityEngine;
 using System.Collections;
 using System.Xml;
@@ -482,4 +482,4 @@ namespace Arale.Engine
 		}
 	#endregion
 	}
-}
+}*/

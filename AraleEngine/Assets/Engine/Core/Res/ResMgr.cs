@@ -2,9 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using Scripts.CoreScripts.Core;
-using Scripts.CoreScripts.GameLogic.Battle.BattleObject;
 using Scripts.BehaviourScripts;
+using Arale.Engine;
 
 public class ResMgr : MonoBehaviour
 {
@@ -13,14 +12,14 @@ public class ResMgr : MonoBehaviour
     void Awake()
     {
         Single = this;
-        ResLoad.Init(this);
+        ResLoad.init(this);
         LoadCommonAB();
     }
 
     void LoadCommonAB()
     {
-        ResLoad.Get("common/font", ResideType.InGame).GetAssetBundle();
-        AssetBundle ab = ResLoad.Get("common/shader", ResideType.InGame).GetAssetBundle();
+        ResLoad.get("common/font", ResideType.InGame).assetBundle();
+        AssetBundle ab = ResLoad.get("common/shader", ResideType.InGame).assetBundle();
 		if (ab != null) 
 		{
 			Object[] objs = ab.LoadAllAssets ();
@@ -30,26 +29,23 @@ public class ResMgr : MonoBehaviour
 				_shaders [sd.name] = sd;
 			}
 		}
-		IObj.RimHighlightShader = FindShader ("Shader/RimHighLight");
     }
 
     public void Reset()
     {
-        Log.I("ResMgr Reset!!!", Log.Tag.RES);
+        Log.i("ResMgr Reset!!!", Log.Tag.RES);
 		_shaders.Clear ();
-        ResLoad.ClearCach();
-        ResLoad.Init(this);
+        ResLoad.clearCach();
+        ResLoad.init(this);
         LoadCommonAB();
 		LuaRoot.dirty = true;
-		GameDataCfg.Instance._dirty = true;
     }
 
 	public Shader FindShader(string name)
 	{
 		Shader sd = Shader.Find(name);
 		if (sd != null)return sd;
-		if (_shaders.TryGetValue (name, out sd))
-			return sd;
+		if (_shaders.TryGetValue (name, out sd))return sd;
 		return null;
 	}
 }

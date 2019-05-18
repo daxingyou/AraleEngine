@@ -47,6 +47,7 @@ namespace Arale.Engine
 
     	public static void copy(string from, string to)
     	{
+            from = from.TrimEnd('\\');
     		if(File.Exists(from))
     		{
     			string dir = System.IO.Path.GetDirectoryName(to);
@@ -131,29 +132,61 @@ namespace Arale.Engine
     	public delegate bool FilterFunc (string name, bool isfile);//返回真删除
     	public static void delFolder(string path, bool recursive, FilterFunc filterFunc=null)
     	{
-    		if(filterFunc==null)
-    			Directory.Delete(path,recursive);
-    		else
-    		{
-    			DirectoryInfo di = new DirectoryInfo(path);
-    			FileInfo[] fis = di.GetFiles();
-    			for(int i=0,max=fis.Length;i<max;++i)
-    			{
-    				if(filterFunc(fis[i].Name, true))fis[i].Delete();
-    			}
-    			if(recursive)
-    			{
-    				DirectoryInfo[] dis = di.GetDirectories();
-    				for(int i=0,max=dis.Length;i<max;++i)
-    				{
-    					if(filterFunc(dis[i].Name, false))delFolder(dis[i].FullName,true,filterFunc);
-    				}
-    			}
-    #if !UNITY_IPHONE
-    			di.Delete();
-    #endif
-    		}
+    		if (filterFunc == null)
+            {
+                Directory.Delete(path, recursive);
+            }
+            else
+            {
+                bool delRoot = true;
+                DirectoryInfo di = new DirectoryInfo(path);
+                FileInfo[] fis = di.GetFiles();
+                for (int i = 0, max = fis.Length; i < max; ++i)
+                {
+                    if (filterFunc (fis [i].Name, true))
+                        fis [i].Delete ();
+                    else
+                        delRoot = false;
+                }
+
+                if (recursive)
+                {
+                    DirectoryInfo[] dis = di.GetDirectories();
+                    for (int i = 0, max = dis.Length; i < max; ++i)
+                    {
+                        if (filterFunc (dis [i].Name, false))
+                            delFolder (dis [i].FullName, true, filterFunc);
+                        else
+                            delRoot = false;
+                    }
+                }
+                else
+                {
+                    if (di.GetDirectories().Length > 0)delRoot = false;
+                }
+                if(delRoot)di.Delete();
+            }
     	}
+
+        public delegate void DealFunc(FileInfo fi);
+        public static void enumFiles(string dirPath, bool recursive, DealFunc dealFunc)
+        {
+            DirectoryInfo di = new DirectoryInfo(dirPath);
+            FileInfo[] fis = di.GetFiles();
+            for (int i = 0, max = fis.Length; i < max; ++i)
+            {
+                dealFunc (fis [i]);
+            }
+
+            if (recursive)
+            {
+                DirectoryInfo[] dis = di.GetDirectories();
+                for (int i = 0, max = dis.Length; i < max; ++i)
+                {
+                    enumFiles (dis [i].FullName, true, dealFunc);
+                }
+            }
+        }
 
     	const int CHECK_BUF_SIZE = 4*1024*1024;
     	public delegate void OnMd5CheckProgress(float progress);

@@ -42,18 +42,24 @@ namespace Arale.Engine
 	
 		public static void DoFileCrypt(string inpath, string outpath, string password)
 		{
-			FileStream InputFile = new FileStream(inpath, FileMode.Open);
-			FileStream OutputFile = new FileStream(outpath, FileMode.Create);
+			FileStream InputFile = new FileStream (inpath, FileMode.Open);
+			FileStream OutputFile = new FileStream (outpath, FileMode.Create);
 			int count = 0;
 			byte[] buf = new byte[1024];
-			do
-			{
-				count = InputFile.Read(buf, 0, 1024);
-				DoCrypt(buf, password);
-				OutputFile.Write(buf, 0, count);
+			do {
+				count = InputFile.Read (buf, 0, 1024);
+				DoCrypt (buf, password);
+				OutputFile.Write (buf, 0, count);
 			} while (count > 0);
-			InputFile.Close();
-			OutputFile.Close();
+			InputFile.Close ();
+			OutputFile.Close ();
+		}
+
+		public static void DoFileCrypt(string inpath, string password)
+		{
+			byte[] buf = File.ReadAllBytes (inpath);
+			DoCrypt (buf, password);
+			File.WriteAllBytes (inpath, buf);
 		}
 		
 		public static void UnFileCrypt(string inpath, string outpath, string password)
@@ -72,17 +78,40 @@ namespace Arale.Engine
 			OutputFile.Close();
 		}
 		
-		public static void DoDirectoryCrypt(DirectoryInfo indir, DirectoryInfo outdir, string password)
+		public static void DoDirectoryCrypt(DirectoryInfo indir, DirectoryInfo outdir, string password, string filter=null)
 		{
 			foreach (FileInfo file in indir.GetFiles())
 			{
+				if(filter!=null)
+				{
+					string ext = file.Extension;
+					if (string.IsNullOrEmpty(ext) || !filter.Contains (file.Extension))continue;
+				}
 				DoFileCrypt(file.FullName, outdir.FullName + "/" + file.Name, password);
 			}
 			
 			foreach (DirectoryInfo dinfo in indir.GetDirectories())
 			{
 				DirectoryInfo newOutDir = outdir.CreateSubdirectory(dinfo.Name);
-				DoDirectoryCrypt(dinfo, newOutDir, password);
+				DoDirectoryCrypt(dinfo, newOutDir, password, filter);
+			}
+		}
+
+		public static void DoDirectoryCrypt(DirectoryInfo indir, string password, string filter=null)
+		{
+			foreach (FileInfo file in indir.GetFiles())
+			{
+				if(filter!=null)
+				{
+					string ext = file.Extension;
+					if (string.IsNullOrEmpty(ext) || !filter.Contains (file.Extension))continue;
+				}
+				DoFileCrypt(file.FullName, password);
+			}
+
+			foreach (DirectoryInfo dinfo in indir.GetDirectories())
+			{
+				DoDirectoryCrypt(dinfo, password, filter);
 			}
 		}
 	

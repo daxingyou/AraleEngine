@@ -9,10 +9,11 @@ using ICSharpCode.SharpZipLib.Zip;
 
 namespace Arale.Engine
 { 
-    public class XmlPatch
-    {
+    public class XmlPatch{
 	    public const string rootName="Root";
 	    public const string leafName="Data";
+        public const string configName="Config";
+        public const string partName="Part";
 	    public const string xmlName ="version";
 	    public const string differFolder = "_Differ";
 	    public const string publishFolder = "_Publish";
@@ -37,6 +38,13 @@ namespace Arale.Engine
 		    XmlElement root = xml.DocumentElement; 
 		    XmlDeclaration c = xml.CreateXmlDeclaration ("1.0", "utf-8", null);
 		    xml.InsertBefore (c, root);
+            XmlNode config = getConfigNode();
+            if (config != null)
+            {
+                //必须导入后才可从一个文档添加到另一个文档
+                config = xml.ImportNode(config, true);
+                root.AppendChild(config);
+            }
 
 		    DirectoryInfo dir=new DirectoryInfo(targetPath);
 		    int pre = targetPath.Length;
@@ -365,21 +373,28 @@ namespace Arale.Engine
 			public string md5;
 		    public bool   zip;
 		    public uint   size;
-		    public DFileInfo(string id, string path, string md5, bool zip, uint size)
+            public int    part;
+            public DFileInfo(string id, string path, string md5, bool zip, uint size, int part)
 		    {
 			    this.id = id;
 			    this.path = path;
 				this.md5 = md5;
 			    this.zip = zip;
 			    this.size = size;
+                this.part = part;
 		    }
 	    }
 
 	    public delegate void OnProgress(float percent);
-		public List<DFileInfo> listDownFiles(OnProgress onProgress, ref bool cancel, int partCode=1000)
+        public List<DFileInfo> listDownFiles(OnProgress onProgress, ref bool cancel, int[] partCode)
 	    {
-		    xml = new XmlDocument ();
-		    xml.Load(targetPath+xmlName+".xml");
+            //加载version.xml
+            if (xml == null)
+            {
+                xml = new XmlDocument();
+                xml.Load(targetPath + xmlName + ".xml");
+            }
+            //列出更新文件
 		    List<DFileInfo> ls = new List<DFileInfo> ();
 			XmlNodeList ns = xml.GetElementsByTagName (leafName);
 		    for(int i=0,max=ns.Count;i<max;++i)
@@ -387,24 +402,55 @@ namespace Arale.Engine
 			    if(cancel)return null;
 			    onProgress(1.0f*(i+1)/max);
 			    XmlElement n = ns[i] as XmlElement;
-				XmlNode attr = n.Attributes ["part"];
-				if (attr!=null && int.Parse (attr.Value) > partCode)continue;
+                XmlNode attr = n.Attributes["part"];
+                int part = attr == null ? 0 : int.Parse(attr.Value);
+                if (partCode!=null&&Array.IndexOf<int>(partCode, part)<0)continue;
 			    if(null != n.Attributes ["del"])continue;
 			    string filePath = targetPath+getNodePath(n,true);
 				string md5 = n.Attributes ["md5"].Value;
 				if(File.Exists(filePath) && md5==FileUtils.GetMd5Hash(filePath) && null==n.Attributes ["forced"])continue;
-			    DFileInfo fi = new DFileInfo(n.Attributes["id"].Value,filePath,md5,false,uint.Parse(n.Attributes["size"].Value));
+                DFileInfo fi = new DFileInfo(n.Attributes["id"].Value,filePath,md5,false,uint.Parse(n.Attributes["size"].Value),part);
 			    ls.Add(fi);
 		    }
+
+            ls.Sort(delegate(DFileInfo x, DFileInfo y){return y.part - x.part;});
 		    return ls;
 	    }
+
+        public int[] getDepends(int[] partCode)
+        {
+            if (xml == null)
+            {
+                xml = new XmlDocument ();
+                xml.Load(targetPath+xmlName+".xml");
+            }
+            HashSet<int> hash = new HashSet<int>();
+            for (int i = 0; i < partCode.Length; ++i)getDepends(partCode[i], hash);
+            int[] ds = new int[hash.Count];
+            hash.CopyTo(ds);
+            Array.Sort(ds, delegate(int x, int y){return x-y;});
+            return ds;
+        }
+
+        void getDepends(int partCode, HashSet<int> hash)
+        {
+            if (hash.Contains(partCode))return;
+            hash.Add(partCode);
+
+            XmlNode n = xml.SelectSingleNode(string.Format("/{0}/{1}/{2}{3}", rootName, configName, partName, partCode));
+            if (n == null)return;
+            XmlNode attr = n.Attributes ["part"];
+            if (n == null)return;
+
+            string[] dps = attr.Value.Split(new char[]{','}, StringSplitOptions.RemoveEmptyEntries);
+            for (int j = 0; j < dps.Length; ++j)getDepends(int.Parse(dps[j]), hash);
+        }
 
 	    public bool verifyFile(string path)
 	    {
 		    if (xml == null) {
-			    string xmlPath = targetPath + xmlName + ".xml";
 			    xml = new XmlDocument ();
-			    xml.Load (xmlPath);
+                xml.Load (targetPath + xmlName + ".xml");
 		    }
 
 		    XmlNode n = getXPathNode (getFileXPath(path));
@@ -423,7 +469,7 @@ namespace Arale.Engine
 		    removeUnusedFile (x);
 	    }
 
-	    public void removeUnusedFile(XmlDocument x)
+	    void removeUnusedFile(XmlDocument x)
 	    {
 		    XmlNode n = x.SelectSingleNode (rootName);
 		    bool diff = (null != n.Attributes ["diff"]) ? true : false;
@@ -464,7 +510,7 @@ namespace Arale.Engine
 	    }
 
 	    //check file is in version.xml
-	    public bool containFile(XmlDocument x, string fileName)
+	    bool containFile(XmlDocument x, string fileName)
 	    {
 		    string dir = System.IO.Path.GetDirectoryName (fileName);
 		    string name = System.IO.Path.GetFileName (fileName);
@@ -485,20 +531,25 @@ namespace Arale.Engine
 
 	#region 分包
 		XmlDocument partXml;
-		string      resPart;
-		//根据ResPart配置文件获取分包号,ResPart文件可以在version.xml文件基础上修改
+        //获取ResPart.xml的配置节点
+        XmlNode getConfigNode()
+        {
+            string resPart = Application.dataPath + "/ResPart.xml";
+            if (!File.Exists (resPart))return null;
+            if (partXml == null)
+            {
+                partXml = new XmlDocument ();
+                partXml.Load (resPart);
+            }
+            return partXml.SelectSingleNode("/"+rootName+"/"+configName);
+        }
+
+		//根据ResPart配置文件获取分包号,ResPart文件需要通过version.xml文件修改获得以保持一致性
 		int getPartCode(string abPath)
 		{
-			if(resPart==null)resPart = Application.dataPath + "/ResPart.xml";
-			if (!File.Exists (resPart))return 0;
-			if (partXml == null)
-			{
-				partXml = new XmlDocument ();
-				partXml.Load (resPart);
-			}
-
+            if (partXml == null)return 0;
 			int partCode = 0;
-			abPath =abPath.Replace('\\','/');
+			abPath = abPath.Replace('\\','/');
 			XmlNode n = getPathNearNode (partXml.SelectSingleNode (rootName), abPath);
 			while(n != null)
 			{//取最小作用域的part
@@ -512,71 +563,24 @@ namespace Arale.Engine
 			return partCode;
 		}
 
-		//根据version.xml生成zip
-		public void makeZip2(string savePath, int partCode=1000)
-		{//下面的压缩方式在某些手机上不支持
-			xml = new XmlDocument();
-			xml.Load(targetPath + xmlName + ".xml");
-
-			List<string> files = new List<string> ();
-			XmlNodeList ns = xml.GetElementsByTagName (leafName);
-			for(int i=0,max=ns.Count;i<max;++i)
-			{
-				XmlElement n = ns[i] as XmlElement;
-				if (n.Attributes ["part"]!=null && int.Parse (n.Attributes ["part"].Value) > partCode)continue;
-				files.Add (getNodePath(n));
-			}
-			files.Add (xmlName + ".xml");
-
-			FileStream fs = null;
-			FileStream zf = File.Create (savePath);
-			try
-			{
-				ZipOutputStream zip = new ZipOutputStream (zf);
-				zip.UseZip64 = UseZip64.Dynamic;//不设置,android提示压缩文件头不正确
-				zip.SetLevel (9);
-				byte[] buffer = new byte[4096];
-				foreach (string file in files)
-				{
-					ZipEntry entry = new ZipEntry(file);
-					entry.DateTime = DateTime.Now;
-					zip.PutNextEntry(entry);
-					using (fs = File.OpenRead(targetPath+file))
-					{
-						int sourceBytes;
-						do
-						{
-							sourceBytes = fs.Read(buffer, 0, buffer.Length);
-							zip.Write(buffer, 0, sourceBytes);
-						} while (sourceBytes > 0);
-					}
-				}
-				zip.Finish();
-				zip.Close();
-			}
-			catch(Exception e)
-			{
-				if (fs != null)fs.Close ();
-				zf.Close();
-				throw(e);
-			}
-		}
-
-		public void makeZip(string savePath, int partCode=1000)
+		public void makePartZip(string savePath, int[] partCode)
 		{
 			string zipTmpPath = Application.dataPath+"/../Publish/ZipTmp/";
 			if (Directory.Exists (zipTmpPath))Directory.Delete (zipTmpPath, true);
 			Directory.CreateDirectory (zipTmpPath);
-
-			xml = new XmlDocument();
-			xml.Load(targetPath + xmlName + ".xml");
-
+            if (xml == null)
+            {
+                xml = new XmlDocument();
+                xml.Load(targetPath + xmlName + ".xml");
+            }
 			List<string> files = new List<string> ();
 			XmlNodeList ns = xml.GetElementsByTagName (leafName);
 			for(int i=0,max=ns.Count;i<max;++i)
 			{
 				XmlElement n = ns[i] as XmlElement;
-				if (n.Attributes ["part"]!=null && int.Parse (n.Attributes ["part"].Value) > partCode)continue;
+                XmlNode attr = n.Attributes["part"];
+                int part = attr == null ? 0 : int.Parse(attr.Value);
+                if (partCode!=null && Array.IndexOf<int>(partCode, part)<0)continue;
 				files.Add (getNodePath(n));
 			}
 			files.Add (xmlName + ".xml");
@@ -589,6 +593,56 @@ namespace Arale.Engine
 			FastZip zip = new FastZip ();
 			zip.CreateZip (savePath, zipTmpPath, true, "+\\.data$;+\\.xml$");
 		}
+
+        //根据version.xml生成zip
+        public void makePartZip2(string savePath, int partCode)
+        {//下面的压缩方式在某些手机上不支持
+            xml = new XmlDocument();
+            xml.Load(targetPath + xmlName + ".xml");
+
+            List<string> files = new List<string> ();
+            XmlNodeList ns = xml.GetElementsByTagName (leafName);
+            for(int i=0,max=ns.Count;i<max;++i)
+            {
+                XmlElement n = ns[i] as XmlElement;
+                if (n.Attributes ["part"]!=null && int.Parse (n.Attributes ["part"].Value) > partCode)continue;
+                files.Add (getNodePath(n));
+            }
+            files.Add (xmlName + ".xml");
+
+            FileStream fs = null;
+            FileStream zf = File.Create (savePath);
+            try
+            {
+                ZipOutputStream zip = new ZipOutputStream (zf);
+                zip.UseZip64 = UseZip64.Dynamic;//不设置,android提示压缩文件头不正确
+                zip.SetLevel (9);
+                byte[] buffer = new byte[4096];
+                foreach (string file in files)
+                {
+                    ZipEntry entry = new ZipEntry(file);
+                    entry.DateTime = DateTime.Now;
+                    zip.PutNextEntry(entry);
+                    using (fs = File.OpenRead(targetPath+file))
+                    {
+                        int sourceBytes;
+                        do
+                        {
+                            sourceBytes = fs.Read(buffer, 0, buffer.Length);
+                            zip.Write(buffer, 0, sourceBytes);
+                        } while (sourceBytes > 0);
+                    }
+                }
+                zip.Finish();
+                zip.Close();
+            }
+            catch(Exception e)
+            {
+                if (fs != null)fs.Close ();
+                zf.Close();
+                throw(e);
+            }
+        }
 	#endregion
 
 
