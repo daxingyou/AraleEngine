@@ -77,14 +77,12 @@ public class UnzipView : MonoBehaviour {
             _resZipSize = resZipSize;
             _resPart = resPart;
             _unzipTagFile = unzipTagFile;
-            ShowUnzip(true);
 			return true;
 		} while(false);
-        ShowUnzip(false);
+        EventMgr.single.SendEvent(GRoot.EventResUnzip, true);
         return false;
 	}
 
-    public GameObject startUI;
     public Slider progressBar;
     public Text   unzipInfo;
     public Button quitBtn;
@@ -99,6 +97,9 @@ public class UnzipView : MonoBehaviour {
         quitBtn.onClick.AddListener( delegate(){ Application.Quit ();});
         EventMgr.single.AddListener ("UnzipEvent", OnUnzipEvent);
         if (!StartUnzip())return;
+
+        progressBar.value = 0;
+        unzipInfo.text = "正在解压资源...";
 		//解压资源/
 		string tmpPath = Application.persistentDataPath + "/ResTmp/";
 		#if UNITY_ANDROID && !UNITY_EDITOR
@@ -107,14 +108,6 @@ public class UnzipView : MonoBehaviour {
 		FileStream fs = new FileStream (Application.streamingAssetsPath + "/res.zip", FileMode.Open, FileAccess.Read);
 		UnzipCach.unzipFile (fs, tmpPath, ResLoad.resPath, OnThreadCallback);
 		#endif
-	}
-
-	void ShowUnzip(bool show)
-	{
-        gameObject.SetActive(show);
-        startUI.SetActive(!show);
-        progressBar.value = 0;
-        unzipInfo.text = "正在解压资源...";
 	}
 
 	void OnDestroy()
@@ -181,8 +174,6 @@ public class UnzipView : MonoBehaviour {
 				File.WriteAllText(_unzipTagFile,"ok");
 				ResLoad.setVersionPart (_resZipVersion,_resPart);
 				Log.i("^_^ unzip ok", Log.Tag.RES);
-				ShowUnzip(false);
-                GRoot.single.ReloadResource();
                 EventMgr.single.SendEvent(GRoot.EventResUnzip, true);
 			}
 		}

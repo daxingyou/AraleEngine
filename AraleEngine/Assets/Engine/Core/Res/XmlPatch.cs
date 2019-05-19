@@ -568,7 +568,7 @@ namespace Arale.Engine
 
 		public void makePartZip(string savePath, int[] partCode)
 		{
-			string zipTmpPath = Application.dataPath+"/../Publish/ZipTmp/";
+			string zipTmpPath = Application.dataPath+"/../Data/ZipTmp/";
 			if (Directory.Exists (zipTmpPath))Directory.Delete (zipTmpPath, true);
 			Directory.CreateDirectory (zipTmpPath);
             if (xml == null)

@@ -1,5 +1,6 @@
 AraleEngine/Library/
 AraleEngine/Temp/
+AraleEngine/Data/
 AraleEngine/AraleEngine.sln
 AraleEngine/*.csproj
 AraleEngine/Assets/XLua/
