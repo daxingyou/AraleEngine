@@ -1,12 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
 分包配置文件
-下面是模板，实际配置可以根据生成的version.xml资源配置文件复制过来然后配置part信息
+下面是模板，实际配置可以根据生成的version.xml资源配置文件复制过来然后配置part信息,打开注释
 1.子节点没配置part的继承最近的父节点part信息
 2.config定义的是下载分包，下载该分包时就会下载的part标记的资源
 3.配置好后再生成version.xml时，每个资源就会标记上part编号
 -->
-<?xml version="1.0" encoding="utf-8"?>
 <Root>
+   <!--
   <Config>
     <Part0 name="初始包" part="1,0" />
     <Part1 name="战场1" part="0" />
@@ -27,4 +28,5 @@
   	<Data name="sound1.data" part="3"  />
     <Data name="sound2.data" part="3" />
   </sounds>
+  -->
 </Root>

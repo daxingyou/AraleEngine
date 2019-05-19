@@ -53,8 +53,9 @@ namespace Arale.Engine
 		    {
 			    string md5 =FileUtils.GetMd5Hash(fi.FullName);
 				if(string.IsNullOrEmpty(md5))return;
+                string dirName = fi.DirectoryName.Replace('\\', '/');
                 string path = null;
-                if (fi.DirectoryName.Length >= pre) path = fi.DirectoryName.Remove(0, pre);
+                if (dirName.Length >= pre) path = dirName.Remove(0, pre);
 			
 			    XmlNode dirNode = getPathNode(path,true);
 			    XmlNode fileNode = xml.CreateElement(leafName);
@@ -88,7 +89,7 @@ namespace Arale.Engine
 		    FileStream fs = new FileStream(savePath, FileMode.Create);
 		    fs.Write(utf8, 0, utf8.Length);
 		    fs.Close();
-		    Debug.Log ("make version ok");
+            Debug.Log ("make version.xml ok! version="+xmlVersion);
 	    }
 
 		string formatXml(XmlDocument doc)
@@ -368,13 +369,14 @@ namespace Arale.Engine
     #region 列出下载清单
 	    public class DFileInfo
 	    {
-		    public string id;
+		    public int id;
 		    public string path;
 			public string md5;
 		    public bool   zip;
 		    public uint   size;
             public int    part;
-            public DFileInfo(string id, string path, string md5, bool zip, uint size, int part)
+            public bool   locked;
+            public DFileInfo(int id, string path, string md5, bool zip, uint size, int part)
 		    {
 			    this.id = id;
 			    this.path = path;
@@ -409,7 +411,7 @@ namespace Arale.Engine
 			    string filePath = targetPath+getNodePath(n,true);
 				string md5 = n.Attributes ["md5"].Value;
 				if(File.Exists(filePath) && md5==FileUtils.GetMd5Hash(filePath) && null==n.Attributes ["forced"])continue;
-                DFileInfo fi = new DFileInfo(n.Attributes["id"].Value,filePath,md5,false,uint.Parse(n.Attributes["size"].Value),part);
+                DFileInfo fi = new DFileInfo(int.Parse(n.Attributes["id"].Value),filePath,md5,false,uint.Parse(n.Attributes["size"].Value),part);
 			    ls.Add(fi);
 		    }
 
@@ -541,12 +543,13 @@ namespace Arale.Engine
                 partXml = new XmlDocument ();
                 partXml.Load (resPart);
             }
+            if (partXml.HasChildNodes == null)return null;
             return partXml.SelectSingleNode("/"+rootName+"/"+configName);
         }
 
 		//根据ResPart配置文件获取分包号,ResPart文件需要通过version.xml文件修改获得以保持一致性
 		int getPartCode(string abPath)
-		{
+        {
             if (partXml == null)return 0;
 			int partCode = 0;
 			abPath = abPath.Replace('\\','/');
@@ -595,6 +598,7 @@ namespace Arale.Engine
 		}
 
         //根据version.xml生成zip
+        /*
         public void makePartZip2(string savePath, int partCode)
         {//下面的压缩方式在某些手机上不支持
             xml = new XmlDocument();
@@ -642,7 +646,7 @@ namespace Arale.Engine
                 zf.Close();
                 throw(e);
             }
-        }
+        }*/
 	#endregion
 
 

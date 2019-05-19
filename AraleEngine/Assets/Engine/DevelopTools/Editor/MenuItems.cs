@@ -5,6 +5,7 @@ using System.IO;
 using UnityEngine.UI;
 using Arale.Engine;
 using System.Collections.Generic;
+using ICSharpCode.SharpZipLib.Zip;
 
 public class MenuItems{
     #region lua
@@ -13,7 +14,7 @@ public class MenuItems{
 	{
         string outPath = dataOutPath()+"/lua";
 		if (!Directory.Exists (outPath))Directory.CreateDirectory(outPath);
-        string srcPath = Application.streamingAssetsPath + "Llua";
+        string srcPath = Application.streamingAssetsPath + "/lua";
 		Crypt.DoDirectoryCrypt (new DirectoryInfo(srcPath), new DirectoryInfo(outPath), "wanghuan", "*.lua");
         Debug.Log("lua加密完成");
 	}
@@ -54,13 +55,7 @@ public class MenuItems{
 	#region 资源打包
     static string dataOutPath()
     {
-        string platform = "PC/";
-        #if UNITY_IOS
-        platform = "IOS/";
-        #elif UNITY_ANDROID
-        platform = "Android/";
-        #endif
-        return Application.dataPath + "/../Data/" + platform;
+        return Path.GetFullPath(Application.dataPath + "/../Data/" + FileUtils.platform+"/");
     }
 
     [MenuItem("开发工具/资源/标记资源")]
@@ -75,8 +70,8 @@ public class MenuItems{
         string outPath = dataOutPath();
         if (!Directory.Exists (dataOutPath()))Directory.CreateDirectory(outPath);
         BuildPipeline.BuildAssetBundles (outPath, BuildAssetBundleOptions.ChunkBasedCompression, EditorUserBuildSettings.activeBuildTarget);
-        string manifestPath = outPath+"Data";
-		string manifestDataPath = manifestPath + ".data";
+        string manifestPath = outPath + FileUtils.platform;
+        string manifestDataPath = outPath + ResLoad.manifestName;
 		if (File.Exists (manifestDataPath))File.Delete (manifestDataPath);
 		File.Move (manifestPath, manifestDataPath);
 	}
@@ -84,25 +79,40 @@ public class MenuItems{
     [MenuItem("开发工具/资源/创建版本")]
     public static void makeVersion()
     {
-        string versionPath = dataOutPath() + "version.xml";
-        XmlPatch patch = new XmlPatch(versionPath);
+        XmlPatch patch = new XmlPatch(dataOutPath());
         patch.make(1);
     }
 
     [MenuItem("开发工具/资源/构建全资源包")]
     public static void makeFullZip()
     {
+        string dataPath = dataOutPath();
+        string outPath = Application.streamingAssetsPath + "/res.zip";
+        FastZip zip = new FastZip();
+        zip.CreateZip(outPath,dataPath,true,"+\\.data$;+\\.xml$");
+        FileInfo fi = new FileInfo(outPath);
+        XmlPatch patch = new XmlPatch(dataPath);
+        string info = string.Format("{0}|{1}|{2}", patch.getVersion(), fi.Length, "0,1,2,3,4,5,6,7,8,9");
+        File.WriteAllText(Application.streamingAssetsPath + "/resinfo.txt", info);
+        Debug.Log("全资源包构建完成");
     }
 
     [MenuItem("开发工具/资源/构建精简资源包")]
     public static void makeMiniZip()
     {
+        string dataPath = dataOutPath();
+        string outPath = Application.streamingAssetsPath + "/res.zip";
+        XmlPatch patch = new XmlPatch(dataPath);
+        patch.makePartZip(outPath, new int[]{0});
+        FileInfo fi = new FileInfo(outPath);
+        string info = string.Format("{0}|{1}|{2}", patch.getVersion(), fi.Length, "0");
+        File.WriteAllText(Application.streamingAssetsPath + "/resinfo.txt", info);
+        Debug.Log("精简资源包构建完成");
     }
 
     [MenuItem("开发工具/资源/浏览资源")]
     public static void showAB()
     {
-        Debug.LogError(dataOutPath());
         System.Diagnostics.Process.Start("Explorer.exe", dataOutPath());
     }
 
@@ -115,29 +125,36 @@ public class MenuItems{
     }
 
     [MenuItem("开发工具/资源/清除测试资源")]
-	public static void clearAB()
+	public static void clearTestAB()
 	{
 		string resPath = Application.persistentDataPath+"/Res/";
 		if (Directory.Exists (resPath))FileUtils.delFolder (resPath, true);
 	}
 
     [MenuItem("开发工具/资源/清除测试缓存")]
-    public static void clearResVer()
+    public static void clearTestResVer()
     {
-        //UnityEngine.PlayerPrefs.DeleteKey(ResLoad.ResVerKey);
+        UnityEngine.PlayerPrefs.DeleteKey(ResLoad.ResVerKey);
+        UnityEngine.PlayerPrefs.DeleteKey(ResLoad.ResPartKey);
         UnityEngine.PlayerPrefs.Save();
     }
 
     [MenuItem("开发工具/资源/更新测试资源")]
-	public static void refreshAB()
+	public static void refreshTestAB()
 	{
 		string resPath = Application.persistentDataPath+"/Res";
 		if (Directory.Exists (resPath))FileUtils.delFolder (resPath, true);
         FileUtils.copy (dataOutPath(), resPath);
 	}
 
+    [MenuItem("开发工具/资源/查看测试资源")]
+    public static void showTestAB()
+    {
+        System.Diagnostics.Process.Start("Explorer.exe", Application.persistentDataPath);
+    }
+
     [MenuItem("开发工具/资源/校验测试更新")]
-    public static void checkMD5()
+    public static void checkTestMD5()
     {
         string resPath = Application.persistentDataPath+"/Res/";
         XmlPatch patch = new XmlPatch(resPath);
@@ -154,7 +171,7 @@ public class MenuItems{
 	#endregion
 
 	#region atlas
-	[MenuItem("DevelopTools/Atlas/Update")]
+    [MenuItem("开发工具/Atlas/更新AB Tag")]
 	public static void updateAtlas()
 	{
 		string atlasPath = Application.dataPath+"/Atlas/";
@@ -176,7 +193,7 @@ public class MenuItems{
 		}
 	}
 
-	[MenuItem("DevelopTools/Atlas/Move")]
+    [MenuItem("开发工具/Atlas/移到Atlas目录")]
 	public static void moveAtlas()
 	{
         string atlasPath = Application.dataPath+"/Atlas/";
@@ -211,7 +228,7 @@ public class MenuItems{
         AssetDatabase.StopAssetEditing ();
 	}
 
-    [MenuItem("DevelopTools/Atlas/Create")]
+    [MenuItem("开发工具/Atlas/创建UGUI Atlas")]
     public static void createAtlas()
     {
         string selPath = NGUIEditorTools.GetSelectionFolder ();
@@ -240,7 +257,7 @@ public class MenuItems{
     }
     #endregion
 
-	[MenuItem("DevelopTools/ExportSprite")]
+	[MenuItem("开发工具/导出Sprite")]
 	static void exportSrite()
 	{
 		string exportDir = "Assets/Resources/Sprite/";
@@ -264,7 +281,7 @@ public class MenuItems{
 		GameObject.DestroyImmediate (go);
 	}
 
-	[MenuItem("DevelopTools/Create/Window")]
+    [MenuItem("开发工具/创建Window")]
 	static void createWindow()
 	{
 		GameObject pa = Selection.activeObject as GameObject;
@@ -282,19 +299,19 @@ public class MenuItems{
 		go.AddComponent<GraphicRaycaster> ();
 	}
         
-    [MenuItem("DevelopTools/CopyCode")]
+    [MenuItem("开发工具/复制目录")]
     static void CopyCode()
     {
-        FileUtils.copy("E:/project/Demo/Assets/Engine/Game", "F:/Demo/Assets/Engine/Game");
+        //FileUtils.copy("E:/project/Demo/Assets/Engine/Game", "F:/Demo/Assets/Engine/Game");
     }
 
-    [MenuItem("DevelopTools/UnloadEditorAsset")]
+    [MenuItem("开发工具/UnloadEditorAsset")]
     static void unloadEditorAsset()
     {
         EditorUtility.UnloadUnusedAssetsImmediate();
     }
 
-    [MenuItem("DevelopTools/UpdateIncludeShader")]
+    [MenuItem("开发工具/UpdateIncludeShader")]
     static void setIncludeShader()
     {
         //BatchMode.setPlayerIncludeShader ();

@@ -9,25 +9,20 @@ namespace Arale.Engine
     {
         public const string EventSceneLoad = "Game.SceneLoad";
         public const string EventGameFocus = "Game.Focus";
+        public const string EventResUnzip  = "Game.Unzip";
+        public const string EventResUpdate = "Game.Update";
         public static GRoot single;
+        public static GDevice device;
         public int mLaunchFlag;
         public bool mUseLua;
-        public Log.Tag mLogTag;
-        public Log.Type mLogLevel;
         public string mGameServer="127.0.0.1:80";
         public string mResServer="http://127.0.0.1:8080/update/";
-        [System.NonSerialized]
-        public GDevice mDevice;
-
         List<VoidDelegate> mUpdates = new List<VoidDelegate>();
         void Awake()
         {
             single = this;
             Log.init ();
-            Log.mFilter = (int)mLogTag;
-            Log.mDebugLevel = (int)mLogLevel;
-                
-            mDevice = new GDevice ();
+            device = new GDevice ();
             DontDestroyOnLoad (this);   
         }
 
@@ -84,6 +79,18 @@ namespace Arale.Engine
         public void RemoveUpdate(VoidDelegate updateFunc)
         {
             mUpdates.Remove(updateFunc);
+        }
+
+        public void ReloadResource()
+        {
+            Log.i("ResMgr Reset!!!", Log.Tag.RES);
+            ResLoad.clearCach();
+            ResLoad.init(this);
+            /*if (mUseLua)
+            {
+                LuaRoot.dirty = true;
+                GetComponent<LuaRoot>().Init();
+            }*/
         }
     }
 }

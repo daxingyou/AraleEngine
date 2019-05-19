@@ -1,18 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
-using Scripts.CoreScripts.Core;
 using System.IO;
 using ICSharpCode.SharpZipLib.Zip;
-using Scripts.BehaviourScripts.UI.Login;
 using System.Threading;
-using Scripts.CoreScripts.Core.Notice;
-using System.Collections.Generic;
 using System;
-using Scripts.CoreScripts.Core.Platform;
+using Arale.Engine;
+using System.Collections.Generic;
+using UnityEngine.UI;
 
-public class UnzipManager : MonoBehaviour {
+public class UnzipView : MonoBehaviour {
 	#if UNITY_ANDROID && !UNITY_EDITOR
-	private const string SDK_JAVA_CLASS = "com.baina.goldshark.update.Helper";
+	private const string SDK_JAVA_CLASS = "YourJavaClassFullName";
 	[System.Serializable]
 	public class UnzipParemJson
 	{
@@ -49,18 +47,9 @@ public class UnzipManager : MonoBehaviour {
 		}
 	}
 
-	public static void StartUnzip(System.Action action=null)
+	bool StartUnzip()
 	{
-		AppAnalysis.recordAction ("action_zip_begin");
-		Debug.Log("action_zip_begin");
-
-		Log.I("start unzip res.zip", Log.Tag.RES);
-		if (_show) 
-		{
-			Log.W("call StartUnzip more times", Log.Tag.Update);
-			return;
-		}
-
+		Log.i("start unzip res.zip", Log.Tag.RES);
 		do 
 		{
 			#if UNITY_ANDROID && !UNITY_EDITOR
@@ -80,47 +69,38 @@ public class UnzipManager : MonoBehaviour {
 			string[] ss = resinfo.Split ('|');
 			int resZipVersion = int.Parse (ss [0]);
 			int resZipSize = int.Parse (ss [1]);
-			int resPart = int.Parse(ss[2]);
+            int[] resPart = ResLoad.str2IntArray(ss[2]);
 			string unzipTagFile = ResLoad.resPath + resZipVersion;
 			if (File.Exists (unzipTagFile))break;
 			if (Directory.Exists (ResLoad.resPath))Directory.Delete (ResLoad.resPath, true);
-			GameObject go = GameObject.Find ("LoginUIRoot");
-			go.AddComponent<UnzipManager> ().Init(resZipVersion, resZipSize, resPart, unzipTagFile, action);
-			return;
+            _resZipVersion = resZipVersion;
+            _resZipSize = resZipSize;
+            _resPart = resPart;
+            _unzipTagFile = unzipTagFile;
+            ShowUnzip(true);
+			return true;
 		} while(false);
-		if (action != null)action ();
+        ShowUnzip(false);
+        return false;
 	}
 
-	public void Init(int resZipVersion, int resZipSize, int resPart, string unzipTagFile, System.Action callback)
-	{
-		_resZipVersion = resZipVersion;
-		_resZipSize = resZipSize;
-		_resPart = resPart;
-		_unzipTagFile = unzipTagFile;
-		_action = callback;
-	}
+    public GameObject startUI;
+    public Slider progressBar;
+    public Text   unzipInfo;
+    public Button quitBtn;
 
-	LoginRoot _loginRoot;
 	string    _unzipTagFile;
 	int       _resZipVersion;
 	int       _resZipSize;
-	int       _resPart;
-	System.Action _action;
-	static	bool _show;
+	int[]     _resPart;
 	// Use this for initialization
-	void Awake()
-	{
-		_show = true;
-		_loginRoot = GetComponent<LoginRoot>();
-		ShowUnzip (true);	
-	}
-
 	void Start () 
 	{
-		EventManager.single.registEventListener ("UnzipEvent", OnUnzipEvent);
+        quitBtn.onClick.AddListener( delegate(){ Application.Quit ();});
+        EventMgr.single.AddListener ("UnzipEvent", OnUnzipEvent);
+        if (!StartUnzip())return;
 		//解压资源/
 		string tmpPath = Application.persistentDataPath + "/ResTmp/";
-		Log.I("unzip start", Log.Tag.RES);
 		#if UNITY_ANDROID && !UNITY_EDITOR
 		callAndroidUnzip("res.zip", tmpPath, ResLoad.resPath);
 		#else
@@ -131,25 +111,15 @@ public class UnzipManager : MonoBehaviour {
 
 	void ShowUnzip(bool show)
 	{
-		_loginRoot.setLoginBtnEnable (!show);
-		#if GAME_THIRD_SHILED
-		_loginRoot._changeAccBtn.SetActive(false);
-		#else
-		_loginRoot._changeAccBtn.SetActive(!show);
-		#endif
-		_loginRoot._processBar.gameObject.SetActive (show);
-
-		_loginRoot._processNum.gameObject.SetActive (show);
-		_loginRoot._introduceInfo.gameObject.SetActive (show);
-		_loginRoot.updateUnzipProgress (0);
-		_loginRoot._introduceInfo.text = "正在解压资源...";
+        gameObject.SetActive(show);
+        startUI.SetActive(!show);
+        progressBar.value = 0;
+        unzipInfo.text = "正在解压资源...";
 	}
 
 	void OnDestroy()
 	{
-		_show = false;
-		_action = null;
-		EventManager.single.unregistEventListener ("UnzipEvent", OnUnzipEvent);
+        EventMgr.single.RemoveListener ("UnzipEvent", OnUnzipEvent);
 	}
 
 	public void onAndroidCallback(string param)
@@ -166,12 +136,12 @@ public class UnzipManager : MonoBehaviour {
 
 	void OnThreadCallback(float prog, int code)
 	{
-		EventManager.single.pushEvent("UnzipEvent",new UnzipEventValue(prog, code));
+        EventMgr.single.PostEvent("UnzipEvent",new UnzipEventValue(prog, code));
 	}
 
-	void OnUnzipEvent(EventManager.EventBase eb)
+	void OnUnzipEvent(EventMgr.EventData eb)
 	{
-		UnzipEventValue v = eb.eventValue as UnzipEventValue;
+		UnzipEventValue v = eb.data as UnzipEventValue;
 		OnUnzipProgress (v.progress, v.code);
 	}
 
@@ -183,7 +153,8 @@ public class UnzipManager : MonoBehaviour {
 	{
 		if (code == 0) 
 		{
-			_loginRoot.updateUnzipProgress (progress);
+            progressBar.value = progress;
+            unzipInfo.text = string.Format("正在解压资源...{0:F2}%",100f*progress);
 			if (progress >= 1) 
 			{//unzip ok
 				List<XmlPatch.DFileInfo> fs=null;
@@ -195,32 +166,31 @@ public class UnzipManager : MonoBehaviour {
 				}
 				catch(Exception e) 
 				{
-					Log.E(e);
+					Log.e(e);
 					fs = null;
 				}
 
 				if(fs==null || fs.Count>0)
 				{
-					Log.E("unzip failed", Log.Tag.RES);
-					MessageBox.showComfirm ("解压资源失败,请确保有足够的存储空间(>"+ToSize(_resZipSize)+")后重启游戏再试.", () => {Application.Quit ();});
+					Log.e("unzip failed", Log.Tag.RES);
+                    unzipInfo.text = "解压资源失败,请确保有足够的存储空间(>" + ToSize(_resZipSize) + ")后重启游戏再试";
+                    quitBtn.gameObject.SetActive(true);
 					return;
 				}
 
 				File.WriteAllText(_unzipTagFile,"ok");
-				ResLoad.SetVersionPart (_resZipVersion,_resPart);
-				Log.I("^_^ unzip ok", Log.Tag.RES);
+				ResLoad.setVersionPart (_resZipVersion,_resPart);
+				Log.i("^_^ unzip ok", Log.Tag.RES);
 				ShowUnzip(false);
-				ResMgr.Single.Reset();
-				if (null!=_action)_action ();
-				Destroy (this);
+                GRoot.single.ReloadResource();
+                EventMgr.single.SendEvent(GRoot.EventResUnzip, true);
 			}
 		}
 		else
 		{//unzip failed
-			Log.E("unzip failed", Log.Tag.RES);
-			MessageBox.showComfirm ("解压资源失败,请确保有足够的存储空间(>"+ToSize(_resZipSize)+")后重启游戏再试", () => {
-				Application.Quit ();
-			});
+			Log.e("unzip failed", Log.Tag.RES);
+            unzipInfo.text = "解压资源失败,请确保有足够的存储空间(>" + ToSize(_resZipSize) + ")后重启游戏再试";
+            quitBtn.gameObject.SetActive(true);
 		}	
 	}
 

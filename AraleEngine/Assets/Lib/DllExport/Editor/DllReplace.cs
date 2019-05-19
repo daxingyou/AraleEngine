@@ -101,7 +101,7 @@ public class DllReplace
 		return result; 
 	}
 
-    [MenuItem("Dll/ReplaceDllScript")]
+    [MenuItem("开发工具/Dll/替换为Dll脚本",false,3)]
     static void replaceDllScript()
     {
         UnityEngine.Object o = Selection.activeObject;

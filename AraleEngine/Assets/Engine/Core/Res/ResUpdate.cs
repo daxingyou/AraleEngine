@@ -1,33 +1,26 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using Scripts.CoreScripts.Core;
 using System.IO;
 using System.Threading;
 using System.Net;
 using System;
 using ICSharpCode.SharpZipLib.Zip;
-using Scripts.CoreScripts.Core.Platform;
 using System.Timers;
 
-namespace Scripts.CoreScripts.Core
+namespace Arale.Engine
 {
+    //支持分包同时更新，但是初始包必须开始游戏时首先更新
     public class ResUpdate
     {
         static ResUpdate mThis;
-        public static ResUpdate single
-        {
-            get
-            {
-                return mThis!=null?mThis:mThis = new ResUpdate();
-            }
-        }
+        public static ResUpdate single{get { return mThis!=null?mThis:mThis = new ResUpdate(); }}
 
         ResUpdate()
         {
             mDataPath = ResLoad.resPath;
             if(!Directory.Exists(mDataPath))Directory.CreateDirectory(mDataPath);
-            EventManager.single.registEventListener("UpdateEvent",updateCallBack);
+            EventMgr.single.AddListener("UpdateEvent",updateCallBack);
             mPatch = new XmlPatch(mDataPath);
             mNewVersion = ResLoad.version;
             clearTmpFile();
@@ -36,7 +29,7 @@ namespace Scripts.CoreScripts.Core
         public void dispose()
         {
             stopTask();
-            EventManager.single.unregistEventListener("UpdateEvent",updateCallBack);
+            EventMgr.single.RemoveListener("UpdateEvent",updateCallBack);
             mThis = null;
         }
 
@@ -50,15 +43,9 @@ namespace Scripts.CoreScripts.Core
 
         void initUrl(int version, string url)
         {
-            string appVersionName = Device.getVersionName ();
-            #if UNITY_ANDROID
-            mUrl = string.Format("{0}{1}/{2}{3}/", url, appVersionName, "android", version);
-            #elif UNITY_IPHONE
-            mUrl = string.Format("{0}{1}/{2}{3}/", url, appVersionName, "iphone", version);
-            #else
-            mUrl = string.Format("{0}{1}/{2}{3}/", url, appVersionName, "standalone", version);
-            #endif
-            Log.I("initUrl="+mUrl, Log.Tag.Update);
+            string appVersionName = GRoot.device.getAppVersion ();
+            mUrl = string.Format("{0}{1}/{2}{3}/", url, appVersionName, FileUtils.platform, version);
+            Log.i("initUrl="+mUrl, Log.Tag.Update);
         }
 
 
@@ -70,7 +57,7 @@ namespace Scripts.CoreScripts.Core
             initUrl(mNewVersion, url);
             PatchTask pt = getTask("init");
             if (pt == null)mTasks.Add(pt = new PatchTask("init", ResLoad.part));
-            Log.I("pullVersion:"+ResLoad.version+"->"+newVersion, Log.Tag.Update);
+            Log.i("pullVersion:"+ResLoad.version+"->"+newVersion, Log.Tag.Update);
             return pt;
         }
 
@@ -128,9 +115,9 @@ namespace Scripts.CoreScripts.Core
             return false;
         }
 
-        void updateCallBack(EventManager.EventBase eb)
+        void updateCallBack(EventMgr.EventData eb)
         {
-            UpdateEvent ue = eb.eventValue as UpdateEvent;
+            UpdateEvent ue = eb.data as UpdateEvent;
             ue.task.onEvent(ue.state,ue.action,ue.progress);
             if (ue.state != State.Completed)return;
             for (int i = 0; i < mTasks.Count; ++i)mTasks[i].start(Action.CalcSize);
@@ -148,7 +135,7 @@ namespace Scripts.CoreScripts.Core
             }
         }
 
-        public XmlPatch.DFileInfo lockDFile(int id)
+        XmlPatch.DFileInfo lockDFile(int id)
         {
             lock (mDFS)
             {
@@ -197,7 +184,7 @@ namespace Scripts.CoreScripts.Core
                 if(mThis==null)throw new Exception("disable new PatchTask by yourself");
                 mParts = parts;
                 mName  = name;
-                Log.I("creat patch task name="+mName+",parts="+ResLoad.intArray2Str(parts), Log.Tag.Update);
+                Log.i("creat patch task name="+mName+",parts="+ResLoad.intArray2Str(parts), Log.Tag.Update);
             }
 
             internal void onEvent(State state, Action action, float progress)
@@ -208,8 +195,8 @@ namespace Scripts.CoreScripts.Core
                 switch (mState)
                 {
                     case State.Completed:
-                        ResLoad.SetVersionPart(mThis.mNewVersion, mParts);
-                        Log.I("patch task ok! name=" + mName, Log.Tag.Update);
+                        ResLoad.setVersionPart(mThis.mNewVersion, mParts);
+                        Log.i("patch task ok! name=" + mName, Log.Tag.Update);
                         if (mCallback != null)mCallback(this);
                         //移除任务
                         mThis.closeTask(mName);
@@ -223,7 +210,7 @@ namespace Scripts.CoreScripts.Core
             public bool start(Action action=Action.DownFile)
             {
                 if (mState == State.Doing||mState==State.Completed)return false;
-                Log.I("start patch Task name="+mName+",action="+action, Log.Tag.Update);
+                Log.i("start patch Task name="+mName+",action="+action, Log.Tag.Update);
                 mState     = State.Doing;
                 mError     = false;
                 mCancel    = false;
@@ -262,7 +249,7 @@ namespace Scripts.CoreScripts.Core
                 try
                 {
                     //获取版本配置文件/
-                    EventManager.single.pushEvent("UpdateEvent",new UpdateEvent(this,progress,State.Doing,action));
+                    EventMgr.single.PostEvent("UpdateEvent",new UpdateEvent(this,progress,State.Doing,action));
                     if(mThis.mPatch.getVersion() != mThis.mNewVersion)
                     {
                         mHWR = HttpWebRequest.Create (new Uri (mThis.mUrl + "version.xml"))as HttpWebRequest;
@@ -282,7 +269,7 @@ namespace Scripts.CoreScripts.Core
                         action     = Action.CalcSize;
                         mIDS       = new List<int>();
                         mParts     = mThis.mPatch.getDepends(mParts);
-                        List<XmlPatch.DFileInfo> dfs = mThis.mPatch.listDownFiles(delegate(float percent){EventManager.single.pushEvent("UpdateEvent",new UpdateEvent(this,progress=percent,State.Doing,action));}, ref mCancel, mParts);
+                        List<XmlPatch.DFileInfo> dfs = mThis.mPatch.listDownFiles(delegate(float percent){EventMgr.single.PostEvent("UpdateEvent",new UpdateEvent(this,progress=percent,State.Doing,action));}, ref mCancel, mParts);
                         long size=0;
                         long tmpSize=0;
                         for(int i=0,max=dfs.Count;i<max;++i)
@@ -301,7 +288,7 @@ namespace Scripts.CoreScripts.Core
                         System.GC.Collect();
                         if((Action)param == Action.CalcSize)
                         {
-                            EventManager.single.pushEvent("UpdateEvent",new UpdateEvent(this,progress,State.Idle,action));
+                            EventMgr.single.PostEvent("UpdateEvent",new UpdateEvent(this,progress,State.Idle,action));
                             return;
                         }
                     }
@@ -310,8 +297,8 @@ namespace Scripts.CoreScripts.Core
                 {
                     mHWR=null;
                     mError=true;
-                    Log.E(e, Log.Tag.Update);
-                    EventManager.single.pushEvent("UpdateEvent",new UpdateEvent(this,progress,State.Failed,action));
+                    Log.e(e, Log.Tag.Update);
+                    EventMgr.single.PostEvent("UpdateEvent",new UpdateEvent(this,progress,State.Failed,action));
                     return;
                 }
 
@@ -319,7 +306,7 @@ namespace Scripts.CoreScripts.Core
                 //开启文件下载线程/
                 progress  = mTotalSize>0?1.0f * Interlocked.Read(ref mDownSize) / mTotalSize:1;
                 action = Action.DownFile;
-                EventManager.single.pushEvent("UpdateEvent",new UpdateEvent(this,progress,State.Doing,action));
+                EventMgr.single.PostEvent("UpdateEvent",new UpdateEvent(this,progress,State.Doing,action));
                 List<Thread> lsThread= new List<Thread> ();
                 for (int i=0; i<mHWRS.Length; ++i)
                 {
@@ -331,7 +318,7 @@ namespace Scripts.CoreScripts.Core
                 while (Interlocked.Read(ref mExitCount) < lsThread.Count)
                 {
                     progress  = mTotalSize>0?1.0f * Interlocked.Read(ref mDownSize) / mTotalSize:1;
-                    EventManager.single.pushEvent("UpdateEvent",new UpdateEvent(this,progress,State.Doing,action));
+                    EventMgr.single.PostEvent("UpdateEvent",new UpdateEvent(this,progress,State.Doing,action));
                     Thread.Sleep(100);
                 }
                 //等待下载线程结束/
@@ -343,16 +330,16 @@ namespace Scripts.CoreScripts.Core
                 //解压lua脚本
                 mError = !unzipLua (ref action, ref progress);
                 //===========
-                Log.I ("cdn main thread exit,task name="+this.mName, Log.Tag.Update);
+                Log.i ("cdn main thread exit,task name="+this.mName, Log.Tag.Update);
                 if (!mError)
                 {
                     //通知更新完成
-                    EventManager.single.pushEvent ("UpdateEvent", new UpdateEvent(this,1,State.Completed,action));
+                    EventMgr.single.PostEvent ("UpdateEvent", new UpdateEvent(this,1,State.Completed,action));
                 }
                 else
                 {
                     Thread.Sleep(500);
-                    EventManager.single.pushEvent ("UpdateEvent", new UpdateEvent(this,progress,State.Failed,action));
+                    EventMgr.single.PostEvent ("UpdateEvent", new UpdateEvent(this,progress,State.Failed,action));
                 }
             }
 
@@ -433,12 +420,12 @@ namespace Scripts.CoreScripts.Core
                         {
                             mError=true;
                             df.locked = false;
-                            Log.E("download failed file="+df.path, Log.Tag.Update);
-                            Log.E(e, Log.Tag.Update);
+                            Log.e("download failed file="+df.path, Log.Tag.Update);
+                            Log.e(e, Log.Tag.Update);
                         }
                         else
                         {
-                            Log.I("retry download file="+df.path, Log.Tag.Update);
+                            Log.i("retry download file="+df.path, Log.Tag.Update);
                             Thread.Sleep(300);
                         }
                     }
@@ -456,11 +443,11 @@ namespace Scripts.CoreScripts.Core
             bool unzipLua(ref Action action, ref float progress)
             {
                 if (mError)return false;
-                Log.I ("begin unzip lua", Log.Tag.Update);
+                Log.i ("begin unzip lua", Log.Tag.Update);
                 try
                 {
                     action = Action.Unzip;
-                    EventManager.single.pushEvent ("UpdateEvent", new UpdateEvent(this,progress,State.Doing,action));
+                    EventMgr.single.PostEvent ("UpdateEvent", new UpdateEvent(this,progress,State.Doing,action));
                     string dataPath = mThis.mDataPath;
                     string luaZip  = dataPath+"/lua.data";
                     if(!File.Exists(luaZip))return true;
@@ -475,7 +462,7 @@ namespace Scripts.CoreScripts.Core
                 }
                 catch(Exception e)
                 {
-                    Log.E(e);
+                    Log.e(e);
                     return false;
                 }
             }
@@ -624,7 +611,7 @@ namespace Scripts.CoreScripts.Core
         static int fdlCount;
         public FileDownLoad(string url, string savePath, string md5=null)
         {
-            if(fdlCount++==0)EventManager.single.registEventListener("DownFileEvent",DownLoadCallBack);
+            if(fdlCount++==0)EventMgr.single.AddListener("DownFileEvent",DownLoadCallBack);
             _state      = State.Idle;
             _action     = Action.DownFile;
             _url        =  url;
@@ -667,7 +654,7 @@ namespace Scripts.CoreScripts.Core
             }
             catch(Exception e) 
             {
-                Log.E (e, Log.Tag.Default, e.StackTrace);
+                Log.e (e, Log.Tag.Default, e.StackTrace);
                 OnDownFailed(this);
             }
         }
@@ -713,13 +700,13 @@ namespace Scripts.CoreScripts.Core
         public void Dispose()
         {
             Stop ();
-            if(--fdlCount==0)EventManager.single.unregistEventListener("DownFileEvent",DownLoadCallBack);
+            if(--fdlCount==0)EventMgr.single.RemoveListener("DownFileEvent",DownLoadCallBack);
             _onDownload = null;
         }
 
-        static void DownLoadCallBack(EventManager.EventBase eb)
+        static void DownLoadCallBack(EventMgr.EventData eb)
         {
-            FileDownLoad fdl = eb.eventValue as FileDownLoad;
+            FileDownLoad fdl = eb.data as FileDownLoad;
             if (null == fdl._onDownload)return;
             fdl._onDownload (fdl);
             if (fdl.state==State.Doing)return;
@@ -763,7 +750,7 @@ namespace Scripts.CoreScripts.Core
             }
             catch(Exception e) 
             {
-                Log.E (e, Log.Tag.Default, e.StackTrace);
+                Log.e (e, Log.Tag.Default, e.StackTrace);
                 OnDownFailed (fdl);
             }
         }
@@ -793,7 +780,7 @@ namespace Scripts.CoreScripts.Core
             }
             catch(Exception e) 
             {
-                Log.E (e, Log.Tag.Default, e.StackTrace);
+                Log.e (e, Log.Tag.Default, e.StackTrace);
                 OnDownFailed (fdl);
             }
         }
@@ -802,7 +789,7 @@ namespace Scripts.CoreScripts.Core
         {
             fdl._state = State.Completed;
             fdl.innerStop();
-            EventManager.single.pushEvent("DownFileEvent", fdl);
+            EventMgr.single.PostEvent("DownFileEvent", fdl);
         }
 
         void OnDownFailed(FileDownLoad fdl)
@@ -818,12 +805,12 @@ namespace Scripts.CoreScripts.Core
             }
             fdl._state = State.Failed;
             fdl.innerStop ();
-            EventManager.single.pushEvent("DownFileEvent", fdl);
+            EventMgr.single.PostEvent("DownFileEvent", fdl);
         }
 
         void OnProgress(FileDownLoad fdl)
         {
-            EventManager.single.pushEvent("DownFileEvent", fdl);
+            EventMgr.single.PostEvent("DownFileEvent", fdl);
         }
     }
     #endregion

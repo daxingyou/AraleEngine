@@ -6,7 +6,7 @@ using UnityEditor;
 
 public class BMFontEditor : EditorWindow
 {
-    [MenuItem("DevelopTools/BMFont Maker")]
+    [MenuItem("开发工具/位图字体")]
     static public void OpenBMFontMaker()
     {
         EditorWindow.GetWindow<BMFontEditor>(false, "BMFont Maker", true).Show();

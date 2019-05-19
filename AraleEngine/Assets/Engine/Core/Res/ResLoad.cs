@@ -6,9 +6,11 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using XLua;
 
 namespace Arale.Engine
 {
+    [LuaCallCSharp]
 	public enum ResideType
 	{//缓存有效期从小到大排列
 		None,   //不缓存/
@@ -18,6 +20,7 @@ namespace Arale.Engine
 		InGame, //游戏内缓存/
 	}
 
+    [LuaCallCSharp]
 	public class ResLoad : System.IDisposable
 	{
 		class CallData
@@ -116,6 +119,11 @@ namespace Arale.Engine
 				item.mReside = ResideType.None;
 				mPool.Add (item);
 			}
+
+            internal static bool isInCach(string key)
+            {
+                return mCach.ContainsKey(key);
+            }
 
 			internal static void addAssetRef(string key)
 			{
@@ -269,7 +277,9 @@ namespace Arale.Engine
 				}
 				else
 				{
-					mAssetBundle = AssetBundle.LoadFromFile(resPath+mKey+ext);
+                    string path = resPath + mKey + ext;
+                    if (!File.Exists(path))return;
+                    mAssetBundle = AssetBundle.LoadFromFile(path);
 				}
 			}
 
@@ -324,7 +334,11 @@ namespace Arale.Engine
 					}
 				}
 
-				if (null==mAsset)Log.e ("load asset failed path="+mKey,Log.Tag.RES);
+                if (null == mAsset)
+                {
+                    Log.e("load asset failed path=" + mKey, Log.Tag.RES);
+                    return null;
+                }
 				//添加依赖引用计数管理
 				setAssetRef(mAsset as GameObject);
 				return mAsset as T;
@@ -332,7 +346,8 @@ namespace Arale.Engine
 
 			internal GameObject gameObject()
 			{
-				return GameObject.Instantiate(asset<GameObject>(null)) as GameObject;
+                Object o = asset<GameObject>(null);
+				return o==null?null:GameObject.Instantiate(o) as GameObject;
 			}
 			#endregion
 
@@ -447,8 +462,9 @@ namespace Arale.Engine
 
 
 		#region ResLoad
+        public const string ext = ".data";
+        public const string manifestName = "main.data";
 		public static string resPath;
-		public static string ext;
 		public delegate void OnLoadFinish(ResLoad resLoad);
 		static uint uniqueID;
 		static MonoBehaviour mMono;
@@ -462,7 +478,7 @@ namespace Arale.Engine
 		//---------------
 		static void loadManifest()
 		{
-			string manifestPath = resPath+"Data"+ext;
+            string manifestPath = resPath+manifestName;
 			if(!File.Exists(manifestPath))return;
 			AssetBundle ab = AssetBundle.LoadFromFile(manifestPath);
 			if (ab != null) 
@@ -478,10 +494,10 @@ namespace Arale.Engine
 			initCheckMap();
 			#endif
 			resPath = Application.persistentDataPath+"/Res/";
-			ext = ".data";
 			mMono = mono;
 			loadManifest ();
-            InitVersionPart();
+            initVersionPart();
+            loadCommonAB ();
 			Log.i ("res path=" + ResLoad.resPath, Log.Tag.RES);
 		}
 
@@ -618,6 +634,11 @@ namespace Arale.Engine
 			CachItem.decAssetRef (path);
 		}
 
+        public static bool isInCach(string path)
+        {
+            return CachItem.isInCach(path);
+        }
+
 		public static void clearCach()
 		{
 			CachItem.clearCach ();
@@ -659,42 +680,106 @@ namespace Arale.Engine
 
 
         #region 资源版本
-        public static int version{ get; protected set;}
-        public static int part{ get; protected set;}
-        const string ResVerKey  = "Res.Ver";
-        const string ResPartKey = "Res.part";
-        public static void SetVersionPart(int ver, int part)
+        public const string ResVerKey  = "Res.Ver";
+        public const string ResPartKey = "Res.part";
+        public static int   version{ get; protected set;}
+        public static int[] part{ get; protected set;}
+        public static void setVersionPart(int ver, int[] part, bool additive=true)
         {
             ResLoad.version = ver;
-            ResLoad.part = part;
+            List<int> ls = additive?new List<int>(ResLoad.part):new List<int>();
+            for (int i = 0; i < part.Length; ++i)
+            {
+                int v = part[i];
+                if (!ls.Contains(v))ls.Add(v);
+            }
+            ls.Sort(delegate(int x, int y){return x-y;});
+            ResLoad.part = ls.ToArray();
+
+            string partStr = intArray2Str(ResLoad.part);
             UnityEngine.PlayerPrefs.SetInt (ResVerKey,ver);
-            UnityEngine.PlayerPrefs.SetInt (ResPartKey, part);
+            UnityEngine.PlayerPrefs.SetString (ResPartKey, partStr);
             UnityEngine.PlayerPrefs.Save();
-            Log.i ("SetVersionPart:" + ResLoad.version + "." + ResLoad.part, Log.Tag.Update);
+            Log.i ("SetVersionPart:" + ResLoad.version + ":" + partStr, Log.Tag.Update);
         }
 
-        public static void ClearVersionPart()
+        public static void clearVersionPart()
         {
             UnityEngine.PlayerPrefs.DeleteKey(ResVerKey);
             UnityEngine.PlayerPrefs.DeleteKey(ResPartKey);
             UnityEngine.PlayerPrefs.Save();
         }
 
-        static void InitVersionPart()
+        static void initVersionPart()
         {
             #if UNITY_STANDALONE_WIN || UNITY_STANDALONE_OSX
             ResLoad.version = 1000;
-            ResLoad.part    = 1000;
+            string partStr  = "0,1,2,3,4,5,6,7,8,9";
             #else
             ResLoad.version = UnityEngine.PlayerPrefs.GetInt(ResVerKey, 0);
-            ResLoad.part    = UnityEngine.PlayerPrefs.GetInt(ResPartKey, 0);
+            string partStr  = UnityEngine.PlayerPrefs.GetString(ResPartKey, "");
             #endif
-            Log.i ("InitVersionPart:" + ResLoad.version + "." + ResLoad.part, Log.Tag.Update);
+            ResLoad.part    = string.IsNullOrEmpty(partStr)?new int[]{0}:str2IntArray(partStr);
+            Log.i ("InitVersionPart:" + ResLoad.version + ":" + partStr, Log.Tag.Update);
         }
 
-        static bool IsResOK()
+        public static bool isPartOK(int partCode)
         {
+            return System.Array.IndexOf<int>(part, partCode) >= 0;
+        }
+
+        public static bool isPartOK(int[] partCodes)
+        {
+            for (int i = 0; i<partCodes.Length; ++i)
+            {
+                if (!isPartOK(partCodes[i]))return false;
+            }
             return true;
+        }
+
+        public static string intArray2Str(int[] val)
+        {
+            int max = val.Length;
+            if (max < 1)return "";
+            string str=val[0].ToString();
+            for(int i=1;i<max;++i)str+=","+val[i];
+            return str;
+        }
+
+        public static int[] str2IntArray(string str)
+        {
+            string[] ss = str.Split(new char[]{','}, System.StringSplitOptions.RemoveEmptyEntries);
+            int[] val = new int[ss.Length];
+            for(int i=0;i<ss.Length;++i)val[i] = int.Parse(ss[i]);
+            return val;
+        }
+        #endregion
+
+
+        #region 扩展
+        static Dictionary<string, Shader> mShaders = new Dictionary<string, Shader>();
+        static void loadCommonAB()
+        {
+            mShaders.Clear();
+            ResLoad.get("common/font", ResideType.InGame).assetBundle();
+            AssetBundle ab = ResLoad.get("common/shader", ResideType.InGame).assetBundle();
+            if (ab != null) 
+            {
+                Object[] objs = ab.LoadAllAssets ();
+                for (int i = 0, max = objs.Length; i < max; ++i) 
+                {
+                    Shader sd = objs [i] as Shader;
+                    mShaders [sd.name] = sd;
+                }
+            }
+        }
+
+        public static Shader FindShader(string name)
+        {
+            Shader sd = Shader.Find(name);
+            if (sd != null)return sd;
+            if (mShaders.TryGetValue (name, out sd))return sd;
+            return null;
         }
         #endregion
 

@@ -233,7 +233,7 @@ namespace Arale.Engine
 		#region 导出枚举
 		const string RET = "\r\n";
 		const string TAB = "\t"; 
-		[MenuItem("DevelopTools/Lua/Gen Enum")]
+		[MenuItem("开发工具/Lua/导出Enum")]
 		public static void genEnum()
 		{
 			string luaCode = "--Auto Gen,Don't modify"+RET;

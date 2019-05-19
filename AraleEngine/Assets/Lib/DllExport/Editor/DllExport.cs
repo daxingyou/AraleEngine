@@ -63,7 +63,7 @@ public class DllExport
         }
     }
 
-    [MenuItem("Dll/DllExport/Start")]
+    [MenuItem("开发工具/Dll/开始生成",false,0)]
     public static void start()
     {
         workPath = Application.dataPath+"/";
@@ -71,7 +71,7 @@ public class DllExport
         exportThread.Start();
     }
 
-    [MenuItem("Dll/DllExport/Stop")]
+    [MenuItem("开发工具/Dll/停止生成",false,1)]
     public static void stop()
     {
         if (exportThread != null)

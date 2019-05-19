@@ -1,9 +1,6 @@
-﻿using UnityEngine;
+﻿/*using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
-using Scripts.CoreScripts.Core;
-using Scripts.CoreScripts.Core.Notice;
-using Scripts.CoreScripts.GameLogic.Data;
 public class UpdateView : MonoBehaviour {
 	public static string _updateURL;
     public Text _infoLB;
@@ -168,3 +165,4 @@ public class UpdateView : MonoBehaviour {
     }
     #endregion
 }
+*/
