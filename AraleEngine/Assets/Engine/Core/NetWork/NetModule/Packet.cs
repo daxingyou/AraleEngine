@@ -84,7 +84,7 @@ namespace Arale.Engine
 			using (MemoryStream ms = new MemoryStream(mNetData, HeaderSize, mNetData.Length - HeaderSize))
 			{
 				ProtoReader pr = new ProtoReader (ms, RuntimeTypeModel.Default, null);
-				LuaObject lp = LuaObject.newObject(name);
+                LuaObject lp = LuaObject.newObject(name);
 				lp.call ("Deserialize", pr);
 				mMetaPacket = lp;
 			}

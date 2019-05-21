@@ -2,5 +2,5 @@ message TestProto{
 	required string a = 1;
 	optional int32 b = 2;
 	optional int32 c = 3;
-    repeated int32 d = 4 [packed=true];    
+    repeated int32 d = 4;    
 }

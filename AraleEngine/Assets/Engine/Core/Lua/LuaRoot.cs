@@ -91,7 +91,7 @@ namespace Arale.Engine
 			mL.AddBuildin("rapidjson", XLua.LuaDLL.Lua.LoadRapidJson);
 			mL.AddBuildin("lpeg", XLua.LuaDLL.Lua.LoadLpeg);
 			mL.AddBuildin("pb", XLua.LuaDLL.Lua.LoadLuaProfobuf);
-			//mL.AddBuildin("ffi", XLua.LuaDLL.Lua.LoadFFI);存在兼容问题
+			//mL.AddBuildin("ffi", XLua.LuaDLL.Lua.LoadFFI);IOS存在兼容问题
 			#endif
 			LuaHelp.ExportToLua ();
 			byte[] tags = mReadLuaFile (LUA_PATH+"main.lua", false);
@@ -204,7 +204,7 @@ namespace Arale.Engine
 			if (mL == null)return;
 			if (Time.time - LuaRoot.LastGCTime > LuaRoot.GCInterval)
 			{
-				LuaRoot.single.mL.Tick();
+				mL.Tick();
 				LuaRoot.LastGCTime = Time.time;
 			}
 		}

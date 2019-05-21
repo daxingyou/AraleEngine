@@ -128,15 +128,60 @@ LProtoWrite =
 	--嵌套类型
 	WriteObject = function(val,dst)
 		local token = ProtoWriter.StartSubItem(val,dst);
-		val:Serializer(dst)
+		if val ~= nil then val:Serializer(dst) end
 		ProtoWriter.EndSubItem(token, dst);
 	end;
-	ReadObject = function(val,src)
+	ReadObject = function(val,src,tag)
+		local ret = nil
 		local token = ProtoReader.StartSubItem(src);
-		local ret = newLuaObject(val);
-		ret:Deserialize(src);
+		if tag ~= source.ReadFieldHeader() then
+			src:SkipField()
+		else
+			ret = newLuaObject(val)
+			ret:Deserialize(src)
+		end
+		ProtoReader.EndSubItem(token, src)
+		return ret
+	end;
+
+	--简单类型数组(packed=true时，见ListDecorator.cs)
+	WriteTypeList= function(val,dst,tag,writeFunc)
+		ProtoWriter.WriteFieldHeader(tag, WireType.String, dst);
+		local token = ProtoWriter.StartSubItem(val, dst);
+		ProtoWriter.SetPackedField(tag, dst);
+		for i=1, #(val) do
+			writeFunc(val[i], dst)
+		end
+		ProtoWriter.EndSubItem(token, dst);
+	end;
+
+	ReadTypeList = function(val,src,wireType,readFunc)
+		local token = ProtoReader.StartSubItem(src);
+		local i = 1;
+		while(ProtoReader.HasSubValue(wireType, src))
+		do
+			val[i] = readFunc(val[i], src);
+			i=i+1;
+		end
 		ProtoReader.EndSubItem(token, src);
-		return ret;
+		return val;
+	end;
+
+	--嵌套类型数组
+	WriteNoneList = function(val,dst,tag)
+		for i=1, #(val) do
+			ProtoWriter.WriteFieldHeader(tag,WireType.String,dst);
+			WriteObject(val[i], dst);
+		end
+	end;
+
+	ReadNoneList = function(val,src,luaClassName,tag)
+		local i = 1;
+		repeat
+			val[i] = ReadObject(luaClassName, src);
+			i=i+1;
+		until src:TryReadFieldHeader(tag)~=true
+		return val;
 	end;
 }
 

@@ -74,7 +74,7 @@ namespace Arale.Engine
     		return null;
     	}
 
-    	public static string ToString<T>(T[] array)
+    	public static string toString<T>(T[] array)
     	{
     		string s = "";
     		if (array == null)return s;

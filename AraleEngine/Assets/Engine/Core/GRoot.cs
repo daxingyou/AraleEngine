@@ -13,7 +13,7 @@ namespace Arale.Engine
         public const string EventResUpdate = "Game.Update";
         public static GRoot single;
         public static GDevice device;
-        public int mLaunchFlag;
+        public int  mLaunchFlag;
         public bool mUseLua;
         public string mGameServer="127.0.0.1:80";
         public string mResServer="http://127.0.0.1:8080/update/";

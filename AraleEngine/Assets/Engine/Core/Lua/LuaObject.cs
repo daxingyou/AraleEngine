@@ -62,9 +62,9 @@ namespace Arale.Engine
     	public T value<T>(string field)
     	{
             //xlua
-            //return mLuaTable.Get<T>(field);
+            return mLT.Get<T>(field);
     		//ulua
-            return (T)mLT [field];
+            //return (T)mLT [field];
     	}
     }
 }

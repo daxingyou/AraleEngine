@@ -50,6 +50,16 @@ public class MenuItems{
         p.StartInfo.Arguments = "--java_out=Proto Proto/test.proto";
         p.Start();
     }
+
+    [MenuItem("开发工具/Proto/生成Lua")]
+    public static void genLuaPB()
+    {
+        string path = Application.dataPath + "/StreamingAssets/Lua/PB/";
+        if (!Directory.Exists(path))Directory.CreateDirectory(path);
+        LuaProtoGen lpb = new LuaProtoGen(path);
+        lpb.addFilter(typeof(Proto.test.TestProto));
+        lpb.genLuaPB();
+    }
     #endregion
 
 	#region 资源打包

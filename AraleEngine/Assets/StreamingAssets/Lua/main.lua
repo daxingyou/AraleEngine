@@ -5,6 +5,7 @@
 print(package.path)
 require "common/LClass"
 require "common/LObject"
+require "common/LProtoWrite"
 --=====================your code begin=================
 --==============工具库
 --local util = require 'lib/xlua/util'--不完整版，无lua导出delegate的接口
@@ -64,6 +65,7 @@ TBPlayer = CS.Arale.Engine.TBPlayer
 TBItem = CS.Arale.Engine.TBItem
 --===============协议
 ProtoWriter = CS.ProtoBuf.ProtoWriter
+ProtoReader = CS.ProtoBuf.ProtoReader
 WireType = CS.ProtoBuf.WireType
 MsgReqCreateHero = CS.MsgReqCreateHero
 MsgReqEnterBattle = CS.MsgReqEnterBattle
@@ -111,6 +113,8 @@ require "game/buff/LJinGu"
 require "game/buff/LSkillHarm"
 require "game/buff/LLeiGongBaoFeng"
 print("require all ok");
+--====================
+require "pb/Proto.test"
 --=====================================================
 function  main( ... )
 	if GRoot.single.mLaunchFlag~=0 then return end
