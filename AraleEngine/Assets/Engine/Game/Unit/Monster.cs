@@ -93,8 +93,11 @@ public class Monster : Unit, PoolMgr<int>.IPoolObject
 		{
 			if (drops != null)
 			{
-				int len = drops.Length;
-				DropItems u = NetMgr.server.createDropItems (drops[Random.Range(0,len)], pos, Vector3.right, 0);
+                int itemId = drops[Random.Range(0, drops.Length)];
+                if(Randoms.drop(itemId,1))
+                {
+                    DropItems u = NetMgr.server.createDropItems (itemId, pos, Vector3.right, 0);
+                }
 			}
 		}
 		Invoke ("recyle", 5f);
