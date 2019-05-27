@@ -177,6 +177,8 @@ public abstract class Unit : LuaMono
 		}
 	}
 
+    public float scale=1;
+
     public void sendMsg(short msgid, MessageBase msg)
     {
         if (isServer)
@@ -240,7 +242,7 @@ public abstract class Unit : LuaMono
 		case (short)MyMsgId.Nav:
 			{
 				MsgNav m = msg.ReadMessage<MsgNav> ();
-				nav.onSync (m);
+                move.onSync(m);
 				if (isServer)sendMsg (msg.msgType, m);
 				break;
 			}
@@ -275,7 +277,7 @@ public abstract class Unit : LuaMono
 		case (short)MyMsgId.Move:
 			{
 				MsgMove m = msg.ReadMessage<MsgMove> ();
-				move.onSync(m);
+                move.onSyncMove(m);
 				if (isServer)sendMsg (msg.msgType, m);
 				break;
 			}
@@ -294,12 +296,12 @@ public abstract class Unit : LuaMono
     protected abstract void onUnitUpdate();
     protected abstract void onUnitDeinit();
 	public virtual int relation(Unit u){return 0;}
+    public virtual float speed{get{return 0;}}
 	public virtual AnimPlugin   anim{get{ return null;}}
 	public virtual AttrPlugin   attr{get{ return null;}}
 	public virtual Skill.Plug   skill{get{ return null;}}
 	public virtual Buff.Plug    buff{get{ return null;}}
 	public virtual EffectPlugin effect{get{ return null;}}
-	public virtual NavPlugin    nav{get{ return null;}}
 	public virtual Move.Plug    move{get{ return null;}}
 	public virtual AIPlugin     ai{get{return null;}}
 
@@ -336,7 +338,7 @@ public abstract class Unit : LuaMono
 	{//对应的脚本在inspector必须为展开状态，否则不会被调用
 		Gizmos.color = Color.green;
 		Gizmos.DrawRay(pos, dir*2);
-		if (nav != null)nav.drawDebug ();
+        if (move != null)move.drawDebug ();
 		if (skill != null)skill.drawDebug ();
 	}
 
@@ -457,6 +459,7 @@ public abstract class Unit : LuaMono
 			//======================
 			unit.name = " "+unit.guid;
 			unit.agentId  = 0;
+            unit.scale = 1;
 			unit.mTran = unit.transform;
 			unit.mTran.SetParent(unit.mgr.unitRoot, false);
 			unit.mTran.localScale = Vector3.one;

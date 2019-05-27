@@ -92,9 +92,9 @@ function M:OnUpdate()
 	local  joystick = self.luaJoyStick
 	local  dir = Vector3(joystick.mDir.x, 0.0, joystick.mDir.y).normalized
 	if dir.z == 0 and dir.x==0 then
-		hero.nav:stopMove ()
+		hero.move:moveStop ()
 	else
-    	hero.nav:move (dir)
+    	hero.move:move (dir)
     end
 end
 

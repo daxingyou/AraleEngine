@@ -16,8 +16,6 @@ public class Player : Unit, PoolMgr<int>.IPoolObject
 	public override Buff.Plug buff{get{return mBuff;}}
 	EffectPlugin mEffect;
 	public override EffectPlugin effect{get{ return mEffect;}}
-	NavPlugin    mNav;
-	public override NavPlugin nav{get{return mNav;}}
 	Move.Plug   mMove;
 	public override Move.Plug move{get{return mMove;}}
 	AIPlugin    mAI;
@@ -29,7 +27,6 @@ public class Player : Unit, PoolMgr<int>.IPoolObject
 		mSkill  = new Skill.Plug(this);
 		mBuff   = new Buff.Plug(this);
 		mEffect = new EffectPlugin(this);
-		mNav    = new NavPlugin(this); 
 		mMove   = new Move.Plug (this);
 		mAI     = new LuaAI (this);
 	}
@@ -40,24 +37,23 @@ public class Player : Unit, PoolMgr<int>.IPoolObject
 		mAttr.reset ();
 		mSkill.reset ();
 		mBuff.reset ();
-		mNav.reset ();
+        mEffect.reset();
+        mMove.reset();
+        mAI.reset();
 
-		mNav.speedCfg = table.speed;
 		mSkill.addSkills (GHelper.toIntArray (table.skills));
+        mAttr.onAttrChanged += onAttrChanged;
 
 		if (!isServer)
 		{
 			mHeadInfo = HeadInfo.Bind (this.transform, this); 
 		}
-
-		mAttr.onAttrChanged += onAttrChanged;
     }
 
 	protected override void onUnitUpdate()
 	{
 		mSkill.update();
 		mBuff.update();
-		mNav.update();
 		mEffect.update();
 		mMove.update ();
 		mAI.update ();
@@ -90,19 +86,24 @@ public class Player : Unit, PoolMgr<int>.IPoolObject
 		return 0;
 	}
 
+    public override float speed{get{return isState(UnitState.Move)?0:scale * table.speed;}}
+
 	void onAttrChanged(int mask, object val)
 	{
 		if (!isState (UnitState.Alive))return;
-		if (mask == (int)AttrID.HP)
-		{
-			int hp = (int)val;
-			if (hp <= 0)
-			{
-				decState (UnitState.Alive);
-				addState (UnitState.Skill | UnitState.MoveCtrl);
-				mAnim.sendEvent (AnimPlugin.Die);
-			}
-		}
+        switch (mask)
+        {
+            case (int)AttrID.HP:
+                int hp = (int)val;
+                if (hp > 0)break;
+                decState (UnitState.Alive);
+                addState (UnitState.Skill | UnitState.MoveCtrl | UnitState.Move);
+                mAnim.sendEvent (AnimPlugin.Die);
+                break;
+            case (int)AttrID.Speed:
+                scale = (float)val;
+                break;
+        }
 	}
 
 	#region 对象池

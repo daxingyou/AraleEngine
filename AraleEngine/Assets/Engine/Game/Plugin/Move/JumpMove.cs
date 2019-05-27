@@ -6,7 +6,7 @@ public class JumpMove : Move
 	float   mHeight;
 	float   mTime;
 	Vector3 mPos;
-	protected override void init(Unit unit)
+	protected override void start(Unit unit)
 	{
 		mPos = unit.pos;
 		mHeight  = float.Parse (table.param);
@@ -21,7 +21,7 @@ public class JumpMove : Move
 	}
 
 	void dirUpdate(Unit unit)
-	{
+    {
 		Vector3 v = unit.pos;
 		float k = mTime / table.life;
 		v = mPos+vTarget*table.speed*mTime;
@@ -30,12 +30,12 @@ public class JumpMove : Move
 		mTime+=Time.unscaledDeltaTime;
 		if(mTime>=table.life)
 		{
-			arrived ();
+            stop(unit,true);
 		}
 	}
 
 	void posUpdate(Unit unit)
-	{
+    {
 		Vector3 v = unit.pos;
 		float k = mTime / table.life;
 		v = mPos + k*(vTarget - mPos);
@@ -45,7 +45,7 @@ public class JumpMove : Move
 		if(mTime>=table.life)
 		{
 			unit.pos = vTarget;
-			arrived ();
+            stop(unit,true);
 		}
 	}
 }

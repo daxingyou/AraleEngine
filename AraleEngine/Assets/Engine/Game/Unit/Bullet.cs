@@ -18,7 +18,7 @@ public class Bullet : Unit, PoolMgr<int>.IPoolObject
 	public override Buff.Plug buff{get{ return mBuff;}}
 	public void play(Vector3 vTarget, uint uTarget)
 	{
-		move.play (table.move, vTarget, uTarget, false, onMoveEvent);
+        move.play (table.move, vTarget, mgr.getUnit(uTarget), false, onMoveEvent);
 		if(this.isServer)sync ();
 	}
 	//=====
@@ -61,7 +61,7 @@ public class Bullet : Unit, PoolMgr<int>.IPoolObject
 				}
 				break;
 			case 3:
-				Unit target = mgr.getUnit (move.uTarget);
+				Unit target = move.uTarget;
 				if (target != null)
 				{
 					target.anim.sendEvent (AnimPlugin.Hit);
@@ -150,7 +150,7 @@ public class Bullet : Unit, PoolMgr<int>.IPoolObject
 		msg.state   = msg.state;
 		msg.tid     = table._id;
 		msg.vTarget = move.vTarget;
-		msg.uTarget = move.uTarget;
+        msg.uTarget = move.uTarget==null?0:move.uTarget.guid;
 		this.sendMsg ((short)MyMsgId.CreateBullet, msg);
 	}
 

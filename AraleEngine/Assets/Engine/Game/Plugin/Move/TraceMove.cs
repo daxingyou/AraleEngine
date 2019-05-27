@@ -3,24 +3,20 @@ using System.Collections;
 
 public class TraceMove : Move
 {
-	uint mTarget;
-	Vector3 mPos;
-	float mSpeed;
-	protected override void init(Unit unit)
+	protected override void start(Unit unit)
 	{
-		mTarget = uTarget;
-		mPos = unit.pos;
+        vTarget = unit.pos;
 		mSpeed = table.speed;
 	}
 
 	protected override void update(Unit unit)
 	{
-		Unit u = unit.mgr.getUnit (mTarget);
-		if (u != null)mPos = u.pos;
-		Vector3 dv = mPos - unit.pos;
+        Unit u = uTarget;
+        if (u != null)vTarget = u.pos;
+        Vector3 dv = vTarget - unit.pos;
 		if (dv.sqrMagnitude <= mSpeed * mSpeed)
 		{
-			arrived ();
+            stop(unit,true);
 		}
 		else
 		{

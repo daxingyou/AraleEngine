@@ -35,7 +35,7 @@ public class Skill
         case (int)TargetType.Pos://位置技能
 			if (Vector3.Distance(self.pos, tPos) > tb.distance)
             {
-				self.nav.startNav(tPos, tb.distance, delegate(bool isArray){if(isArray)playSkill(self);});
+                self.move.nav(tPos, tb.distance, delegate(bool isAI){if(isAI)playSkill(self);});
                 return;
             }
             break;
@@ -44,7 +44,7 @@ public class Skill
 			if (!aiCall)break;
 			if (Vector3.Distance(self.pos, tUnit.pos) > tb.distance)
 			{
-				self.nav.startNav(tUnit, tb.distance, delegate(bool isArray){if(isArray)playSkill(self);});
+                self.move.nav(tUnit, tb.distance, delegate(bool isAI){if(isAI)playSkill(self);});
 				return;
 			}
             break;
@@ -57,7 +57,7 @@ public class Skill
 			}
 			if (Vector3.Distance(self.pos, tUnit.pos) > tb.distance)
             {
-				self.nav.startNav(tUnit, tb.distance, delegate(bool isArray){if(isArray)playSkill(self);});
+                self.move.nav(tUnit, tb.distance, delegate(bool isArray){if(isArray)playSkill(self);});
                 return;
             }
             break;
@@ -71,7 +71,7 @@ public class Skill
     void playSkill(Unit unit)
     {
 		if (unit.isState (UnitState.Skill))return;
-		unit.nav.stopNav (false);
+        unit.move.stop ();
         if (unit.isServer)
         {
             TBSkill tb = TableMgr.single.GetData<TBSkill>(mTID);

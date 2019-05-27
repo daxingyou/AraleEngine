@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using Arale.Engine;
+using UnityEngine.Networking;
+using System;
 
 public class Move
 {
@@ -13,133 +15,312 @@ public class Move
 		Stop,
 		Arrive,
 	}
+
+    public enum State
+    {
+        None,
+        Move,
+        Run,
+        Jump,
+        Climb,
+    }
+
+    public enum MoveType
+    {
+        All = 0xffff,
+        Play=0x0001,
+        Ctr =0x0002,
+        Nav =0x0004,
+        Path=0x0008,
+    }
+
+    public class Step
+    {
+        public long    time;
+        public Vector3 pos;
+        public Vector3 dir;
+        public Vector3 speed;
+        public State   state;
+        public Step(long time, Vector3 pos, Vector3 dir, Vector3 speed, State state)
+        {
+            this.time = time;
+            this.pos  = pos;
+            this.dir  = dir;
+            this.speed= speed;
+            this.state=state;
+        }
+    }
 	
 	public delegate void OnMoveEvent(Event evt, object param);
-	protected OnMoveEvent   onEvent;
-	public TBMove table{ get; protected set;}
+	protected OnMoveEvent onEvent;
+    public TBMove table{ get; protected set;}
 	protected Vector3   vTarget;
-	protected uint      uTarget;
-	protected bool isOver{ get; set;}
-	protected virtual void init(Unit unit){}
-	protected virtual void deinit(Unit unit){}
-	protected virtual void update(Unit unit){}
+    protected Unit      uTarget;
+    protected float     mSpeed;
+	protected virtual void start(Unit unit){}
+    protected virtual void update(Unit unit){}
+    protected virtual void stop(Unit unit, bool arrived)
+    {
+        unit.move.moveState = State.None;
+        unit.move.mMove = null;
+        if (null != onEvent)onEvent(arrived?Event.Arrive:Event.Stop, this);
+    }
+    protected virtual void sync(Unit unit)
+    {
+        MsgMove msg = new MsgMove ();
+        msg.guid   = unit.guid;
+        msg.pos    = unit.pos;
+        msg.dir    = unit.dir;
+        msg.state  = unit.state;
+        msg.moveId = table.id;
+        msg.uTarget= uTarget==null?0:uTarget.guid;
+        msg.vTarget= vTarget;
+        unit.sendMsg((short)MyMsgId.Move, msg);
+    }
 
-	protected void arrived()
-	{
-		isOver = true;
-		if (null != onEvent)onEvent(Event.Arrive, this);
-	}
-
-	protected void stop()
-	{
-		isOver = true;
-		if (null != onEvent)onEvent(Event.Stop, this);
-	}
-
+    #region 移动插件
 	public class Plug : Plugin
 	{
 		bool mPause;
-		List<Move> mMoves = new List<Move> ();
-		Move mMove;
-		public float   speed{get{return mMove.table.speed;}}
-		public Vector3 vTarget{get{return mMove.vTarget;}}
-		public uint    uTarget{get{return mMove.uTarget;}}
-		public Plug(Unit unit):base(unit)
+        public Move mMove;
+        CtrlMove mCtrlMove;
+        NavMove  mNavMove;
+        public State   moveState;
+        public float   speed{get{return   mMove==null?0:mMove.mSpeed;}}
+        public Vector3 vTarget{get{return mMove==null?default(Vector3):mMove.vTarget;}}
+        public Unit    uTarget{get{return mMove==null?null:mMove.uTarget;}}
+        public Move    curMove{get{return mMove;}}
+        public Plug(Unit unit):base(unit)
 		{
-		}
-		
-		public void play(int id, Unit other, bool bSync=false, OnMoveEvent callbck=null)
-		{
-			
+            mCtrlMove = new CtrlMove();
+            NavMeshAgent agent = unit.GetComponent<NavMeshAgent> ();
+            if(agent!=null)
+            {
+                mNavMove  = new NavMove();
+                mNavMove.mAgent = agent;
+            }
 		}
 
-		public void play(int id, Vector3 vTarget, uint uTarget, bool bSync=false, OnMoveEvent callbck=null)
-		{
+        public void play(int id, Vector3 vTarget, Unit uTarget, bool bSync=false, OnMoveEvent callbck=null)
+        {
 			TBMove tb = TableMgr.single.GetData<TBMove>(id);
 			if (tb == null)return;
 			switch (tb.type)
 			{
-			case 1:
-				mMove = new PosMove ();
-				break;
-			case 2:
-				mMove = new DirMove ();
-				break;
-			case 3:
-				mMove = new TraceMove ();
-				break;
-			case 4:
-				mMove = new JumpMove ();
-				break;
-			default:
-				Log.e ("unsupport move type=" + tb.type, Log.Tag.Unit);
-				return;
+    			case 1:
+    				mMove = new PosMove ();
+    				break;
+    			case 2:
+    				mMove = new DirMove ();
+    				break;
+    			case 3:
+    				mMove = new TraceMove ();
+    				break;
+    			case 4:
+    				mMove = new JumpMove ();
+    				break;
+                case 5:
+                    mMove = new PhysicMove();
+                    break;
+    			default:
+    				Log.e ("unsupport move type=" + tb.type, Log.Tag.Unit);
+    				return;
 			}
+            moveState = State.Move;
 			mMove.table = tb;
 			mMove.vTarget= vTarget;
 			mMove.uTarget= uTarget;
 			mMove.onEvent = callbck;
-			mMoves.Add (mMove);
-			mMove.init (mUnit);
-			if (bSync)sync ();
+            mMove.start (mUnit);
+            if (bSync)mMove.sync(mUnit);
 		}
+
+        public void move(Vector3 dir)
+        {//控制移动
+            if(mUnit.isState(UnitState.MoveCtrl))return;
+            if(mMove!=null&&!object.ReferenceEquals(mMove, mCtrlMove))mMove.stop(mUnit,false);
+            mMove = mCtrlMove;
+            mCtrlMove.vTarget = dir;
+            mCtrlMove.uTarget = null;
+            mCtrlMove.start(mUnit);
+        }
+
+        public void nav(Vector3 pos, float stopDistance=0, Action<bool> callback=null)
+        {//导航移动
+            if (moveState == State.Move)
+            {
+                if (null != callback)callback(false);
+                return;
+            }
+            if(mNavMove == null || mUnit.isState(UnitState.MoveCtrl))return;
+            if(mMove!=null&&!object.ReferenceEquals(mMove, mNavMove))mMove.stop(mUnit,false);
+            mMove = mNavMove;
+            mNavMove.uTarget = null;
+            mNavMove.vTarget = pos;
+            mNavMove.mCallback = callback;
+            mNavMove.mAgent.stoppingDistance = stopDistance;
+            mNavMove.start(mUnit);
+        }
+
+        public void nav(Unit unit, float stopDistance=0, Action<bool> callback=null)
+        {//导航移动
+            if (moveState == State.Move)
+            {
+                if (null != callback)callback(false);
+                return;
+            }
+            if(mNavMove == null || mUnit.isState(UnitState.MoveCtrl))return;
+            if(mMove!=null&&!object.ReferenceEquals(mMove, mNavMove))mMove.stop(mUnit,false);
+            mMove = mNavMove;
+            mNavMove.uTarget = unit;
+            mNavMove.vTarget = unit.pos;
+            mNavMove.mCallback = callback;
+            mNavMove.mAgent.stoppingDistance = stopDistance;
+            mNavMove.start(mUnit);
+        }
+
+        public void path(string path, bool autoPlay=true, Vector3 startPos=default(Vector3), bool inverse=false)
+        {//路径移动
+            if (mUnit.isState(UnitState.MoveCtrl))return;
+            if(mMove!=null)mMove.stop(mUnit,false);
+            PathMove pm = new PathMove();
+            mMove = pm;
+            pm.vTarget = startPos;
+            pm.uTarget = null;
+            pm.play(mUnit, path, autoPlay, inverse);
+        }
+
+        public void jump()
+        {
+        }
 
 		public void update()
 		{
-			for (int i = mMoves.Count-1; i >= 0; --i)
-			{
-				Move mov = mMoves [i];
-				if (mov.isOver)
-				{
-					mMoves.RemoveAt (i);
-					mov.deinit (mUnit);
-				}
-				else
-				{
-					if(!mPause)mov.update (mUnit);
-				}
-			}
+            if (unit.anim != null)
+            {
+                switch (moveState)
+                {
+                    case State.Run:
+                        unit.anim.sendEvent(AnimPlugin.Run);
+                        break;
+                    case State.Jump:
+                        unit.anim.sendEvent(AnimPlugin.Jump);
+                        break;
+                    case State.Climb:
+                        unit.anim.sendEvent(AnimPlugin.Climb);
+                        break;
+                    default:
+                        unit.anim.sendEvent(AnimPlugin.StopRun);
+                        break;
+                }
+            }
+
+            if (moveState!=State.Move)stepSync();
+            if (moveState==State.None||mMove==null)return;
+            if (!mPause)mMove.update(mUnit);
 		}
 
-		public void stop()
+        public void stop(bool all=true)
 		{
-			//if (null != onEvent)onEvent(Event.Stop, this);
+            if (mMove == null)return;
+            moveState = State.None;
+            mMove.stop(mUnit,false);
+            mMove = null;
 		}
+
+        public void moveStop()
+        {//停止控制移动
+            if (object.ReferenceEquals(mMove, mCtrlMove))stop();
+        }
 
 		public void pause()
 		{
 			mPause = true;
-			//if (null != onEvent)onEvent(Event.Pause, this);
 		}
 
 		public void resume()
 		{
 			mPause = false;
-			//if (null != onEvent)onEvent(Event.Resume, this);
 		}
 
         public override void reset ()
         {
-            mMoves.Clear();
+            mStepping = false;
+            mSteps.Clear();
+            stop();
         }
 
-		void sync()
+		public void onSyncMove(MsgMove msg)
 		{
-			MsgMove msg = new MsgMove ();
-			msg.guid   = mUnit.guid;
-			msg.pos    = mUnit.pos;
-			msg.dir    = mUnit.dir;
-			msg.state  = mUnit.state;
-			msg.moveId = mMove.table.id;
-			msg.uTarget= mMove.uTarget;
-			msg.vTarget= mMove.vTarget;
-			mUnit.sendMsg ((short)MyMsgId.Move, msg);
+            unit.onSyncState (msg);
+            mStepping = false;
+            mSteps.Clear();
+            play (msg.moveId, msg.vTarget, unit.mgr.getUnit(msg.uTarget));
 		}
 
-		public void onSync(MsgMove msg)
-		{
-			mUnit.onSyncState (msg);
-			play (msg.moveId, msg.vTarget, msg.uTarget);
-		}
+        #region 行走插值同步
+        const float FollowDelay = 0.1f;//值越小跟随越紧
+        float mDelay;//同步延迟时间
+        public bool  mStepping;
+        public List<Step> mSteps = new List<Step>();
+        public override void onSync(MessageBase message)
+        {
+            if (mUnit.isAgent)return;
+            MsgNav msg =  message as MsgNav;
+            if (mUnit.isServer)
+            {//检测合法性,不合法强制拉回
+                //mUnit.onSyncState (msg);
+                //msg.time  = RTime.R.utcTickMs;
+                //mUnit.sendMsg ((short)MyMsgId.Nav, msg);
+            }
+            mStepping = true;
+            mSteps.Add(new Step(msg.time, msg.pos, msg.dir, msg.speed, (State)msg.navState));
+        }
+
+        void stepSync()
+        {//0.5s内采样完成 
+            if(!mStepping||mUnit.isState(UnitState.MoveCtrl))return;
+            Move move = mCtrlMove;
+            if (mSteps.Count < 1)
+            {
+                unit.setDir(move.vTarget);
+                unit.pos += Time.deltaTime * move.vTarget * move.mSpeed;
+                return;
+            }
+
+            Step step = mSteps [0];
+            move.mSpeed = unit.speed;
+            mDelay = 0.001f*(RTime.R.utcTickMs - step.time);
+            float dt = mDelay<=FollowDelay?0:Time.deltaTime/FollowDelay*mDelay;
+            float detalTime = Time.deltaTime+dt;
+            move.vTarget = (step.pos - unit.pos).normalized;
+            mDelay -= dt;
+            if (Vector3.Distance (unit.pos, step.pos) <= detalTime * move.mSpeed)
+            {
+                mSteps.RemoveAt (0);
+                unit.pos = step.pos;
+                unit.dir = step.dir;
+                move.vTarget  = step.speed.normalized;
+                moveState= step.state;
+                if (moveState == State.None)
+                {
+                    mStepping = mSteps.Count>0;
+                }
+            }
+            else
+            {
+                unit.setDir(move.vTarget);
+                unit.pos += detalTime * move.vTarget * move.mSpeed;
+            }
+        }
+        #endregion
+
+        public void drawDebug()
+        {
+            if (mNavMove == null)return;
+            Vector3[] points= mNavMove.mAgent.path.corners;
+            DebugLine.drawLines (points, Color.blue);
+        }
 	}
+    #endregion
 }

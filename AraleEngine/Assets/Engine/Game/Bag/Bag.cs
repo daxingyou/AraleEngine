@@ -16,8 +16,16 @@ public class Bag
 			this.id = id;
 			table = TableMgr.single.GetData<TBItem>(id);
 		}
-		public virtual void use(uint num){}
+		public virtual void use(uint num)
+        {
+            count = num > count ? 0 : count - num;
+        }
 	}
+
+    public delegate void OnItemChanged(int id, uint num, uint oldNum);
+    public OnItemChanged onItemChanged;
+    public void AddItemListener (OnItemChanged callback){onItemChanged += callback;}
+    public void RemoveItemListener (OnItemChanged callback){onItemChanged -= callback;}
 
 	public int bagSize = 32;
 	public bool isFull{get{return mItems.Count >= bagSize;}}
@@ -26,7 +34,9 @@ public class Bag
 	{
 		Item it = getItem (id, true);
 		if (it == null)return null;
+        uint old = it.count;
 		it.count += num;
+        if (onItemChanged != null)onItemChanged(it.id, it.count, old);
 		return it;
 	}
 
@@ -34,7 +44,9 @@ public class Bag
 	{
 		Item it = getItem (id);
 		if (it == null)return null;
+        uint old = it.count;
 		it.count = it.count > num?it.count-num:0;
+        if (onItemChanged != null)onItemChanged(it.id, it.count, old);
 		return it;
 	}
 
@@ -43,7 +55,9 @@ public class Bag
 		Item it = getItem (id);
 		if (it == null)return null;
 		uint useNum = it.count > num?num:it.count;
+        uint old = it.count;
 		it.use (useNum);
+        if (onItemChanged != null)onItemChanged(it.id, it.count, old);
 		return it;
 	}
 
@@ -51,13 +65,15 @@ public class Bag
 	{
 		Item it = getItem (id, num > 0);
 		if (it == null)return null;
+        uint old = it.count;
 		it.count = num;
 		if (num == 0)mItems.Remove (it);
+        if (onItemChanged != null)onItemChanged(it.id, it.count, old);
 		return it;
 	}
 
 	public uint getItemCount(int id)
-	{
+    {
 		Item it = getItem (id, false);
 		return it == null ? 0 : it.count;
 	}

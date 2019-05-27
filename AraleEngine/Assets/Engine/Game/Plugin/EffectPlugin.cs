@@ -69,4 +69,12 @@ public class EffectPlugin : Plugin
 			mEffects.Remove (effect);
 		}
 	}
+
+    public override void reset ()
+    {
+        for (int i = 0; i < mEffects.Count; ++i)
+        {
+            mEffects[i].stop();
+        }
+    }
 }

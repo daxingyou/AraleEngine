@@ -40,6 +40,7 @@ public class SkillBuff : Buff
 	protected override void onInit(Unit unit)
 	{
 		buildActions (table.lua, table.param);
+        Debug.LogError(table.lua);
 		mUnit  = unit;
 		mUnit.addState (UnitState.MoveCtrl, true);
 		mUnit.sendUnitEvent ((int)UnitEvent.SkillBegin,null,true);
@@ -62,7 +63,7 @@ public class SkillBuff : Buff
 			if (a.state > 0)
 				mUnit.addState (a.state);
 			else
-				mUnit.decState (a.state);
+				mUnit.decState (-a.state);
 		}
 
 		if (a.anim != null) {
@@ -124,7 +125,7 @@ public class SkillBuff : Buff
 			mUnit.buff.addBuff (a.buff);
 		}
 
-		if (a.move != 0){
+        if (a.move != 0){
 			if (a.area != null)
 			{
 				IArea garea = GameArea.fromString (a.area);
@@ -136,9 +137,9 @@ public class SkillBuff : Buff
 					if (u.guid == mUnit.guid)continue;
 					u.dir = (mUnit.pos - u.pos).normalized;
 					if(a.move>0)
-						u.move.play(a.move,mUnit.pos-garea.R*u.dir,0,true);//击退到攻击范围的最远点
+						u.move.play(a.move,mUnit.pos-garea.R*u.dir,null,true);//击退到攻击范围的最远点
 					else
-						u.move.play(Mathf.Abs(a.move),-u.dir,0,true);//击退指定距离
+                        u.move.play(Mathf.Abs(a.move),-u.dir,null,true);//击退指定距离
 				}
 			}
 			else
@@ -146,7 +147,7 @@ public class SkillBuff : Buff
 				Unit u = mUnit.skill.targetUnit;
 				if (u == null)return;
 				u.dir = (mUnit.pos - u.pos).normalized;
-				u.move.play(a.move,-u.dir,0,true);//击退指定距离
+                u.move.play(a.move,-u.dir,null,true);//击退指定距离
 			}
 		}
 

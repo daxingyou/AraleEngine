@@ -31,7 +31,7 @@ public class BattleSceneCtrl : SceneCtrl {
 			{
 				if (hit.collider.name == "NavMesh")
 				{
-					player.nav.startNav (hit.point);
+                    player.move.nav(hit.point);
 				}
 				else
 				{
@@ -67,7 +67,7 @@ public class BattleSceneCtrl : SceneCtrl {
 		}
 
 		if(Input.GetKeyDown (KeyCode.Space)) {
-			player.nav.jump ();
+			player.move.jump ();
 		}
 		if (Input.GetKeyDown (KeyCode.F1)) {
 			player.skill.playIndex(0);

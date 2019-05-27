@@ -40,21 +40,21 @@ public abstract class AIPlugin : Plugin
 		{
 		case 1://顺序点巡逻
 			if (mPatrolPoint == null || mPatrolPoint.Count < 1)break;
-			mUnit.nav.startNav (mPatrolPoint [mPatrolIndex]);
+            mUnit.move.nav (mPatrolPoint [mPatrolIndex]);
 			mPatrolIndex = ++mPatrolIndex % mPatrolPoint.Count;
 			return true;
 		case 2://随机点巡逻
 			if (mPatrolPoint == null || mPatrolPoint.Count < 1)break;
 			int idx = Random.Range (0, mPatrolPoint.Count);
 			if (idx == mPatrolIndex)break;
-			mUnit.nav.startNav (mPatrolPoint [mPatrolIndex = idx]);
+            mUnit.move.nav (mPatrolPoint [mPatrolIndex = idx]);
 			return true;
 		case 3://范围随机巡逻
 			float r = Random.Range (0, mPatrolArea);
 			float ang = Random.Range (0, 360);
 			Matrix4x4 mt = Matrix4x4.TRS (Vector3.zero, Quaternion.Euler (0, ang, 0), Vector3.zero);
 			//Vector3 center = mPatrolCenter == Vector3.zero ? mUnit.pos : mPatrolCenter;
-			mUnit.nav.startNav (mPatrolCenter + mt.MultiplyVector (Vector3.forward) * r);
+            mUnit.move.nav (mPatrolCenter + mt.MultiplyVector (Vector3.forward) * r);
 			return true;
 		default:
 			break;
@@ -92,17 +92,17 @@ public abstract class AIPlugin : Plugin
 	{
 		switch (type)
 		{
-		case 0://目标方向逃离
-			mUnit.nav.startNav (mUnit.pos + mFlee * 5);
-			return true;
-		case 1://反向逃离
-			if (target == null)break;
-			Vector3 dir = mUnit.pos - target.pos;
-			mUnit.nav.startNav (mUnit.pos + dir * 5);
-			return true;
-		case 2://目标点逃离
-			mUnit.nav.startNav (mFlee);
-			return true;
+    		case 0://目标方向逃离
+                mUnit.move.nav (mUnit.pos + mFlee * 5);
+    			return true;
+    		case 1://反向逃离
+    			if (target == null)break;
+    			Vector3 dir = mUnit.pos - target.pos;
+                mUnit.move.nav (mUnit.pos + dir * 5);
+    			return true;
+    		case 2://目标点逃离
+                mUnit.move.nav (mFlee);
+    			return true;
 		}
 		return false;
 	}

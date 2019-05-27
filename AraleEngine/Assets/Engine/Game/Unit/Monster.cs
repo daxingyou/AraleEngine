@@ -31,8 +31,6 @@ public class Monster : Unit, PoolMgr<int>.IPoolObject
 	public override Buff.Plug buff{get{return mBuff;}}
     EffectPlugin mEffect;
 	public override EffectPlugin effect{get{ return mEffect;}}
-    NavPlugin    mNav;
-	public override NavPlugin nav{get{return mNav;}}
 	AIPlugin     mAI;
 	public override AIPlugin ai{get{return mAI;}}
 	Move.Plug   mMove;
@@ -45,7 +43,6 @@ public class Monster : Unit, PoolMgr<int>.IPoolObject
 		mSkill  = new Skill.Plug(this);
 		mBuff   = new Buff.Plug(this);
 		mEffect = new EffectPlugin(this);
-		mNav    = new NavPlugin(this); 
 		mAI     = new LuaAI(this);
 		mMove   = new Move.Plug (this);
 	}
@@ -56,16 +53,16 @@ public class Monster : Unit, PoolMgr<int>.IPoolObject
 		mAttr.reset ();
 		mSkill.reset ();
 		mBuff.reset ();
-		mNav.reset ();
+        mMove.reset ();
+        mAI.reset();
 
-		mNav.speedCfg = table.speed;
+        mAttr.onAttrChanged += onAttrChanged;
 		mSkill.addSkills (GHelper.toIntArray (table.skills));
 
 		if (!isServer)
 		{
 			mHeadInfo = HeadInfo.Bind (this.transform, this); 
 		}
-		mAttr.onAttrChanged += onAttrChanged;
     }
 
 	protected override void onUnitParam(object param)
@@ -78,7 +75,6 @@ public class Monster : Unit, PoolMgr<int>.IPoolObject
 		mAI.update ();
 		mSkill.update();
 		mBuff.update();
-		mNav.update();
 		mEffect.update();
 		mMove.update ();
 	}
@@ -140,19 +136,25 @@ public class Monster : Unit, PoolMgr<int>.IPoolObject
 		return 0;
 	}
 
-	void onAttrChanged(int mask, object val)
-	{
-		if (!isState (UnitState.Alive))return;
-		if (mask == (int)AttrID.HP)
-		{
-			int hp = (int)val;
-			if (hp <= 0)
-			{
-				decState (UnitState.Alive|UnitState.Exist);
-				addState (UnitState.Skill | UnitState.MoveCtrl );
-			}
-		}
-	}
+    public override float speed{get{return isState(UnitState.Move)?0:scale * table.speed;}}
+
+    void onAttrChanged(int mask, object val)
+    {
+        if (!isState (UnitState.Alive))return;
+        switch (mask)
+        {
+            case (int)AttrID.HP:
+                int hp = (int)val;
+                if (hp > 0)break;
+                decState (UnitState.Alive);
+                addState (UnitState.Skill | UnitState.MoveCtrl | UnitState.Move);
+                mAnim.sendEvent (AnimPlugin.Die);
+                break;
+            case (int)AttrID.Speed:
+                scale = (float)val;
+                break;
+        }
+    }
 
 	#region 对象池
 	public static PoolMgr<int> Pool = new PoolMgr<int> (delegate(int param) {

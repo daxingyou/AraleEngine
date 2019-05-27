@@ -41,17 +41,17 @@ public class TestUnit : GRoot
 		if (mPlayer == null)return;
 
 		if (Input.GetKey (KeyCode.UpArrow)) {
-			mPlayer.nav.move (Vector3.forward);
+            mPlayer.move.move(Vector3.forward);
 		} else if (Input.GetKey (KeyCode.DownArrow)) {
-			mPlayer.nav.move (Vector3.back);
+            mPlayer.move.move(Vector3.back);
 		} else if (Input.GetKey (KeyCode.LeftArrow)) {
-			mPlayer.nav.move (Vector3.left);
+            mPlayer.move.move(Vector3.left);
 		} else if (Input.GetKey (KeyCode.RightArrow)) {
-			mPlayer.nav.move (Vector3.right);
+            mPlayer.move.move(Vector3.right);
 		} else if (Input.GetKey (KeyCode.J)) {
-			mPlayer.nav.jump ();
+			mPlayer.move.jump ();
 		} else {
-			mPlayer.nav.stopMove ();
+            mPlayer.move.moveStop();
 		}
 
 		if (Input.GetMouseButtonDown (0))
@@ -60,7 +60,7 @@ public class TestUnit : GRoot
 			Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
 			RaycastHit hit;
 			if (!Physics.Raycast (ray, out hit) || hit.collider.gameObject.name != "AgentMesh")return;
-			mPlayer.nav.startNav (hit.point);
+            mPlayer.move.nav (hit.point);
 		}
 
 		if (Input.GetMouseButtonDown (1))

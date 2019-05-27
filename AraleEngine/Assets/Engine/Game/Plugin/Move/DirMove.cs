@@ -3,12 +3,9 @@ using System.Collections;
 
 public class DirMove : Move
 {
-	Vector3 mDir;
 	float   mDistance;
-	float   mSpeed;
-	protected override void init(Unit unit)
+	protected override void start(Unit unit)
 	{
-		mDir = vTarget;
 		mSpeed = table.speed;
 		mDistance = table.life;
 	}
@@ -17,11 +14,11 @@ public class DirMove : Move
 	{
 		if (mDistance <= 0)
 		{//达到飞行距离
-			arrived();
+            stop(unit,true);
 		}
 		else
 		{
-			Vector3 d = mDir * mSpeed;
+            Vector3 d = vTarget * mSpeed;
 			mDistance -= d.magnitude;
 			unit.pos += d;
 		}
