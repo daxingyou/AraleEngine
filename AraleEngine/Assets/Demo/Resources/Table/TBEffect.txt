@@ -1,3 +1,4 @@
+{"_id":1,"model":"effect/yuxiaoxue/yuxiaoxue_s01_active01","life":5.0,"desc":"玩家出生效果"}
 {"_id":100,"move":1,"model":"effect/houyi/huoyi_ba_active01","srcMount":"Bone001","desc":"后羿箭"}
 {"_id":101,"move":1,"model":"effect/houyi/huoyi_s01_active02","srcMount":"Bone001","desc":"后羿箭(强化)"}
 {"_id":200,"move":2,"model":"effect/ehuang/ehuang_BA_zidan01","srcMount":"Bone001","desc":"娥皇大魔法球"}

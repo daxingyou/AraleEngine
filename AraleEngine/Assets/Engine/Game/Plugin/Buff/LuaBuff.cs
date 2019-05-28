@@ -17,19 +17,19 @@ public class LuaBuff : Buff
 	protected override void onInit(Unit unit)
 	{
 		mL = LuaObject.newObject (mTB.lua, this);
-		onEvent (0, unit);
+        onEvent (EvtInit, unit);
 	}
 
 	protected override void onDeinit()
 	{
-		onEvent(1, null);
+        onEvent(EvtDeinit, null);
 		mL.Dispose ();
 		mL = null;
 	}
 
-	protected override void onMutex(Unit unit, TBBuff buff)
+    protected override void onMutex(Unit unit, TBBuff buff, ref bool reject)
 	{
-		if (onEvent (2, buff))return;
-		base.onMutex (unit, buff);
+        if (reject = onEvent (EvtMutex, buff))return;
+        base.onMutex (unit, buff, ref reject);
 	}
 }

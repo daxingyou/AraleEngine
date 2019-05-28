@@ -25,15 +25,6 @@ public class Move
         Climb,
     }
 
-    public enum MoveType
-    {
-        All = 0xffff,
-        Play=0x0001,
-        Ctr =0x0002,
-        Nav =0x0004,
-        Path=0x0008,
-    }
-
     public class Step
     {
         public long    time;
@@ -137,7 +128,7 @@ public class Move
 
         public void move(Vector3 dir)
         {//控制移动
-            if(mUnit.isState(UnitState.MoveCtrl))return;
+            if(!mUnit.isState(UnitState.Move))return;
             if(mMove!=null&&!object.ReferenceEquals(mMove, mCtrlMove))mMove.stop(mUnit,false);
             mMove = mCtrlMove;
             mCtrlMove.vTarget = dir;
@@ -152,7 +143,7 @@ public class Move
                 if (null != callback)callback(false);
                 return;
             }
-            if(mNavMove == null || mUnit.isState(UnitState.MoveCtrl))return;
+            if(mNavMove == null || !mUnit.isState(UnitState.Move))return;
             if(mMove!=null&&!object.ReferenceEquals(mMove, mNavMove))mMove.stop(mUnit,false);
             mMove = mNavMove;
             mNavMove.uTarget = null;
@@ -169,7 +160,7 @@ public class Move
                 if (null != callback)callback(false);
                 return;
             }
-            if(mNavMove == null || mUnit.isState(UnitState.MoveCtrl))return;
+            if(mNavMove == null || !mUnit.isState(UnitState.Move))return;
             if(mMove!=null&&!object.ReferenceEquals(mMove, mNavMove))mMove.stop(mUnit,false);
             mMove = mNavMove;
             mNavMove.uTarget = unit;
@@ -181,7 +172,7 @@ public class Move
 
         public void path(string path, bool autoPlay=true, Vector3 startPos=default(Vector3), bool inverse=false)
         {//路径移动
-            if (mUnit.isState(UnitState.MoveCtrl))return;
+            if (!mUnit.isState(UnitState.Move))return;
             if(mMove!=null)mMove.stop(mUnit,false);
             PathMove pm = new PathMove();
             mMove = pm;
@@ -279,7 +270,7 @@ public class Move
 
         void stepSync()
         {//0.5s内采样完成 
-            if(!mStepping||mUnit.isState(UnitState.MoveCtrl))return;
+            if(!mStepping||!mUnit.isState(UnitState.Move))return;
             Move move = mCtrlMove;
             if (mSteps.Count < 1)
             {

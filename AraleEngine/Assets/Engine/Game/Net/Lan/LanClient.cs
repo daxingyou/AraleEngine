@@ -208,8 +208,9 @@ public class LanClient : NetworkDiscovery//局域网发现,两端的端口设置
     void createPlayer(MsgCreate m)
     {
 		Player u = mUnitMgr.getUnit(m.guid, UnitType.Player, m.tid) as Player;
-		u.setParam(m.pos,m.dir);
         u.agentId = m.agentId;
+        u.onSyncState(m);
+		u.setParam(m.pos,m.dir);
 		if(u.isAgent)EventMgr.single.SendEvent("Game.Player", u);
     }
 
@@ -234,13 +235,13 @@ public class LanClient : NetworkDiscovery//局域网发现,两端的端口设置
 	}
 
 	void onUnitMsg(NetworkMessage msg)
-	{
+    {
 		Log.i("LanClient onUnitMsg:"+msg.msgType, Log.Tag.Net);
 		MsgUnit m = msg.ReadMessage<MsgUnit> ();
 		msg.reader.SeekZero ();
 		Unit u = mUnitMgr.getUnit (m.guid);
 		if (u == null)
-		{
+        {
 			reqUnit (m.guid);
 			return;
 		}

@@ -44,10 +44,16 @@ public class Player : Unit, PoolMgr<int>.IPoolObject
 		mSkill.addSkills (GHelper.toIntArray (table.skills));
         mAttr.onAttrChanged += onAttrChanged;
 
-		if (!isServer)
-		{
-			mHeadInfo = HeadInfo.Bind (this.transform, this); 
-		}
+        if (!isServer)
+        {
+            mHeadInfo = HeadInfo.Bind(this.transform, this);
+            effect.playEffect(1);
+        }
+    }
+
+    protected override void onUnitParam(object param)
+    {
+        if(isServer)mBuff.addBuff(1);
     }
 
 	protected override void onUnitUpdate()
@@ -86,7 +92,7 @@ public class Player : Unit, PoolMgr<int>.IPoolObject
 		return 0;
 	}
 
-    public override float speed{get{return isState(UnitState.Move)?0:scale * table.speed;}}
+    public override float speed{get{return isState(UnitState.Move)?scale * table.speed:0;}}
 
 	void onAttrChanged(int mask, object val)
 	{
@@ -96,8 +102,7 @@ public class Player : Unit, PoolMgr<int>.IPoolObject
             case (int)AttrID.HP:
                 int hp = (int)val;
                 if (hp > 0)break;
-                decState (UnitState.Alive);
-                addState (UnitState.Skill | UnitState.MoveCtrl | UnitState.Move);
+                decState (UnitState.Alive|UnitState.Skill|UnitState.Move);
                 mAnim.sendEvent (AnimPlugin.Die);
                 break;
             case (int)AttrID.Speed:

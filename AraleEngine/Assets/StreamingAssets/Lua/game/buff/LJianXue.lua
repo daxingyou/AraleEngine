@@ -9,7 +9,7 @@ local M =
 
 	[0] = function(this, param)
 		this._unit = param;
-		this._unit:addState(UnitState.Skill,true);
+		this._cs:decUnitState(this._unit,UnitState.Skill,true);
 		local ta = this._cs.timer
 		
 		action = ta:AddAction(TimeMgr.Action());
@@ -27,7 +27,7 @@ local M =
 	end;
 
 	[1] = function(this, param)
-		this._unit:decState(UnitState.Skill,true);
+		this._cs:addUnitState(this._unit,UnitState.Skill,true);
 	end;
 }
 

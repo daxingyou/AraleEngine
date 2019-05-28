@@ -151,7 +151,7 @@ public class LanHost : NetworkDiscovery//局域网发现,两端的端口设置�
 		MsgCreate reply = new MsgCreate();
         reply.unitType = u.type;
         reply.guid  = u.guid;
-		//reply.agentId = mClients[msg.conn.connectionId].accoundId;
+		reply.agentId = mClients[msg.conn.connectionId].accoundId;
 		reply.pos   = u.pos;
 		reply.dir   = u.dir;
 		reply.state = u.state;
@@ -258,7 +258,7 @@ public class LanHost : NetworkDiscovery//局域网发现,两端的端口设置�
 		reply.guid  = u.guid;
 		reply.pos   = u.pos;
 		reply.dir   = u.dir;
-		reply.state = u.type;
+        reply.state = u.state;
 		reply.tid   = u.tid;
 		reply.unitType = u.type;
 		sendToAll((short)MyMsgId.Create, reply);
@@ -275,7 +275,7 @@ public class LanHost : NetworkDiscovery//局域网发现,两端的端口设置�
 		reply.guid  = u.guid;
 		reply.pos   = u.pos;
 		reply.dir   = u.dir;
-		reply.state = u.type;
+        reply.state = u.state;
 		reply.tid   = u.tid;
 		reply.unitType = u.type;
 		sendToAll((short)MyMsgId.Create, reply);

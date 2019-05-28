@@ -8,9 +8,9 @@ local M =
 
 	[0] = function(this, param)
 		this._unit = param;
-		this._unit:addState(UnitState.Move);
-		this._unit:addState(UnitState.Anim);
-		this._unit:addState(UnitState.Skill,true);
+		this._cs:decUnitState(this._unit,UnitState.Move);
+		this._cs:decUnitState(this._unit,UnitState.Anim);
+		this._cs:decUnitState(this._unit,UnitState.Skill,true);
 		this._unit.attr.speed = 0;
 		this._unit.attr:sync();
 		this._cs.state = 1;
@@ -23,9 +23,9 @@ local M =
 	end;
 
 	[1] = function(this, param)
-		this._unit:decState(UnitState.Move);
-		this._unit:decState(UnitState.Anim);
-		this._unit:decState(UnitState.Skill,true);
+		this._cs:addUnitState(this._unit,UnitState.Move);
+		this._cs:addUnitState(this._unit,UnitState.Anim);
+		this._cs:addUnitState(this._unit,UnitState.Skill,true);
 		this._unit.attr.speed = 1;
 		this._unit.attr:sync();
 	end;
@@ -33,7 +33,7 @@ local M =
 
 function M:new(cs)
 	self._cs = cs
-	this._param = BuffParam.DingShen[cs.table.param]
+	self._param = BuffParam.DingShen[cs.table.param]
 	cs.luaOnEvent = self.OnEvent
 end
 

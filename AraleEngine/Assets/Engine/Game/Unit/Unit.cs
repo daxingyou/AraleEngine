@@ -30,6 +30,8 @@ public enum UnitEvent
 #region Unit状态
 public class UnitState
 {
+    public const int ALL  =0xFFFF;
+    public const int Init =0xFFFD;//初始状态
 	public const int Exist=0x0001;//存
 	public const int Alive=0x0002;//生
 	public const int Move =0x0004;//移
@@ -37,8 +39,6 @@ public class UnitState
 	public const int Skill=0x0010;//技
 	public const int Show =0x0020;//显
 	public const int Harm =0x0040;//伤
-
-	public const int MoveCtrl = 1000;//移动控制
 }
 #endregion
 
@@ -59,16 +59,52 @@ public abstract class Unit : LuaMono
 	public int   type{ get; private set;}//单位类型
 	public int   tid { get; private set;}//单位配表id
 	public int   state{get; private set;}//对象状态,掩码最后位勿用，用来标识加状态还是减状态
+    #region 状态引用计数
+    //unit内部实现状态引用计数管理(这个出错不好处理，尽量使用buff管理状态引用,涉及修改状态时尽量使用buff)
+    int[] statemap;//statemap长度决定了同时最多允许同位被锁定多少次，起到引用计数效果，防止解锁混乱
+    string strStateMap{get{string s = ""; for (int i = 0; i < statemap.Length; ++i)s += "," + statemap[i]; return s;}}
+    void addStateMap(int mask)
+    {//记录锁位信息,把每个置位分配到不同的statemap单元
+        int maskFilter = mask;
+        for (int i = 0, max = statemap.Length; i < max&&maskFilter!=0; ++i)
+        {
+            int m = (~statemap[i])&maskFilter;
+            statemap[i] |= m;
+            maskFilter = (~m) & maskFilter;
+        }
+    }
 
+    int decStateMap(int mask)
+    {//反解锁位信息
+        int maskFilter = mask;
+        for (int i = 0, max = statemap.Length; i < max&&maskFilter!=0; ++i)
+        {
+            int m = ~(statemap[i]&maskFilter);
+            statemap[i] &= m;
+            maskFilter = m & maskFilter;
+        }
+        for (int i = 0, max = statemap.Length; i < max&&mask!=0; ++i)
+        {
+            int m = ~(statemap[i]&mask);
+            statemap[i] &= m;
+            mask = m & mask;
+        }
+        return mask;
+    }
+    #endregion
+
+    #region 状态管理
 	public void addState(int mask, bool sync=false)
-	{
+	{//请使用buff设置状态
+        if (statemap != null)mask = decStateMap(mask);
 		state |= mask;
 		if (null!=mOnStateChange)mOnStateChange (this);
 		if (sync)syncState ();
 	}
 
 	public void decState(int mask, bool sync=false)
-	{
+    {//请使用buff设置状态
+        if (statemap != null)addStateMap(mask);
 		state &= (~mask);
 		if (null!=mOnStateChange)mOnStateChange (this);
 		if (sync)syncState ();
@@ -101,6 +137,7 @@ public abstract class Unit : LuaMono
 	protected OnStateChange mOnStateChange;
 	public void AddStateListener (OnStateChange callback){mOnStateChange += callback;}
 	public void RemoveStateListener (OnStateChange callback){mOnStateChange -= callback;}
+    #endregion
 
 	uint mAgentID;
 	public uint  agentId
@@ -203,8 +240,8 @@ public abstract class Unit : LuaMono
 	public void setParam(Vector3 pos, Vector3 dir, object param=null)
 	{
 		if (type == 0)throw new Exception ("can't new object by yourself");
-		if (isState(UnitState.Alive))return;
-		addState (UnitState.Alive);
+        if (isState(UnitState.Alive))return;
+        addState(UnitState.Alive);
 		this.pos=pos;this.dir=dir;
 		onUnitParam (param);
 	}
@@ -359,13 +396,12 @@ public abstract class Unit : LuaMono
 	string testTID="配表ID";
 	void OnGUI()
 	{
-		if (!object.Equals (UnityEditor.Selection.activeObject, gameObject) || attr==null)
-			return;
+        if (!object.Equals (UnityEditor.Selection.activeObject, gameObject) || attr==null || buff==null)return;
 		float y = 100;
 		GUI.color = Color.gray;
-		string attrInfo = "STATE:"+Convert.ToString(state, 2)+" HP:"+attr.HP + " MP:" + attr.MP;
-		GUI.Label (new Rect(0,y,200,25), attrInfo);
-		testTID = GUI.TextField (new Rect (0, y+=25, 100, 25), testTID);
+        string attrInfo = "STATE:"+Convert.ToString(state, 2)+" HP:"+attr.HP + " MP:" + attr.MP+" BUFF:" + buff.getBuffs(0xFFFF).Count;
+		GUI.Label (new Rect(0,y,200,50), attrInfo);
+		testTID = GUI.TextField (new Rect (0, y+=50, 100, 25), testTID);
 		if (ai!=null && GUI.Button (new Rect (0, y+=25, 100, 25), ai.isPlay?"关闭AI":"打开AI"))
 		{
 			sendEvent (ai.isPlay?(int)UnitEvent.AIStop:(int)UnitEvent.AIStart,null);
@@ -452,7 +488,7 @@ public abstract class Unit : LuaMono
 
 			unit.type     = unitType;
 			unit.tid      = tid;
-			unit.state    = UnitState.Exist;
+            unit.state    = UnitState.Init;
 			unit.isServer = isServer;
 			mUnitList.Add(unit);
 			mUnits[unit.guid] = unit; 

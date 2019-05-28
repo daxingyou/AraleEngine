@@ -136,7 +136,7 @@ public class Monster : Unit, PoolMgr<int>.IPoolObject
 		return 0;
 	}
 
-    public override float speed{get{return isState(UnitState.Move)?0:scale * table.speed;}}
+    public override float speed{get{return isState(UnitState.Move)?scale * table.speed:0;}}
 
     void onAttrChanged(int mask, object val)
     {
@@ -146,8 +146,7 @@ public class Monster : Unit, PoolMgr<int>.IPoolObject
             case (int)AttrID.HP:
                 int hp = (int)val;
                 if (hp > 0)break;
-                decState (UnitState.Alive);
-                addState (UnitState.Skill | UnitState.MoveCtrl | UnitState.Move);
+                decState (UnitState.Alive|UnitState.Skill|UnitState.Move|UnitState.Move);
                 mAnim.sendEvent (AnimPlugin.Die);
                 break;
             case (int)AttrID.Speed:

@@ -9,7 +9,7 @@ local M =
 
 	[0] = function(this, param)
 		this._unit = param;
-		this._unit:addState(UnitState.Skill,true);
+		this._cs:decUnitState(this._unit,UnitState.Skill,true);
 		local ta = this._cs.timer
 		
 		action = ta:AddAction(TimeMgr.Action());
@@ -26,13 +26,13 @@ local M =
 	end;
 
 	[1] = function(this, param)
-		this._unit:decState(UnitState.Skill,true);
+		this._cs:addUnitState(this._unit,UnitState.Skill,true);
 	end;
 }
 
 function M:new(cs)
 	self._cs = cs
-	this._param = BuffParam.HuiXue[cs.table.param]
+	self._param = BuffParam.HuiXue[cs.table.param]
 	cs.luaOnEvent = self.OnEvent
 end
 

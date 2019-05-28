@@ -40,9 +40,8 @@ public class SkillBuff : Buff
 	protected override void onInit(Unit unit)
 	{
 		buildActions (table.lua, table.param);
-        Debug.LogError(table.lua);
 		mUnit  = unit;
-		mUnit.addState (UnitState.MoveCtrl, true);
+        mUnit.decState (UnitState.Move, true);
 		mUnit.sendUnitEvent ((int)UnitEvent.SkillBegin,null,true);
 		mUnit.forward (mUnit.skill.targetPos);
 		for (int i = 0; i < skill.action.Length; ++i)
@@ -61,9 +60,9 @@ public class SkillBuff : Buff
 		Action a = skill.action[idx];
 		if (a.state != 0) {//掩码最高位不用
 			if (a.state > 0)
-				mUnit.addState (a.state);
+                addUnitState(mUnit,a.state);
 			else
-				mUnit.decState (-a.state);
+                decUnitState(mUnit,-a.state);
 		}
 
 		if (a.anim != null) {
@@ -159,7 +158,7 @@ public class SkillBuff : Buff
 
 	protected override void onDeinit()
 	{
-		mUnit.decState (UnitState.MoveCtrl, true);
+        mUnit.addState (UnitState.Move, true);
 		mUnit.sendUnitEvent ((int)UnitEvent.SkillEnd, null, true);
 		mUnit = null;
 	}

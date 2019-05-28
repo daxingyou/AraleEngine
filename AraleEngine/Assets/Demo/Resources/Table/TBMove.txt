@@ -2,5 +2,5 @@
 {"_id":2,"type":1,"speed":0.3,"life":10,"param":"","desc":"娥皇球pos"}
 {"_id":3,"type":3,"speed":0.1,"life":10,"param":"","desc":"娥皇球guid"}
 {"_id":4,"type":1,"speed":0,"life":5,"param":"","desc":"雷公闪电pos"}
-{"_id":101,"type":1,"speed":0.3,"life":3,"param":"","desc":"灵鸢击退dir"}
+{"_id":101,"type":1,"speed":0.3,"life":1,"param":"","desc":"灵鸢击退dir"}
 {"_id":201,"type":4,"speed":0,"life":0.5,"param":"2","desc":"灵鸢击起jump"}

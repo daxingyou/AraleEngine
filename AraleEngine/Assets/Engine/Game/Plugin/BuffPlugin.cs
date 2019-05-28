@@ -12,13 +12,28 @@ public class Buff
 		ID,
 		Kind,
 	};
+    public const int EvtInit   = 0;
+    public const int EvtDeinit = 1;
+    public const int EvtMutex  = 2;
 	public const int EvtOverlyingBegin = 102;
 	public const int EvtOverlyingEnd   = 103;
+    int mUnitState=UnitState.ALL;
+    public void addUnitState(Unit unit, int mask, bool sync=false)
+    {//如果有一个buff锁定了该状态就不能恢复
+        mUnitState |= mask;
+        int m = unit.buff.buffUnitState();
+        unit.addState(mask & m, sync);
+    }
+    public void decUnitState(Unit unit, int mask, bool sync=false)
+    {//禁用状态可以随便禁用
+        mUnitState &= (~mask);
+        unit.decState(mask, sync);
+    }
 	protected TBBuff  mTB;
+    protected float   mTime;
     protected int     mState;
-	protected float   mTime;
 	public int state{get{return mState;}set{mState = value;}}
-	public bool isOver{get{return mState <= 0;}}
+	public bool   isOver{get{return mState <= 0;}}
 	public TBBuff table{get{return mTB;}}
 	public TimeMgr.TimeAxis timer{ get; protected set;}
 	protected void init(Unit unit)
@@ -33,6 +48,7 @@ public class Buff
 	{
 		onDeinit ();
 		timer = null;
+        if(mUnitState!=UnitState.ALL)Log.e("buff state not clear!!! id=" + mTB.id, Log.Tag.Skill);
 	}
 
 	protected void update()
@@ -42,7 +58,7 @@ public class Buff
 		mTime += Time.deltaTime;
 	}
 
-	protected virtual void onMutex(Unit unit, TBBuff buff)
+    protected virtual void onMutex(Unit unit, TBBuff buff, ref bool reject)
 	{
 		if((buff.kind & mTB.mutex) == 0)return;
 		if (buff.priority >= mTB.priority)
@@ -51,7 +67,7 @@ public class Buff
 		} 
 		else
 		{
-			unit.buff.isReject = true;	
+            reject = true;	
 		}
 	}
 	protected virtual void onInit(Unit unit){}
@@ -63,9 +79,8 @@ public class Buff
 	#region 插件
 	public class Plug: Plugin
 	{
-		public bool isReject;
 		List<Buff> mBuffs = new List<Buff> ();
-		delegate void OnMutex(Unit unit, TBBuff newBuff);
+        delegate void OnMutex(Unit unit, TBBuff newBuff, ref bool reject);
 		OnMutex onMutex;
 		public Plug(Unit unit):base(unit)
 		{
@@ -73,8 +88,7 @@ public class Buff
 
 		public override void reset ()
 		{
-			isReject = false;
-			clearBuff (int.MinValue);
+			clearBuff (0xFFFF);
 		}
 
 		//creator是buff的创建者,用于计算动态伤害参数
@@ -84,8 +98,8 @@ public class Buff
 			Log.i("addBuff id=" + buffTID, Log.Tag.Skill);
 			TBBuff tb = TableMgr.single.GetData<TBBuff>(buffTID);
 			if (tb == null)return;
-			isReject = false;
-			if(onMutex!=null)onMutex (mUnit, tb);
+			bool isReject = false;
+            if(onMutex!=null)onMutex (mUnit, tb, ref isReject);
 			if(isReject)return;
 			//挂载buff
 			Buff buff = null;
@@ -201,6 +215,18 @@ public class Buff
 			msg.buff = (short)buff.table.id;
 			mUnit.sendMsg ((short)MyMsgId.Buff, msg);
 		}
+
+        public int buffUnitState()
+        {
+            int mask = UnitState.ALL;
+            for (int i = 0, max = mBuffs.Count; i < max; ++i)mask &= mBuffs[i].mUnitState;
+            return mask;
+        }
+
+        public void drawDebug()
+        {
+            
+        }
 
 		public void sync()
 		{

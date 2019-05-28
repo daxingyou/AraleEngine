@@ -130,7 +130,7 @@ public class TestUnit : GRoot
 				NetMgr.single.destroyLanClient();
 				mPlayer = null;
 			}
-			if (GUI.Button (new Rect (200, 0, 100, 30), "重载Lua"))
+			if (GUI.Button (new Rect (100, 0, 100, 30), "重载Lua"))
 			{
 				LuaRoot.single.Init();
 			}

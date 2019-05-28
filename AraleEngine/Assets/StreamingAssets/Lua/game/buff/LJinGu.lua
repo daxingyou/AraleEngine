@@ -8,12 +8,11 @@ local M =
 
 	[0] = function(this, param)
 		this._unit = param;
-		this._unit:addState(Unit.STMove);
-		this._unit:addState(Unit.STAnim);
-		this._unit:addState(Unit.STSkill,true);
+		this._cs:decUnitState(this._unit, UnitState.Move);
+		this._cs:decUnitState(this._unit, UnitState.Skill,true);
 		this._cs.state = 1;
 		local ta = this._cs.timer
-		action = ta:addAction(TimeMgr.Action());
+		action = ta:AddAction(TimeMgr.Action());
 		action.doTime = this._param.duration;
 		action.onAction = function()
 			this._cs.state = 0;
@@ -21,9 +20,8 @@ local M =
 	end;
 
 	[1] = function(this, param)
-		this._unit:decState(Unit.STMove);
-		this._unit:decState(Unit.STAnim);
-		this._unit:decState(Unit.STSkill,true);
+		this._cs:addUnitState(this._unit, UnitState.Move);
+		this._cs:addUnitState(this._unit, UnitState.Skill,true);
 	end;
 }
 
@@ -48,10 +46,10 @@ BuffParam.JinGu=
 {
 	[0]=
 	{
-		duration = 5,
+		duration = 2,
 	};
 	[1]=
 	{
-		duration = 1;
+		duration = 10;
 	};
 }

@@ -70,7 +70,7 @@ public class Skill
 
     void playSkill(Unit unit)
     {
-		if (unit.isState (UnitState.Skill))return;
+		if (!unit.isState (UnitState.Skill))return;
         unit.move.stop ();
         if (unit.isServer)
         {
@@ -130,7 +130,7 @@ public class Skill
 		public void play(int skillTID, bool aiCall=false)
 		{
 			if (this.skill != null)return;
-			if (mUnit.isState (UnitState.Skill))return;
+			if (!mUnit.isState (UnitState.Skill))return;
 			Skill skill = mSkills.Find(delegate(Skill s){return s.mTID == skillTID;});
 			if (skill == null)
 			{
@@ -145,7 +145,7 @@ public class Skill
 		public void playIndex(int idx, bool aiCall=false)
 		{
 			if (this.skill != null)return;
-			if (mUnit.isState (UnitState.Skill))return;
+			if (!mUnit.isState (UnitState.Skill))return;
 			if (mSkills.Count <= idx)
 			{
 				Log.i("skill index not exit, idx="+idx, Log.Tag.Skill);

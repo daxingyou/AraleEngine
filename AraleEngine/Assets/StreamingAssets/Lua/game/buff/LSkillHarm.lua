@@ -9,7 +9,7 @@ local M =
 	[0] = function(this, param)
 		this._unit = param;
 		this._unit:forward(this._unit.skill.targetPos);
-		this._unit:addState(UnitState.Move);
+		this._cs:decUnitState(this._unit,UnitState.Move);
 		this._unit.anim:sendEvent(AnimPlugin.PlayAnim, this._param.anim);
 
 		local ta = this._cs.timer
@@ -34,7 +34,7 @@ local M =
 	end;
 
 	[1] = function(this, param)
-		this._unit:decState(UnitState.Move,true);
+		this._cs:addUnitState(this._unit,UnitState.Move,true);
 	end;
 }
 

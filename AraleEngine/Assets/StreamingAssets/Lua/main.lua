@@ -102,6 +102,7 @@ require "game/ui/LRewardWindow"
 require "game/ai/LHero"
 require "game/ai/LMonster"
 BuffParam={}
+require "game/buff/LBornBuff"
 require "game/buff/LChenMo"
 require "game/buff/LDingShen"
 require "game/buff/LHuiXue"
