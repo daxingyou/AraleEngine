@@ -102,8 +102,7 @@ public class Player : Unit, PoolMgr<int>.IPoolObject
             case (int)AttrID.HP:
                 int hp = (int)val;
                 if (hp > 0)break;
-                decState (UnitState.Alive|UnitState.Skill|UnitState.Move);
-                mAnim.sendEvent (AnimPlugin.Die);
+                if(isServer)buff.addBuff(2);
                 break;
             case (int)AttrID.Speed:
                 scale = (float)val;

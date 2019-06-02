@@ -9,7 +9,7 @@ local M =
 	[0] = function(self, param)
 		print(param)
 		self._unit = param
-		self._cs:decUnitState(this._unit,UnitState.Skill,true)
+		self._cs:decUnitState(self._unit,UnitState.Skill,true)
 		self._cs.state = 1
 		local ta = self._cs.timer
 		action = ta:AddAction(TimeMgr.Action())
@@ -39,7 +39,7 @@ local M =
 	end;
 
 	[1] = function(self, param)
-		self._cs:addUnitState(this._unit,UnitState.Skill,true)
+		self._cs:addUnitState(self._unit,UnitState.Skill,true)
 	end;
 }
 

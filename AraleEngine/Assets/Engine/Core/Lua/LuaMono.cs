@@ -36,7 +36,7 @@ namespace Arale.Engine
 
 
     	#region bindlua
-        public void bindLua(string luaClassName=null)
+        public void bindLua(string luaClassName=null, bool needBind=true)
         {
             if (luaClassName != null)mLuaClassName = luaClassName;
             mLO = LuaObject.newObject (mLuaClassName, this);
@@ -48,7 +48,7 @@ namespace Arale.Engine
                     mLO.mLT[mBinds[i].name] = mBinds[i];
                 }
             }
-            else
+            else if(needBind)
             {
                 for (int i = 0; i < transform.childCount; ++i)
                 {
@@ -61,6 +61,13 @@ namespace Arale.Engine
     	{
             if (mLO != null)mLO.Dispose ();
             mLO = null;
+            luaOnAwake = null;
+            luaOnEnable= null;
+            luaOnStart = null;
+            luaOnUpdate= null;
+            luaOnDisable= null;
+            luaOnDestroy= null;
+            luaOnEvent  = null;
     	}
 
     	public GameObject[] mBinds;

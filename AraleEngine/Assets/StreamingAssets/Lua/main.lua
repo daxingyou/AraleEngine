@@ -53,6 +53,8 @@ UnitType = CS.UnitType
 Unit = CS.Unit
 Buff = CS.Buff
 Bag  = CS.Bag
+AnimPlugin = CS.AnimPlugin
+Randoms = CS.Randoms
 GameArea = CS.GameArea
 UIItemSlot = CS.UIItemSlot
 PlayerHeader = CS.PlayerHeader
@@ -103,6 +105,7 @@ require "game/ai/LHero"
 require "game/ai/LMonster"
 BuffParam={}
 require "game/buff/LBornBuff"
+require "game/buff/LDieBuff"
 require "game/buff/LChenMo"
 require "game/buff/LDingShen"
 require "game/buff/LHuiXue"

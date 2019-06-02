@@ -8,6 +8,12 @@ public class Randoms
     public static int lookId;//监视id
     static Randoms mThis;
     public static void init(){mThis = new Randoms();}
+    int[] mSeeds;
+    int   mIdx;
+    Randoms()
+    {
+        mSeeds = new int[]{1,2,6,0,22,99,56,12,34,44,112,343,9,22,21,65,1,2,6,0,22,99,56,12,34,44,112,343,9,22,21,65};
+    }
 
     class DropRandom
     {
@@ -40,6 +46,12 @@ public class Randoms
         }
     }
 
+    public static float rang(float b, float e)
+    {
+        Random.seed = mThis.mSeeds[mThis.mIdx=++mThis.mIdx%mThis.mSeeds.Length];
+        return Random.Range(b, e);
+    }
+
     Dictionary<int,DropRandom> mDropRandoms = new Dictionary<int,DropRandom>();
     public static bool drop(int id, float reqRate)
     {
@@ -51,7 +63,7 @@ public class Randoms
         return dr.drop(id, reqRate);
     }
 
-    public static void enable(int id, bool able)
+    public static void enableDrop(int id, bool able)
     {
         DropRandom dr;
         if (!mThis.mDropRandoms.TryGetValue(id, out dr))

@@ -4,8 +4,8 @@ using Arale.Engine;
 
 public class LuaAI : AIPlugin
 {
-	LuaObject mLAI;
-	float     mTime;
+    bool   mPlaying;  
+	float  mTime;
 	public TimeMgr.TimeAxis timer{ get; protected set;}
 	public LuaAI(Unit unit):base(unit)
 	{
@@ -21,33 +21,19 @@ public class LuaAI : AIPlugin
 
 	public override bool startAI(string aiClass)
 	{
-		mLAI = LuaObject.newObject (aiClass, this);
-		return true;
+        mUnit.bindLua(aiClass, false);
+        mPlaying = mUnit.mLO != null;
+        return mPlaying;
 	}
 
 	public override void stopAI()
 	{
-		if (mLAI == null)return;
-		mLAI.Dispose ();
-		mLAI = null;
+        if (!mPlaying)return;
+        mUnit.unbindLua();
 	}
 
 	public override bool isPlay
 	{
-		get{ return mLAI!=null; }
-	}
-
-	public override bool onEvent (int evt, object param, object sender)
-	{
-		if (!isPlay)return false;
-		switch(evt)
-		{
-		case (int)UnitEvent.NavEnd:
-			break;
-		case (int)UnitEvent.SkillEnd:
-			break;
-		}
-
-		return false;
+        get{ return mPlaying; }
 	}
 }

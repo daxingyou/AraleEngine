@@ -85,7 +85,7 @@ public class NavMove : Move {
         unit.move.moveState= State.None;
         vTarget  = Vector3.zero;
         uTarget  = null;
-        unit.sendUnitEvent((int)UnitEvent.NavEnd, 0);
+        unit.sendUnitEvent((int)UnitEvent.NavEnd, arrived);
         sync(unit);
     }
 

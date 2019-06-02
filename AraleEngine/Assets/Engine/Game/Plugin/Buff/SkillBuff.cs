@@ -41,7 +41,7 @@ public class SkillBuff : Buff
 	{
 		buildActions (table.lua, table.param);
 		mUnit  = unit;
-        mUnit.decState (UnitState.Move, true);
+        decUnitState (mUnit, UnitState.Move, true);
 		mUnit.sendUnitEvent ((int)UnitEvent.SkillBegin,null,true);
 		mUnit.forward (mUnit.skill.targetPos);
 		for (int i = 0; i < skill.action.Length; ++i)
@@ -83,7 +83,8 @@ public class SkillBuff : Buff
 					u.anim.sendEvent (AnimPlugin.Hit);
 					AttrPlugin ap = u.attr;
 					ap.HP -= a.harm;
-					ap.sync ();    
+					ap.sync ();
+                    u.sendUnitEvent((int)UnitEvent.BeHit,mUnit.guid,true);
 				}
 			}
 			else
@@ -94,7 +95,8 @@ public class SkillBuff : Buff
 				u.anim.sendEvent (AnimPlugin.Hit);
 				AttrPlugin ap = u.attr;
 				ap.HP -= a.harm;
-				ap.sync ();  
+				ap.sync (); 
+                u.sendUnitEvent((int)UnitEvent.BeHit,mUnit.guid,true);
 			}
 		}
 
@@ -158,7 +160,7 @@ public class SkillBuff : Buff
 
 	protected override void onDeinit()
 	{
-        mUnit.addState (UnitState.Move, true);
+        addUnitState (mUnit, UnitState.Move, true);
 		mUnit.sendUnitEvent ((int)UnitEvent.SkillEnd, null, true);
 		mUnit = null;
 	}

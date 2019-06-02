@@ -54,6 +54,7 @@ public class Move
     {
         unit.move.moveState = State.None;
         unit.move.mMove = null;
+        unit.sendEvent((int)UnitEvent.MoveEnd, arrived);
         if (null != onEvent)onEvent(arrived?Event.Arrive:Event.Stop, this);
     }
     protected virtual void sync(Unit unit)
@@ -123,6 +124,7 @@ public class Move
 			mMove.uTarget= uTarget;
 			mMove.onEvent = callbck;
             mMove.start (mUnit);
+            unit.sendEvent((int)UnitEvent.MoveBegin, 0);
             if (bSync)mMove.sync(mUnit);
 		}
 

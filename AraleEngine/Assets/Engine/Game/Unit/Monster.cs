@@ -67,7 +67,7 @@ public class Monster : Unit, PoolMgr<int>.IPoolObject
 
 	protected override void onUnitParam(object param)
 	{
-		if(isAgent)mAI.startAI (table.ai);
+        if (isAgent)mAI.startAI (table.ai);
 	}
 
 	protected override void onUnitUpdate()
@@ -146,8 +146,7 @@ public class Monster : Unit, PoolMgr<int>.IPoolObject
             case (int)AttrID.HP:
                 int hp = (int)val;
                 if (hp > 0)break;
-                decState (UnitState.Alive|UnitState.Skill|UnitState.Move|UnitState.Move);
-                mAnim.sendEvent (AnimPlugin.Die);
+                buff.addBuff(2);
                 break;
             case (int)AttrID.Speed:
                 scale = (float)val;

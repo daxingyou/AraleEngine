@@ -7,12 +7,13 @@ using Arale.Engine;
 public abstract class AIPlugin : Plugin
 {
 	public AIPlugin(Unit unit):base(unit){}
-	public virtual  bool onEvent (int evt, object param, object sender){return false;}
+    public virtual  bool onEvent (int evt, object param, object sender){return false;}
 	public abstract bool isPlay{ get; }
 	public abstract bool startAI (string btPath);
 	public abstract void stopAI ();
 
-	public Unit target{ get; protected set;}
+	public Unit target{ get; set;}
+    public bool busy{ get; set;}
 	protected List<Vector3> mPatrolPoint;
 	protected int           mPatrolIndex;
 	protected Vector3       mPatrolCenter;
@@ -26,6 +27,7 @@ public abstract class AIPlugin : Plugin
 	public void setPatrolArea(Vector3 center, float r)
 	{
 		mPatrolCenter = center;
+        if (mPatrolCenter == Vector3.zero)mPatrolCenter = mUnit.pos;
 		mPatrolArea = r;
 	}
 	public void setFlee(Vector3 v)
@@ -36,29 +38,30 @@ public abstract class AIPlugin : Plugin
 	//巡逻
 	public bool doPatrol(int type)
 	{
+        busy = true;
 		switch (type)
 		{
-		case 1://顺序点巡逻
-			if (mPatrolPoint == null || mPatrolPoint.Count < 1)break;
-            mUnit.move.nav (mPatrolPoint [mPatrolIndex]);
-			mPatrolIndex = ++mPatrolIndex % mPatrolPoint.Count;
-			return true;
-		case 2://随机点巡逻
-			if (mPatrolPoint == null || mPatrolPoint.Count < 1)break;
-			int idx = Random.Range (0, mPatrolPoint.Count);
-			if (idx == mPatrolIndex)break;
-            mUnit.move.nav (mPatrolPoint [mPatrolIndex = idx]);
-			return true;
-		case 3://范围随机巡逻
-			float r = Random.Range (0, mPatrolArea);
-			float ang = Random.Range (0, 360);
-			Matrix4x4 mt = Matrix4x4.TRS (Vector3.zero, Quaternion.Euler (0, ang, 0), Vector3.zero);
-			//Vector3 center = mPatrolCenter == Vector3.zero ? mUnit.pos : mPatrolCenter;
-            mUnit.move.nav (mPatrolCenter + mt.MultiplyVector (Vector3.forward) * r);
-			return true;
-		default:
-			break;
+    		case 1://顺序点巡逻
+    			if (mPatrolPoint == null || mPatrolPoint.Count < 1)break;
+                mUnit.move.nav (mPatrolPoint [mPatrolIndex]);
+    			mPatrolIndex = ++mPatrolIndex % mPatrolPoint.Count;
+    			return true;
+    		case 2://随机点巡逻
+    			if (mPatrolPoint == null || mPatrolPoint.Count < 1)break;
+    			int idx = Random.Range (0, mPatrolPoint.Count);
+    			if (idx == mPatrolIndex)break;
+                mUnit.move.nav (mPatrolPoint [mPatrolIndex = idx]);
+    			return true;
+            case 3://范围随机巡逻
+                float r   = Randoms.rang(0, mPatrolArea);
+                float ang = Randoms.rang(0, 2*Mathf.PI);
+                Vector3 pos = mPatrolCenter + new Vector3(Mathf.Cos(ang), 0, Mathf.Sin(ang)) * r;
+                mUnit.move.nav (pos);
+			    return true;
+    		default:
+    			break;
 		}
+        busy = false;
 		return false;
 	}
 
@@ -84,26 +87,29 @@ public abstract class AIPlugin : Plugin
 		mUnit.skill.targetPos  = target.pos;
 		mUnit.skill.targetUnit = target;
 		mUnit.skill.playIndex (idx, true);
+        busy = true;
 		return true;
 	}
 
 	//逃离
 	public bool doFlee(int type)
 	{
+        busy = true;
 		switch (type)
 		{
-    		case 0://目标方向逃离
-                mUnit.move.nav (mUnit.pos + mFlee * 5);
+            case 0://目标方向逃离
+                mUnit.move.nav(mUnit.pos + mFlee * 5);
     			return true;
     		case 1://反向逃离
     			if (target == null)break;
     			Vector3 dir = mUnit.pos - target.pos;
-                mUnit.move.nav (mUnit.pos + dir * 5);
+                mUnit.move.nav (mUnit.pos + dir * 3);
     			return true;
     		case 2://目标点逃离
                 mUnit.move.nav (mFlee);
     			return true;
 		}
+        busy = false;
 		return false;
 	}
 }

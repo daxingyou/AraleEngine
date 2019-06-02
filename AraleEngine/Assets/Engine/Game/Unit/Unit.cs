@@ -12,8 +12,12 @@ using System;
 //自定义事件使用Max+
 public enum UnitEvent
 {
-	NavBegin=100,
+    StateChanged=100,
+    BeHit,
+	NavBegin,
 	NavEnd,
+    MoveBegin,
+    MoveEnd,
 	SkillBegin,
 	SkillEnd,
 	BuffAdd,
@@ -98,16 +102,14 @@ public abstract class Unit : LuaMono
 	{//请使用buff设置状态
         if (statemap != null)mask = decStateMap(mask);
 		state |= mask;
-		if (null!=mOnStateChange)mOnStateChange (this);
-		if (sync)syncState ();
+        notifyStateChanged(state, sync);
 	}
 
 	public void decState(int mask, bool sync=false)
     {//请使用buff设置状态
         if (statemap != null)addStateMap(mask);
 		state &= (~mask);
-		if (null!=mOnStateChange)mOnStateChange (this);
-		if (sync)syncState ();
+        notifyStateChanged(state, sync);
 	}
 
 	public bool isState(int mask)
@@ -120,7 +122,7 @@ public abstract class Unit : LuaMono
 		pos = msg.pos;
 		dir = msg.dir;
 		state = msg.state;
-		if (null!=mOnStateChange)mOnStateChange (this);
+        notifyStateChanged(state,false);
 	}
 
 	public void syncState()
@@ -133,6 +135,12 @@ public abstract class Unit : LuaMono
 		sendMsg((short)MyMsgId.State, msg);
 	}
 
+    void notifyStateChanged(int state, bool sync)
+    {
+        sendUnitEvent((int)UnitEvent.StateChanged, state);
+        if (null!=mOnStateChange)mOnStateChange (this);
+        if (sync)syncState ();
+    }
 	public delegate void OnStateChange (Unit u);
 	protected OnStateChange mOnStateChange;
 	public void AddStateListener (OnStateChange callback){mOnStateChange += callback;}
@@ -246,6 +254,13 @@ public abstract class Unit : LuaMono
 		onUnitParam (param);
 	}
 
+    protected override bool onEvent(int evt, object param, object sender=null)
+    {
+        if (skill != null)skill.onEvent(evt, param, sender);
+        if (ai != null)ai.onEvent(evt, param, sender);
+        return base.onEvent(evt, param, sender);
+    }
+
 	public void sendUnitEvent(int evt, object param, bool sync=false)
 	{
 		sendEvent (evt, param);
@@ -256,13 +271,6 @@ public abstract class Unit : LuaMono
 		msg.param = param==null?"":param.ToString ();
 		msg.sender = guid;
 		sendMsg((short)MyMsgId.Event, msg);
-	}
-
-	protected override bool onEvent(int evt, object param, object sender)
-	{
-		if(ai!=null)ai.onEvent (evt, param, sender);
-		if (skill != null)skill.onEvent (evt, param, sender);
-		return false;
 	}
 		
 	public virtual void onSync(NetworkMessage msg)
