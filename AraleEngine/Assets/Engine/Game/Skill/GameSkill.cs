@@ -1,15 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using System.IO;
 using Arale.Engine;
-using System;
 
 public partial class GameSkill : AraleSerizlize
-{
+{//所有变量只允许读,不允许设置,属于静态共享数据
     float  lastUseTime;
-    List<Action> actions = new List<Action>();
+    public int initState=UnitState.ALL;
+    public string initAnim="";
+    public List<Action> actions = new List<Action>();
     public string name{ get; protected set;}
 
     public abstract partial class Node : AraleSerizlize{}
@@ -21,7 +21,10 @@ public partial class GameSkill : AraleSerizlize
         public int    loopTimes;
         public string anim="";
         public int    state=UnitState.ALL;
-        public bool   breakable;
+        int    mask;
+        public bool   end{get{return (mask&0x0001)!=0;}}
+        public bool   breakable{get{return (mask&0x0002)!=0;}}
+        public bool   cancelable{get{return (mask&0x0004)!=0;}}
         public List<Bullet> bullets = new List<Bullet>();
 
         public override void read(BinaryReader r)
@@ -31,7 +34,7 @@ public partial class GameSkill : AraleSerizlize
             loopTimes = r.ReadInt32();
             anim = r.ReadString();
             state = r.ReadInt32();
-            breakable = r.ReadBoolean();
+            mask = r.ReadInt32();
             bullets = AraleSerizlize.read<Bullet>(r);
             for (int i = 0; i < bullets.Count; ++i)
             {
@@ -46,7 +49,7 @@ public partial class GameSkill : AraleSerizlize
             w.Write(loopTimes);
             w.Write(anim);
             w.Write(state);
-            w.Write(breakable);
+            w.Write(mask);
             AraleSerizlize.write<Bullet>(bullets, w);
         } 
     }
@@ -125,12 +128,16 @@ public partial class GameSkill : AraleSerizlize
     public override void read(BinaryReader r)
     {
         name = r.ReadString();
+        initAnim = r.ReadString();
+        initState = r.ReadInt32();
         actions = AraleSerizlize.read<Action>(r);
     }
 
     public override void write(BinaryWriter w)
     {
         w.Write(name);
+        w.Write(initAnim);
+        w.Write(initState);
         actions.Sort(delegate(Action x, Action y)
             {
                 return x.time.CompareTo(y.time);
@@ -151,7 +158,7 @@ public partial class GameSkill : AraleSerizlize
             fs.Close();
             return true;
         }
-        catch(Exception e)
+        catch(System.Exception e)
         {
             Log.e(e.Message, Log.Tag.Skill, e);
             if(fs!=null)fs.Close();
@@ -173,17 +180,18 @@ public partial class GameSkill : AraleSerizlize
         MemoryStream fs = null;
         try
         {
-            if(!isSkillFile(ta.bytes))throw new Exception("not skill file");
+            if(!isSkillFile(ta.bytes))throw new System.Exception("not skill file");
             fs = new MemoryStream(ta.bytes);
             fs.Seek(5, SeekOrigin.Begin);
             BinaryReader r = new BinaryReader(fs);
             int v = r.ReadInt16();
-            if(v!=ver)throw new Exception("version error!v="+v);
+            //新版本应对老代码兼容，根据版本使用对应的读取序列化
+            if(v>ver)throw new System.Exception("version error!v="+v);
             AraleSerizlize.read<GameSkill>(skills, r);
             fs.Close();
             return true;
         }
-        catch(Exception e)
+        catch(System.Exception e)
         {
             Log.e(e.Message, Log.Tag.Skill, e);
             if(fs!=null)fs.Close();

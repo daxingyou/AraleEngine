@@ -74,7 +74,7 @@ public partial class GameSkill : AraleSerizlize
 
     public partial class Action : Node
     {
-        public virtual void setAction(GameSkill.Action a){}
+        public override void setAction(GameSkill.Action a){}
         public void mergeTo(GameSkill.Action a)
         {
             for (int i = bullets.Count-1; i>=0; --i)bullets[i].setAction(a);
@@ -84,8 +84,9 @@ public partial class GameSkill : AraleSerizlize
             drawNode(pos, Color.yellow);
             drawMark(0, loopTimes>0);
             drawMark(1, breakable);
-            drawMark(2, !string.IsNullOrEmpty(anim));
-            drawMark(3, state!=UnitState.ALL);
+            drawMark(2, end);
+            drawMark(3, !string.IsNullOrEmpty(anim));
+            drawMark(4, state!=UnitState.ALL);
             pos.y += 35;
             for (int i = 0; i<bullets.Count; ++i)
             {
@@ -95,9 +96,11 @@ public partial class GameSkill : AraleSerizlize
 
         public override bool drawGUI()
         {
-            loopTimes = EditorGUILayout.IntField(loopTimes<0?"技能结束":"循环次数", loopTimes);
+            loopTimes = EditorGUILayout.IntField("循环次数", loopTimes);
             if(loopTimes>0)loopInterval = EditorGUILayout.FloatField("循环间隔(s)", loopInterval);
-            breakable = EditorGUILayout.Toggle("打断", breakable);
+            mask = EditorGUILayout.Toggle("结束", end)?mask|0x0001:mask&~0x0001;
+            mask = EditorGUILayout.Toggle("可打断", breakable)?mask|0x0002:mask&~0x0002;
+            mask = EditorGUILayout.Toggle("可取消", cancelable)?mask|0x0004:mask&~0x0004;
             anim = EditorGUILayout.TextField("动画", anim);
             state = EditorGUILayout.Toggle("生",(state & UnitState.Alive)!=0)?state|UnitState.Alive:state&(~UnitState.Alive);
             state = EditorGUILayout.Toggle("移",(state & UnitState.Move)!=0)?state|UnitState.Move:state&(~UnitState.Move);
@@ -154,17 +157,30 @@ public partial class GameSkill : AraleSerizlize
     }
 
     public static bool isDrag{get{return Event.current.alt;}}
+    bool fold=true;
     public void drawGUI(float tickLine)
     {
-        string newName = EditorGUILayout.TextField("技能名称", name);
-        if (!skills.ContainsKey(newName))
+        //=======
+        fold = EditorGUILayout.Foldout(fold,"skill属性");
+        if (fold)
         {
-            skills.Remove(name);
-            name = newName;
-            skills[name] = this;
-            genNames();
+            string newName = EditorGUILayout.TextField("技能名称", name);
+            if (!skills.ContainsKey(newName))
+            {
+                skills.Remove(name);
+                name = newName;
+                skills[name] = this;
+                genNames();
+            }
+            initAnim = EditorGUILayout.TextField("动画", initAnim);
+            initState = EditorGUILayout.Toggle("生", (initState & UnitState.Alive) != 0) ? initState | UnitState.Alive : initState & (~UnitState.Alive);
+            initState = EditorGUILayout.Toggle("移", (initState & UnitState.Move) != 0) ? initState | UnitState.Move : initState & (~UnitState.Move);
+            initState = EditorGUILayout.Toggle("动", (initState & UnitState.Anim) != 0) ? initState | UnitState.Anim : initState & (~UnitState.Anim);
+            initState = EditorGUILayout.Toggle("技", (initState & UnitState.Skill) != 0) ? initState | UnitState.Skill : initState & (~UnitState.Skill);
+            initState = EditorGUILayout.Toggle("显", (initState & UnitState.Show) != 0) ? initState | UnitState.Show : initState & (~UnitState.Show);
+            initState = EditorGUILayout.Toggle("伤", (initState & UnitState.Harm) != 0) ? initState | UnitState.Harm : initState & (~UnitState.Harm);
         }
-
+        //=======
         switch (EditorGUILayout.Popup(0, new string[]{ "选定时间线处添加", "行为","子弹"}))
         {
             case 1:
@@ -185,6 +201,7 @@ public partial class GameSkill : AraleSerizlize
         Action act = new Action();
         actions.Add(act);
         act.time = time;
+        act.state = initState;
         return act;
     }
 
@@ -243,6 +260,15 @@ public partial class GameSkill : AraleSerizlize
             }
             dragAction = null;
         }
+    }
+
+    public bool hasEndAction()
+    {
+        for (int i = 0; i < actions.Count; ++i)
+        {
+            if (actions[i].end)return true; 
+        }
+        return false;
     }
 
     public void deleteSelected()

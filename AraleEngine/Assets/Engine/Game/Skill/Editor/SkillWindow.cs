@@ -101,7 +101,6 @@ public class SkillEditorWindow : EditorWindow{
 		mLeftScroll = GUILayout.BeginScrollView (mLeftScroll);
         GUILayout.Label("path:" + mThis.mSavePath);
         drawSkillSelector();
-        GUILayout.Space(16);
         if(gameSkill!=null)gameSkill.drawGUI(mTickLine);
         GUILayout.FlexibleSpace();
         if (GUILayout.Button("保存"))save();
@@ -132,6 +131,7 @@ public class SkillEditorWindow : EditorWindow{
             int idx = EditorGUILayout.Popup(skillIdx, GameSkill.names);
             if (idx != skillIdx && idx >= 0)
             {
+                noEndActionTip();
                 skillIdx = idx;
                 gameSkill = GameSkill.get(GameSkill.names[skillIdx]);
             }
@@ -155,11 +155,18 @@ public class SkillEditorWindow : EditorWindow{
             }
             else
             {
+                noEndActionTip();
                 gameSkill = newskill;
                 skillIdx = ArrayUtility.IndexOf<string>(GameSkill.names, gameSkill.name);
             }
         }
         GUILayout.EndHorizontal();
+    }
+
+    void noEndActionTip()
+    {
+        if (gameSkill == null||gameSkill.hasEndAction())return;
+        Debug.LogError("skill has no end action!!! name="+gameSkill.name);
     }
 
 	#region 键盘鼠标事件
@@ -294,6 +301,7 @@ public class SkillEditorWindow : EditorWindow{
 	string mSavePath="";
 	void save()
 	{
+        noEndActionTip();
         if (File.Exists(mSavePath))
         {
             if (!EditorUtility.DisplayDialog("提示", "文件已存在,确定覆盖吗", "确定", "取消"))return;

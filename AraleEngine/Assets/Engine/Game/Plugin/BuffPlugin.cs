@@ -17,7 +17,7 @@ public class Buff
     public const int EvtMutex  = 2;
 	public const int EvtOverlyingBegin = 102;
 	public const int EvtOverlyingEnd   = 103;
-    int mUnitState=UnitState.ALL;
+    protected int mUnitState=UnitState.ALL;
     public void addUnitState(Unit unit, int mask, bool sync=false)
     {//如果有一个buff锁定了该状态就不能恢复
         mUnitState |= mask;
@@ -105,14 +105,17 @@ public class Buff
 			Buff buff = null;
 			switch (tb.type)
 			{
-			case 0:
-				buff = new LuaBuff ();
-				break;
-			case 1:
-				buff = new SkillBuff ();
-				break;
-			default:
-				return;
+    			case 0:
+    				buff = new LuaBuff ();
+    				break;
+    			case 1:
+    				buff = new SkillBuff ();
+    				break;
+                case 2:
+                    buff = new SkillBuffEx();
+                    break;
+    			default:
+    				return;
 			}
 			buff.mTB = tb;
 			buff.init(mUnit);
