@@ -2,61 +2,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
+using System.IO;
+using Arale.Engine;
+using System;
 
-public class GameSkill
+public partial class GameSkill : AraleSerizlize
 {
+    float  lastUseTime;
     List<Action> actions = new List<Action>();
-    public abstract class Node
-    {
-        public Action action{ get; protected set;}
-        Rect rc = new Rect(0,0,12,12);
-        protected void drawNode(Vector3 pos, Color fillClr)
-        {
-            rc.center = pos;
-            bool sel = selecteds.Contains(this);
-            Vector3[] vs = new Vector3[]{ new Vector3(pos.x-6,pos.y,0), new Vector3(pos.x,pos.y+6,0), new Vector3(pos.x+6,pos.y,0), new Vector3(pos.x,pos.y-6,0)};
-            Handles.color = sel ? Color.red : fillClr;
-            Handles.DrawSolidRectangleWithOutline(vs, Handles.color, Color.black);
-            if (Event.current == null || Event.current.rawType != EventType.MouseDown || !rc.Contains(Event.current.mousePosition))
-                return;
+    public string name{ get; protected set;}
 
-            if (!Event.current.control)
-            {
-                selecteds.Clear();
-            }
+    public abstract partial class Node : AraleSerizlize{}
 
-            if (inSameAction())
-            {
-                if (sel)
-                    selecteds.Remove(this);
-                else
-                    selecteds.Add(this);
-            }   
-        }
-        public virtual void setAction(Action a)
-        {
-            if (action != null)action.bullets.Remove(this);
-            action = a;
-            a.bullets.Add(this);
-        }
-        public abstract void draw(Vector3 pos);
-        public abstract void drawGUI();
-        bool inSameAction()
-        {
-            if (selecteds.Count < 1)return true;
-            Node n = selecteds[0];
-            if (n.action == null)
-            {
-                return action == null ? object.ReferenceEquals(this,n) : object.ReferenceEquals(action,n);
-            }
-            else
-            {
-                return action == null ? object.ReferenceEquals(this,n.action) : object.ReferenceEquals(action,n.action);
-            }
-        }
-    }
-
-    public class Action : Node
+    public partial class Action : Node
     {
         public float  time;
         public float  loopInterval=1;
@@ -64,38 +22,36 @@ public class GameSkill
         public string anim="";
         public int    state=UnitState.ALL;
         public bool   breakable;
-        public List<Node> bullets = new List<Node>();
-        public virtual void setAction(Action a){}
-        public void mergeTo(Action a)
+        public List<Bullet> bullets = new List<Bullet>();
+
+        public override void read(BinaryReader r)
         {
-            for (int i = bullets.Count-1; i>=0; --i)bullets[i].setAction(a);
-        }
-        public override void draw(Vector3 pos)
-        {
-            drawNode(pos, Color.yellow);
-            pos.y += 35;
-            for (int i = 0; i<bullets.Count; ++i)
+            time = r.ReadSingle();
+            loopInterval = r.ReadSingle();
+            loopTimes = r.ReadInt32();
+            anim = r.ReadString();
+            state = r.ReadInt32();
+            breakable = r.ReadBoolean();
+            bullets = AraleSerizlize.read<Bullet>(r);
+            for (int i = 0; i < bullets.Count; ++i)
             {
-                bullets[i].draw(pos);pos.y += 20;
+                bullets[i].setAction(this);
             }
         }
 
-        public override void drawGUI()
+        public override void write(BinaryWriter w)
         {
-            loopTimes = EditorGUILayout.IntField("循环次数(0不循环)", loopTimes);
-            loopInterval = EditorGUILayout.FloatField("循环间隔(s))", loopInterval);
-            breakable = EditorGUILayout.Toggle("打断", breakable);
-            anim = EditorGUILayout.TextField("动画", anim);
-            state = EditorGUILayout.Toggle("生",(state & UnitState.Alive)!=0)?state|UnitState.Alive:state&(~UnitState.Alive);
-            state = EditorGUILayout.Toggle("移",(state & UnitState.Move)!=0)?state|UnitState.Move:state&(~UnitState.Move);
-            state = EditorGUILayout.Toggle("动",(state & UnitState.Anim)!=0)?state|UnitState.Anim:state&(~UnitState.Anim);
-            state = EditorGUILayout.Toggle("技",(state & UnitState.Skill)!=0)?state|UnitState.Skill:state&(~UnitState.Skill);
-            state = EditorGUILayout.Toggle("显",(state & UnitState.Show)!=0)?state|UnitState.Show:state&(~UnitState.Show);
-            state = EditorGUILayout.Toggle("伤",(state & UnitState.Harm)!=0)?state|UnitState.Harm:state&(~UnitState.Harm);
-        }
+            w.Write(time);
+            w.Write(loopInterval);
+            w.Write(loopTimes);
+            w.Write(anim);
+            w.Write(state);
+            w.Write(breakable);
+            AraleSerizlize.write<Bullet>(bullets, w);
+        } 
     }
 
-    public class Bullet : Node
+    public partial class Bullet : Node
     {
         public enum Mode
         {
@@ -110,39 +66,29 @@ public class GameSkill
         public int moveId;
         public Mode mode;
         public List<Target> targets=new List<Target>();
-        public override void draw(Vector3 pos)
+
+        public override void read(BinaryReader r)
         {
-            drawNode(pos, Color.green);
+            id = r.ReadInt32();
+            harm = r.ReadInt32();
+            buffId = r.ReadInt32();
+            moveId = r.ReadInt32();
+            mode = (Mode)r.ReadInt32();
+            targets = AraleSerizlize.read<Target>(r);
         }
 
-        public override void drawGUI()
+        public override void write(BinaryWriter w)
         {
-            id = EditorGUILayout.IntField("子弹ID", id);
-            harm = EditorGUILayout.IntField("伤害", harm);
-            buffId = EditorGUILayout.IntField("BuffID", buffId);
-            moveId = EditorGUILayout.IntField("MoveID", moveId);
-            mode = (Mode)EditorGUILayout.EnumPopup("模式", mode);
-            for(int i=targets.Count-1;i>=0;--i)
-            {
-                EditorGUILayout.Space();
-                if (!targets[i].drawGUI())targets.RemoveAt(i);
-            }
-            if(GUILayout.Button("添加目标"))
-            {
-                targets.Insert(0,new Target());
-            }
-        }
-
-        public void addTarget()
-        {
-        }
-
-        public void removeTarget()
-        {
+            w.Write(id);
+            w.Write(harm);
+            w.Write(buffId);
+            w.Write(moveId);
+            w.Write((int)mode);
+            AraleSerizlize.write<Target>(targets, w);
         }
     }
 
-    public class Target
+    public partial class Target : Node
     {
         enum Find
         {
@@ -159,111 +105,115 @@ public class GameSkill
 
         public int unitTypeMask;
         public int maxTarget=1;
-        public string area;
-        public bool drawGUI()
+        public string area="";
+
+        public override void read(BinaryReader r)
         {
-            GUILayout.BeginHorizontal();
-            GUILayout.Label("目标:");
-            GUILayout.FlexibleSpace();
-            if (GUILayout.Button("X", GUI.skin.label))return false;
-            GUILayout.EndHorizontal();
-            unitTypeMask = EditorGUILayout.IntField("unit查找过滤器", unitTypeMask);
-            maxTarget = EditorGUILayout.IntField("最大命中目标数", maxTarget);
-            if (maxTarget < 1)maxTarget = 1;
-            area = EditorGUILayout.TextField("子弹命中区域", area);
+            unitTypeMask = r.ReadInt32();
+            maxTarget = r.ReadInt32();
+            area = r.ReadString();
+        }
+
+        public override void write(BinaryWriter w)
+        {
+            w.Write(unitTypeMask);
+            w.Write(maxTarget);
+            w.Write(area);
+        }
+    }
+
+    public override void read(BinaryReader r)
+    {
+        name = r.ReadString();
+        actions = AraleSerizlize.read<Action>(r);
+    }
+
+    public override void write(BinaryWriter w)
+    {
+        w.Write(name);
+        actions.Sort(delegate(Action x, Action y)
+            {
+                return x.time.CompareTo(y.time);
+            });
+        AraleSerizlize.write<Action>(actions, w);
+    }
+
+    public static bool saveSkill(string skillPath)
+    {
+        FileStream fs = null;
+        try
+        {
+            fs = new FileStream(skillPath, FileMode.Create);
+            BinaryWriter w = new BinaryWriter(fs);
+            w.Write(new byte[]{0x73,0x6b,0x69,0x6c,0x6c});
+            w.Write(ver);
+            AraleSerizlize.write<GameSkill>(skills,w);
+            fs.Close();
             return true;
         }
-    }
-    #if UNITY_EDITOR
-    static List<Node> selecteds = new List<Node>();
-    public static bool isDrag{get{return Event.current.alt;}}
-    public static void drawGUI()
-    {
-        if (selecteds.Count < 1)return;
-        Node n = selecteds[selecteds.Count - 1];
-        n.drawGUI();
-    }
-
-    Action createAction(float time)
-    {
-        Action act = new Action();
-        actions.Add(act);
-        act.time = time;
-        return act;
-    }
-
-    public Action getAction(float time)
-    {
-        Action act = actions.Find(delegate(Action a){return a.time == time;});
-        return act !=null?act:createAction(time);
-    }
-
-    public void draw(Rect rc, float unitWidth)
-    {
-        Color clr = Handles.color;
-        Vector3 v = new Vector3(rc.xMin, rc.center.y,0);
-        for (int i = 0; i < actions.Count; ++i)
+        catch(Exception e)
         {
-            Action act = actions[i];
-            act.draw(v + new Vector3(act.time * unitWidth, 0, 0));
-        }
-        Handles.color = clr;
-    }
-
-    Action dragAction;
-    public void drag(float timeLine, bool draging)
-    {
-        if (selecteds.Count < 1)return;
-        if (draging && isDrag)
-        {
-            if (dragAction == null)
-            {
-                Node n = selecteds[0];
-                Action a = n as Action;
-                dragAction = a == null ? n.action : a;
-                if (!selecteds.Contains(dragAction))
-                {
-                    dragAction = createAction(timeLine);
-                    selecteds.Add(dragAction);
-                    for (int i = 0; i < selecteds.Count; ++i)
-                    {
-                        n = selecteds[i];
-                        if (n.action == null)continue;
-                        n.setAction(dragAction);
-                    }
-                }
-            }
-            dragAction.time = timeLine;
-        }
-        else
-        {
-            if (dragAction == null)return;
-            Action act = actions.Find(delegate(Action b){return b.time == dragAction.time&&!object.ReferenceEquals(b,dragAction);});
-            if (act != null)
-            {
-                dragAction.mergeTo(act);
-                actions.Remove(dragAction);
-                selecteds.Remove(dragAction);
-            }
-            dragAction = null;
+            Log.e(e.Message, Log.Tag.Skill, e);
+            if(fs!=null)fs.Close();
+            return false;
         }
     }
 
-    public void deleteSelected()
+    public static bool loadSkill(string skillPath)
     {
-        for (int i = 0; i < selecteds.Count; ++i)
+        skillPath =FileUtils.toResourcesPath(skillPath);
+        skillPath = skillPath.Remove(skillPath.Length-4);
+        TextAsset ta = ResLoad.get(skillPath).asset<TextAsset>();
+        if (ta == null)
         {
-            Node n = selecteds[i];
-            if (n.action != null)
-            {
-                n.action.bullets.Remove(n);
-            }
-            else
-            {
-                actions.Remove(n as Action);
-            }
+            Log.e("Skill not find by ResLoad path="+skillPath, Log.Tag.Skill);
+            return false;
         }
-        selecteds.Clear();
+
+        MemoryStream fs = null;
+        try
+        {
+            if(!isSkillFile(ta.bytes))throw new Exception("not skill file");
+            fs = new MemoryStream(ta.bytes);
+            fs.Seek(5, SeekOrigin.Begin);
+            BinaryReader r = new BinaryReader(fs);
+            int v = r.ReadInt16();
+            if(v!=ver)throw new Exception("version error!v="+v);
+            AraleSerizlize.read<GameSkill>(skills, r);
+            fs.Close();
+            return true;
+        }
+        catch(Exception e)
+        {
+            Log.e(e.Message, Log.Tag.Skill, e);
+            if(fs!=null)fs.Close();
+            return false;
+        }
+        return true;
     }
-    #endif
+
+    #region 外部接口
+    public const short ver = 5;
+    static Dictionary<string, GameSkill> skills = new Dictionary<string, GameSkill>();
+    public static void clear()
+    {
+        skills.Clear();
+    }
+    public static GameSkill get(string name, string path=null)
+    {
+        GameSkill gs;
+        if (!skills.TryGetValue(name, out gs))
+        {
+            loadSkill(path);
+        }
+        gs.lastUseTime = Time.realtimeSinceStartup;
+        return gs;
+    }
+
+
+    public static bool isSkillFile(byte[] bs)
+    {
+        return bs.Length>5 && bs[0] == 0x73 && bs[1] == 0x6b && bs[2] == 0x69 && bs[3] == 0x6c && bs[4] == 0x6c;
+    }
+    #endregion
 }

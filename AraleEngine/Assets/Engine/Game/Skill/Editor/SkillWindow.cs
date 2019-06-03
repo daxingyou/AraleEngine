@@ -6,32 +6,32 @@ using System.IO;
 //http://docs.manew.com/Script/index.htm
 public class SkillEditorWindow : EditorWindow{
 	static SkillEditorWindow mThis;
-	const int TimeUnitWidth = 100;
+	const int TimeUnitWidth = 100;//1s像素宽度
 	Rect winRect;           //窗口大小
 	Rect leftRect;          //左侧编辑栏大小
 	Rect rightRect;         //右侧编辑栏大小
-    GameSkill gameSkill;    //技能对象
+    int      skillIdx;
+    GameSkill gameSkill;   //技能对象
 	GameObject  mDebugGameobject;
 	public static SkillEditorWindow single{get{ return mThis; }}
 	[MenuItem("Assets/Create/SkillWindow")]
 	static void createSkillAsset()
-	{
+    {
+        GameSkill.reset(true);
 		string path = Application.dataPath; 
 		path = NGUIEditorTools.GetSelectionFolder ();
 		openSkillEditorWindow ();
-        mThis.gameSkill = new GameSkill();
 		mThis.mSavePath = newFilePath(path);
-		mThis.save ();
 		AssetDatabase.Refresh ();
 	}
 
 	static string newFilePath(string path)
 	{
 		int i = 1;
-		string s = path + "NewSkill.skill";
+		string s = path + "NewSkill.skill.txt";
 		while(File.Exists (s))
 		{
-			s = path + string.Format ("NewSkill{0}.skill", i++);
+			s = path + string.Format ("NewSkill{0}.skill.txt", i++);
 		}
 		return s;
 	}
@@ -40,7 +40,8 @@ public class SkillEditorWindow : EditorWindow{
 	public static bool openSkilAsset(int instanceID, int line)
 	{//选中打开asset资源文件
 		string path = AssetDatabase.GetAssetPath(EditorUtility.InstanceIDToObject(instanceID));
-		if(!path.EndsWith(".skill"))return false;
+        byte[] ctx = File.ReadAllBytes(path);
+        if(!path.EndsWith(".skill.txt" )||!GameSkill.isSkillFile(ctx))return false;
 		openSkillEditorWindow().open (path);
 		mThis.Focus ();
 		return true;
@@ -98,16 +99,12 @@ public class SkillEditorWindow : EditorWindow{
 	{
 		GUILayout.BeginArea (leftRect);
 		mLeftScroll = GUILayout.BeginScrollView (mLeftScroll);
-        switch (EditorGUILayout.Popup(0, new string[]{ "选定时间线处添加", "行为","子弹"}))
-        {
-            case 1:
-                gameSkill.getAction(mTickLine);
-                break;
-            case 2:
-                new GameSkill.Bullet().setAction(gameSkill.getAction(mTickLine));
-                break;
-        }
-        GameSkill.drawGUI();
+        GUILayout.Label("path:" + mThis.mSavePath);
+        drawSkillSelector();
+        GUILayout.Space(16);
+        if(gameSkill!=null)gameSkill.drawGUI(mTickLine);
+        GUILayout.FlexibleSpace();
+        if (GUILayout.Button("保存"))save();
 		GUILayout.EndScrollView ();
 		GUILayout.EndArea ();
 	}
@@ -120,10 +117,50 @@ public class SkillEditorWindow : EditorWindow{
         Rect rc = new Rect(0, 0, rightRect.width, rightRect.height);
         mTickLine = drawTimeCtrl (rc, TimeUnitWidth, 10, mTickLine, ref mTimeDrag, GameSkill.isDrag);
         rc.height = 50;
-        gameSkill.draw(rc, TimeUnitWidth);
-        gameSkill.drag(mTickLine, mTimeDrag);
+        if (gameSkill != null)
+        {
+            gameSkill.draw(rc, TimeUnitWidth);
+            gameSkill.drag(mTickLine, mTimeDrag);
+        }
 		GUILayout.EndArea ();
 	}
+
+    void drawSkillSelector()
+    {
+        if (GameSkill.names!=null && GameSkill.names.Length > 0)
+        {
+            int idx = EditorGUILayout.Popup(skillIdx, GameSkill.names);
+            if (idx != skillIdx && idx >= 0)
+            {
+                skillIdx = idx;
+                gameSkill = GameSkill.get(GameSkill.names[skillIdx]);
+            }
+        }
+        GUILayout.BeginHorizontal();
+        if (GUILayout.Button("删除技能"))
+        {
+            if(gameSkill == null)return;
+            if (!EditorUtility.DisplayDialog("提示", "确定删除当前技能吗", "确定", "取消"))return;
+            GameSkill.delete(gameSkill.name);
+            gameSkill = null;
+            skillIdx  = -1;
+        }
+
+        if (GUILayout.Button("新建技能"))
+        {
+            GameSkill newskill = GameSkill.create("new skill");
+            if (newskill == null)
+            {
+                Debug.LogError("new skill技能已存在,请先改名称后再新建");
+            }
+            else
+            {
+                gameSkill = newskill;
+                skillIdx = ArrayUtility.IndexOf<string>(GameSkill.names, gameSkill.name);
+            }
+        }
+        GUILayout.EndHorizontal();
+    }
 
 	#region 键盘鼠标事件
 	void onKeyMouseEvent(Event e)
@@ -140,7 +177,7 @@ public class SkillEditorWindow : EditorWindow{
 
 	void onKeyUpEvent(KeyCode kc)
 	{
-        if(kc == KeyCode.Delete)gameSkill.deleteSelected();
+        if(kc == KeyCode.Delete&&gameSkill!=null)gameSkill.deleteSelected();
 	}
 
 	void onMouseKeyUp(Event e)
@@ -154,6 +191,7 @@ public class SkillEditorWindow : EditorWindow{
         Rect timeBar = new Rect (rc.x, rc.y, rc.width, 50);
         Rect dragArea = dragItem ? rc : timeBar;
         GUI.Box (timeBar,"");
+        GUI.Label(new Rect(rc.x, rc.y+30, unitWidth, 20),tickLine.ToString("F2"));
         Handles.BeginGUI ();
         int len = (int)(second + 0.99f);
         for(int i=0;i<=len;++i)
@@ -256,11 +294,37 @@ public class SkillEditorWindow : EditorWindow{
 	string mSavePath="";
 	void save()
 	{
-		
+        if (File.Exists(mSavePath))
+        {
+            if (!EditorUtility.DisplayDialog("提示", "文件已存在,确定覆盖吗", "确定", "取消"))return;
+        }
+
+        if (!GameSkill.saveSkill(mSavePath))
+        {
+            Debug.LogError("保存文件失败 path="+mSavePath);
+        }
+        else
+        {
+            AssetDatabase.Refresh();
+        }
 	}
 
 	void open(string path)
 	{
+        GameSkill.reset(true);
+        if (GameSkill.loadSkill(path))
+        {
+            GameSkill.genNames();
+            mThis.mSavePath = path;
+            mThis.gameSkill = null;
+            if (GameSkill.names.Length < 1)return;
+            mThis.gameSkill = GameSkill.get(GameSkill.names[mThis.skillIdx=0]);
+        }
+        else
+        {
+            mThis.mSavePath = "";
+            Debug.LogError("打开文件失败 path="+path);
+        }
 	}
 	#endregion
 }
