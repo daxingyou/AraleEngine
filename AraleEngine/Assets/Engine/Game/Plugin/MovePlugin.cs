@@ -118,14 +118,7 @@ public class Move
     				Log.e ("unsupport move type=" + tb.type, Log.Tag.Unit);
     				return;
 			}
-            moveState = State.Move;
-			mMove.table = tb;
-			mMove.vTarget= vTarget;
-			mMove.uTarget= uTarget;
-			mMove.onEvent = callbck;
-            mMove.start (mUnit);
-            unit.sendEvent((int)UnitEvent.MoveBegin, 0);
-            if (bSync)mMove.sync(mUnit);
+
 		}
 
         public void move(Vector3 dir)

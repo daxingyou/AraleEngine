@@ -94,20 +94,36 @@ public partial class GameSkill : AraleSerizlize
             }
         }
 
+        bool fold=true;
         public override bool drawGUI()
         {
-            loopTimes = EditorGUILayout.IntField("循环次数", loopTimes);
-            if(loopTimes>0)loopInterval = EditorGUILayout.FloatField("循环间隔(s)", loopInterval);
-            mask = EditorGUILayout.Toggle("结束", end)?mask|0x0001:mask&~0x0001;
-            mask = EditorGUILayout.Toggle("可打断", breakable)?mask|0x0002:mask&~0x0002;
-            mask = EditorGUILayout.Toggle("可取消", cancelable)?mask|0x0004:mask&~0x0004;
-            anim = EditorGUILayout.TextField("动画", anim);
-            state = EditorGUILayout.Toggle("生",(state & UnitState.Alive)!=0)?state|UnitState.Alive:state&(~UnitState.Alive);
-            state = EditorGUILayout.Toggle("移",(state & UnitState.Move)!=0)?state|UnitState.Move:state&(~UnitState.Move);
-            state = EditorGUILayout.Toggle("动",(state & UnitState.Anim)!=0)?state|UnitState.Anim:state&(~UnitState.Anim);
-            state = EditorGUILayout.Toggle("技",(state & UnitState.Skill)!=0)?state|UnitState.Skill:state&(~UnitState.Skill);
-            state = EditorGUILayout.Toggle("显",(state & UnitState.Show)!=0)?state|UnitState.Show:state&(~UnitState.Show);
-            state = EditorGUILayout.Toggle("伤",(state & UnitState.Harm)!=0)?state|UnitState.Harm:state&(~UnitState.Harm);
+            fold = EditorGUILayout.Foldout(fold,"行为属性");
+            if (fold)
+            {
+                loopTimes = EditorGUILayout.IntField("循环次数", loopTimes);
+                if (loopTimes > 0)loopInterval = EditorGUILayout.FloatField("循环间隔(s)", loopInterval);
+                mask = EditorGUILayout.Toggle("结束", end) ? mask | 0x0001 : mask & ~0x0001;
+                mask = EditorGUILayout.Toggle("可打断", breakable) ? mask | 0x0002 : mask & ~0x0002;
+                mask = EditorGUILayout.Toggle("可取消", cancelable) ? mask | 0x0004 : mask & ~0x0004;
+                anim = EditorGUILayout.TextField("动画", anim);
+                state = EditorGUILayout.Toggle("生", (state & UnitState.Alive) != 0) ? state | UnitState.Alive : state & (~UnitState.Alive);
+                state = EditorGUILayout.Toggle("移", (state & UnitState.Move) != 0) ? state | UnitState.Move : state & (~UnitState.Move);
+                state = EditorGUILayout.Toggle("动", (state & UnitState.Anim) != 0) ? state | UnitState.Anim : state & (~UnitState.Anim);
+                state = EditorGUILayout.Toggle("技", (state & UnitState.Skill) != 0) ? state | UnitState.Skill : state & (~UnitState.Skill);
+                state = EditorGUILayout.Toggle("显", (state & UnitState.Show) != 0) ? state | UnitState.Show : state & (~UnitState.Show);
+                state = EditorGUILayout.Toggle("伤", (state & UnitState.Harm) != 0) ? state | UnitState.Harm : state & (~UnitState.Harm);
+            }
+            //子弹列表
+            int delIdx = -1;
+            for (int i = 0; i < bullets.Count; ++i)
+            {
+                if (!bullets[i].drawGUI())delIdx = i;
+            }
+            if (delIdx >= 0)
+            {
+                selecteds.Remove(bullets[delIdx]);
+                bullets.RemoveAt(delIdx);
+            }
             return true;
         }
     }
@@ -118,22 +134,25 @@ public partial class GameSkill : AraleSerizlize
         {
             drawNode(pos, Color.green);
         }
-
+        bool fold=true;
         public override bool drawGUI()
         {
-            id = EditorGUILayout.IntField("子弹ID", id);
-            harm = EditorGUILayout.IntField("伤害", harm);
-            buffId = EditorGUILayout.IntField("BuffID", buffId);
-            moveId = EditorGUILayout.IntField("MoveID", moveId);
-            mode = (Mode)EditorGUILayout.EnumPopup("模式", mode);
-            for(int i=targets.Count-1;i>=0;--i)
+            GUILayout.BeginHorizontal();
+            fold = EditorGUILayout.Foldout(fold,"子弹属性");
+            GUILayout.FlexibleSpace();
+            if (GUILayout.Button("X", GUI.skin.label))return false;
+            GUILayout.EndHorizontal();
+            if (fold)
             {
-                EditorGUILayout.Space();
-                if (!targets[i].drawGUI())targets.RemoveAt(i);
-            }
-            if(GUILayout.Button("添加目标"))
-            {
-                targets.Insert(0,new Target());
+                id = EditorGUILayout.IntField("子弹ID", id);
+                harm = EditorGUILayout.IntField("伤害", harm);
+                buffId = EditorGUILayout.IntField("BuffID", buffId);
+                moveId = EditorGUILayout.IntField("MoveID", moveId);
+                mode = (Mode)EditorGUILayout.EnumPopup("模式", mode);
+                GUILayout.Box("目标",GUILayout.ExpandWidth(true));//撑满
+                Target.Type t = (Target.Type)EditorGUILayout.EnumPopup("类型:", target.type);
+                if (t != target.type)target = Target.newType(t);
+                target.drawGUI();
             }
             return true;
         }
@@ -141,17 +160,35 @@ public partial class GameSkill : AraleSerizlize
 
     public partial class Target : Node
     {
-        public bool drawGUI()
+        public override bool drawGUI()
         {
-            GUILayout.BeginHorizontal();
-            GUILayout.Label("目标:");
-            GUILayout.FlexibleSpace();
-            if (GUILayout.Button("X", GUI.skin.label))return false;
-            GUILayout.EndHorizontal();
-            unitTypeMask = EditorGUILayout.IntField("unit查找过滤器", unitTypeMask);
-            maxTarget = EditorGUILayout.IntField("最大命中目标数", maxTarget);
-            if (maxTarget < 1)maxTarget = 1;
-            area = EditorGUILayout.TextField("子弹命中区域", area);
+            relation = (UnitRelation)EditorGUILayout.EnumMaskPopup(new GUIContent("目标关系"),relation);
+            selector = (Selector)EditorGUILayout.EnumPopup("选择器",selector);
+            if (type == Type.None)
+            {
+                noneType = (NoneType)EditorGUILayout.EnumPopup("指向", noneType);
+            }
+            return true;
+        }
+    }
+
+    public partial class VecctorTarget : Target
+    {
+        public override bool drawGUI()
+        {
+            base.drawGUI();
+            local  = EditorGUILayout.Toggle(local?"本地坐标":"世界坐标",local);
+            vct = EditorGUILayout.Vector3Field(type==Type.Dir?"方向":"位置", vct);
+            return true;
+        }
+    }
+
+    public partial class AreaTarget : Target
+    {
+        public override bool drawGUI()
+        {
+            base.drawGUI();
+            area = EditorGUILayout.TextField("区域", area);
             return true;
         }
     }
@@ -181,12 +218,12 @@ public partial class GameSkill : AraleSerizlize
             initState = EditorGUILayout.Toggle("伤", (initState & UnitState.Harm) != 0) ? initState | UnitState.Harm : initState & (~UnitState.Harm);
         }
         //=======
-        switch (EditorGUILayout.Popup(0, new string[]{ "选定时间线处添加", "行为","子弹"}))
+        switch (GUILayout.Toolbar(-1, new string[]{"添加行为","添加子弹"}))
         {
-            case 1:
+            case 0:
                 getAction(tickLine);
                 break;
-            case 2:
+            case 1:
                 new GameSkill.Bullet().setAction(getAction(tickLine));
                 break;
         }

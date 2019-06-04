@@ -57,6 +57,16 @@ public class UnitType
 }
 #endregion
 
+#region Unit关系
+public enum UnitRelation
+{
+    Self=0x1,//自己
+    Emney=0x2,//敌人
+    Friend=0x4,//朋友
+    Neutral=0x8,//对立
+}
+#endregion
+
 public abstract class Unit : LuaMono
 {
 	public uint  guid{ get; private set;}//单位编号

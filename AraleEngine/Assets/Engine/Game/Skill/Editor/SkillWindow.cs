@@ -58,8 +58,8 @@ public class SkillEditorWindow : EditorWindow{
 	{
 		mThis = this;
 		winRect   = mThis.position;
-		leftRect  = new Rect(0, 0, 240,winRect.height);
-		rightRect = new Rect (240, 0, winRect.width - 240, winRect.height);
+		leftRect  = new Rect(0, 0, 300,winRect.height);
+		rightRect = new Rect (300, 0, winRect.width - 300, winRect.height);
 	}
 
 	void Update()
@@ -99,7 +99,10 @@ public class SkillEditorWindow : EditorWindow{
 	{
 		GUILayout.BeginArea (leftRect);
 		mLeftScroll = GUILayout.BeginScrollView (mLeftScroll);
-        GUILayout.Label("path:" + mThis.mSavePath);
+        GUILayout.BeginHorizontal();
+        GUILayout.Label("文件:" + Path.GetFileName(mThis.mSavePath));
+        drawTestGUI();
+        GUILayout.EndHorizontal();
         drawSkillSelector();
         if(gameSkill!=null)gameSkill.drawGUI(mTickLine);
         GUILayout.FlexibleSpace();
@@ -137,28 +140,28 @@ public class SkillEditorWindow : EditorWindow{
             }
         }
         GUILayout.BeginHorizontal();
-        if (GUILayout.Button("删除技能"))
+        switch (GUILayout.Toolbar(-1, new string[]{"删除技能","添加技能"}))
         {
-            if(gameSkill == null)return;
-            if (!EditorUtility.DisplayDialog("提示", "确定删除当前技能吗", "确定", "取消"))return;
-            GameSkill.delete(gameSkill.name);
-            gameSkill = null;
-            skillIdx  = -1;
-        }
-
-        if (GUILayout.Button("新建技能"))
-        {
-            GameSkill newskill = GameSkill.create("new skill");
-            if (newskill == null)
-            {
-                Debug.LogError("new skill技能已存在,请先改名称后再新建");
-            }
-            else
-            {
-                noEndActionTip();
-                gameSkill = newskill;
-                skillIdx = ArrayUtility.IndexOf<string>(GameSkill.names, gameSkill.name);
-            }
+            case 0:
+                if(gameSkill == null)return;
+                if (!EditorUtility.DisplayDialog("提示", "确定删除当前技能吗", "确定", "取消"))return;
+                GameSkill.delete(gameSkill.name);
+                gameSkill = null;
+                skillIdx  = -1;
+                break;
+            case 1:
+                GameSkill newskill = GameSkill.create("new skill");
+                if (newskill == null)
+                {
+                    Debug.LogError("new skill技能已存在,请先改名称后再新建");
+                }
+                else
+                {
+                    noEndActionTip();
+                    gameSkill = newskill;
+                    skillIdx = ArrayUtility.IndexOf<string>(GameSkill.names, gameSkill.name);
+                }
+                break;
         }
         GUILayout.EndHorizontal();
     }
@@ -335,4 +338,18 @@ public class SkillEditorWindow : EditorWindow{
         }
 	}
 	#endregion
+
+    #region 测试
+    Unit testUnit;
+    bool testing;
+    void drawTestGUI()
+    {
+        testUnit = (Unit)EditorGUILayout.ObjectField(testUnit, typeof(Unit), true);
+        if (testUnit!=null&&gameSkill!=null&&GUILayout.Button(testing?"停止测试":"开始测试"))
+        {
+            //testUnit.buff.addBuff();
+            testing=!testing;
+        }
+    }
+    #endregion
 }
