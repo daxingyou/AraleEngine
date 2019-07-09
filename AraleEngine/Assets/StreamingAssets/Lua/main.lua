@@ -76,52 +76,14 @@ MsgItem = CS.MsgItem
 --==============
 require "LuaEnum"
 require "game/data/LClient"
-require "game/ui/LWindow"
-require "game/ui/LStartWindow"
-require "game/ui/LLoginWindow"
-require "game/ui/LLanLoginWindow"
-require "game/ui/LMainWindow"
-require "game/ui/LNoticeWindow"
-require "game/ui/LMessageWindow"
-require "game/ui/LPlayerWindow"
-require "game/ui/LTaskWindow"
-require "game/ui/LSkillWindow"
-require "game/ui/skill/LSkillItem"
-require "game/ui/LShopWindow"
-require "game/ui/LMailWindow"
-require "game/ui/LChatWindow"
-require "game/ui/mail/LMailItem"
-require "game/ui/shop/LShopItem"
-require "game/ui/LForginWindow"
-require "game/ui/LBagWindow"
-require "game/ui/bag/LItemSlot"
-require "game/ui/LRoleCreateWindow"
-require "game/ui/LRoleCreateWindowItem"
-require "game/battle/LBattleSceneCtrl"
-require "game/ui/main/LSKillButton"
-require "game/ui/main/LHeadInfo"
-require "game/ui/LRewardWindow"
-require "game/ai/LHero"
-require "game/ai/LMonster"
-BuffParam={}
-require "game/buff/LBornBuff"
-require "game/buff/LDieBuff"
-require "game/buff/LChenMo"
-require "game/buff/LDingShen"
-require "game/buff/LHuiXue"
-require "game/buff/LJianSu"
-require "game/buff/LJianXue"
-require "game/buff/LJinGang"
-require "game/buff/LJingHua"
-require "game/buff/LJinGu"
-require "game/buff/LSkillHarm"
-require "game/buff/LLeiGongBaoFeng"
+require "game/ais"
+require "game/uis"
+require "game/buffs"
 print("require all ok");
 --====================
 require "pb/Proto.test"
 --=====================================================
 function  main( ... )
-	if GRoot.single.mLaunchFlag~=0 then return end
 	WindowMgr.SetWindowRes ("NoticeWindow", "UI/NoticeWindow")
 	WindowMgr.SetWindowRes ("MessageWindow", "UI/MessageWindow")
 	WindowMgr.SetWindowRes ("StartWindow", "UI/StartWindow")
@@ -152,6 +114,7 @@ function  main( ... )
 	EventMgr.single:AddListener("Game.Login", onLogin)
 	EventMgr.single:AddListener("Game.Logout", onLogout)
 	
+	if GRoot.single.mLaunchFlag~=0 then return end
 	SceneMgr.single:LoadScene("Login")
 	print("main.lua ok");
 end

@@ -17,6 +17,7 @@ namespace Arale.Engine
         UISListItem mPrefab;
 		public OnSelectChange onSelectedChange=null;
         public bool mMultiSelect;
+        public bool mReverse;
         void Awake()
         {
             mPrefab = GetComponentInChildren<UISListItem>();
@@ -85,7 +86,10 @@ namespace Arale.Engine
             }
             it.setData(data,id);
             it.gameObject.SetActive(true);
-			it.transform.SetAsLastSibling ();
+            if (mReverse)
+                it.transform.SetAsFirstSibling();
+            else
+			    it.transform.SetAsLastSibling ();
             return it;
         }
 
@@ -116,7 +120,14 @@ namespace Arale.Engine
 		public void sort(System.Comparison<UISListItem> comp)
         {
 			mItems.Sort(comp);
-			for (int i = 0,max=mItems.Count; i < max; ++i)mItems[i].transform.SetAsLastSibling();
+            if (mReverse)
+            {
+                for (int i = 0,max=mItems.Count; i < max; ++i)mItems[i].transform.SetAsFirstSibling();
+            }
+            else
+            {
+                for (int i = 0,max=mItems.Count; i < max; ++i)mItems[i].transform.SetAsLastSibling();
+            }
 		}
     }
 

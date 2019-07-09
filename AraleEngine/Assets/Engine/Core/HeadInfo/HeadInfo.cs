@@ -72,7 +72,7 @@ namespace Arale.Engine
         public float mYOffset = 3;
 		RectTransform mRT;
 		Transform mTarget;
-		public Transform target{get{return mTarget;} set{mTarget = value;Update ();}}
+        public Transform target{get{return mTarget;} set{mTarget = value;LateUpdate ();}}
 
         public void Unbind()
         {
@@ -88,8 +88,8 @@ namespace Arale.Engine
 			mRT = transform as RectTransform;
 		}
 
-    	void Update ()
-        {
+        void LateUpdate ()
+        {//必须在camera跟新位置后执行否则画面抖动
             if (mTarget == null)return;
             Vector3 v = mTarget.position;
             v.y += mYOffset;

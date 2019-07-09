@@ -26,7 +26,7 @@ public class TableBuilder<T> : ITableBuilder where T:TableBase, new()
             string[] datas = ta.text.Split(new char[]{'\n'}, System.StringSplitOptions.RemoveEmptyEntries);
             for (int i = 0; i < datas.Length; ++i)
             {
-				if(string.IsNullOrEmpty(datas[i]))continue;
+                if(string.IsNullOrEmpty(datas[i])||datas[i][0]!='{')continue;
 				try
 				{
             		TableBase record = JsonUtility.FromJson(datas[i], typeof(T)) as TableBase;
