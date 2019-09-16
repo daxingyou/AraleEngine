@@ -1,0 +1,3 @@
+[submodule "AraleEngine/Assets/Engine/DevelopTool"]
+	path = AraleEngine/Assets/Engine/DevelopTool
+	url = https://github.com/aralehuan/DevelopTools.git
