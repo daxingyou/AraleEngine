@@ -1,5 +1,5 @@
 ﻿//don't del, use dll now
-/*using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
@@ -302,6 +302,69 @@ namespace Arale.Engine
         }
         #endregion
 
+
+        #region 耗时统计
+        public class Sample
+        {
+            uint count;
+            float _time;
+            public float time
+            {
+                set
+                {
+                    if (_time == 0)
+                    {
+                        _time = value;
+                    }
+                    else
+                    {
+                        float dtime = value - _time;
+                        _time = 0;
+                        cur = dtime;
+                        min = dtime < min ? dtime : min;
+                        max = dtime > max ? dtime : max;
+                        if(++count!=0)avg = avg + (dtime - avg) / count;
+                    }
+                }
+            }
+            public string name { get; protected set; }
+            public float max { get; protected set; }
+            public float min { get; protected set; }
+            public float avg { get; protected set; }
+            public float cur { get; protected set; }
+            public Sample(string name)
+            {
+                this.name = name;
+                this.min = float.MaxValue;
+            }
+        }
+        static Dictionary<string, Sample> samples = new Dictionary<string, Sample>();
+        public static void beginTime(string name)
+        {
+            if (mDebugLevel < 1) return;
+            Sample sp;
+            if (!samples.TryGetValue(name, out sp))
+            {
+                sp = new Sample(name);
+                samples[name] = sp;
+            }
+            sp.time = Time.realtimeSinceStartup;
+        }
+        public static void endTime(string name)
+        {
+            if (mDebugLevel < 1) return;
+            Sample sp;
+            if (!samples.TryGetValue(name, out sp))
+            {
+                Debug.LogError("Log.endTime sample not find:"+name);
+                return;
+            }
+            sp.time = Time.realtimeSinceStartup;
+        }
+        public static List<Sample> getSmaples()
+        {
+            return new List<Sample>(samples.Values);
+        }
+        #endregion
     }
 }
-*/
