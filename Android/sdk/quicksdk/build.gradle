@@ -5,17 +5,16 @@ android {
     buildToolsVersion "28.0.3"
 
     defaultConfig {
-        applicationId "com.arale.engine"
         minSdkVersion 21
         targetSdkVersion 28
     }
 
     signingConfigs {
         released {
-            storeFile file('../keystore/bc.keystore')
-            storePassword "*****"
-            keyAlias "arale"
-            keyPassword "*****"
+            storeFile file('../keystore/lanmao.jks')
+            storePassword "xxxx"
+            keyAlias "lanmao"
+            keyPassword "xxxx"
             v2SigningEnabled true
             v1SigningEnabled true
         }
@@ -38,7 +37,4 @@ android {
 dependencies {
     //引用libs目录下的所有.jar.aar文件
     implementation fileTree(include: ['*.jar', '*.aar'], dir: 'libs')
-    //引用外部库
-    //implementation 'com.facebook.android:facebook-android-sdk:[5,6)'
-    //implementation 'com.google.android.gms:play-services-auth:15.0.1'
 }

@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BuildConfig>
+  <icon>1</icon>
+  <appname>阿拉蕾之彩虹岛</appname>
+  <package>com.arale.island.android</package>
+  <define></define>
+  <!--一个包可以组合一个渠道sdk和多个功能sdk,sdk名称为sdk目录名,一个渠道可以发布多个包,所以每个包都对应一套参数由param指定-->
+  <sdk param="1">quicksdk</sdk>
+</BuildConfig>
+
