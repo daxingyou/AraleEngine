@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+//动态管理遮挡剔除对象，静态的剔除对象可以简单的使用Occlusion Culling工具烘培
+//脚本挂根节点上,它会管理该节点下所有CullingItem节点
 public class CullingMgr : MonoBehaviour {
     public Camera cam;
     CullingGroup  culling;

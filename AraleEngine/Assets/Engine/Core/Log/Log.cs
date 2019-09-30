@@ -310,6 +310,7 @@ namespace Arale.Engine
             float _time;
             public float time
             {
+                get{return _time;}
                 set
                 {
                     if (_time == 0)
@@ -348,6 +349,7 @@ namespace Arale.Engine
                 sp = new Sample(name);
                 samples[name] = sp;
             }
+            if (sp.time != 0)return;
             sp.time = Time.realtimeSinceStartup;
         }
         public static void endTime(string name)
@@ -359,6 +361,7 @@ namespace Arale.Engine
                 Debug.LogError("Log.endTime sample not find:"+name);
                 return;
             }
+            if (sp.time == 0)return;
             sp.time = Time.realtimeSinceStartup;
         }
         public static List<Sample> getSmaples()

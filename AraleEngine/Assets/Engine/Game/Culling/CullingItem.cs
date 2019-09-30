@@ -6,7 +6,7 @@ using Arale.Engine;
 public class CullingItem : MonoBehaviour
 {
     public float radius;
-    public string path;
+    public string path;//动态资源加载路径，不设置则会控制根节点显示隐藏
 	// Use this for initialization
     void OnEnable()
     {

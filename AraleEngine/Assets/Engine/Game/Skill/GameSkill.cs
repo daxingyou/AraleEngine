@@ -36,10 +36,12 @@ public partial class GameSkill : AraleSerizlize
             state = r.ReadInt32();
             mask = r.ReadInt32();
             bullets = AraleSerizlize.read<Bullet>(r);
+            #if UNITY_EDITOR
             for (int i = 0; i < bullets.Count; ++i)
             {
                 bullets[i].setAction(this);
             }
+            #endif
         }
 
         public override void write(BinaryWriter w)
