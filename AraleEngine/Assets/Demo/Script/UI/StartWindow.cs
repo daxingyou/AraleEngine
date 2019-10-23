@@ -5,6 +5,8 @@ using Arale.Engine;
 //StartWindow最好不要Lua化,防止更新了错误资源无法重更新恢复
 public class StartWindow : Window
 {
+    public float splashTime=2;
+    public CanvasGroup mSplashView;
     public GameObject mStartView;
     public UnzipView  mUnzipView;
     public UpdateView mUpdateView;
@@ -12,9 +14,6 @@ public class StartWindow : Window
     {
         if (eventId == Event.Create)
         {
-            mUnzipView.gameObject.SetActive(true);
-            mUpdateView.gameObject.SetActive(false);
-            mStartView.SetActive(false);
             EventMgr.single.AddListener(GRoot.EventResUnzip,OnResUnzipCallback);
             EventMgr.single.AddListener(GRoot.EventResUpdate,OnResUpdateCallback);
         }
