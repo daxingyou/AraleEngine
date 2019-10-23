@@ -168,14 +168,14 @@ namespace Arale.Engine
             }
     	}
 
-        public delegate void DealFunc(FileInfo fi);
-        public static void enumFiles(string dirPath, bool recursive, DealFunc dealFunc)
+        public delegate void DealFunc(FileInfo fi, object param);
+        public static void enumFiles(string dirPath, bool recursive, DealFunc dealFunc, object param=null)
         {
             DirectoryInfo di = new DirectoryInfo(dirPath);
             FileInfo[] fis = di.GetFiles();
             for (int i = 0, max = fis.Length; i < max; ++i)
             {
-                dealFunc (fis [i]);
+                dealFunc (fis [i],param);
             }
 
             if (recursive)
@@ -183,7 +183,7 @@ namespace Arale.Engine
                 DirectoryInfo[] dis = di.GetDirectories();
                 for (int i = 0, max = dis.Length; i < max; ++i)
                 {
-                    enumFiles (dis [i].FullName, true, dealFunc);
+                    enumFiles (dis [i].FullName, true, dealFunc, param);
                 }
             }
         }
