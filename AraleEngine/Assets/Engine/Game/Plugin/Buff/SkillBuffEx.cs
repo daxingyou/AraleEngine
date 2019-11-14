@@ -7,7 +7,7 @@ public class SkillBuffEx : Buff
 {
     Unit mUnit;
     GameSkill mGS;
-    GameSkill.Action mCurAction;
+    SkillAction mCurAction;
     protected override void onInit(Unit unit)
     {
         mUnit  = unit;
@@ -24,7 +24,7 @@ public class SkillBuffEx : Buff
 
         for (int i = 0,max=mGS.actions.Count; i<max; ++i)
         {
-            GameSkill.Action act = mGS.actions[i];
+            SkillAction act = mGS.actions[i];
             TimeMgr.Action a = timer.AddAction (new TimeMgr.Action ());
             a.doTime   = act.time;
             a.onAction = onAction;
@@ -35,7 +35,7 @@ public class SkillBuffEx : Buff
 
     void onAction(TimeMgr.Action a)
     {
-        GameSkill.Action act = a.userData as GameSkill.Action;
+        SkillAction act = a.userData as SkillAction;
         mCurAction = act;
         mUnitState = act.state;
         if (string.IsNullOrEmpty(act.anim))
@@ -58,13 +58,13 @@ public class SkillBuffEx : Buff
         }
     }
 
-    void bulletProcess(GameSkill.Bullet b)
+    void bulletProcess(SkillBullet b)
     {
         if (b.id == 0)
         {//直接效果
-            if (b.target.type == GameSkill.Target.Type.Area)
+            if (b.target.type == SkillTarget.Type.Area)
             {
-                GameSkill.AreaTarget t = b.target as GameSkill.AreaTarget;
+                SkillAreaTarget t = b.target as SkillAreaTarget;
                 IArea garea = GameArea.fromString (t.area);
                 Matrix4x4 mt = Matrix4x4.TRS (mUnit.pos, Quaternion.LookRotation (mUnit.dir), Vector3.one).inverse;
                 List<Unit> units = mUnit.mgr.getUnitInArea (UnitType.Monster|UnitType.Player, garea, mt);
@@ -99,15 +99,15 @@ public class SkillBuffEx : Buff
 
             switch (b.target.type)
             {
-                case GameSkill.Target.Type.None:
+                case SkillTarget.Type.None:
                     switch (b.target.noneType)
                     {
-                        case GameSkill.Target.NoneType.Dir:
+                        case SkillTarget.NoneType.Dir:
                             Vector3 v = mUnit.skill.targetPos;
                             v.y = bt.pos.y;
                             bt.play ((v - bt.pos).normalized, mUnit.skill.targetGUID);
                             break;
-                        case GameSkill.Target.NoneType.Unit:
+                        case SkillTarget.NoneType.Unit:
                             bt.play (mUnit.skill.targetPos, mUnit.skill.targetGUID);
                             break;
                         default:
@@ -115,21 +115,21 @@ public class SkillBuffEx : Buff
                             break;
                     }
                     break;
-                case GameSkill.Target.Type.Dir:
+                case SkillTarget.Type.Dir:
                     {
-                        GameSkill.VecctorTarget t = b.target as GameSkill.VecctorTarget;
+                        SkillVecctorTarget t = b.target as SkillVecctorTarget;
                         bt.play (t.local?bt.transform.localToWorldMatrix.MultiplyVector(t.vct):t.vct, mUnit.skill.targetGUID);
                         break;
                     }
-                case GameSkill.Target.Type.Pos:
+                case SkillTarget.Type.Pos:
                     {
-                        GameSkill.VecctorTarget t = b.target as GameSkill.VecctorTarget;
+                        SkillVecctorTarget t = b.target as SkillVecctorTarget;
                         bt.play (t.local?bt.transform.localToWorldMatrix.MultiplyPoint(t.vct):t.vct, mUnit.skill.targetGUID);
                         break;
                     }
-                case GameSkill.Target.Type.Area:
+                case SkillTarget.Type.Area:
                     {
-                        GameSkill.AreaTarget t = b.target as GameSkill.AreaTarget;
+                        SkillAreaTarget t = b.target as SkillAreaTarget;
                         //bt.play (t.local?bt.transform.localToWorldMatrix.MultiplyPoint(t.vct):t.vct, mUnit.skill.targetGUID);
                         break;
                     }
@@ -137,7 +137,7 @@ public class SkillBuffEx : Buff
         }
     }
 
-    void affectUnit(GameSkill.Bullet bt, Unit unit, IArea area=null)
+    void affectUnit(SkillBullet bt, Unit unit, IArea area=null)
     {
         bool notSelf = unit.guid != mUnit.guid;
         if (bt.buffId != 0)

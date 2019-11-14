@@ -9,209 +9,15 @@ public partial class GameSkill : AraleSerizlize
     float  lastUseTime;
     public int initState=UnitState.ALL;
     public string initAnim="";
-    public List<Action> actions = new List<Action>();
+    public List<SkillAction> actions = new List<SkillAction>();
     public string name{ get; protected set;}
-
-    public abstract partial class Node : AraleSerizlize{}
-
-    public partial class Action : Node
-    {
-        public float  time;
-        public float  loopInterval=1;
-        public int    loopTimes;
-        public string anim="";
-        public int    state=UnitState.ALL;
-        int    mask;
-        public bool   end{get{return (mask&0x0001)!=0;}}
-        public bool   breakable{get{return (mask&0x0002)!=0;}}
-        public bool   cancelable{get{return (mask&0x0004)!=0;}}
-        public List<Bullet> bullets = new List<Bullet>();
-
-        public override void read(BinaryReader r)
-        {
-            time = r.ReadSingle();
-            loopInterval = r.ReadSingle();
-            loopTimes = r.ReadInt32();
-            anim = r.ReadString();
-            state = r.ReadInt32();
-            mask = r.ReadInt32();
-            bullets = AraleSerizlize.read<Bullet>(r);
-            #if UNITY_EDITOR
-            for (int i = 0; i < bullets.Count; ++i)
-            {
-                bullets[i].setAction(this);
-            }
-            #endif
-        }
-
-        public override void write(BinaryWriter w)
-        {
-            w.Write(time);
-            w.Write(loopInterval);
-            w.Write(loopTimes);
-            w.Write(anim);
-            w.Write(state);
-            w.Write(mask);
-            AraleSerizlize.write<Bullet>(bullets, w);
-        } 
-    }
-
-    public partial class Bullet : Node
-    {
-        public enum Mode
-        {
-            None,
-            Scatter,//散射
-            Chain,  //链式
-        }
-            
-        public int id;
-        public int harm;
-        public int buffId;
-        public int moveId;
-        public Mode mode;
-        public Target target = new Target();
-
-        public override void read(BinaryReader r)
-        {
-            id = r.ReadInt32();
-            harm = r.ReadInt32();
-            buffId = r.ReadInt32();
-            moveId = r.ReadInt32();
-            mode = (Mode)r.ReadInt32();
-            target = Target.readType(r);
-        }
-
-        public override void write(BinaryWriter w)
-        {
-            w.Write(id);
-            w.Write(harm);
-            w.Write(buffId);
-            w.Write(moveId);
-            w.Write((int)mode);
-            target.write(w);
-        }
-    }
-
-    public partial class Target : Node
-    {
-        public enum Type
-        {
-            None,
-            Pos,
-            Dir,
-            Area,
-            Unit,
-        }
-
-        public enum NoneType
-        {
-            Pos,
-            Dir,
-            Unit,
-        }
-
-        public enum Selector
-        {
-            None,
-            Nearst,
-            MinHp,
-            MaxHp,
-            MinDF,
-            MaxDF,
-        }
-
-        int mask;
-        public Type type{get{return (Type)(mask&0x000000ff);} protected set{mask&=0x7fffff00; mask|=((int)value&0x000000ff);}}
-        public NoneType noneType{get{return (NoneType)((mask&0x0000ff00)>>8);} protected set{mask &= 0x7fff00ff; mask|=(((int)value&0x000000ff)<<8);}}
-        public UnitRelation relation{get{return (UnitRelation)((mask&0x00ff0000)>>16);} protected set{mask &= 0x7f00ffff; mask|=(((int)value&0x000000ff)<<16);}}
-        public Selector selector{get{return (Selector)((mask&0xff000000)>>24);} protected set{mask &= 0x00ffffff; mask|=(((int)value&0x000000ff)<<24);}}
-        public static Target newType(Type tp)
-        {
-            Target t = null;
-            switch (tp)
-            {
-                case Type.Dir:
-                    t = new VecctorTarget();
-                    break;
-                case Type.Pos:
-                    t = new VecctorTarget();
-                    break;
-                case Type.Area:
-                    t = new AreaTarget();
-                    break;
-                default:
-                    t = new Target();
-                    break;
-            }
-            t.type = tp;
-            return t;
-        }
-
-        public static Target readType(BinaryReader r)
-        {
-            int mask = r.ReadInt32();
-            Target t = newType((Type)(mask&0x000f));
-            t.mask = mask;
-            t.read(r);
-            return t;
-        }
-
-        public override void read(BinaryReader r)
-        {
-        }
-
-        public override void write(BinaryWriter w)
-        {
-            w.Write(mask);
-        }
-    }
-
-    public partial class VecctorTarget : Target
-    {
-        public bool  local;
-        public Vector3 vct;
-        public override void read(BinaryReader r)
-        {
-            base.read(r);
-            local = r.ReadBoolean();
-            vct.x = r.ReadSingle();
-            vct.y = r.ReadSingle();
-            vct.z = r.ReadSingle();
-        }
-
-        public override void write(BinaryWriter w)
-        {
-            base.write(w);
-            w.Write(local);
-            w.Write(vct.x);
-            w.Write(vct.y);
-            w.Write(vct.z);
-        }
-    }
-
-    public partial class AreaTarget : Target
-    {
-        public string area;
-        public override void read(BinaryReader r)
-        {
-            base.read(r);
-            area = r.ReadString();
-        }
-
-        public override void write(BinaryWriter w)
-        {
-            base.write(w);
-            w.Write(area);
-        }
-    }
 
     public override void read(BinaryReader r)
     {
         name = r.ReadString();
         initAnim = r.ReadString();
         initState = r.ReadInt32();
-        actions = AraleSerizlize.read<Action>(r);
+        actions = AraleSerizlize.read<SkillAction>(r);
     }
 
     public override void write(BinaryWriter w)
@@ -219,11 +25,11 @@ public partial class GameSkill : AraleSerizlize
         w.Write(name);
         w.Write(initAnim);
         w.Write(initState);
-        actions.Sort(delegate(Action x, Action y)
+        actions.Sort(delegate(SkillAction x, SkillAction y)
             {
                 return x.time.CompareTo(y.time);
             });
-        AraleSerizlize.write<Action>(actions, w);
+        AraleSerizlize.write<SkillAction>(actions, w);
     }
 
     public static bool saveSkill(string skillPath)
