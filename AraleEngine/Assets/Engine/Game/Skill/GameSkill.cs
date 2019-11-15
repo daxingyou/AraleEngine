@@ -7,7 +7,7 @@ using Arale.Engine;
 public partial class GameSkill : AraleSerizlize
 {//所有变量只允许读,不允许设置,属于静态共享数据
     float  lastUseTime;
-    public int initState=UnitState.ALL;
+    public int state=UnitState.ALL;
     public string initAnim="";
     public List<SkillAction> actions = new List<SkillAction>();
     public string name{ get; protected set;}
@@ -16,7 +16,7 @@ public partial class GameSkill : AraleSerizlize
     {
         name = r.ReadString();
         initAnim = r.ReadString();
-        initState = r.ReadInt32();
+        state = r.ReadInt32();
         actions = AraleSerizlize.read<SkillAction>(r);
     }
 
@@ -24,7 +24,7 @@ public partial class GameSkill : AraleSerizlize
     {
         w.Write(name);
         w.Write(initAnim);
-        w.Write(initState);
+        w.Write(state);
         actions.Sort(delegate(SkillAction x, SkillAction y)
             {
                 return x.time.CompareTo(y.time);

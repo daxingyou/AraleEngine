@@ -15,7 +15,7 @@ public class SkillBuffEx : Buff
         string path = table.lua;
         int idx = path.LastIndexOf('/');
         mGS = GameSkill.get(path.Remove(idx), path.Substring(idx + 1));
-        mUnitState = mGS.initState;
+        mUnitState = mGS.state;
         mUnit.forward (mUnit.skill.targetPos);
         if (string.IsNullOrEmpty(mGS.initAnim))
         {

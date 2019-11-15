@@ -9,6 +9,8 @@ using System;
 
 public partial class GameSkill : AraleSerizlize
 {
+    public static Color[] markClrs = new Color[]{Color.cyan,Color.blue,Color.magenta,Color.green,Color.red};
+    public const float StateHeight=18;
     public static List<SkillNode> selecteds = new List<SkillNode>();
     public static bool isDrag{get{return Event.current.alt;}}
     bool fold=true;
@@ -27,15 +29,6 @@ public partial class GameSkill : AraleSerizlize
                 genNames();
             }
             initAnim = EditorGUILayout.TextField("动画", initAnim);
-            GUILayout.BeginHorizontal();
-            GUILayoutOption width = GUILayout.Width(32);
-            initState = EditorGUILayout.ToggleLeft("生", (initState & UnitState.Alive) != 0, width) ? initState | UnitState.Alive : initState & (~UnitState.Alive);
-            initState = EditorGUILayout.ToggleLeft("移", (initState & UnitState.Move) != 0, width) ? initState | UnitState.Move : initState & (~UnitState.Move);
-            initState = EditorGUILayout.ToggleLeft("动", (initState & UnitState.Anim) != 0, width) ? initState | UnitState.Anim : initState & (~UnitState.Anim);
-            initState = EditorGUILayout.ToggleLeft("技", (initState & UnitState.Skill) != 0, width) ? initState | UnitState.Skill : initState & (~UnitState.Skill);
-            initState = EditorGUILayout.ToggleLeft("显", (initState & UnitState.Show) != 0, width) ? initState | UnitState.Show : initState & (~UnitState.Show);
-            initState = EditorGUILayout.ToggleLeft("伤", (initState & UnitState.Harm) != 0, width) ? initState | UnitState.Harm : initState & (~UnitState.Harm);
-            GUILayout.EndHorizontal();
         }
         //=======
         switch (GUILayout.Toolbar(-1, new string[]{"添加行为","添加子弹"}))
@@ -58,7 +51,8 @@ public partial class GameSkill : AraleSerizlize
         SkillAction act = new SkillAction();
         actions.Add(act);
         act.time = time;
-        act.state = initState;
+        act.state = state;
+        actions.Sort(delegate(SkillAction x, SkillAction y){return x.time.CompareTo(y.time);});
         return act;
     }
 
@@ -72,12 +66,50 @@ public partial class GameSkill : AraleSerizlize
     {
         Color clr = Handles.color;
         Vector3 v = new Vector3(rc.xMin, rc.center.y,0);
-        for (int i = 0; i < actions.Count; ++i)
+        int max = actions.Count;
+        for (int i = 0; i < max; ++i)
         {
             SkillAction act = actions[i] as SkillAction;
-            act.draw(v + new Vector3(act.time * unitWidth, 0, 0));
+            Vector3 offset = new Vector3(act.time * unitWidth, 0, 0);
+            act.length = i < max - 1 ? actions[i + 1].time * unitWidth - offset.x : 1000-offset.x+StateHeight;
+            act.draw(v + offset);
         }
         Handles.color = clr;
+        v.x -= StateHeight;
+        state = drawStates(ref v, max>0?actions[0].time * unitWidth+StateHeight:1000+2*StateHeight, state);
+    }
+
+    public static int drawStates(ref Vector3 pos, float length, int state)
+    {
+        pos.y += 25;
+        int i = 0;
+        state = drawState(ref pos, length, i++, (state & UnitState.Alive) != 0) ? state | UnitState.Alive : state & (~UnitState.Alive);
+        state = drawState(ref pos, length, i++, (state & UnitState.Move) != 0) ? state | UnitState.Move : state & (~UnitState.Move);
+        state = drawState(ref pos, length, i++, (state & UnitState.Anim) != 0) ? state | UnitState.Anim : state & (~UnitState.Anim);
+        state = drawState(ref pos, length, i++, (state & UnitState.Skill) != 0) ? state | UnitState.Skill : state & (~UnitState.Skill);
+        state = drawState(ref pos, length, i++, (state & UnitState.Show) != 0) ? state | UnitState.Show : state & (~UnitState.Show);
+        state = drawState(ref pos, length, i++, (state & UnitState.Harm) != 0) ? state | UnitState.Harm : state & (~UnitState.Harm);
+        return state;
+    }
+
+    static bool drawState(ref Vector3 pos, float length, int idx, bool light)
+    {
+        Rect rc = new Rect(pos.x, pos.y, length, StateHeight);pos.y += StateHeight;
+        Color clr = markClrs[idx%markClrs.Length];
+        Handles.color = clr;
+        Handles.DrawSolidRectangleWithOutline(rc, light?clr:Color.clear, Color.black);
+        if (Event.current == null || Event.current.rawType != EventType.MouseDown || !rc.Contains(Event.current.mousePosition))return light;
+        return !light;
+    }
+
+    public static void drawMark(Vector3 pos, int idx, bool light)
+    {
+        if (!light)return;
+        pos.y += idx * 5+8;
+        Vector3[] vs = new Vector3[]{ new Vector3(pos.x-2,pos.y-2,0), new Vector3(pos.x+2,pos.y-2,0), new Vector3(pos.x+2,pos.y+2,0), new Vector3(pos.x-2,pos.y+2,0)};
+        Color clr = markClrs[idx];
+        Handles.color = clr;
+        Handles.DrawSolidRectangleWithOutline(vs, clr, Color.black);
     }
 
     SkillAction dragAction;

@@ -43,6 +43,7 @@ public class UnitState
 	public const int Skill=0x0010;//技
 	public const int Show =0x0020;//显
 	public const int Harm =0x0040;//伤
+    public const int Break=0x0080;//断
 }
 #endregion
 

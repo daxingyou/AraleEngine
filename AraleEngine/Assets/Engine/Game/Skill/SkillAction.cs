@@ -13,7 +13,6 @@ public partial class SkillAction : SkillNode
     public int    state=UnitState.ALL;
     int    mask;
     public bool   end{get{return (mask&0x0001)!=0;}}
-    public bool   breakable{get{return (mask&0x0002)!=0;}}
     public bool   cancelable{get{return (mask&0x0004)!=0;}}
     public List<SkillBullet> bullets = new List<SkillBullet>();
 

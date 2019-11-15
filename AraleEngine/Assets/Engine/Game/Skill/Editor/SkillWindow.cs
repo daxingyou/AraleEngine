@@ -41,7 +41,9 @@ public class SkillEditorWindow : EditorWindow{
 	{//选中打开asset资源文件
 		string path = AssetDatabase.GetAssetPath(EditorUtility.InstanceIDToObject(instanceID));
         byte[] ctx = File.ReadAllBytes(path);
-        if(!path.EndsWith(".skill.txt" )||!GameSkill.isSkillFile(ctx))return false;
+        //文件必须放在Resources目录下
+        Debug.Assert(path.Contains("Resources"));
+        Debug.Assert(path.EndsWith(".skill.txt") && GameSkill.isSkillFile(ctx));
 		openSkillEditorWindow().open (path);
 		mThis.Focus ();
 		return true;
@@ -116,7 +118,7 @@ public class SkillEditorWindow : EditorWindow{
 	void drawRightPanle()
 	{
 		GUILayout.BeginArea (rightRect);
-        Rect rc = new Rect(0, 0, rightRect.width, rightRect.height);
+        Rect rc = new Rect(32, 0, rightRect.width, rightRect.height);
         mTickLine = drawTimeCtrl (rc, TimeUnitWidth, 10, mTickLine, ref mTimeDrag, GameSkill.isDrag);
         rc.height = 50;
         if (gameSkill != null)
@@ -124,6 +126,13 @@ public class SkillEditorWindow : EditorWindow{
             gameSkill.draw(rc, TimeUnitWidth);
             gameSkill.drag(mTickLine, mTimeDrag);
         }
+        GUILayout.Space(rc.height);
+        GUILayout.Label("生");
+        GUILayout.Label("移");
+        GUILayout.Label("动");
+        GUILayout.Label("技");
+        GUILayout.Label("显");
+        GUILayout.Label("伤");
 		GUILayout.EndArea ();
 	}
 
@@ -215,18 +224,18 @@ public class SkillEditorWindow : EditorWindow{
                 {
                     float tenth = one + 0.1f * j * unitWidth;
                     Handles.color = Color.gray;
-                    Handles.DrawLine (new Vector3 (tenth, 0, 0), new Vector3 (tenth, 10, 0));
+                    Handles.DrawLine (new Vector3 (rc.x+tenth, 0, 0), new Vector3 (rc.x+tenth, 10, 0));
                     Handles.color = new Color(0f, 0f, 0f, 0.2f);
-                    Handles.DrawLine (new Vector3 (tenth, 50, 0), new Vector3 (tenth, rc.height, 0));
+                    Handles.DrawLine (new Vector3 (rc.x+tenth, 50, 0), new Vector3 (rc.x+tenth, rc.height, 0));
                 }
                 Handles.color = Color.gray;
-                Handles.DrawLine (new Vector3 (half, 0, 0), new Vector3 (half, 20, 0));
+                Handles.DrawLine (new Vector3 (rc.x+half, 0, 0), new Vector3 (rc.x+half, 20, 0));
             }
-            Handles.DrawLine (new Vector3 (one, 0, 0), new Vector3 (one, rc.height, 0));
-            GUI.Label (new Rect (one, 10, unitWidth, 20), i+":00");
+            Handles.DrawLine (new Vector3 (rc.x+one, 0, 0), new Vector3 (rc.x+one, rc.height, 0));
+            GUI.Label (new Rect (rc.x+one, 10, unitWidth, 20), i+":00");
         }
         Handles.color = Color.red;
-        Handles.DrawLine (new Vector3 (tickLine*unitWidth, 0, 0), new Vector3 (tickLine*unitWidth, rc.height, 0));
+        Handles.DrawLine (new Vector3 (rc.x+tickLine*unitWidth, 0, 0), new Vector3 (rc.x+tickLine*unitWidth, rc.height, 0));
         Handles.EndGUI ();
 
         if (Event.current != null)
@@ -237,11 +246,11 @@ public class SkillEditorWindow : EditorWindow{
                 case EventType.MouseDown:
                     if (!dragArea.Contains(e.mousePosition))break;
                     drag=true;
-                    tickLine = e.mousePosition.x/unitWidth;
+                    tickLine = (e.mousePosition.x-rc.x)/unitWidth;
                     break;
                 case EventType.MouseDrag:
                     if (!drag)break;
-                    tickLine = e.mousePosition.x/unitWidth;
+                    tickLine = (e.mousePosition.x-rc.x)/unitWidth;
                     break;
                 case EventType.MouseUp:
                     drag=false;

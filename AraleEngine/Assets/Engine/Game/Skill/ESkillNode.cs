@@ -7,8 +7,6 @@ using System.Collections.Generic;
 
 public abstract partial class SkillNode : AraleSerizlize
 {
-    protected static Color[] markClrs = new Color[]{Color.cyan,Color.blue,Color.magenta,Color.green,Color.red};
-
     public SkillAction action{ get; protected set;}
     Rect rc = new Rect(0,0,12,12);
     protected void drawNode(Vector3 pos, Color fillClr)
@@ -54,17 +52,6 @@ public abstract partial class SkillNode : AraleSerizlize
         {
             return action == null ? object.ReferenceEquals(this,n.action) : object.ReferenceEquals(action,n.action);
         }
-    }
-
-    protected void drawMark(int idx, bool light)
-    {
-        if (!light)return;
-        Vector3 pos = rc.center;
-        pos.y += idx * 5+8;
-        Vector3[] vs = new Vector3[]{ new Vector3(pos.x-2,pos.y-2,0), new Vector3(pos.x+2,pos.y-2,0), new Vector3(pos.x+2,pos.y+2,0), new Vector3(pos.x-2,pos.y+2,0)};
-        Color clr = markClrs[idx];
-        Handles.color = clr;
-        Handles.DrawSolidRectangleWithOutline(vs, clr, Color.black);
     }
 }
 #endif
