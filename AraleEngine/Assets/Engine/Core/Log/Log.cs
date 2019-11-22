@@ -1,6 +1,5 @@
 ﻿//don't del, use dll now
-/*
-using UnityEngine;
+/*using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
@@ -38,6 +37,7 @@ namespace Arale.Engine
 
         const int MaxLogFileSize = 1024 * 1024;
         static public int  mDebugLevel=0;
+        static public bool mDebugModel=false;
         static public bool mWriteScreen=false;
         static public bool mWriteFile=false;
         static public bool mErrorPause = false;
@@ -91,21 +91,24 @@ namespace Arale.Engine
 
         public static void readConfig()
         {
-            #if DEBUG_TOOL_ENABLE
-            mDebugLevel = UnityEngine.PlayerPrefs.GetInt ("Log.debugLevel", 1);
-            mWriteScreen = UnityEngine.PlayerPrefs.GetInt ("Log.WriteScreen", 1) == 1;
-            mWriteFile = UnityEngine.PlayerPrefs.GetInt ("Log.WriteFile", 0) == 1;
-            mErrorPause = UnityEngine.PlayerPrefs.GetInt ("Log.errorPause", 0) == 1;
-            mShowTimeStamp = UnityEngine.PlayerPrefs.GetInt ("Log.ShowTimeStamp", 1) == 1;
-            mFilter = UnityEngine.PlayerPrefs.GetInt ("Log.Filter", 0);
-            #else
-            mDebugLevel = UnityEngine.PlayerPrefs.GetInt ("Log.debugLevel", 0);
-            mWriteScreen = UnityEngine.PlayerPrefs.GetInt ("Log.WriteScreen", 0) == 1;
-            mWriteFile = UnityEngine.PlayerPrefs.GetInt ("Log.WriteFile", 0) == 1;
-            mErrorPause = UnityEngine.PlayerPrefs.GetInt ("Log.errorPause", 0) == 1;
-            mShowTimeStamp = UnityEngine.PlayerPrefs.GetInt ("Log.ShowTimeStamp", 0) == 1;
-            mFilter = UnityEngine.PlayerPrefs.GetInt ("Log.Filter", 0);
-            #endif
+            if (mDebugModel)
+            {
+                mDebugLevel = UnityEngine.PlayerPrefs.GetInt("Log.debugLevel", 1);
+                mWriteScreen = UnityEngine.PlayerPrefs.GetInt("Log.WriteScreen", 1) == 1;
+                mWriteFile = UnityEngine.PlayerPrefs.GetInt("Log.WriteFile", 0) == 1;
+                mErrorPause = UnityEngine.PlayerPrefs.GetInt("Log.errorPause", 0) == 1;
+                mShowTimeStamp = UnityEngine.PlayerPrefs.GetInt("Log.ShowTimeStamp", 1) == 1;
+                mFilter = UnityEngine.PlayerPrefs.GetInt("Log.Filter", 0);
+            }
+            else
+            {
+                mDebugLevel = UnityEngine.PlayerPrefs.GetInt ("Log.debugLevel", 0);
+                mWriteScreen = UnityEngine.PlayerPrefs.GetInt ("Log.WriteScreen", 0) == 1;
+                mWriteFile = UnityEngine.PlayerPrefs.GetInt ("Log.WriteFile", 0) == 1;
+                mErrorPause = UnityEngine.PlayerPrefs.GetInt ("Log.errorPause", 0) == 1;
+                mShowTimeStamp = UnityEngine.PlayerPrefs.GetInt ("Log.ShowTimeStamp", 0) == 1;
+                mFilter = UnityEngine.PlayerPrefs.GetInt ("Log.Filter", 0);
+            }
         }
 
         static void onUnityLogCallback(string condition, string StackTrace, LogType lt)
@@ -179,7 +182,7 @@ namespace Arale.Engine
             }
             mMutex.ReleaseMutex();
 
-            #if UNITY_EDITOR
+            if (!mDebugModel)return;
             switch(type)
             {
                 case Type.D:
@@ -190,10 +193,11 @@ namespace Arale.Engine
                     Debug.LogWarning(logStr, null);
                     break;
                 case Type.E:
+                    Exception e = content as Exception; 
+                    if(e!=null)logStr += "\r\n" + e.ToString();
                     Debug.LogError(logStr, null);
                     break;
             }
-            #endif
         }
 
         static void writeToFile(object source, ElapsedEventArgs e)
