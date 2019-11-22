@@ -109,10 +109,10 @@ public class Buff
     				buff = new LuaBuff ();
     				break;
     			case 1:
-    				buff = new SkillBuff ();
+    				buff = new GameSkillBuff ();
     				break;
                 case 2:
-                    buff = new SkillBuffEx();
+                    buff = new GameSkillBuffEx();
                     break;
     			default:
     				return;

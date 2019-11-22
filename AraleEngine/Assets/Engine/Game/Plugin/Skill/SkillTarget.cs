@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.IO;
+using System.Xml;
 
 public partial class SkillTarget : SkillNode
 {
@@ -59,20 +60,33 @@ public partial class SkillTarget : SkillNode
 
     public static SkillTarget readType(BinaryReader r)
     {
-        int mask = r.ReadInt32();
+        int mask = r.PeekChar();
         SkillTarget t = newType((Type)(mask&0x000f));
-        t.mask = mask;
         t.read(r);
+        return t;
+    }
+
+    public static SkillTarget readType(XmlNode n)
+    {
+        SkillTarget.Type nodeType = (SkillTarget.Type)System.Enum.Parse(typeof(SkillTarget.Type), n.Name);
+        SkillTarget t = newType(nodeType);
+        t.read(n);
         return t;
     }
 
     public override void read(BinaryReader r)
     {
+        mask = r.ReadInt32();
     }
 
     public override void write(BinaryWriter w)
     {
         w.Write(mask);
+    }
+
+    public override void read(XmlNode n)
+    {
+        mask = int.Parse(n.Attributes["mask"].Value);
     }
 }
 

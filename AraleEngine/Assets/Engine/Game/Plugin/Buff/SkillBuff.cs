@@ -5,7 +5,7 @@ using Arale.Engine;
 using System.Collections.Generic;
 using System.Xml;
 
-public class SkillBuff : Buff
+public class GameSkillBuff : Buff
 {
 	Unit mUnit;
 	public class Root
