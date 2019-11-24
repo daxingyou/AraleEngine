@@ -111,9 +111,6 @@ public class Buff
     			case 1:
     				buff = new GameSkillBuff ();
     				break;
-                case 2:
-                    buff = new GameSkillBuffEx();
-                    break;
     			default:
     				return;
 			}

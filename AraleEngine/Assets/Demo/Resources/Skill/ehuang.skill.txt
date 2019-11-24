@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <skills>
-    <skill name="skill1" anim="attack" state="FFFD">
+    <skill name="eh.skill1" anim="attack" state="FFFD">
     	<action time="1" state="FFFD" end="">
             <Bullet id="200" target="Area" area="3,2.00,112.21" selector="Nearst" relation="Emney"/>
     	</action>
     </skill>
-	<skill name="skill2" anim="skill01" state="FFFD">
+	<skill name="eh.skill2" anim="skill01" state="FFFD">
         <action time="0.5" state="FFFD">
             <Bullet id="202" target="Area" area="2,4.00,7.00" selector="Nearst" relation="Emney"/>
         </action>
@@ -16,12 +16,12 @@
             <Bullet id="202" target="Area" area="2,4.00,7.00" selector="Nearst" relation="Emney"/>
         </action>
     </skill>
-    <skill name="skill3" anim="skill02" state="FFFD">
+    <skill name="eh.skill3" anim="skill02" state="FFFD">
         <action time="0.5" state="FFFD"  end="">
             <Bullet id="201" target="Area" area="2,4.00,5.00" selector="Nearst" relation="Emney"/>
         </action>
     </skill>
-    <skill name="skill4" anim="skill04" state="FFFD">
+    <skill name="eh.skill4" anim="skill04" state="FFFD">
         <action time="0.5" state="FFFD">
             <Buff id="10008" target="Area" area="3,2.00,112.21" selector="Nearst" relation="Emney"/>
         </action>

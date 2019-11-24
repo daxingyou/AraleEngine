@@ -123,13 +123,15 @@ public partial class GameSkill : AraleSerizlize
     {
         skills.Clear();
     }
-    public static GameSkill get(string name, string path=null)
+    public static GameSkill get(string skillname)
     {
+        int idx = skillname.LastIndexOf('/');
+        string key = skillname.Substring(idx + 1);
         GameSkill gs;
-        if (!skills.TryGetValue(name, out gs))
+        if (!skills.TryGetValue(key, out gs))
         {
-            if (!loadSkill(path))return null;
-            gs = skills[name];
+            if (!loadSkill("Skill/"+skillname.Remove(idx)))return null;
+            gs = skills[key];
         }
         gs.lastUseTime = Time.realtimeSinceStartup;
         return gs;

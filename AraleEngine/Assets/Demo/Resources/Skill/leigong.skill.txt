@@ -1,22 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <skills>
-    <skill name="skill1" anim="attack" state="FFFD">
+    <skill name="lg.skill1" anim="attack" state="FFFD">
     	<action time="0.5" state="FFFD" end="">
             <Harm harm="10" target="Area" area="3,4.00,72.00" selector="Nearst" relation="Emney"/>
     	</action>
     </skill>
-	<skill name="skill2" anim="skill01" state="FFFD">
+	<skill name="lg.skill2" anim="skill01" state="FFFD">
         <action time="1.3" state="FFFD" end="">
             <Bullet id="601" target="Area" area="2,2.00,6.00" selector="Nearst" relation="Emney"/> 
             <Harm harm="10" target="Area" area="2,2.00,6.00" selector="Nearst" relation="Emney"/>
         </action>
     </skill>
-    <skill name="skill3" anim="skill02" state="FFFD">
+    <skill name="lg.skill3" anim="skill02" state="FFFD">
         <action time="1.5" state="FFFD"  end="">
             <Bullet id="602" target="Area" area="2,2.00,6.00" selector="Nearst" relation="Emney"/>
         </action>
     </skill>
-    <skill name="skill4" anim="skill04" state="FFFD">
+    <skill name="lg.skill4" anim="skill04" state="FFFD">
         <action time="2.0" state="FFFD" end="">
             <Bullet id="603" target="Area" area="2,2.00,6.00" selector="Nearst" relation="Emney"/>
             <Harm harm="50" target="Area" area="2,2.00,3.20" selector="Nearst" relation="Emney"/>
