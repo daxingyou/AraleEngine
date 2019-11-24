@@ -86,10 +86,10 @@ public class Player : Unit, PoolMgr<int>.IPoolObject
 		return base.onEvent (evt, param, sender);
 	}
 
-	public override int relation(Unit u)
+    public override int relation(Unit u)
 	{
-		if (u.type != type)return -1;
-		return 0;
+        if (u.type != type)return -1;
+        return 0;
 	}
 
     public override float speed{get{return isState(UnitState.Move)?scale * table.speed:0;}}

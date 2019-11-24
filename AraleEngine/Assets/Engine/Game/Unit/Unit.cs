@@ -64,7 +64,7 @@ public enum UnitRelation
     Self=0x1,//自己
     Emney=0x2,//敌人
     Friend=0x4,//朋友
-    Neutral=0x8,//对立
+    Neutral=0x8,//中立
 }
 #endregion
 
@@ -351,7 +351,20 @@ public abstract class Unit : LuaMono
 	protected virtual void onUnitParam(object param){}
     protected abstract void onUnitUpdate();
     protected abstract void onUnitDeinit();
-	public virtual int relation(Unit u){return 0;}
+    public virtual int relation(Unit u){return 0;}
+    public bool isRelation(Unit u, int relationMask)
+    {
+        if (u.guid == guid)
+        {
+            return (relationMask & (int)UnitRelation.Self) != 0;
+        }
+        else
+        {
+            int r = relation(u);
+            UnitRelation ur =  r == 0 ? UnitRelation.Neutral : (r > 0 ? UnitRelation.Friend : UnitRelation.Emney);
+            return (relationMask & (int)ur) != 0;
+        }
+    }
     public virtual float speed{get{return 0;}}
 	public virtual AnimPlugin   anim{get{ return null;}}
 	public virtual AttrPlugin   attr{get{ return null;}}

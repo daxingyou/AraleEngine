@@ -25,7 +25,7 @@ public class Bullet : Unit, PoolMgr<int>.IPoolObject
 	protected override void onAwake()
 	{
 		mMove  = new Move.Plug(this);
-		mBuff = new Buff.Plug (this);
+		mBuff  = new Buff.Plug (this);
 	}
 
 	void onMoveEvent(Move.Event evt, object param)

@@ -80,71 +80,59 @@ public class GameSkillBuffEx : Buff
 
     void harmProcess(SkillHarm n)
     {
-        if (n.target.type == SkillTarget.Type.Area)
-        {
-            SkillAreaTarget t = n.target as SkillAreaTarget;
-            IArea garea = GameArea.fromString (t.area);
+        Debug.LogError(n.area+","+n.type+","+n.relation.ToString("X"));
+        if (n.target == SkillTarget.Target.Area)
+        {//区域伤害
+            IArea garea = GameArea.fromString (n.area);
             Matrix4x4 mt = Matrix4x4.TRS (mUnit.pos, Quaternion.LookRotation (mUnit.dir), Vector3.one).inverse;
             List<Unit> units = mUnit.mgr.getUnitInArea (UnitType.Monster|UnitType.Player, garea, mt);
             for (int i = 0; i < units.Count; ++i)
             {
-                
                 Unit u = units [i];
-                if ((n.target.relation & UnitRelation.Self) == 0 && u.guid == mUnit.guid)continue;
+                if (!mUnit.isRelation(u, (int)n.relation))continue;
                 affectUnit(u, n);
             }
         }
         else
-        {
-            if ((n.target.relation & UnitRelation.Self) != 0)
-            {
-                affectUnit(mUnit, n);
-            }
+        {//目标伤害
+            if ((n.relation & UnitRelation.Self)!=0)affectUnit(mUnit, n);
             Unit u = mUnit.skill.targetUnit;
-            if (u == null)return;
-            affectUnit(u, n);
+            if (u != null && mUnit.isRelation(u, (int)n.relation))affectUnit(u, n);
         }
     }
 
     void bulletProcess(SkillBullet n)
     {
-        Bullet bt = mUnit.mgr.getUnit (0, UnitType.Bullet, n.id) as Bullet;
-        bt.setParam (mUnit.pos, mUnit.dir, mUnit);
-        bt.mOwner = mUnit.guid;
-        switch (n.target.type)
+        switch (n.target)
         {
-            case SkillTarget.Type.None:
-                switch (n.target.noneType)
+            case SkillTarget.Target.Dir:
                 {
-                    case SkillTarget.NoneType.Dir:
-                        Vector3 v = mUnit.skill.targetPos;
-                        v.y = bt.pos.y;
-                        bt.play ((v - bt.pos).normalized, mUnit.skill.targetGUID);
-                        break;
-                    case SkillTarget.NoneType.Unit:
-                        bt.play (mUnit.skill.targetPos, mUnit.skill.targetGUID);
-                        break;
-                    default:
-                        bt.play (mUnit.skill.targetPos, mUnit.skill.targetGUID);
-                        break;
-                }
-                break;
-            case SkillTarget.Type.Dir:
-                {
-                    SkillVecctorTarget t = n.target as SkillVecctorTarget;
-                    bt.play (t.local?bt.transform.localToWorldMatrix.MultiplyVector(t.vct):t.vct, mUnit.skill.targetGUID);
+                    Bullet bt = mUnit.mgr.getUnit (0, UnitType.Bullet, n.id) as Bullet;
+                    bt.setParam (mUnit.pos, mUnit.dir, mUnit);
+                    bt.mOwner = mUnit.guid;
+                    bt.play (n.locationDir(mUnit).normalized, mUnit.skill.targetGUID);
                     break;
                 }
-            case SkillTarget.Type.Pos:
+            case SkillTarget.Target.Pos:
                 {
-                    SkillVecctorTarget t = n.target as SkillVecctorTarget;
-                    bt.play (t.local?bt.transform.localToWorldMatrix.MultiplyPoint(t.vct):t.vct, mUnit.skill.targetGUID);
+                    Bullet bt = mUnit.mgr.getUnit (0, UnitType.Bullet, n.id) as Bullet;
+                    bt.setParam (mUnit.pos, mUnit.dir, mUnit);
+                    bt.mOwner = mUnit.guid;
+                    bt.play (n.locationDir(mUnit), mUnit.skill.targetGUID);
                     break;
                 }
-            case SkillTarget.Type.Area:
+            case SkillTarget.Target.Area:
                 {
-                    SkillAreaTarget t = n.target as SkillAreaTarget;
-                    //bt.play (t.local?bt.transform.localToWorldMatrix.MultiplyPoint(t.vct):t.vct, mUnit.skill.targetGUID);
+                    IArea garea = GameArea.fromString (n.area);
+                    Matrix4x4 mt = Matrix4x4.TRS (mUnit.pos, Quaternion.LookRotation (mUnit.dir), Vector3.one).inverse;
+                    List<Unit> units = mUnit.mgr.getUnitInArea (UnitType.Monster|UnitType.Player, garea, mt);
+                    for (int i = 0; i < units.Count; ++i)
+                    {
+                        Bullet bt = mUnit.mgr.getUnit (0, UnitType.Bullet, n.id) as Bullet;
+                        bt.setParam (mUnit.pos, mUnit.dir, mUnit);
+                        bt.mOwner = mUnit.guid;
+                        bt.play (units[i].pos, units[i].guid);
+                    }
                     break;
                 }
         }
@@ -152,6 +140,24 @@ public class GameSkillBuffEx : Buff
 
     void buffProcess(SkillBuff n)
     {
+        if (n.target == SkillTarget.Target.Area)
+        {
+            IArea garea = GameArea.fromString (n.area);
+            Matrix4x4 mt = Matrix4x4.TRS (mUnit.pos, Quaternion.LookRotation (mUnit.dir), Vector3.one).inverse;
+            List<Unit> units = mUnit.mgr.getUnitInArea (UnitType.Monster|UnitType.Player, garea, mt);
+            for (int i = 0; i < units.Count; ++i)
+            {
+                Unit u = units [i];
+                if (!mUnit.isRelation(u, (int)n.relation))continue;
+                u.buff.addBuff(n.id);
+            }
+        }
+        else
+        {
+            if ((n.relation & UnitRelation.Self)!=0)mUnit.buff.addBuff(n.id);
+            Unit u = mUnit.skill.targetUnit;
+            if (u != null && mUnit.isRelation(u, (int)n.relation))u.buff.addBuff(n.id);
+        }
     }
 
     void eventProcess(SkillEvent n)
@@ -173,17 +179,15 @@ public class GameSkillBuffEx : Buff
 
     void affectUnit(Unit u, SkillHarm n)
     {
-        bool notSelf = u.guid != mUnit.guid;
-        if (n.harm > 0&&notSelf)
+        if (u == null)return;
+        if (n.harm > 0)
         {
-            u.dir = (mUnit.pos - u.pos).normalized;
             u.anim.sendEvent(AnimPlugin.Hit);
         }
         AttrPlugin ap = u.attr;
         ap.HP -= n.harm;
         ap.sync(); 
         u.sendUnitEvent((int)UnitEvent.BeHit, mUnit.guid, true);
-        if(notSelf)u.dir = (mUnit.pos - u.pos).normalized;
     }
 
     protected override void onDeinit()

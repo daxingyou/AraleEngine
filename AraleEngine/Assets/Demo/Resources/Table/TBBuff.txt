@@ -1,9 +1,9 @@
 {"_id":1,"type":0,"param":0,"lua":"LBornBuff","desc":"角色出生buff"}
 {"_id":2,"type":0,"param":0,"lua":"LDieBuff","desc":"角色死亡buff"}
-{"_id":10,"type":1,"param":0,"lua":"skill/lingyuan","desc":"灵鸢技能1buff"}
-{"_id":11,"type":1,"param":1,"lua":"skill/lingyuan","desc":"灵鸢技能2buff"}
-{"_id":12,"type":1,"param":2,"lua":"skill/lingyuan","desc":"灵鸢技能3buff"}
-{"_id":13,"type":1,"param":3,"lua":"skill/lingyuan","desc":"灵鸢技能4buff"}
+{"_id":10,"type":2,"param":0,"lua":"skill/lingyuan.skill/skill1","desc":"灵鸢技能1buff"}
+{"_id":11,"type":2,"param":1,"lua":"skill/lingyuan.skill/skill2","desc":"灵鸢技能2buff"}
+{"_id":12,"type":1,"param":2,"lua":"skill/lingyuan.skill/skill3","desc":"灵鸢技能3buff"}
+{"_id":13,"type":1,"param":3,"lua":"skill/lingyuan.skill/skill4","desc":"灵鸢技能4buff"}
 {"_id":20,"type":0,"param":0,"lua":"LSkillHarm","desc":"小雪技能1buff"}
 {"_id":21,"type":1,"param":1,"lua":"","desc":"小雪技能2buff"}
 {"_id":22,"type":1,"param":2,"lua":"","desc":"小雪技能3buff"}

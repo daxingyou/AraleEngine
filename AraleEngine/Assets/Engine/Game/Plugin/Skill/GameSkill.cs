@@ -12,6 +12,8 @@ public partial class GameSkill : AraleSerizlize
     public string anim="";
     public List<SkillAction> actions = new List<SkillAction>();
     public string name{ get; protected set;}
+    //施法距离(位置,指向,选中,无)
+    public float distance;
 
     public override void read(BinaryReader r)
     {

@@ -138,6 +138,16 @@ namespace Arale.Engine
             return f;
         }
 
+        public static Vector3 toVector3(string s)
+        {
+            Vector3 v = UnityEngine.Vector3.zero;
+            string[] ss = s.Split(',');
+            v.x = float.Parse(ss[0]);
+            v.x = float.Parse(ss[1]);
+            v.x = float.Parse(ss[2]);
+            return v;
+        }
+
     	public static T[] reverse<T>(T[] sz)
     	{
     		for(int i=0,max=sz.Length;i<max/2;++i)

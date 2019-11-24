@@ -12,8 +12,7 @@ public partial class SkillAction : SkillNode
     public int    loopTimes;
     public int    state=UnitState.ALL;
     int    mask;
-    public bool   end{get{return (mask&0x0001)!=0;}}
-    public bool   cancelable{get{return (mask&0x0004)!=0;}}
+    public bool   end{get{return (mask&0x0001)!=0;} set{mask = value ? mask | 0x0001 : mask & ~0x0001;}}
     public List<SkillNode> nodes = new List<SkillNode>();
     public override void read(BinaryReader r)
     {
@@ -53,7 +52,7 @@ public partial class SkillAction : SkillNode
         attr = n.Attributes["loopTimes"];
         loopTimes = attr == null ? 0 : int.Parse(attr.Value);
         state = System.Convert.ToInt32(n.Attributes["state"].Value, 16);
-        mask  = System.Convert.ToInt32(n.Attributes["mask"].Value, 16);
+        end = n.Attributes["end"] != null;
         for (int i = 0,max=n.ChildNodes.Count; i < max; ++i)
         {
             XmlNode nd = n.ChildNodes[i];

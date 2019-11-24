@@ -76,9 +76,15 @@ public partial class SkillAnim : SkillNode
         base.write(w);
         w.Write(anim);
     }
+
+    public override void read(XmlNode n)
+    {
+        base.read(n);
+        anim = n.Attributes["anim"].Value;
+    }
 } 
 
-public partial class SkillBullet : SkillNode
+public partial class SkillBullet : SkillTarget
 {
     public enum Mode
     {
@@ -87,16 +93,14 @@ public partial class SkillBullet : SkillNode
         Chain,  //链式
     }
 
-    public int id;
+    public int  id;
+    public int  num;
     public Mode mode;
-    public SkillTarget target = new SkillTarget();
-
     public override void read(BinaryReader r)
     {
         base.read(r);
         id = r.ReadInt32();
         mode = (Mode)r.ReadInt32();
-        target = SkillTarget.readType(r);
     }
 
     public override void write(BinaryWriter w)
@@ -104,54 +108,56 @@ public partial class SkillBullet : SkillNode
         base.write(w);
         w.Write(id);
         w.Write((int)mode);
-        target.write(w);
+    }
+
+    public override void read(XmlNode n)
+    {
+        base.read(n);
+        id = int.Parse(n.Attributes["id"].Value);
     }
 }
 
-public partial class SkillHarm : SkillNode
+public partial class SkillHarm : SkillTarget
 {
     public int harm;
-    public SkillTarget target = new SkillTarget();
-
     public override void read(BinaryReader r)
     {
         base.read(r);
         harm = r.ReadInt32();
-        target = SkillTarget.readType(r);
     }
 
     public override void write(BinaryWriter w)
     {
         base.write(w);
         w.Write(harm);
-        target.write(w);
     }
 
     public override void read(XmlNode n)
     {
         base.read(n);
         harm = int.Parse(n.Attributes["harm"].Value);
-        target = SkillTarget.readType(n.ChildNodes[0]);
     }
 }
 
-public partial class SkillBuff : SkillNode
+public partial class SkillBuff : SkillTarget
 {
     public int id;
-    public SkillTarget target = new SkillTarget();
-
     public override void read(BinaryReader r)
     {
         base.read(r);
         id = r.ReadInt32();;
-        target = SkillTarget.readType(r);
     }
 
     public override void write(BinaryWriter w)
     {
         base.write(w);
         w.Write(id);
-        target.write(w);
+    }
+
+    public override void read(XmlNode n)
+    {
+        base.read(n);
+        id = int.Parse(n.Attributes["id"].Value);
     }
 }
 
@@ -169,24 +175,32 @@ public partial class SkillEvent : SkillNode
         base.write(w);
         w.Write(evt);
     }
+
+    public override void read(XmlNode n)
+    {
+        base.read(n);
+        evt = n.Attributes["evt"].Value;
+    }
 }
 
 public partial class SkillMove : SkillNode
 {
     public int id;
-    public SkillTarget target = new SkillTarget();
-
     public override void read(BinaryReader r)
     {
         base.read(r);
         id = r.ReadInt32();;
-        target = SkillTarget.readType(r);
     }
 
     public override void write(BinaryWriter w)
     {
         base.write(w);
         w.Write(id);
-        target.write(w);
+    }
+
+    public override void read(XmlNode n)
+    {
+        base.read(n);
+        id = int.Parse(n.Attributes["id"].Value);
     }
 }
