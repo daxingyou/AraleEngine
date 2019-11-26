@@ -5,6 +5,7 @@ public class TraceMove : Move
 {
 	protected override void start(Unit unit)
 	{
+        unit.move.moveState = State.Move;
         vTarget = unit.pos;
 		mSpeed = table.speed;
 	}

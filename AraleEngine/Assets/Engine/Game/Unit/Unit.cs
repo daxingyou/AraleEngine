@@ -156,9 +156,9 @@ public abstract class Unit : LuaMono
         }
     }
 
-    Vector3  mDir;
+    Vector3  mDir;//模型必须朝向z正轴
     public Vector3  dir
-    { 
+    {
         set
         {
             mDir = value;

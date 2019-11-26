@@ -94,6 +94,7 @@ public class Skill
 	{
 		public Skill skill;       //当前正在释放的技能
 		public Vector3 targetPos; //当前技能目标位置
+        public Vector3 targetDir{get{return(targetPos - mUnit.pos).normalized;}}
 		public Unit targetUnit;   //当前技能目标单位
 		public uint targetGUID{get{return targetUnit == null ? 0 : targetUnit.guid;}}
 		List<Skill> mSkills = new List<Skill>();

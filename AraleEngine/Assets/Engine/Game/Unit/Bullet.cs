@@ -9,7 +9,6 @@ public class Bullet : Unit, PoolMgr<int>.IPoolObject
 	public uint          	mOwner{ set; get;}//GUID
 	public int              mHarm{set;get;}
     public Action<int,int>  mOnEvent;
-    protected float      	mDelay;
     protected int        	mState;
 	public TBEffect table{ get; protected set;}
 	Move.Plug mMove;
@@ -99,17 +98,17 @@ public class Bullet : Unit, PoolMgr<int>.IPoolObject
 	{
 		mMove.update ();
 		mBuff.update ();
-		hit ();
+        hit ();
 	}
 
 	protected override void onUnitDeinit()
 	{
 		Pool.recyle (this);
 	}
-
-	protected virtual void hit()
+        
+    protected virtual void hit()
     {
-		if (!isServer)return;
+        if (!isServer||mHarm==0)return;
 		//自己实现碰撞(可以对目标进行拣选)
 		/*List<Unit> units = mgr.getUnitInSphere (1, pos, 1);
 		Ray ray = new Ray (pos, dir);
@@ -124,7 +123,7 @@ public class Bullet : Unit, PoolMgr<int>.IPoolObject
 			}
 		}*/
 		//利用unity物理引擎检测碰撞体
-		RaycastHit[] rh = Physics.RaycastAll (pos, dir, mMove.speed, 0x01<<LayerMask.NameToLayer ("Server"));
+        RaycastHit[] rh = Physics.RaycastAll (pos, dir, mMove.speed, 0x01<<LayerMask.NameToLayer ("Server"));
 		if (rh!=null)
 		{
 			for (int i = 0; i < rh.Length; ++i)

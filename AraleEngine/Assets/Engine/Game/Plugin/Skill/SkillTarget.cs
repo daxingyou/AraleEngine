@@ -76,13 +76,13 @@ public partial class SkillTarget : SkillNode
         switch (location)
         {
             case Location.Self:
-                return u.transform.localToWorldMatrix.MultiplyVector(vct);
+                return Quaternion.Euler(vct)*u.transform.forward;
             case Location.Target:
-                return u.skill.targetUnit.transform.localToWorldMatrix.MultiplyVector(vct);
+                return Quaternion.Euler(vct)*u.skill.targetDir+vct;
             case Location.World:
-                return vct;
+                return Quaternion.Euler(vct)*Vector3.forward;
             default:
-                return u.transform.localToWorldMatrix.MultiplyVector(vct);
+                return Quaternion.Euler(vct)*u.transform.forward;
         }
     }
 
@@ -93,7 +93,7 @@ public partial class SkillTarget : SkillNode
             case Location.Self:
                 return u.transform.localToWorldMatrix.MultiplyPoint(vct);
             case Location.Target:
-                return u.skill.targetUnit.transform.localToWorldMatrix.MultiplyPoint(vct);
+                return u.skill.targetPos+vct;
             case Location.World:
                 return vct;
             default:

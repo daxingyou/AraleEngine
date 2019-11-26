@@ -12,6 +12,7 @@ public class PathMove : Move
     protected override void start(Unit unit)
     {
         mSpeed = unit.speed;
+        unit.move.moveState = State.Move;
     }
 
     void onWaypointChange(int pointIdx)

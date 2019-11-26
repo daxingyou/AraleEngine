@@ -3,14 +3,13 @@ if LDieBuff then print("same lua, reload ignore!!!") end
 local M = 
 {
 	_cs  = nil;
-	_unit= nil;
 	[0] = function(this, param)
-		this._unit = param;
-		this._cs:decUnitState(this._unit,UnitState.Alive)
-		this._cs:decUnitState(this._unit,UnitState.Move)
-		this._cs:decUnitState(this._unit,UnitState.Skill)
-		this._unit.anim:sendEvent (AnimPlugin.Die)
-		this._cs:decUnitState(this._unit,UnitState.Anim)
+		local unit = param;
+		this._cs:decUnitState(UnitState.Alive)
+		this._cs:decUnitState(UnitState.Move)
+		this._cs:decUnitState(UnitState.Skill)
+		unit.anim:sendEvent (AnimPlugin.Die)
+		this._cs:decUnitState(UnitState.Anim)
 		this._cs.state = 1
 	end;
 }

@@ -8,6 +8,7 @@ public class DirMove : Move
 	{
 		mSpeed = table.speed;
 		mDistance = table.life;
+        unit.move.moveState = State.Move;
 	}
 
 	protected override void update(Unit unit)

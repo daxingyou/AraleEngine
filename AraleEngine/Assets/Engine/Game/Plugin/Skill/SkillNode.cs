@@ -94,12 +94,14 @@ public partial class SkillBullet : SkillTarget
     }
 
     public int  id;
+    public int  harm;
     public int  num;
     public Mode mode;
     public override void read(BinaryReader r)
     {
         base.read(r);
         id = r.ReadInt32();
+        harm = r.ReadInt32();
         mode = (Mode)r.ReadInt32();
     }
 
@@ -107,6 +109,7 @@ public partial class SkillBullet : SkillTarget
     {
         base.write(w);
         w.Write(id);
+        w.Write(harm);
         w.Write((int)mode);
     }
 
@@ -114,6 +117,8 @@ public partial class SkillBullet : SkillTarget
     {
         base.read(n);
         id = int.Parse(n.Attributes["id"].Value);
+        XmlAttribute attr = n.Attributes["harm"];
+        harm = attr == null ? 0 : int.Parse(attr.Value);
     }
 }
 

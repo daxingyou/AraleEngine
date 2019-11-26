@@ -76,7 +76,6 @@ public class GameSkillBuff : Buff
 
     void harmProcess(SkillHarm n)
     {
-        Debug.LogError(n.area+","+n.type+","+n.relation.ToString("X"));
         if (n.target == SkillTarget.Target.Area)
         {//区域伤害
             IArea garea = GameArea.fromString (n.area);
@@ -101,12 +100,26 @@ public class GameSkillBuff : Buff
     {
         switch (n.target)
         {
+            case SkillTarget.Target.Unit:
+                {
+                    Bullet bt = mUnit.mgr.getUnit (0, UnitType.Bullet, n.id) as Bullet;
+                    bt.setParam (mUnit.pos, mUnit.dir, mUnit);
+                    bt.mOwner = mUnit.guid;
+                    bt.mHarm = n.harm;
+                    Vector3 projDir = n.locationDir(mUnit);
+                    projDir.y = 0;
+                    bt.play (projDir.normalized, mUnit.skill.targetGUID);
+                    break;
+                }
             case SkillTarget.Target.Dir:
                 {
                     Bullet bt = mUnit.mgr.getUnit (0, UnitType.Bullet, n.id) as Bullet;
                     bt.setParam (mUnit.pos, mUnit.dir, mUnit);
                     bt.mOwner = mUnit.guid;
-                    bt.play (n.locationDir(mUnit).normalized, mUnit.skill.targetGUID);
+                    bt.mHarm = n.harm;
+                    Vector3 projDir = n.locationDir(mUnit);
+                    projDir.y = 0;
+                    bt.play (projDir.normalized, mUnit.skill.targetGUID);
                     break;
                 }
             case SkillTarget.Target.Pos:
@@ -114,7 +127,8 @@ public class GameSkillBuff : Buff
                     Bullet bt = mUnit.mgr.getUnit (0, UnitType.Bullet, n.id) as Bullet;
                     bt.setParam (mUnit.pos, mUnit.dir, mUnit);
                     bt.mOwner = mUnit.guid;
-                    bt.play (n.locationDir(mUnit), mUnit.skill.targetGUID);
+                    bt.mHarm = n.harm;
+                    bt.play (n.locationPos(mUnit), mUnit.skill.targetGUID);
                     break;
                 }
             case SkillTarget.Target.Area:
@@ -127,6 +141,7 @@ public class GameSkillBuff : Buff
                         Bullet bt = mUnit.mgr.getUnit (0, UnitType.Bullet, n.id) as Bullet;
                         bt.setParam (mUnit.pos, mUnit.dir, mUnit);
                         bt.mOwner = mUnit.guid;
+                        bt.mHarm = n.harm;
                         bt.play (units[i].pos, units[i].guid);
                     }
                     break;

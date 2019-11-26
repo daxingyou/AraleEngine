@@ -5,6 +5,7 @@ public class PosMove : Move
 {
 	protected override void start(Unit unit)
 	{
+        unit.move.moveState = State.Move;
 		mSpeed = table.speed;
 		if(mSpeed == 0)
 		{//直接放置目的地
