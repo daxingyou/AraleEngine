@@ -13,7 +13,7 @@ public class GameSkillBuff : Buff
         mUnit  = unit;
         mUnit.sendUnitEvent ((int)UnitEvent.SkillBegin,null,true);
         mGS = GameSkill.get(table.lua);
-        mUnitState = mGS.state;
+        unitState = mGS.state;
         mUnit.forward (mUnit.skill.targetPos);
         if (!string.IsNullOrEmpty(mGS.anim))
         {
@@ -35,7 +35,7 @@ public class GameSkillBuff : Buff
     {
         SkillAction act = a.userData as SkillAction;
         mCurAction = act;
-        mUnitState = act.state;
+        unitState = act.state;
         for (int i = 0; i < act.nodes.Count; ++i)
         {
             SkillNode n = act.nodes[i];
@@ -190,9 +190,7 @@ public class GameSkillBuff : Buff
 
     protected override void onDeinit()
     {
-        mCurAction = null;
-        mUnitState = UnitState.ALL;
+        mUnit.syncState();
         mUnit.sendUnitEvent ((int)UnitEvent.SkillEnd, null, true);
-        mUnit = null;
     }
 }

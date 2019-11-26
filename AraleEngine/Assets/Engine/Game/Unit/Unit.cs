@@ -35,6 +35,7 @@ public enum UnitEvent
 public class UnitState
 {
     public const int ALL  =0xFFFF;
+    public const int STOK =0x8000;
     public const int Init =0xFFFD;//初始状态
 	public const int Exist=0x0001;//存
 	public const int Alive=0x0002;//生
@@ -73,53 +74,18 @@ public abstract class Unit : LuaMono
 	public uint  guid{ get; private set;}//单位编号
 	public int   type{ get; private set;}//单位类型
 	public int   tid { get; private set;}//单位配表id
-	public int   state{get; private set;}//对象状态,掩码最后位勿用，用来标识加状态还是减状态
-    #region 状态引用计数
-    //unit内部实现状态引用计数管理(这个出错不好处理，尽量使用buff管理状态引用,涉及修改状态时尽量使用buff)
-    int[] statemap;//statemap长度决定了同时最多允许同位被锁定多少次，起到引用计数效果，防止解锁混乱
-    string strStateMap{get{string s = ""; for (int i = 0; i < statemap.Length; ++i)s += "," + statemap[i]; return s;}}
-    void addStateMap(int mask)
-    {//记录锁位信息,把每个置位分配到不同的statemap单元
-        int maskFilter = mask;
-        for (int i = 0, max = statemap.Length; i < max&&maskFilter!=0; ++i)
-        {
-            int m = (~statemap[i])&maskFilter;
-            statemap[i] |= m;
-            maskFilter = (~m) & maskFilter;
-        }
-    }
-
-    int decStateMap(int mask)
-    {//反解锁位信息
-        int maskFilter = mask;
-        for (int i = 0, max = statemap.Length; i < max&&maskFilter!=0; ++i)
-        {
-            int m = ~(statemap[i]&maskFilter);
-            statemap[i] &= m;
-            maskFilter = m & maskFilter;
-        }
-        for (int i = 0, max = statemap.Length; i < max&&mask!=0; ++i)
-        {
-            int m = ~(statemap[i]&mask);
-            statemap[i] &= m;
-            mask = m & mask;
-        }
-        return mask;
-    }
-    #endregion
-
     #region 状态管理
+    int mState;//掩码最后位勿用，用来标识加状态还是减状态
+    public int   state{get {return buff==null||(mState&UnitState.STOK)!=0?mState:mState=buff.unitState;}}
 	public void addState(int mask, bool sync=false)
 	{//请使用buff设置状态
-        if (statemap != null)mask = decStateMap(mask);
-		state |= mask;
+        mState |= mask;
         notifyStateChanged(state, sync);
 	}
 
 	public void decState(int mask, bool sync=false)
     {//请使用buff设置状态
-        if (statemap != null)addStateMap(mask);
-		state &= (~mask);
+        mState &= (~mask);
         notifyStateChanged(state, sync);
 	}
 
@@ -132,7 +98,8 @@ public abstract class Unit : LuaMono
 	{
 		pos = msg.pos;
 		dir = msg.dir;
-		state = msg.state;
+		mState = msg.state;
+        Debug.LogError("c:"+mState.ToString("X"));
         notifyStateChanged(state,false);
 	}
 
@@ -143,6 +110,7 @@ public abstract class Unit : LuaMono
 		msg.pos   = pos;
 		msg.dir   = dir;
 		msg.state = state;
+        Debug.LogError("s:"+state.ToString("X"));
 		sendMsg((short)MyMsgId.State, msg);
 	}
 
@@ -520,7 +488,7 @@ public abstract class Unit : LuaMono
 
 			unit.type     = unitType;
 			unit.tid      = tid;
-            unit.state    = UnitState.Init;
+            unit.mState   = UnitState.Init;
 			unit.isServer = isServer;
 			mUnitList.Add(unit);
 			mUnits[unit.guid] = unit; 

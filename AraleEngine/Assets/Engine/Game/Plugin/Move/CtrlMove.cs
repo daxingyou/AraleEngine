@@ -9,6 +9,7 @@ public class CtrlMove : Move
     Vector3 mDir;
     protected override void start(Unit unit)
     {
+        if (!unit.isState(UnitState.Move))return;
         mSpeed = unit.speed;
         unit.move.moveState = State.Run;
         if (mDir != vTarget)
@@ -20,6 +21,7 @@ public class CtrlMove : Move
 
     protected override void update(Unit unit)
     {
+        if (!unit.isState(UnitState.Move))return;
         mSpeed = unit.speed;
         unit.setDir(vTarget);
         unit.pos += Time.deltaTime * vTarget * mSpeed;

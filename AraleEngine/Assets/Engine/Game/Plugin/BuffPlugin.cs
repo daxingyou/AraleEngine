@@ -17,27 +17,22 @@ public class Buff
     public const int EvtMutex  = 2;
 	public const int EvtOverlyingBegin = 102;
 	public const int EvtOverlyingEnd   = 103;
-    protected int mUnitState=UnitState.ALL;
-    public void addUnitState(Unit unit, int mask, bool sync=false)
-    {//如果有一个buff锁定了该状态就不能恢复
-        mUnitState |= mask;
-        int m = unit.buff.buffUnitState();
-        unit.addState(mask & m, sync);
-    }
-    public void decUnitState(Unit unit, int mask, bool sync=false)
-    {//禁用状态可以随便禁用
-        mUnitState &= (~mask);
-        unit.decState(mask, sync);
-    }
+    int    mUnitState=UnitState.ALL;
+    public int unitState{ get{return mUnitState;} set{mUnitState = value;mUnit.decState(UnitState.STOK);}}
+    public void addUnitState(int mask){unitState |= mask;}
+    public void decUnitState(int mask){unitState &= (~mask);}
+    protected Unit    mUnit;
 	protected TBBuff  mTB;
     protected float   mTime;
     protected int     mState;
-	public int state{get{return mState;}set{mState = value;}}
+	public int    state{get{return mState;}set{mState = value;}}
 	public bool   isOver{get{return mState <= 0;}}
+    public Unit   unit{get{return mUnit;}}
 	public TBBuff table{get{return mTB;}}
 	public TimeMgr.TimeAxis timer{ get; protected set;}
 	protected void init(Unit unit)
 	{
+        mUnit = unit;
 		mTime = 0;
 		mState= 1;
 		timer = new TimeMgr.TimeAxis ();
@@ -47,8 +42,10 @@ public class Buff
 	protected void deinit()
 	{
 		onDeinit ();
-		timer = null;
-        if(mUnitState!=UnitState.ALL)Log.e("buff state not clear!!! id=" + mTB.id, Log.Tag.Skill);
+        unitState = UnitState.ALL;
+        mUnit.syncState();
+        mUnit = null;
+        timer = null;
 	}
 
 	protected void update()
@@ -76,12 +73,19 @@ public class Buff
 	protected virtual bool onEvent(int evt, object param){return false;}
 
 
-	#region 插件
 	public class Plug: Plugin
 	{
 		List<Buff> mBuffs = new List<Buff> ();
         delegate void OnMutex(Unit unit, TBBuff newBuff, ref bool reject);
 		OnMutex onMutex;
+        public int unitState
+        {
+            get{
+                int mask = UnitState.ALL;
+                for (int i = 0, max = mBuffs.Count; i < max; ++i)mask &= mBuffs[i].mUnitState;
+                return mask;
+            }
+        }
 		public Plug(Unit unit):base(unit)
 		{
 		}
@@ -93,7 +97,7 @@ public class Buff
 
 		//creator是buff的创建者,用于计算动态伤害参数
 		public void addBuff(int buffTID, Unit creator=null)
-		{
+        {
 			Debug.Assert (mUnit.isServer);
 			Log.i("addBuff id=" + buffTID, Log.Tag.Skill);
 			TBBuff tb = TableMgr.single.GetData<TBBuff>(buffTID);
@@ -115,8 +119,8 @@ public class Buff
     				return;
 			}
 			buff.mTB = tb;
+            mBuffs.Add(buff);
 			buff.init(mUnit);
-			mBuffs.Add(buff);
 			addBuff (buff);
 			if (tb.mutex != 0)onMutex += buff.onMutex;
 		}
@@ -186,6 +190,8 @@ public class Buff
 			}
 		}
 
+
+        #region buff同步(通知客户端显示buff标记)
 		void clearBuff(Buff buff)
 		{
 			if (buff.table.flag == null)return;
@@ -215,18 +221,6 @@ public class Buff
 			msg.buff = (short)buff.table.id;
 			mUnit.sendMsg ((short)MyMsgId.Buff, msg);
 		}
-
-        public int buffUnitState()
-        {
-            int mask = UnitState.ALL;
-            for (int i = 0, max = mBuffs.Count; i < max; ++i)mask &= mBuffs[i].mUnitState;
-            return mask;
-        }
-
-        public void drawDebug()
-        {
-            
-        }
 
 		public void sync()
 		{
@@ -266,7 +260,7 @@ public class Buff
 				}
 			}
 		}
+        #endregion
 	}
-	#endregion
 }
 #endregion
