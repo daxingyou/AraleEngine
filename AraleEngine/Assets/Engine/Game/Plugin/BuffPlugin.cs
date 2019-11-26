@@ -18,9 +18,9 @@ public class Buff
 	public const int EvtOverlyingBegin = 102;
 	public const int EvtOverlyingEnd   = 103;
     int    mUnitState=UnitState.ALL;
-    public int unitState{ get{return mUnitState;} set{mUnitState = value;mUnit.decState(UnitState.STOK);}}
-    public void addUnitState(int mask){unitState |= mask;}
-    public void decUnitState(int mask){unitState &= (~mask);}
+    public void setUnitState(int mask,bool sync=false){if (mask == 0)return;mUnitState = mask;mUnit.decState(UnitState.STOK);if (sync)mUnit.syncState();}
+    public void addUnitState(int mask,bool sync=false){mUnitState |= mask; mUnit.decState(UnitState.STOK); if(sync)mUnit.syncState();}
+    public void decUnitState(int mask,bool sync=false){mUnitState &= (~mask); mUnit.decState(UnitState.STOK); if(sync)mUnit.syncState();}
     protected Unit    mUnit;
 	protected TBBuff  mTB;
     protected float   mTime;
@@ -42,7 +42,7 @@ public class Buff
 	protected void deinit()
 	{
 		onDeinit ();
-        unitState = UnitState.ALL;
+        setUnitState(UnitState.ALL, true);
         mUnit.syncState();
         mUnit = null;
         timer = null;

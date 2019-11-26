@@ -16,10 +16,10 @@
 {"_id":201,"type":1,"param":1,"lua":"ehuang.skill/eh.skill2","desc":"娥皇技能2buff"}
 {"_id":202,"type":1,"param":2,"lua":"ehuang.skill/eh.skill3","desc":"娥皇技能3buff"}
 {"_id":203,"type":1,"param":3,"lua":"ehuang.skill/eh.skill4","desc":"娥皇技能4buff"}
-{"_id":300,"type":1,"param":0,"lua":"sunwukong.skill/swh.skill1","desc":"孙悟空技能1buff"}
-{"_id":301,"type":1,"param":1,"lua":"sunwukong.skill/swh.skill2","desc":"孙悟空技能2buff"}
-{"_id":302,"type":1,"param":2,"lua":"sunwukong.skill/swh.skill3","desc":"孙悟空技能3buff"}
-{"_id":303,"type":1,"param":3,"lua":"sunwukong.skill/swh.skill4","desc":"孙悟空技能4buff"}
+{"_id":300,"type":1,"param":0,"lua":"sunwukong.skill/swk.skill1","desc":"孙悟空技能1buff"}
+{"_id":301,"type":1,"param":1,"lua":"sunwukong.skill/swk.skill2","desc":"孙悟空技能2buff"}
+{"_id":302,"type":1,"param":2,"lua":"sunwukong.skill/swk.skill3","desc":"孙悟空技能3buff"}
+{"_id":303,"type":1,"param":3,"lua":"sunwukong.skill/swk.skill4","desc":"孙悟空技能4buff"}
 {"_id":400,"type":1,"param":0,"lua":"nezha.skill/nz.skill1","desc":"哪吒技能1buff"}
 {"_id":401,"type":1,"param":1,"lua":"nezha.skill/nz.skill2","desc":"哪吒技能2buff"}
 {"_id":402,"type":1,"param":2,"lua":"nezha.skill/nz.skill3","desc":"哪吒技能3buff"}

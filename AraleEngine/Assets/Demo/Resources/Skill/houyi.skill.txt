@@ -1,43 +1,39 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <skills>
-    <skill name="hy.skill1" anim="attack" state="FFFD">
-    	<action time="1" state="FFFD" end="">
-            <Bullet id="100">
-            </Bullet>
+    <skill name="hy.skill1" anim="attack" state="FFFB">
+    	<action time="1">
+            <Bullet id="100" />
     	</action>
+        <action time="1.5" end=""/>
     </skill>
-	<skill name="hy.skill2" anim="skill01" state="FFFD">
-        <action time="0.5" state="FFFD">
-            <Bullet id="100">
-            </Bullet> 
+	<skill name="hy.skill2" anim="skill01" state="FFFB">
+        <action time="0.5">
+            <Bullet id="100" />
         </action>
-        <action time="1" state="FFFD">
-            <Bullet id="100">
-            </Bullet>
+        <action time="1">
+            <Bullet id="100" />
         </action>
-        <action time="1.5" state="FFFD" end="">
-            <Bullet id="101">
-            </Bullet> 
+        <action time="1.5">
+            <Bullet id="101" />
         </action>
+        <action time="2" end=""/>
     </skill>
-    <skill name="hy.skill3" anim="skill02" state="FFFD">
-        <action time="1.5" state="FFFD"  end="">
-            <Bullet id="100">
-            </Bullet>
+    <skill name="hy.skill3" anim="skill02" state="FFFB">
+        <action time="1.5">
+            <Bullet id="100" />
         </action>
+        <action time="2" end=""/>
     </skill>
-    <skill name="hy.skill4" anim="skill04" state="FFFD">
-        <action time="2" state="FFFD">
-            <Bullet id="100">
-            </Bullet>
+    <skill name="hy.skill4" anim="skill04" state="FFFB">
+        <action time="2">
+            <Bullet id="100" />
         </action>
-        <action time="2.2" state="FFFD">
-            <Bullet id="100">
-            </Bullet>
+        <action time="2.2">
+            <Bullet id="100" />
         </action>
-        <action time="2.5" state="FFFD" end="">
-            <Bullet id="101">
-            </Bullet>
+        <action time="2.5">
+            <Bullet id="101" />
         </action>
+        <action time="3" end=""/>
     </skill>
 </skills>

@@ -3,11 +3,9 @@ if LBornBuff then print("same lua, reload ignore!!!") end
 local M = 
 {
 	_cs  = nil;
-	_unit= nil;
 	[0] = function(this, param)
-		this._unit = param;
-		this._cs:decUnitState(this._unit,UnitState.Move);
-		this._cs:decUnitState(this._unit,UnitState.Skill,true);
+		this._cs:decUnitState(UnitState.Move);
+		this._cs:decUnitState(UnitState.Skill,true);
 		this._cs.state = 1;
 		local ta = this._cs.timer
 		action = ta:AddAction(TimeMgr.Action());
@@ -18,8 +16,8 @@ local M =
 	end;
 
 	[1] = function(this, param)
-		this._cs:addUnitState(this._unit,UnitState.Move);
-		this._cs:addUnitState(this._unit,UnitState.Skill,true);
+		this._cs:addUnitState(UnitState.Move);
+		this._cs:addUnitState(UnitState.Skill,true);
 	end;
 }
 

@@ -64,7 +64,8 @@ public class AnimPlugin : Plugin
     			if (mAnimtor != null)mAnimtor.SetTrigger("Jump");
     			if (mAnim != null)mAnim.Play ("jump", PlayMode.StopAll);
     			break;
-    		case Hit:
+            case Hit:
+                if (mUnit.isState(UnitState.Break))break;
     			if (mAnimtor != null)mAnimtor.SetTrigger("Hit");
     			if (mAnim != null)mAnim.Play ("hit", PlayMode.StopAll);
     			needSync=true;

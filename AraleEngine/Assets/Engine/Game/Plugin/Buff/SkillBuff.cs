@@ -5,15 +5,13 @@ using System.Collections.Generic;
 
 public class GameSkillBuff : Buff
 {
-    Unit mUnit;
     GameSkill mGS;
     SkillAction mCurAction;
     protected override void onInit(Unit unit)
     {
-        mUnit  = unit;
         mUnit.sendUnitEvent ((int)UnitEvent.SkillBegin,null,true);
         mGS = GameSkill.get(table.lua);
-        unitState = mGS.state;
+        setUnitState(mGS.state,true);
         mUnit.forward (mUnit.skill.targetPos);
         if (!string.IsNullOrEmpty(mGS.anim))
         {
@@ -35,7 +33,7 @@ public class GameSkillBuff : Buff
     {
         SkillAction act = a.userData as SkillAction;
         mCurAction = act;
-        unitState = act.state;
+        setUnitState(act.state,true);
         for (int i = 0; i < act.nodes.Count; ++i)
         {
             SkillNode n = act.nodes[i];

@@ -99,7 +99,6 @@ public abstract class Unit : LuaMono
 		pos = msg.pos;
 		dir = msg.dir;
 		mState = msg.state;
-        Debug.LogError("c:"+mState.ToString("X"));
         notifyStateChanged(state,false);
 	}
 
@@ -110,7 +109,6 @@ public abstract class Unit : LuaMono
 		msg.pos   = pos;
 		msg.dir   = dir;
 		msg.state = state;
-        Debug.LogError("s:"+state.ToString("X"));
 		sendMsg((short)MyMsgId.State, msg);
 	}
 

@@ -10,7 +10,7 @@ public partial class SkillAction : SkillNode
     public float  time;
     public float  loopInterval=1;
     public int    loopTimes;
-    public int    state=UnitState.ALL;
+    public int    state;//0默认不生效
     int    mask;
     public bool   end{get{return (mask&0x0001)!=0;} set{mask = value ? mask | 0x0001 : mask & ~0x0001;}}
     public List<SkillNode> nodes = new List<SkillNode>();
@@ -51,7 +51,8 @@ public partial class SkillAction : SkillNode
         loopInterval = attr == null ? 0f : float.Parse(attr.Value);
         attr = n.Attributes["loopTimes"];
         loopTimes = attr == null ? 0 : int.Parse(attr.Value);
-        state = System.Convert.ToInt32(n.Attributes["state"].Value, 16);
+        attr = n.Attributes["loopTimes"];
+        state = attr == null? 0:System.Convert.ToInt32(attr.Value, 16);
         end = n.Attributes["end"] != null;
         for (int i = 0,max=n.ChildNodes.Count; i < max; ++i)
         {

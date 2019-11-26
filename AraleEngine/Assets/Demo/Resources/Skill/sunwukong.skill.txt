@@ -1,29 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <skills>
-    <skill name="swk.skill1" anim="attack" state="FFFD">
-    	<action time="0.5" state="FFFD" end="">
-            <Harm harm="10" target="Area" area="3,4.00,72.00" relation="Emney"/>
-    	</action>
+    <skill name="swk.skill1" anim="attack" state="FFFB">
+    	<action time="0.5"><Harm harm="10" target="Area" area="3,4.00,72.00" relation="Emney"/></action>
+        <action time="1" end=""/>
     </skill>
-	<skill name="swk.skill2" anim="skill01" state="FFFD">
-        <action time="1" state="FFFD" end=""> 
-            <Harm harm="20" target="Area" area="2,2.00,6.00" relation="Emney"/>
-        </action>
+	<skill name="swk.skill2" anim="skill01" state="FFFB">
+        <action time="1"> <Harm harm="20" target="Area" area="2,2.00,6.00" relation="Emney"/></action>
+        <action time="1.5" end=""/>
     </skill>
-    <skill name="swk.skill3" anim="skill02" state="FFFD">
-        <action time="1" state="FFFD"  end="">
-            <Harm harm="20" target="Area" area="2,2.00,3.20" relation="Emney"/>
-        </action>
+    <skill name="swk.skill3" anim="skill02" state="FFFB">
+        <action time="1"><Harm harm="20" target="Area" area="2,2.00,3.20" relation="Emney"/></action>
+        <action time="1.5" end=""/>
     </skill>
-    <skill name="swk.skill4" anim="skill04" state="FFFD">
-        <action time="1" state="FFFD">
-            <Harm harm="5" target="Area" area="2,2.00,7.00" relation="Emney"/>
-        </action>
-        <action time="1.5" state="FFFD">
-            <Harm harm="5" target="Area" area="2,2.00,7.00" relation="Emney"/>
-        </action>
-        <action time="2.5" state="FFFD" end="">
-            <Harm harm="5" target="Area" area="2,2.00,7.00" relation="Emney"/>
-        </action>
+    <skill name="swk.skill4" anim="skill04" state="FFFB">
+        <action time="1"><Harm harm="5" target="Area" area="2,2,7" relation="Emney"/></action>
+        <action time="1.5"><Harm harm="5" target="Area" area="2,2,7" relation="Emney"/></action>
+        <action time="2.5"><Harm harm="5" target="Area" area="2,2,7" relation="Emney"/></action>
+        <action time="3" end=""/>
     </skill>
 </skills>

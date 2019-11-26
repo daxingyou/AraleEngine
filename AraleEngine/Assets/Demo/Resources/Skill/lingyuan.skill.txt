@@ -1,38 +1,41 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <skills>
     <skill name="ly.skill1" anim="attack" state="FFFB">
-        <action time="0.5" state="FFFF" end="">
+        <action time="0.5">
             <Harm harm="10" target="Area" area="3,2.00,112.21" selector="Nearst" relation="Emney"/>
         </action>
+        <action time="1.5" end=""/>
     </skill>
     <skill name="ly.skill2" anim="skill01" state="FFFB">
-        <action time="0.5" state="FFFB">
+        <action time="0.5">
             <Harm harm="10" target="Area" area="2,4.00,7.00" selector="Nearst" relation="Emney"/>
         </action>
-        <action time="0.8" state="FFFB">
+        <action time="0.8">
             <Harm harm="10" target="Area" area="2,4.00,7.00" selector="Nearst" relation="Emney"/>
         </action>
-        <action time="2.0" state="FFFF" end="" />
+        <action time="1.5" end=""/>
     </skill>
     <skill name="ly.skill3" anim="skill02" state="FFFB">
-        <action time="0.5" state="FFFB">
+        <action time="0.5">
             <Move id="101" target="Area" area="2,4.00,5.00" selector="Nearst" relation="Emney"/>
             <Harm harm="20" target="Area" area="2,4.00,6.00" selector="Nearst" relation="Emney"/>
         </action>
-        <action time="1.5" state="FFFB" end="">
+        <action time="1.5">
             <Move id="201" target="Area" area="2,4.00,6.00" selector="Nearst" relation="Emney"/>
             <Harm harm="30" target="Area" area="2,4.00,6.00" selector="Nearst" relation="Emney"/>
         </action>
+        <action time="2.0" end=""/>
     </skill>
     <skill name="ly.skill4" anim="skill04" state="FFFB">
-        <action time="2" state="FFFD">
+        <action time="2">
             <Harm harm="10" target="Area" area="3,2.00,112.21" selector="Nearst" relation="Emney"/>
         </action>
-        <action time="2.2" state="FFFD">
+        <action time="2.2">
             <Harm harm="10" target="Area" area="3,2.00,112.21" selector="Nearst" relation="Emney"/>
         </action>
-        <action time="2.5" state="FFFD" end="">
+        <action time="2.5">
             <Harm harm="10" target="Area" area="3,2.00,112.21" selector="Nearst" relation="Emney"/>
         </action>
+        <action time="3.0" end=""/>
     </skill>
 </skills>
