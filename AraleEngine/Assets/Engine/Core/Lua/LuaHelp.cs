@@ -69,6 +69,7 @@ public static class LuaHelp
 		typeof(BoolDelegateI),
         typeof(VoidDelegateF),
 		typeof(DG.Tweening.TweenCallback),
+        typeof(UIIndicator.OnIndicator),
 	};
 
 	//黑名单

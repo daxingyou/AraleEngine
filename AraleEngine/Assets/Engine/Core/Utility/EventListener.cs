@@ -19,6 +19,8 @@ namespace Arale.Engine
         public void AddOnClick(VoidDelegate callback){onClick += callback;}
         public void RemoveOnClick(VoidDelegate callback){onClick -= callback;}
         public VoidDelegate onPointDown;
+        public void AddOnPointDown(VoidDelegate callback){onPointDown += callback;}
+        public void RemoveOnPointDown(VoidDelegate callback){onPointDown -= callback;}
         public VoidDelegate onPointerEnter;
         public VoidDelegate onPointerExit;
         public VoidDelegate onPointerUp;

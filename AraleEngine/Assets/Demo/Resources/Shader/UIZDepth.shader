@@ -1,4 +1,5 @@
 ﻿//通过Shader "UI/Default"修改
+//让UGUI Image在Screen SPace模式下也有z轴深度
 Shader "Unlit/UIZDepth"  
 {  
     Properties  

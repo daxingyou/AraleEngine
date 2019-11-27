@@ -181,6 +181,19 @@ public class Skill
 			DebugLine.drawCircle(targetPos, 0.7f, Color.red);
 			if (targetUnit != null)DebugLine.drawCircle(targetUnit.pos, 0.7f, Color.magenta);
 		}
+
+        IndicatorMesh mIndicator;
+        public void showIndicator(Vector2 dir, float dis, float disPercent, bool end)
+        {
+            if (mIndicator == null)
+            {
+                GameObject go = new GameObject("indicator");
+                go.transform.SetParent(mUnit.transform, false);
+                mIndicator = go.AddComponent<IndicatorMesh>();
+            }
+            mIndicator.gameObject.SetActive(!end);
+            mIndicator.Show(dir, dis, disPercent);
+        }
 	}
 	#endregion
 }

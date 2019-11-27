@@ -40,14 +40,11 @@ function M:Start()
 	EventListener.Get(self.luaChat):AddOnClick(function(evt)  WindowMgr.single:GetWindow("ChatWindow", true) end)
 	EventListener.Get(self.luaHero):AddOnClick(function(evt)  WindowMgr.single:GetWindow("RoleCreateWindow", true) end)
 	EventListener.Get(self.luaLogout):AddOnClick(function(evt)  EventMgr.single:SendEvent("Game.Logout") end)
+	self.luaIndicator = self.luaIndicator:GetComponent("UIIndicator")
 	self.luaJoyStick = self.luaJoyStick:GetComponent("UIStick")
 	self.luaSkillBtn = self.luaSkillBtn:GetComponent("UISList")
-	self.luaSkillBtn.onSelectedChange = function(selItem)
-		local btn = selItem.mLO.mLT
-		btn:Play(self._hero)
-	end
 
-	if _hero == nil then
+	if self._hero == nil then
 		WindowMgr.single:GetWindow("RoleCreateWindow", true)
 	end
 end
