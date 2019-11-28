@@ -11,8 +11,9 @@ public class UIIndicator : MonoBehaviour,IPointerEnterHandler,IDragHandler,IEndD
     {
         Debug.Assert(radius > 0);
         rc = transform as RectTransform;
-        rc.sizeDelta.Set(2 * radius, 2 * radius);
+        rc.sizeDelta = new Vector2(2 * radius, 2 * radius);
     }
+    //dir是方向向量,disPercent是鼠标距离中心点距离除radius,end是否操作结束
     public delegate void OnIndicator(Vector2 dir, float disPercent, bool end);
     public OnIndicator onEvent;
     public void OnPointerEnter(PointerEventData eventData)

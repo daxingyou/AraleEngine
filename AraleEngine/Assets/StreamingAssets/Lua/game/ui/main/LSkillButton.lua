@@ -3,7 +3,7 @@ if LSkillButton then print("same lua, reload ignore!!!") end
 local M =
 {
 	_cs;
-	_skillTB;
+	_skill;
 }
 
 function M:new(cs)
@@ -18,15 +18,9 @@ function M:Awake()
 end
 
 function M:SetData(skill)
-	local tb = TableMgr.single:GetDataByKey(typeof(TBSkill), skill.mTID)
+	local tb = skill.TB
 	AssetRef.setImage(self.luaIcon, tb.icon)
-	self._skillTB = tb
-end
-
-function M:Play(hero)
-	if self.luaMask.isCD then return end
-	self.luaMask:Play(3)
-	hero.skill:play(self._skillTB._id)
+	self._skill = skill
 end
 
 function M:PlaySkill(evt)
@@ -37,8 +31,7 @@ function M:PlaySkill(evt)
 	indicator.transform.position = self._cs.transform.position
 	indicator.gameObject:SetActive(true)
 	indicator.onEvent = function(dir,disPercent,dragEnd)
-		hero.skill:showIndicator (dir,self._skillTB.distance,disPercent,dragEnd)
-		if dragEnd == true then self:Play(hero) end
+		hero.skill:showIndicator (self._skill,dir,disPercent,dragEnd)
 	end
 end
 --========================

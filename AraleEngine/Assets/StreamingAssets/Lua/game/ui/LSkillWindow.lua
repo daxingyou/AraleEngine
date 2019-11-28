@@ -44,7 +44,7 @@ function M:Start()
 	--bottom
 	local hasSkills = self._player.skill.skills
 	for i=1,hasSkills.Count do
-		local skill = TableMgr.single:GetDataByKey(typeof(TBSkill),hasSkills[i-1].mTID)
+		local skill = TableMgr.single:GetDataByKey(typeof(TBSkill),hasSkills[i-1].TB.id)
 		local icon = self._slots[i]
 		if icon~= nil then
 			icon.gameObject:SetActive(true)
@@ -90,7 +90,7 @@ function M:OnSkillSlot(dragItem,receiver)
 		slot1.transform.localPosition = Vector3.zero
 		slot2.transform.localPosition = Vector3.zero
 		if skill1 ~= nil then
-			skill2 = TableMgr.single:GetDataByKey(typeof(TBSkill),skill2.mTID)
+			skill2 = TableMgr.single:GetDataByKey(typeof(TBSkill),skill2.TB.id)
 			AssetRef.setImage(slot1, skill2.icon);
 			slot1.gameObject:SetActive(true)
 		else
@@ -98,7 +98,7 @@ function M:OnSkillSlot(dragItem,receiver)
 		end
 
 		if skill2 ~= nil then
-			skill1 = TableMgr.single:GetDataByKey(typeof(TBSkill),skill1.mTID)
+			skill1 = TableMgr.single:GetDataByKey(typeof(TBSkill),skill1.TB.id)
 			AssetRef.setImage(slot2, skill1.icon);
 			slot2.gameObject:SetActive(true)
 		else

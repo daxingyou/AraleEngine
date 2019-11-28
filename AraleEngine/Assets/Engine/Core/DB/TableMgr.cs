@@ -136,6 +136,7 @@ namespace Arale.Engine
 				DataPoolDic.Remove (type);
 			}
 			GetDataPool (type);
+            mDirty = true;
 		}
 
 		public string GenLuaExtend(Type type)

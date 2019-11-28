@@ -2,165 +2,135 @@
 using System.Collections;
 using Arale.Engine;
 
-[RequireComponent(typeof(MeshRenderer), typeof(MeshFilter))]
 public class IndicatorMesh : MonoBehaviour
 {
-    public float radius = 2f;
-    public float angleDegree = 100;
-    public int segments = 10;
-    public int angleDegreePrecision = 1000;
-    public int radiusPrecision = 1000;
-
-    private MeshFilter meshFilter;
-
-    private SectorMeshCreator creator = new SectorMeshCreator();
     private Mesh m_mesh;
+    Material  circleMat;
+    Material  rectMat;
+    RectMesh  rangMesh;
+    RectMesh  rectMesh;
+    FanMesh   fanMesh;
+    Transform sticker;
+    Matrix4x4 mLocalMX = Matrix4x4.identity;
+    Vector3 dir = Vector3.zero;
     [ExecuteInEditMode]
     private void Awake()
     {
-        meshFilter = GetComponent<MeshFilter>();
+        sticker = new GameObject("indicator").transform;
+        sticker.SetParent(transform, false);
+        rectMesh = new RectMesh();
+        rangMesh = new RectMesh();
+        fanMesh =  new FanMesh();
     }
 
     void Start()
     {
-        GetComponent<MeshRenderer>().material = ResLoad.get("Mat/Indicator").asset<Material>();
+        circleMat= ResLoad.get("Mat/Indicator1", ResideType.InScene).asset<Material>();
+        rectMat = ResLoad.get("Mat/Indicator2", ResideType.InScene).asset<Material>();
     }
 
-    private void Update()
+    void Update()
     {
-        meshFilter.mesh = creator.CreateMesh(radius, angleDegree, segments, angleDegreePrecision, radiusPrecision);
+        if (!sticker.gameObject.activeSelf)return;
+        sticker.forward = dir;
+        //rangMesh.draw(sticker.localToWorldMatrix, circleMat);
+        //rectMesh.draw(sticker.localToWorldMatrix*rectMesh.pivotMX, rectMat);
+        fanMesh.draw(sticker.localToWorldMatrix, circleMat);
     }
 
-    public void Show(Vector2 dir, float dis, float disPercent)
+    void OnDestroy()
     {
-        radius = dis;
-        transform.forward = new Vector3(dir.x, 0, dir.y);
+        GameObject.Destroy(sticker.gameObject);
     }
 
-    void OnDrawGizmos()
+    public void Show(Vector2 dir, float dis, float disPercent, bool show)
     {
-        Gizmos.color = Color.gray;
-        DrawMesh();
+        sticker.gameObject.SetActive(show);
+        if (!show)return;
+        this.dir.x = dir.x;
+        this.dir.z = dir.y;
+        rangMesh.get(dis*2, dis*2);
+        fanMesh.get(dis, 60);
+        rectMesh.get(1, dis, new Vector2(0f, -0.5f));
+        mLocalMX.SetTRS(Vector3.forward*(dis*disPercent), Quaternion.identity, Vector3.one);
     }
 
-    void OnDrawGizmosSelected()
+    class StickerMesh
     {
-        Gizmos.color = Color.green;
-        DrawMesh();
-    }
-
-    private void DrawMesh()
-    {
-        Mesh mesh = creator.CreateMesh(radius, angleDegree, segments, angleDegreePrecision, radiusPrecision);
-        int[] tris = mesh.triangles;
-        for (int i = 0; i < tris.Length; i += 3)
+        protected Mesh mMesh;
+        public void draw(Matrix4x4 mx, Material mat)
         {
-            Gizmos.DrawLine(convert2World(mesh.vertices[tris[i]]), convert2World(mesh.vertices[tris[i + 1]]));
-            Gizmos.DrawLine(convert2World(mesh.vertices[tris[i]]), convert2World(mesh.vertices[tris[i + 2]]));
-            Gizmos.DrawLine(convert2World(mesh.vertices[tris[i + 1]]), convert2World(mesh.vertices[tris[i + 2]]));
+            if(mMesh!=null)Graphics.DrawMesh(mMesh, mx, mat, 0);
         }
     }
 
-    private Vector3 convert2World(Vector3 src)
+    class FanMesh : StickerMesh
     {
-        return transform.TransformPoint(src);
-    }
-
-    private class SectorMeshCreator
-    {
-        private float radius;
-        private float angleDegree;
-        private int segments;
-
-        private Mesh cacheMesh;
-
-        /// <summary>
-        /// 创建一个扇形Mesh
-        /// </summary>
-        /// <param name="radius">扇形半价</param>
-        /// <param name="angleDegree">扇形角度</param>
-        /// <param name="segments">扇形弧线分段数</param>
-        /// <param name="angleDegreePrecision">扇形角度精度（在满足精度范围内，认为是同个角度）</param>
-        /// <param name="radiusPrecision">
-        /// <pre>
-        /// 扇形半价精度（在满足半价精度范围内，被认为是同个半价）。
-        /// 比如：半价精度为1000，则：1.001和1.002不被认为是同个半径。因为放大1000倍之后不相等。
-        /// 如果半价精度设置为100，则1.001和1.002可认为是相等的。
-        /// </pre>
-        /// </param>
-        /// <returns></returns>
-        public Mesh CreateMesh(float radius, float angleDegree, int segments, int angleDegreePrecision, int radiusPrecision)
+        float r;
+        float ang;
+        public Mesh get(float r, float ang)
         {
-            if (checkDiff(radius, angleDegree, segments, angleDegreePrecision, radiusPrecision))
-            {
-                Mesh newMesh = Create(radius, angleDegree, segments);
-                if (newMesh != null)
-                {
-                    cacheMesh = newMesh;
-                    this.radius = radius;
-                    this.angleDegree = angleDegree;
-                    this.segments = segments;
-                }
-            }
-            return cacheMesh;
-        }
-
-        private Mesh Create(float radius, float angleDegree, int segments)
-        {
-
-            if (segments == 0)
-            {
-                segments = 1;
-                #if UNITY_EDITOR
-                Debug.Log("segments must be larger than zero.");
-                #endif
-            }
-
-            Mesh mesh = new Mesh();
-            Vector3[] vertices = new Vector3[3 + segments - 1];//全部的顶点数据
+            if (this.r == r && this.ang == ang)return mMesh;
+            mMesh = new Mesh();
+            int segs = 32;//偶数,保证第一个点在0度
+            Vector3[] vertices = new Vector3[3 + segs - 1];
             vertices[0] = new Vector3(0, 0, 0);
-
-            float angle = Mathf.Deg2Rad * angleDegree;
-            float currAngle = angle / 2;
-            float deltaAngle = angle / segments;
-
-            currAngle = Mathf.Deg2Rad * (90 + angleDegree / 2);
-
+            float angle = Mathf.Deg2Rad * ang;
+            float beginAngle = (-angle+Mathf.PI)/2;//起始度数为90度
             //生成顶点数据
-            for (int i = 1; i < vertices.Length; i++)
+            for (int i = 1; i < segs; i++)
             {
-                vertices[i] = new Vector3(Mathf.Cos(currAngle) * radius, 0, Mathf.Sin(currAngle) * radius);
-                currAngle -= deltaAngle;
+                float curAng = beginAngle + angle * i / segs;
+                vertices[i] = new Vector3(Mathf.Cos(curAng) * r, 0.1f, Mathf.Sin(curAng) * r);
             }
-
+            mMesh.vertices = vertices;
             //生成三角形数据
-            int[] triangles = new int[segments * 3];//有segments个三角形，每3个数据构成一个三角形
+            int[] triangles = new int[segs * 3];//有segments个三角形，每3个数据构成一个三角形
             for (int i = 0, vi = 1; i < triangles.Length; i += 3, vi++)
             {
                 triangles[i] = 0;
                 triangles[i + 1] = vi;
                 triangles[i + 2] = vi + 1;
             }
-
-            mesh.vertices = vertices;
-            mesh.triangles = triangles;
-
+            mMesh.triangles = triangles;
             //纹理坐标
             Vector2[] uvs = new Vector2[vertices.Length];
-            float len = 2 * radius;
+            float len = 2 * r;
             for (int i = 0; i < uvs.Length; i++)
             {//归一化+坐标系反转与uv坐标系一致
                 uvs[i] = new Vector2(vertices[i].x/len+0.5f, -vertices[i].z/len+0.5f);
             }
-            mesh.uv = uvs;
-
-            return mesh;
+            mMesh.uv = uvs;
+            return mMesh;
         }
+    }
 
-        private bool checkDiff(float radius, float angleDegree, int segments, int angleDegreePrecision, int radiusPrecision)
+    class RectMesh : StickerMesh
+    {
+        float w;
+        float h;
+        public Matrix4x4 pivotMX = Matrix4x4.identity;
+        public Mesh get(float w,float h,Vector2 pivot=default(Vector2))
         {
-            return segments != this.segments || (int)((angleDegree - this.angleDegree) * angleDegreePrecision) != 0 ||
-                (int)((radius - this.radius) * radiusPrecision) != 0;
+            pivotMX.SetTRS(new Vector3(pivot.x * w,0.1f,-pivot.y * h), Quaternion.identity, Vector3.one);
+            if (this.w == w && this.h == h)return mMesh;
+            mMesh = new Mesh();
+            Vector3[] vertices = new Vector3[4];
+            vertices[0] = new Vector3(-w/2, 0, h/2);
+            vertices[1] = new Vector3(w/2, 0, h/2);
+            vertices[2] = new Vector3(w/2, 0, -h/2);
+            vertices[3] = new Vector3(-w/2, 0, -h/2);
+            mMesh.vertices = vertices;
+            Vector2[] uvs = new Vector2[vertices.Length];
+            uvs[0] = new Vector2(0, 0);
+            uvs[1] = new Vector2(1, 0);
+            uvs[2] = new Vector2(1, 1);
+            uvs[3] = new Vector2(0, 1);
+            mMesh.uv = uvs;
+            mMesh.triangles = new int[]{2,3,0,2,0,1};
+            this.w = w;
+            this.h = h;
+            return mMesh;
         }
     }
 }
