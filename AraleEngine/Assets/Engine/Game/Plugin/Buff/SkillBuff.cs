@@ -5,12 +5,17 @@ using System.Collections.Generic;
 
 public class GameSkillBuff : Buff
 {
+    public GameSkillBuff(GameSkill gs)
+    {
+        mGS = gs;
+    }
+
     GameSkill mGS;
     SkillAction mCurAction;
     protected override void onInit(Unit unit)
     {
+        mTB = TableMgr.single.GetData<TBBuff>(mGS.buff);
         mUnit.sendUnitEvent ((int)UnitEvent.SkillBegin,null,true);
-        mGS = GameSkill.get(table.lua);
         setUnitState(mGS.state,true);
         mUnit.forward (mUnit.skill.targetPos);
         if (!string.IsNullOrEmpty(mGS.anim))

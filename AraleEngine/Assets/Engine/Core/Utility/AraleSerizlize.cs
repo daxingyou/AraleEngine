@@ -45,40 +45,46 @@ namespace Arale.Engine
             }
             return ls;
         }
-        public static void write<T>(Dictionary<string,T> dic, BinaryWriter w) where T:AraleSerizlize
+        public static void write<VType>(Dictionary<int,VType> dic, BinaryWriter w) where VType:AraleSerizlize
         {
             w.Write(dic.Count);
             IEnumerator e = dic.GetEnumerator();
             while (e.MoveNext())
             {
-                KeyValuePair<string,T> kp = (KeyValuePair<string,T>)e.Current;
+                KeyValuePair<int,VType> kp = (KeyValuePair<int,VType>)e.Current;
                 w.Write(kp.Key);
                 kp.Value.write(w);
             }
         }
-        public static void read<T>(Dictionary<string,T> dic, BinaryReader r) where T:AraleSerizlize,new()
+        public static void read<VType>(Dictionary<int,VType> dic, BinaryReader r) where VType:AraleSerizlize,new()
         {
             int n = r.ReadInt32();
             for (int i = 0; i < n; ++i)
             {
-                string key = r.ReadString();
-                T val = new T();
+                int key = r.ReadInt32();
+                VType val = new VType();
                 val.read(r);
                 if (dic.ContainsKey(key))throw new UnityException("has same key="+key);
                 dic[key] = val;
             }
         }
-        public static void read<T>(Dictionary<string,T> dic, XmlNode parent) where T:AraleSerizlize,new()
+
+        public static void read<VType>(Dictionary<int,VType> dic, XmlNode parent) where VType:AraleSerizlize,new()
         {
             for (int i = 0,max=parent.ChildNodes.Count; i < max; ++i)
             {
                 XmlNode n = parent.ChildNodes[i];
-                string key = n.Attributes["name"].Value;
-                T val = new T();
+                int key = int.Parse(n.Attributes["id"].Value);
+                VType val = new VType();
                 val.read(n);
                 if (dic.ContainsKey(key))throw new UnityException("has same key="+key);
                 dic[key] = val;
             }
+        }
+
+        public static bool writeXml(object o)
+        {
+            return true;
         }
     }
 }

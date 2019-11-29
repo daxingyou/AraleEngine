@@ -8,69 +8,62 @@ using Arale.Engine;
 #region Skill基类
 public class Skill
 {
-	public enum TargetType
+    //指向类型
+    public enum PointType
 	{
+        None,  //直接施法(无指向)
 		Pos,   //位置施法
 		Dir,   //方向施法
 		Target,//目标施法
 	}
 
-    public Skill(int tid)
+    public Skill(int skillID)
     {
-        mTB = TableMgr.single.GetData<TBSkill>(tid);
+        GS = GameSkill.get(skillID); 
     }
 
     public int   mLV;         //技能等级
     public float mRCD;        //技能RCD
-    TBSkill mTB;              //技能配表(勿用)
-    public TBSkill TB         //用于动态重加载配表
-    {
-        get{
-            if(TableMgr.single.dirty)mTB = TableMgr.single.GetData<TBSkill>(mTB.id);
-            return mTB;
-        }
-    }
-
+    public GameSkill GS{get;protected set;}
 	protected virtual void play(Unit self, bool aiCall)
 	{
         if (mRCD > 0)return;
 		Vector3 tPos = self.skill.targetPos;
 		Unit    tUnit= self.skill.targetUnit;
-        TBSkill tb = TB;
-        switch (tb.type)
+        switch (GS.pointType)
         {
-        case (int)TargetType.Pos://位置技能
-			if (Vector3.Distance(self.pos, tPos) > tb.distance)
+        case PointType.Pos://位置技能
+			if (Vector3.Distance(self.pos, tPos) > GS.distance)
             {
-                self.move.nav(tPos, tb.distance, delegate(bool isAI){if(isAI)playSkill(self);});
+                self.move.nav(tPos, GS.distance, delegate(bool isAI){if(isAI)playSkill(self);});
                 return;
             }
             break;
 
-		case (int)TargetType.Dir://方向技能
+        case PointType.Dir://方向技能
 			if (!aiCall)break;
-			if (Vector3.Distance(self.pos, tUnit.pos) > tb.distance)
+			if (Vector3.Distance(self.pos, tUnit.pos) > GS.distance)
 			{
-                self.move.nav(tUnit, tb.distance, delegate(bool isAI){if(isAI)playSkill(self);});
+                self.move.nav(tUnit, GS.distance, delegate(bool isAI){if(isAI)playSkill(self);});
 				return;
 			}
             break;
 
-		case (int)TargetType.Target://目标技能
+        case PointType.Target://目标技能
 			if (tUnit == null)
 			{
 				Debug.LogError ("目标技能未指定目标");
 				return;
 			}
-			if (Vector3.Distance(self.pos, tUnit.pos) > tb.distance)
+			if (Vector3.Distance(self.pos, tUnit.pos) > GS.distance)
             {
-                self.move.nav(tUnit, tb.distance, delegate(bool isArray){if(isArray)playSkill(self);});
+                self.move.nav(tUnit, GS.distance, delegate(bool isArray){if(isArray)playSkill(self);});
                 return;
             }
             break;
 
         default:
-            return;
+            break;
         }
         playSkill(self);
     }
@@ -81,14 +74,14 @@ public class Skill
         unit.move.stop ();
         if (unit.isServer)
         {
-            unit.buff.addBuff(TB.skillBuff);
+            unit.buff.addSkill(GS.id);
         }
         else
         {
             //请求服务器释放技能
             MsgSkill msg = new MsgSkill();
             msg.guid      = unit.guid;
-            msg.skillTID  = TB.id;
+            msg.skillTID  = GS.id;
 			msg.targetPos = unit.skill.targetPos;
 			msg.targetGUID= unit.skill.targetGUID;
 			unit.sendMsg((short)MyMsgId.Skill, msg);
@@ -98,7 +91,7 @@ public class Skill
 	#region 插件
 	public class Plug : Plugin
 	{
-		public Skill skill;       //当前正在释放的技能
+		public Skill   skill;     //当前正在释放的技能
 		public Vector3 targetPos; //当前技能目标位置
         public Vector3 targetDir{get{return(targetPos - mUnit.pos).normalized;}}
 		public Unit targetUnit;   //当前技能目标单位
@@ -125,7 +118,6 @@ public class Skill
 
 		public Skill addSkill(int skillTID)
 		{
-			TBSkill tb = TableMgr.single.GetData<TBSkill>(skillTID);
 			Skill s = new Skill (skillTID);
 			mSkills.Add(s);
 			return s;
@@ -133,13 +125,13 @@ public class Skill
 
 		public void delKill(int skillTID)
 		{
-            Skill skill = mSkills.Find(delegate(Skill s){return s.TB.id == skillTID;});
+            Skill skill = mSkills.Find(delegate(Skill s){return s.GS.id == skillTID;});
 			if (skill != null)mSkills.Remove (skill);
 		}
 
 		public void play(int skillTID, bool aiCall=false)
 		{
-            Skill skill = mSkills.Find(delegate(Skill s){return s.TB.id == skillTID;});
+            Skill skill = mSkills.Find(delegate(Skill s){return s.GS.id == skillTID;});
 			if (skill == null)
 			{
 				Log.i("skill tid not exit, tid="+skillTID, Log.Tag.Skill);
@@ -162,7 +154,7 @@ public class Skill
         {
             if (this.skill != null)return;
             if (!mUnit.isState (UnitState.Skill))return;
-            Log.i("playIndex skill="+skill.TB.id, Log.Tag.Skill);
+            Log.i("playIndex skill="+skill.GS.id, Log.Tag.Skill);
             skill.play (mUnit, aiCall);
             this.skill = skill;
         }
@@ -195,11 +187,11 @@ public class Skill
         public void showIndicator(Skill skill, Vector2 dir, float disPercent, bool end)
         {
             if (mIndicator == null)mIndicator = mUnit.gameObject.AddComponent<IndicatorMesh>();
-            mIndicator.Show(dir, skill.TB.distance, disPercent, !end);
+            mIndicator.Show(dir, skill.GS.distance, disPercent, !end);
             if (end)
             {
                 Vector3 d = new Vector3(dir.x, 0, dir.y);
-                targetPos = mUnit.pos + skill.TB.distance * disPercent*d;
+                targetPos = mUnit.pos + skill.GS.distance * disPercent*d;
                 playSkill(skill,false);
             }
         }

@@ -25,7 +25,6 @@ namespace Arale.Engine
 			builders.Add(typeof(TBPlayer), new TableBuilder<TBPlayer>());
 			builders.Add(typeof(TBMonster), new TableBuilder<TBMonster>());
             builders.Add(typeof(TBBuff), new TableBuilder<TBBuff>());
-            builders.Add(typeof(TBSkill), new TableBuilder<TBSkill>());
             builders.Add(typeof(TBSound), new TableBuilder<TBSound>());
 			builders.Add(typeof(TBEffect), new TableBuilder<TBEffect>());
 			builders.Add(typeof(TBMove), new TableBuilder<TBMove>());

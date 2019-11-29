@@ -112,9 +112,6 @@ public class Buff
     			case 0:
     				buff = new LuaBuff ();
     				break;
-    			case 1:
-    				buff = new GameSkillBuff ();
-    				break;
     			default:
     				return;
 			}
@@ -124,6 +121,15 @@ public class Buff
 			addBuff (buff);
 			if (tb.mutex != 0)onMutex += buff.onMutex;
 		}
+
+        public void addSkill(int skillID)
+        {
+            Debug.Assert (mUnit.isServer);
+            GameSkillBuff buff = new GameSkillBuff(GameSkill.get(skillID));
+            mBuffs.Add(buff);
+            buff.init(mUnit);
+            addBuff (buff);
+        }
 
 		public void clearBuff(int kindMask)
 		{

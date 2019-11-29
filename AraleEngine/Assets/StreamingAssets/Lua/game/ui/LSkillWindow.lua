@@ -26,15 +26,15 @@ function M:Start()
 	EventListener.Get(self.luaBtn):AddOnClick(function(evt)   end)
 	local list = self.luaContent:GetComponent("UISList");
 	local csTB = TableMgr.single:GetDataByKey(typeof(TBPlayer),1001)
-	local skills = GHelper.toIntArray(csTB.skills)
+	local buffs = GHelper.toIntArray(csTB.skills)
 	for i=1,skills.Length do
-		local skill = TableMgr.single:GetDataByKey(typeof(TBSkill),skills[i-1])
-		local it = list:addItem(skill)
+		local buff = TableMgr.single:GetDataByKey(typeof(TBBuff),buffs[i-1])
+		local it = list:addItem(buff)
 		if i == 1 then
 			it.selected = true
-			self:ShowRight(skill)
+			self:ShowRight(buff)
 		end
-		it.mLO.mLT:SetData(skill)
+		it.mLO.mLT:SetData(buff)
 	end
 	list.onSelectedChange = function(selItem)
 		local item = selItem.data
@@ -44,17 +44,18 @@ function M:Start()
 	--bottom
 	local hasSkills = self._player.skill.skills
 	for i=1,hasSkills.Count do
-		local skill = TableMgr.single:GetDataByKey(typeof(TBSkill),hasSkills[i-1].TB.id)
+		local gs = hasSkills[i-1].GS
 		local icon = self._slots[i]
 		if icon~= nil then
 			icon.gameObject:SetActive(true)
-			AssetRef.setImage(icon, skill.icon)
+			AssetRef.setImage(icon, gs.icon)
 		end
 	end
 end
 
-function M:ShowRight(skill)
-	AssetRef.setImage(self.luaIcon, skill.icon)
+function M:ShowRight(buff)
+	local gs = GameSkill.get(buff.param,buff.lua)
+	AssetRef.setImage(self.luaIcon, gs.icon)
 	self.luaName.text = "...."
 	self.luaDesc.text = "...."
 	self.luaCast.text = "消耗1个技能点"
@@ -62,10 +63,11 @@ end
 
 function M:OnSkillList(dragItem,receiver)
 	local it = dragItem:GetComponentInParent(typeof(UISListItem))
-	local skill = it.data
+	local buff = it.data
+	local gs = GameSkill.get(buff.param,buff.lua)
 	local slotId = tonumber(receiver.name)
 	local icon = self._slots[slotId]
-	AssetRef.setImage(icon, skill.icon);
+	AssetRef.setImage(icon, gs.icon);
 	icon.gameObject:SetActive(true)
 	GameObject.Destroy(dragItem.gameObject)
 end
@@ -90,7 +92,7 @@ function M:OnSkillSlot(dragItem,receiver)
 		slot1.transform.localPosition = Vector3.zero
 		slot2.transform.localPosition = Vector3.zero
 		if skill1 ~= nil then
-			skill2 = TableMgr.single:GetDataByKey(typeof(TBSkill),skill2.TB.id)
+			skill2 = TableMgr.single:GetDataByKey(typeof(Buff),skill2.TB.id)
 			AssetRef.setImage(slot1, skill2.icon);
 			slot1.gameObject:SetActive(true)
 		else

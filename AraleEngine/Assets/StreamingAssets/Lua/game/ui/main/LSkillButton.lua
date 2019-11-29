@@ -18,8 +18,7 @@ function M:Awake()
 end
 
 function M:SetData(skill)
-	local tb = skill.TB
-	AssetRef.setImage(self.luaIcon, tb.icon)
+	AssetRef.setImage(self.luaIcon, skill.GS.icon)
 	self._skill = skill
 end
 

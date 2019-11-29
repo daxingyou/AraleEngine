@@ -2,6 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace Arale.Engine
 {
@@ -92,4 +95,17 @@ namespace Arale.Engine
 			return true;
 		}
 	}
+
+    #if UNITY_EDITOR
+    [CustomEditor(typeof(AssetRef))]
+    public class AssetRefInsp : Editor
+    {
+        public override void OnInspectorGUI()
+        {
+            base.OnInspectorGUI();
+            Sprite sp = (target as AssetRef).mAsset as Sprite;
+            GUILayout.Box(sp.texture);
+        }
+    }
+    #endif
 }

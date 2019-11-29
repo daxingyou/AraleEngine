@@ -11,12 +11,23 @@ public partial class GameSkill : AraleSerizlize
     public int state=UnitState.ALL;
     public string anim="";
     public List<SkillAction> actions = new List<SkillAction>();
+    public int id{ get; protected set;}
     public string name{ get; protected set;}
-    //施法距离(位置,指向,选中,无)
-    public float distance;
+    public Skill.PointType pointType{ get; protected set;}
+    public float distance{ get; protected set;}
+    public float cd{ get;protected set;}
+    string mIcon;
+    public string icon{ get{return "Skill/Icon/" + mIcon;}}
+    public string desc{ get; protected set;}
+    public int buff{ get; protected set;}
+    public GameSkill()
+    {
+        desc = "";
+    }
 
     public override void read(BinaryReader r)
     {
+        id   = r.ReadInt32();
         name = r.ReadString();
         anim = r.ReadString();
         state = r.ReadInt32();
@@ -25,6 +36,7 @@ public partial class GameSkill : AraleSerizlize
 
     public override void write(BinaryWriter w)
     {
+        w.Write(id);
         w.Write(name);
         w.Write(anim);
         w.Write(state);
@@ -37,11 +49,25 @@ public partial class GameSkill : AraleSerizlize
 
     public override void read(XmlNode n)
     {
-        name = n.Attributes["name"].Value;
-        XmlAttribute attr = n.Attributes["anim"];
+        id = int.Parse(n.Attributes["id"].Value);
+        buff = int.Parse(n.Attributes["buff"].Value);
+        Debug.Assert(id != 0);
+        XmlAttribute attr = n.Attributes["name"];
+        name = attr==null?"":attr.Value;
+        attr = n.Attributes["anim"];
         anim = attr==null?"":attr.Value;
         state = System.Convert.ToInt32(n.Attributes["state"].Value, 16);
         actions = AraleSerizlize.read<SkillAction>(n);
+        attr = n.Attributes["pointType"];
+        pointType = attr==null?Skill.PointType.None:(Skill.PointType)System.Enum.Parse(typeof(Skill.PointType), attr.Value);
+        attr = n.Attributes["distance"];
+        distance = attr == null ? 0 : float.Parse(attr.Value);
+        attr = n.Attributes["cd"];
+        cd = attr== null ? 0 : float.Parse(attr.Value);
+        attr = n.Attributes["icon"];
+        mIcon = attr== null ? "" : attr.Value;
+        attr = n.Attributes["desc"];
+        desc = attr== null ? "" : attr.Value;
     }
 
     public static bool saveSkill(string skillPath)
@@ -116,22 +142,25 @@ public partial class GameSkill : AraleSerizlize
         }
     }
 
+    string getFile(int id)
+    {
+        
+    }
+
     #region 外部接口
     public const short ver = 5;
-    static Dictionary<string, GameSkill> skills = new Dictionary<string, GameSkill>();
+    static Dictionary<int, GameSkill> skills = new Dictionary<int, GameSkill>();
     public static void clear()
     {
         skills.Clear();
     }
-    public static GameSkill get(string skillname)
+    public static GameSkill get(int id)
     {
-        int idx = skillname.LastIndexOf('/');
-        string key = skillname.Substring(idx + 1);
         GameSkill gs;
-        if (!skills.TryGetValue(key, out gs))
+        if (!skills.TryGetValue(id, out gs))
         {
-            if (!loadSkill("Skill/"+skillname.Remove(idx)))return null;
-            gs = skills[key];
+            if (!loadSkill("Skill/"+getFile(id)))return null;
+            gs = skills[id];
         }
         gs.lastUseTime = Time.realtimeSinceStartup;
         return gs;

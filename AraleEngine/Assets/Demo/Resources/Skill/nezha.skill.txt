@@ -1,19 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <skills>
-    <skill name="nz.skill1" anim="attack" state="FFFB">
+    <skill id="400" name="nz.skill1" anim="attack" state="FFFB">
     	<action time="0.5"><Harm harm="10" target="Area" area="3,4.00,72.00" relation="Emney"/></action>
         <action time="1" end=""/>
     </skill>
-	<skill name="nz.skill2" anim="skill01" state="FFFB">
+	<skill id="401" name="nz.skill2" anim="skill01" state="FFFB">
         <action time="0.5"><Harm harm="10" target="Area" area="2,1.50,3.00" relation="Emney"/></action>
         <action time="1"><Harm harm="20" target="Area" area="2,1.50,3.00" relation="Emney"/></action>
         <action time="1.5" end=""/>
     </skill>
-    <skill name="nz.skill3" anim="skill02" state="FFFB">
+    <skill id="402" name="nz.skill3" anim="skill02" state="FFFB">
         <action time="1"><Harm harm="20" target="Area" area="2,1.50,3.00" relation="Emney"/></action>
         <action time="1.5" end=""/>
     </skill>
-    <skill name="nz.skill4" anim="skill04" state="FFFB">
+    <skill id="403" name="nz.skill4" anim="skill04" state="FFFB">
         <action time="1.5"><Harm harm="5" target="Area" area="2,1.50,3.00" relation="Emney"/></action>
         <action time="2"><Harm harm="5" target="Area" area="2,1.50,3.00" relation="Emney"/></action>
         <action time="2.8"><Harm harm="5" target="Area" area="2,1.50,3.00" relation="Emney"/></action>
