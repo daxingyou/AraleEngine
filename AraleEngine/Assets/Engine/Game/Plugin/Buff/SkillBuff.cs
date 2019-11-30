@@ -3,18 +3,19 @@ using System.Collections;
 using Arale.Engine;
 using System.Collections.Generic;
 
-public class GameSkillBuff : Buff
+public class GameSkillBuff : LuaBuff
 {
     public GameSkillBuff(GameSkill gs)
     {
+        mTB = new TBBuff();
         mGS = gs;
     }
-
+        
+    LuaObject mL;
     GameSkill mGS;
     SkillAction mCurAction;
     protected override void onInit(Unit unit)
     {
-        mTB = TableMgr.single.GetData<TBBuff>(mGS.buff);
         mUnit.sendUnitEvent ((int)UnitEvent.SkillBegin,null,true);
         setUnitState(mGS.state,true);
         mUnit.forward (mUnit.skill.targetPos);
@@ -32,6 +33,12 @@ public class GameSkillBuff : Buff
             a.userData = act;
         }
         state = 1;
+        //lua call
+        if (mGS.lua != null)
+        {
+            mTB.lua = mGS.lua;
+            base.onInit(mUnit);
+        }
     }
 
     void onAction(TimeMgr.Action a)
@@ -45,6 +52,7 @@ public class GameSkillBuff : Buff
             switch (n.type)
             {
                 case SkillNode.Type.Anim:
+                    animProcess(n as SkillAnim);
                     break;
                 case SkillNode.Type.Harm:
                     harmProcess(n as SkillHarm);
@@ -60,6 +68,9 @@ public class GameSkillBuff : Buff
                     break;
                 case SkillNode.Type.Move:
                     moveProcess(n as SkillMove);
+                    break;
+                case SkillNode.Type.Lua:
+                    luaProcess(n as SkillLua);
                     break;
             }
         }
@@ -193,6 +204,11 @@ public class GameSkillBuff : Buff
         }
     }
 
+    void luaProcess(SkillLua n)
+    {
+        onEvent(n.evt, n.param);
+    }
+
     void affectUnit(Unit u, SkillHarm n)
     {
         if (u == null)return;
@@ -210,5 +226,9 @@ public class GameSkillBuff : Buff
     {
         mUnit.syncState();
         mUnit.sendUnitEvent ((int)UnitEvent.SkillEnd, null, true);
+        if (mGS.lua != null)
+        {
+            base.onDeinit();
+        }
     }
 }

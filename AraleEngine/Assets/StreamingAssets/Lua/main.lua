@@ -53,6 +53,7 @@ UnitType = CS.UnitType
 Unit = CS.Unit
 Buff = CS.Buff
 Bag  = CS.Bag
+GameSkill = CS.GameSkill
 AnimPlugin = CS.AnimPlugin
 Randoms = CS.Randoms
 GameArea = CS.GameArea

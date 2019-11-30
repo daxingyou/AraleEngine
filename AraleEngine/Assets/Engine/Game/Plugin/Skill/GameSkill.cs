@@ -18,8 +18,8 @@ public partial class GameSkill : AraleSerizlize
     public float cd{ get;protected set;}
     string mIcon;
     public string icon{ get{return "Skill/Icon/" + mIcon;}}
+    public string lua{ get; protected set;}
     public string desc{ get; protected set;}
-    public int buff{ get; protected set;}
     public GameSkill()
     {
         desc = "";
@@ -50,7 +50,6 @@ public partial class GameSkill : AraleSerizlize
     public override void read(XmlNode n)
     {
         id = int.Parse(n.Attributes["id"].Value);
-        buff = int.Parse(n.Attributes["buff"].Value);
         Debug.Assert(id != 0);
         XmlAttribute attr = n.Attributes["name"];
         name = attr==null?"":attr.Value;
@@ -66,6 +65,8 @@ public partial class GameSkill : AraleSerizlize
         cd = attr== null ? 0 : float.Parse(attr.Value);
         attr = n.Attributes["icon"];
         mIcon = attr== null ? "" : attr.Value;
+        attr = n.Attributes["lua"];
+        lua = attr== null ? null : attr.Value;
         attr = n.Attributes["desc"];
         desc = attr== null ? "" : attr.Value;
     }
@@ -142,9 +143,9 @@ public partial class GameSkill : AraleSerizlize
         }
     }
 
-    string getFile(int id)
+    static string getFile(int id)
     {
-        
+        return "lingyuan.skill";
     }
 
     #region 外部接口

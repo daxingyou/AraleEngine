@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <skills>
-    <skill id="10" buff="10" name="ly.skill1" pointType="1" distance="4" cd="3" icon="sk_huoyujian" anim="attack" state="FFFB">
+    <skill id="10" name="ly.skill1" pointType="1" distance="4" cd="3" icon="sk_huoyujian" anim="attack" state="FFFB">
         <action time="0.5">
             <Harm harm="10" target="Area" area="3,2.00,112.21" selector="Nearst" relation="Emney"/>
         </action>
         <action time="1.5" end=""/>
     </skill>
-    <skill id="11" buff="11" name="ly.skill2" pointType="1" distance="4" cd="3" icon="sk_jinguangzhan" anim="skill01" state="FFFB">
+    <skill id="11" name="ly.skill2" pointType="1" distance="4" cd="3" icon="sk_jinguangzhan" anim="skill01" state="FFFB">
         <action time="0.5">
             <Harm harm="10" target="Area" area="2,4.00,7.00" selector="Nearst" relation="Emney"/>
         </action>
@@ -15,7 +15,7 @@
         </action>
         <action time="1.5" end=""/>
     </skill>
-    <skill id="12" buff="12" name="ly.skill3" pointType="1" distance="4" cd="3" icon="sk_jioumieling" anim="skill02" state="FFFB">
+    <skill id="12" name="ly.skill3" pointType="1" distance="4" cd="3" icon="sk_jioumieling" anim="skill02" state="FFFB">
         <action time="0.5">
             <Move id="101" target="Area" area="2,4.00,5.00" selector="Nearst" relation="Emney"/>
             <Harm harm="20" target="Area" area="2,4.00,6.00" selector="Nearst" relation="Emney"/>
@@ -26,7 +26,7 @@
         </action>
         <action time="2.0" end=""/>
     </skill>
-    <skill id="13" buff="13" name="ly.skill4" pointType="1" distance="4" cd="3" icon="sk_leitingguanghua" anim="skill04" state="FFFB">
+    <skill id="13" name="ly.skill4" pointType="1" distance="4" cd="3" icon="sk_leitingguanghua" anim="skill04" state="FFFB">
         <action time="2">
             <Harm harm="10" target="Area" area="3,2.00,112.21" selector="Nearst" relation="Emney"/>
         </action>

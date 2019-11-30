@@ -11,6 +11,7 @@ public class LuaBuff : Buff
 
 	protected override bool onEvent(int evt, object param)
 	{
+        if (mL == null)return false;
 		return luaOnEvent (mL.mLT, evt, param);
 	}
 

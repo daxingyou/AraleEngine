@@ -1,20 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <skills>
-    <skill id="100" name="hy.skill1" anim="attack" state="FFFB">
+    <skill id="100" name="hy.skill1"  pointType="1" distance="4" cd="3" icon="sk_huoyujian" anim="attack" state="FFFB">
     	<action time="1"><Bullet id="100" harm="10" target="Dir" relation="Emney"/></action>
         <action time="1.5" end=""/>
     </skill>
-	<skill id="101" name="hy.skill2" anim="skill01" state="FFFB">
+	<skill id="101" name="hy.skill2"  pointType="1" distance="4" cd="3" icon="sk_huoyujian" anim="skill01" state="FFFB">
         <action time="0.5"><Bullet id="100"  harm="10" target="Dir" relation="Emney"/></action>
         <action time="1"><Bullet id="100"  harm="10" target="Dir" relation="Emney"/></action>
         <action time="1.5"><Bullet id="101"  harm="10" target="Dir" relation="Emney"/></action>
         <action time="2" end=""/>
     </skill>
-    <skill id="102" name="hy.skill3" anim="skill02" state="FFFB">
+    <skill id="102" name="hy.skill3"  pointType="1" distance="4" cd="3" icon="sk_huoyujian" anim="skill02" state="FFFB">
         <action time="1.5"><Bullet id="100" harm="10" target="Unit" relation="Emney"/></action>
         <action time="2" end=""/>
     </skill>
-    <skill id="103" name="hy.skill4" anim="skill04" state="FFFB">
+    <skill id="103" name="hy.skill4"  pointType="1" distance="4" cd="3" icon="sk_huoyujian" anim="skill04" state="FFFB">
         <action time="2"><Bullet id="100" harm="10" target="Dir" relation="Emney"/></action>
         <action time="2.2"><Bullet id="100" harm="10" target="Dir" relation="Emney"/></action>
         <action time="2.5"><Bullet id="101" harm="10" target="Dir" relation="Emney"/></action>

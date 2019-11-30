@@ -15,6 +15,7 @@ public abstract partial class SkillNode : AraleSerizlize
         Buff,  //buff
         Event, //事件
         Move,  //位移
+        Lua,   //Lua事件
     };
     public Type type; 
     public static SkillNode createNode(Type nodeType)
@@ -42,6 +43,9 @@ public abstract partial class SkillNode : AraleSerizlize
                 break;
             case SkillNode.Type.Move:
                 n = new SkillMove();
+                break;
+            case SkillNode.Type.Lua:
+                n = new SkillLua();
                 break;
             default:
                 Debug.LogError("unsurpport skillnode type:"+nodeType);
@@ -207,5 +211,32 @@ public partial class SkillMove : SkillNode
     {
         base.read(n);
         id = int.Parse(n.Attributes["id"].Value);
+    }
+}
+
+public partial class SkillLua : SkillNode
+{
+    public int evt;
+    public string param;
+    public override void read(BinaryReader r)
+    {
+        base.read(r);
+        evt = r.ReadInt32();
+        param = r.ReadString();
+    }
+
+    public override void write(BinaryWriter w)
+    {
+        base.write(w);
+        w.Write(evt);
+        w.Write(param);
+    }
+
+    public override void read(XmlNode n)
+    {
+        base.read(n);
+        evt = int.Parse(n.Attributes["evt"].Value);
+        XmlAttribute attr = n.Attributes["param"];
+        param = attr == null ? null:attr.Value;
     }
 }

@@ -1,20 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <skills>
-    <skill id="20" name="yxx.skill1" anim="attack" state="FFFB">
+    <skill id="20" name="yxx.skill1"  pointType="1" distance="4" cd="3" icon="sk_huoyujian" anim="attack" state="FFFB">
     	<action time="0.5"><Harm harm=10 target="Unit" relation="Emney"/></action>
         <action time="1" end=""/>
     </skill>
-	<skill id="21" name="yxx.skill2" anim="skill01" state="FFFB">
+	<skill id="21" name="yxx.skill2"  pointType="1" distance="4" cd="3" icon="sk_huoyujian" anim="skill01" state="FFFB">
         <action time="0.5"> <Harm harm=10 target="Unit" relation="Emney"/></action>
         <action time="1"> <Harm harm=10 target="Unit" relation="Emney"/></action>
         <action time="1.5"> <Harm harm=10 target="Unit" relation="Emney"/></action>
         <action time="2" end=""/>
     </skill>
-    <skill id="22" name="yxx.skill3" anim="skill02" state="FFFB">
+    <skill id="22" name="yxx.skill3"  pointType="1" distance="4" cd="3" icon="sk_huoyujian" anim="skill02" state="FFFB">
         <action time="1.5"><Harm harm=10 target="Unit" relation="Emney"/></action>
         <action time="2" end=""/>
     </skill>
-    <skill id="23" name="yxx.skill4" anim="skill04" state="FFFB">
+    <skill id="23" name="yxx.skill4"  pointType="1" distance="4" cd="3" icon="sk_huoyujian" anim="skill04" state="FFFB">
         <action time="2"> <Harm harm="-10" target="Area" area="0,3" relation="Self,Friend"/></action>
         <action time="2.2"> <Harm harm="-10" target="Area" area="0,3" relation="Self,Friend"/></action>
         <action time="2.5"> <Harm harm="-10" target="Area" area="0,3" relation="Self,Friend"/></action>
