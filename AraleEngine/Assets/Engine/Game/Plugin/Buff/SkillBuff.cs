@@ -10,10 +10,8 @@ public class GameSkillBuff : LuaBuff
         mTB = new TBBuff();
         mGS = gs;
     }
-        
-    LuaObject mL;
+
     GameSkill mGS;
-    SkillAction mCurAction;
     protected override void onInit(Unit unit)
     {
         mUnit.sendUnitEvent ((int)UnitEvent.SkillBegin,null,true);
@@ -44,7 +42,6 @@ public class GameSkillBuff : LuaBuff
     void onAction(TimeMgr.Action a)
     {
         SkillAction act = a.userData as SkillAction;
-        mCurAction = act;
         setUnitState(act.state,true);
         for (int i = 0; i < act.nodes.Count; ++i)
         {

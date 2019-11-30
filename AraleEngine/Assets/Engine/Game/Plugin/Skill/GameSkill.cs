@@ -145,11 +145,22 @@ public partial class GameSkill : AraleSerizlize
 
     static string getFile(int id)
     {
-        return "lingyuan.skill";
+        if (skillmap == null)
+        {
+            skillmap = new Dictionary<int, string>();
+            TextAsset ta = ResLoad.get("Skill/skillmap").asset<TextAsset>();
+            string[] ss = ta.text.Split(new string[]{ "," }, System.StringSplitOptions.RemoveEmptyEntries);
+            for (int i = 0; i < ss.Length; i += 2)
+            {
+                skillmap[int.Parse(ss[i])] = ss[i+1];
+            }
+        }
+        return skillmap[id];
     }
 
     #region 外部接口
     public const short ver = 5;
+    static Dictionary<int, string> skillmap;
     static Dictionary<int, GameSkill> skills = new Dictionary<int, GameSkill>();
     public static void clear()
     {
