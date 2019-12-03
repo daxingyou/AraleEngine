@@ -13,6 +13,7 @@ public class IndicatorMesh : MonoBehaviour
     Transform sticker;
     Matrix4x4 mLocalMX = Matrix4x4.identity;
     Vector3 dir = Vector3.zero;
+    GameSkill gs;
     [ExecuteInEditMode]
     private void Awake()
     {
@@ -33,9 +34,23 @@ public class IndicatorMesh : MonoBehaviour
     {
         if (!sticker.gameObject.activeSelf)return;
         sticker.forward = dir;
-        //rangMesh.draw(sticker.localToWorldMatrix, circleMat);
-        //rectMesh.draw(sticker.localToWorldMatrix*rectMesh.pivotMX, rectMat);
-        fanMesh.draw(sticker.localToWorldMatrix, circleMat);
+        switch (gs.pointType)
+        {
+            case Skill.PointType.Pos:
+                rangMesh.draw(sticker.localToWorldMatrix, circleMat);
+                rectMesh.draw(sticker.localToWorldMatrix*mLocalMX*rectMesh.pivotMX, circleMat);
+                break;
+            case Skill.PointType.Dir:
+                //rectMesh.draw(sticker.localToWorldMatrix*rectMesh.pivotMX, rectMat);
+                fanMesh.draw(sticker.localToWorldMatrix, circleMat);
+                break;
+            case Skill.PointType.Target:
+                rangMesh.draw(sticker.localToWorldMatrix, circleMat);
+                break;
+            case Skill.PointType.None:
+                if(gs.distance>0)rangMesh.draw(sticker.localToWorldMatrix, circleMat);
+                break;
+        }
     }
 
     void OnDestroy()
@@ -43,16 +58,28 @@ public class IndicatorMesh : MonoBehaviour
         GameObject.Destroy(sticker.gameObject);
     }
 
-    public void Show(Vector2 dir, float dis, float disPercent, bool show)
+    public void Show(GameSkill gs, Vector2 dir, float disPercent, bool show)
     {
         sticker.gameObject.SetActive(show);
         if (!show)return;
+        this.gs = gs;
         this.dir.x = dir.x;
         this.dir.z = dir.y;
-        rangMesh.get(dis*2, dis*2);
-        fanMesh.get(dis, 60);
-        rectMesh.get(1, dis, new Vector2(0f, -0.5f));
-        mLocalMX.SetTRS(Vector3.forward*(dis*disPercent), Quaternion.identity, Vector3.one);
+        rangMesh.get(gs.distance*2, gs.distance*2);
+        switch (gs.pointType)
+        {
+            case Skill.PointType.Pos:
+                rectMesh.get(1, 1, new Vector2(0f, -0.5f));
+                break;
+            case Skill.PointType.Dir:
+                fanMesh.get(gs.distance, 60);
+                break;
+            case Skill.PointType.Target:
+                break;
+            case Skill.PointType.None:   
+                break;
+        }
+        mLocalMX.SetTRS(Vector3.forward*(gs.distance*disPercent), Quaternion.identity, Vector3.one);
     }
 
     class StickerMesh

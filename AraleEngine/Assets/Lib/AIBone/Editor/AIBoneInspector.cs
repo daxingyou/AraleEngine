@@ -26,12 +26,12 @@ public class AIBoneInspector : Editor {
 
 	public override void OnInspectorGUI()
 	{
-		NGUIEditorTools.BeginContents ();
+        AraleEditorTool.BeginContents ();
 		EditorGUILayout.BeginHorizontal ();
 		if (GUILayout.Button ("设置为根", GUILayout.Width (80)))onRootClick ();
 		if (GUILayout.Button ("骨骼分裂", GUILayout.Width (80)))onDivideClick ();
 		EditorGUILayout.EndHorizontal ();
-		NGUIEditorTools.EndContents ();
+        AraleEditorTool.EndContents ();
 
 		drawLengthGUI ();
 		drawRotateGUI ();
@@ -45,7 +45,7 @@ public class AIBoneInspector : Editor {
 
 	void drawLengthGUI()
 	{
-		NGUIEditorTools.BeginContents ();
+        AraleEditorTool.BeginContents ();
 		EditorGUILayout.BeginHorizontal ();
 		if (GUILayout.Button (mAIBone.length>0?"解锁":"锁定", GUILayout.Width (80)))onLockLengthClick ();
 		EditorGUILayout.LabelField ("length", GUILayout.Width(30));
@@ -56,12 +56,12 @@ public class AIBoneInspector : Editor {
 		mAIBone.maxLength = EditorGUILayout.FloatField(mAIBone.maxLength);
 		mAIBone.length = Mathf.Clamp (mAIBone.length, mAIBone.minLength, mAIBone.maxLength);
 		EditorGUILayout.EndHorizontal ();
-		NGUIEditorTools.EndContents ();
+        AraleEditorTool.EndContents ();
 	}
 
 	void drawRotateGUI()
 	{
-		NGUIEditorTools.BeginContents ();
+        AraleEditorTool.BeginContents ();
 		EditorGUILayout.BeginHorizontal ();
 		if (GUILayout.Button (mAIBone.xMin == 0 ? "xMin" : mAIBone.xMin.ToString (), GUILayout.Width (80)))mAIBone.xMin = mAIBone.transform.localRotation.eulerAngles.x;
 		if (GUILayout.Button (mAIBone.xMax == 0 ? "xMax" : mAIBone.xMax.ToString (), GUILayout.Width (80)))mAIBone.xMax = mAIBone.transform.localRotation.eulerAngles.x;
@@ -74,7 +74,7 @@ public class AIBoneInspector : Editor {
 		if (GUILayout.Button (mAIBone.zMin == 0 ? "zMin" : mAIBone.zMin.ToString (), GUILayout.Width (80)))mAIBone.zMin = mAIBone.transform.localRotation.eulerAngles.z;
 		if (GUILayout.Button (mAIBone.zMax == 0 ? "zMax" : mAIBone.zMax.ToString (), GUILayout.Width (80)))mAIBone.zMax = mAIBone.transform.localRotation.eulerAngles.z;
 		EditorGUILayout.EndHorizontal ();
-		NGUIEditorTools.EndContents ();
+        AraleEditorTool.EndContents ();
 	}
 
 	void onRootClick()

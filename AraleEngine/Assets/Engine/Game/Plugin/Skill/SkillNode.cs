@@ -17,7 +17,10 @@ public abstract partial class SkillNode : AraleSerizlize
         Move,  //位移
         Lua,   //Lua事件
     };
-    public Type type; 
+    public Type type;
+    #if UNITY_EDITOR
+    public SkillAction action{ get; set;}
+    #endif
     public static SkillNode createNode(Type nodeType)
     {
         SkillNode n = null;

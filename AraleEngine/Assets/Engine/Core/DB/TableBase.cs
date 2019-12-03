@@ -9,19 +9,29 @@ using XLua;
 namespace Arale.Engine
 {
 
-public class TableBase
-{
-    public int _id;
-    public int id { get { return _id; } }
-	public string _extend;
-    public TableBase()
+    public class TableBase
     {
-		
+        public int _id;
+        public int id { get { return _id; } }
+        [TableField("Lua表:如{a=1;b=2;}")]
+    	public string _extend;
+        public TableBase()
+        {
+    		
+        }
+        public virtual void Init(string[] value)
+        {
+    		int.TryParse(value[0], out _id);
+        }
     }
-    public virtual void Init(string[] value)
+
+    public class TableField:Attribute
     {
-		int.TryParse(value[0], out _id);
+        public TableField(string desc)
+        {
+            this.desc = desc;
+        }
+        public string desc;
     }
-}
 
 }

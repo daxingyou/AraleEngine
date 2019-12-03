@@ -8,7 +8,7 @@ namespace Arale.Engine
 {
 
     [RequireComponent(typeof(RawImage))]
-    public class TimeAxisCtrl : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IScrollHandler, IPointerClickHandler{
+    public class UITimeAxisCtrl : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IScrollHandler, IPointerClickHandler{
     	const  int  BandWidth = 8;
     	public Text mTimeLeftInfo;
     	public Text mTimeRightInfo;

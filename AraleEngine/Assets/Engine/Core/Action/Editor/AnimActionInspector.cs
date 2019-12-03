@@ -18,25 +18,25 @@ namespace Arale.Engine
     	public override void OnInspectorGUI()
     	{
     		mAnimAction.mActionName = EditorGUILayout.TextField ("ActionName", mAnimAction.mActionName);
-    		if (NGUIEditorTools.DrawHeader ("action-info", "ACTION-INFO"))
+            if (AraleEditorTool.DrawHeader ("action-info", "ACTION-INFO"))
     		{
-    			NGUIEditorTools.BeginContents ();
+                AraleEditorTool.BeginContents ();
     			for (int i=0; i<mAnimAction.actions.Count; ++i)
     			{
     				drawActionInspector (i);
     			}
     			GUILayout.Space (10);
     			if (GUILayout.Button ("添加", GUILayout.Width (80)))onAddClick ();
-    			NGUIEditorTools.EndContents ();
+                AraleEditorTool.EndContents ();
     		}
     	}
 
     	void drawActionInspector(int idx)
     	{
     		AnimAction.Action action = mAnimAction.actions[idx];
-    		if (NGUIEditorTools.DrawHeader (""+idx+":"+action.mType, "ACTION"+idx))
+            if (AraleEditorTool.DrawHeader (""+idx+":"+action.mType, "ACTION"+idx))
     		{
-    			NGUIEditorTools.BeginContents ();
+                AraleEditorTool.BeginContents ();
     			action.mType = (AnimAction.ActionType)EditorGUILayout.EnumPopup("类型", action.mType);
     			action.mMask = (AnimAction.ActionMask)EditorGUILayout.EnumMaskField("过滤器", action.mMask);
     			action.mEnable = EditorGUILayout.Toggle("是否可用", action.mEnable);
@@ -61,7 +61,7 @@ namespace Arale.Engine
     				break;
     			}
     			if (GUILayout.Button ("删除", GUILayout.Width (80)))onDelClick (idx);
-    			NGUIEditorTools.EndContents ();
+                AraleEditorTool.EndContents ();
     		}
     	}
 

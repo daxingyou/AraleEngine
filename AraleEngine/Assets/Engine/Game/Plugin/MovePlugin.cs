@@ -118,6 +118,7 @@ public class Move
     				Log.e ("unsupport move type=" + tb.type, Log.Tag.Unit);
     				return;
 			}
+
             mMove.vTarget = vTarget;
             mMove.uTarget = uTarget;
             mMove.table = tb;

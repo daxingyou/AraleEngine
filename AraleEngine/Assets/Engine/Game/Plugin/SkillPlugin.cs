@@ -187,7 +187,7 @@ public class Skill
         public void showIndicator(Skill skill, Vector2 dir, float disPercent, bool end)
         {
             if (mIndicator == null)mIndicator = mUnit.gameObject.AddComponent<IndicatorMesh>();
-            mIndicator.Show(dir, skill.GS.distance, disPercent, !end);
+            mIndicator.Show(skill.GS, dir, disPercent, !end);
             if (end)
             {
                 Vector3 d = new Vector3(dir.x, 0, dir.y);

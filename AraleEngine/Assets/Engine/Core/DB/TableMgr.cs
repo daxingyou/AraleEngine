@@ -6,6 +6,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Reflection;
+
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -19,16 +22,17 @@ namespace Arale.Engine
         public const string TestTablePath = "/Demo/Resources/Table/";
         public static bool  TestModel;
         Dictionary<Type, TableData> DataPoolDic = new Dictionary<Type, TableData>();
-        Dictionary<Type, ITableBuilder> builders = new Dictionary<Type, ITableBuilder>();
+        Dictionary<Type, TableBuilder> builders = new Dictionary<Type, TableBuilder>();
         public override void Init()
     	{
-			builders.Add(typeof(TBPlayer), new TableBuilder<TBPlayer>());
-			builders.Add(typeof(TBMonster), new TableBuilder<TBMonster>());
-            builders.Add(typeof(TBBuff), new TableBuilder<TBBuff>());
-            builders.Add(typeof(TBSound), new TableBuilder<TBSound>());
-			builders.Add(typeof(TBEffect), new TableBuilder<TBEffect>());
-			builders.Add(typeof(TBMove), new TableBuilder<TBMove>());
-			builders.Add(typeof(TBItem), new TableBuilder<TBItem>());
+            Type[] types = Assembly.GetExecutingAssembly().GetTypes();
+            for (int i = 0; i < types.Length; ++i)
+            {
+                Type t = types[i];
+                if (t.BaseType != typeof(TableBase))continue;
+                builders.Add(t, new TableBuilder(t));
+       
+            }
             mDirty = true;
     	}
 
@@ -99,7 +103,7 @@ namespace Arale.Engine
     		}
     		else
     		{
-    			ITableBuilder buider;
+    			TableBuilder buider;
     			if(builders.TryGetValue(type, out buider))
     			{
                     data_pool = buider.build();
