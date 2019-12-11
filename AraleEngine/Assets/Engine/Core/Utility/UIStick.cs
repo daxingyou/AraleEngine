@@ -27,10 +27,8 @@ namespace Arale.Engine
     	void FixedUpdate()
     	{
 			isHit = false;
-    		if (!Input.anyKey) {
-    			mDir = Vector2.zero;
-    			return;
-    		}
+            if (mStick.gameObject.activeSelf)
+                return;
 
     		if (Input.GetKey (KeyCode.A))
     			mDir = Vector2.left;
@@ -40,6 +38,8 @@ namespace Arale.Engine
     			mDir = Vector2.right;
     		else if (Input.GetKey (KeyCode.W))
     			mDir = Vector2.up;
+            else
+                mDir = Vector2.zero;
     	}
 
 		public void OnPointerDown (PointerEventData eventData)

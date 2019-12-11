@@ -1,4 +1,4 @@
-﻿Shader "Custom/Projector/Project"
+﻿Shader "Arale/Projector/Project"
 {
     Properties{
         _ShadowTex("Cookie", 2D) = "gray"{}

@@ -16,6 +16,7 @@ public partial class GameSkill : AraleSerizlize
     public Skill.PointType pointType{ get; protected set;}
     public float distance{ get; protected set;}
     public float cd{ get;protected set;}
+    public IArea area{ get; protected set;}
     string mIcon;
     public string icon{ get{return "Skill/Icon/" + mIcon;}}
     public string lua{ get; protected set;}
@@ -63,6 +64,8 @@ public partial class GameSkill : AraleSerizlize
         distance = attr == null ? 0 : float.Parse(attr.Value);
         attr = n.Attributes["cd"];
         cd = attr== null ? 0 : float.Parse(attr.Value);
+        attr = n.Attributes["area"];
+        area = attr == null ? null : GameArea.fromString(attr.Value);
         attr = n.Attributes["icon"];
         mIcon = attr== null ? "" : attr.Value;
         attr = n.Attributes["lua"];

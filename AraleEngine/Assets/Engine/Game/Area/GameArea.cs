@@ -9,6 +9,7 @@ using System.Collections.Generic;
 public interface IArea
 {
 	float R{ get;}
+    GameArea.AreaType type{ get;}
 	bool inArea (Vector3 pos);
 	void debugDraw ();
 	void inspDraw();
@@ -20,6 +21,7 @@ public class CircleArea : IArea
 {
 	public float r = 3;
 	public float R{get{return r;}}
+    public GameArea.AreaType type{ get{return GameArea.AreaType.circle;}}
 
 	public bool inArea(Vector3 pos)
 	{
@@ -54,6 +56,8 @@ public class CircleArea : IArea
 public class SquareArea : IArea {
 	public float inR = 3;
 	public float R{get{return inR;}}
+    public GameArea.AreaType type{ get{return GameArea.AreaType.Square;}}
+
 	public bool inArea(Vector3 pos)
 	{
 		return pos.x<inR&&pos.x>-inR&&pos.z<inR&&pos.z>-inR;
@@ -94,6 +98,8 @@ public class RectangleArea : IArea {
 	public float w = 3;
 	public float l = 6;
 	public float R{get{return l;}}
+    public GameArea.AreaType type{ get{return GameArea.AreaType.Rectangle;}}
+
 	public bool inArea(Vector3 pos)
 	{
 		return pos.x<w/2&&pos.x>-w/2&&pos.z<l&&pos.z>0;
@@ -137,6 +143,8 @@ public class FanArea : IArea {
 	public float r = 3;
 	public float ang = 60;
 	public float R{get{return r;}}
+    public GameArea.AreaType type{ get{return GameArea.AreaType.Fan;}}
+
 	public bool inArea(Vector3 pos)
 	{
 		if (pos.sqrMagnitude > r * r)return false;

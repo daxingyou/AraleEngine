@@ -7,6 +7,7 @@ namespace Arale.Engine
     public class CameraController : MonoBehaviour
     {
         public Bounds mWinBox;//滑动窗口，限制camera视口在区域内移动
+        public Vector2 mOffset = new Vector2(9f,-10f);//相机相对主角的水平偏移
     	[System.NonSerialized]public Camera mCam;
     	[System.NonSerialized]public Transform mTarget;
 		[System.NonSerialized]public float mDistance;
@@ -44,13 +45,13 @@ namespace Arale.Engine
 
         protected void FollowPos()
         {//相机平滑跟随(位置)
-			Vector3 targetPos = mTarget.position + new Vector3 (0, 9, -10);
+            Vector3 targetPos = mTarget.position + new Vector3 (0, mOffset.x, mOffset.y);
 			mTrans.position = Vector3.Lerp (mTrans.position, targetPos, mSmooth * Time.deltaTime);
 		}
 
         protected void FollowPosDir()
         {//相机平滑跟随(位置，角度)
-			Vector3 targetPos = mTarget.position + new Vector3 (0, 9, -10);
+            Vector3 targetPos = mTarget.position + new Vector3 (0, mOffset.x, mOffset.y);
 			mTrans.position = Vector3.Lerp (mTrans.position, targetPos, mSmooth * Time.deltaTime);
 			Quaternion angle = Quaternion.LookRotation (mTarget.position - mTrans.position);
 			mTrans.rotation = Quaternion.Slerp (mTrans.rotation, angle, mSmooth * Time.deltaTime);

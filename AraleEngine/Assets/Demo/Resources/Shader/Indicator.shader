@@ -4,7 +4,7 @@ Shader "Custom/Indicator"
 	Properties {
 		_Color ("Main Color", Color) = (1,1,1,1)
 		_HalfWidth("HalfWidth", Float) = 1
-		_HalfHieght("HalfHeight", Float) = 1
+		_HalfHeight("HalfHeight", Float) = 1
 		_Ang("Fan Ang", Float) = 60
 	}
 	 
@@ -29,9 +29,10 @@ Shader "Custom/Indicator"
 					
 					#include "UnityCG.cginc"
 					#define PI 3.1415926
+					#define w 0.1
 					float4 _Color;
 					float _HalfWidth;
-					float _HalfHieght;
+					float _HalfHeight;
 					float _Ang;
 
 					struct v2f {   
@@ -41,7 +42,7 @@ Shader "Custom/Indicator"
 					
 					v2f vert(appdata_tan v)   
 					{   
-						v2f o;   
+						v2f o;
 						o.pos = mul (UNITY_MATRIX_MVP, v.vertex);
 						o.uv1.x =  v.vertex.x;
 						o.uv1.y =  v.vertex.z;
@@ -57,7 +58,6 @@ Shader "Custom/Indicator"
 					float getFanAlpha(float2 uv)
 					{
 						float d = sqrt(uv.x*uv.x + uv.y*uv.y);
-						float w = 0.2f;
 						float r = _HalfWidth;
 						float begin = 0.5*PI-radians(_Ang/2);
 						float end = 0.5*PI+radians(_Ang/2);
@@ -88,7 +88,6 @@ Shader "Custom/Indicator"
 					float getCircleAlpha(float2 uv)
 					{
 						float d = sqrt(uv.x*uv.x + uv.y*uv.y);
-						float w = 0.2f;
 						float r = _HalfWidth;
 						if(d>r)return 0;
 						d=abs(d-r);
@@ -98,10 +97,9 @@ Shader "Custom/Indicator"
 
 					float getRectAlpha(float2 uv)
 					{
-						float w = 0.2f;
 						float dw = _HalfWidth - abs(uv.x);
 						if(dw<0)return 0;
-						float dy = _HalfHieght- abs(uv.y);
+						float dy = _HalfHeight- abs(uv.y);
 						if(dy<0)return 0;
 						float d = dw<dy?dw:dy;
 						if(d>w)return 0.2;

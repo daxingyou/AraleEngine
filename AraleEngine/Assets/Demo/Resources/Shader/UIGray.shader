@@ -1,6 +1,6 @@
 ﻿//通过Shader "UI/Default"修改
 //Image灰度化
-Shader "Unlit/UIGray"  
+Shader "Arale/UI/UIGray"  
 {  
     Properties  
     {  

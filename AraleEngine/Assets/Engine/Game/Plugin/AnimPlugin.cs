@@ -37,6 +37,7 @@ public class AnimPlugin : Plugin
 		if (needSync)sync (evt, anim);
 	}
 
+    float jioTime;
 	protected virtual void onEvent(int evt, string anim, ref bool needSync)
 	{
         if (!mUnit.isState(UnitState.Anim))return;
@@ -59,6 +60,14 @@ public class AnimPlugin : Plugin
     		case Run:
     			if (mAnimtor != null)mAnimtor.SetBool("Run", true);
     			if (mAnim != null)mAnim.Play ("run", PlayMode.StopAll);
+
+                //显示脚印
+                jioTime+=Time.deltaTime;
+                if (jioTime > 0.5f && !mUnit.isServer)
+                {
+                    jioTime -= 0.5f;
+                    MeshEffect.addQuad(mUnit.pos, mUnit.transform.eulerAngles.y, Vector2.one, 0);
+                }
     			break;
     		case Jump:
     			if (mAnimtor != null)mAnimtor.SetTrigger("Jump");
