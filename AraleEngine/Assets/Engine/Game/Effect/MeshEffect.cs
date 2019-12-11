@@ -6,6 +6,7 @@ using System.Collections.Generic;
 [RequireComponent(typeof(MeshRenderer))]
 public class MeshEffect : MonoBehaviour
 {
+    const int MaxEffectCount = 10000;
     static MeshEffect mThis;
     List<Vector3> vs = new List<Vector3>();
     List<int> tris = new List<int>(); 
@@ -36,6 +37,7 @@ public class MeshEffect : MonoBehaviour
     int innerAddQuad(Vector3 pos, float rotation, Vector2 size, int spriteIdx, bool skewed=false)
     {
         int i = vs.Count;
+        if (i > MaxEffectCount)return -1;
         vs.Add(pos+Quaternion.Euler(0,rotation,0)*new Vector3(-size.x,0.05f,size.y));
         vs.Add(pos+Quaternion.Euler(0,rotation,0)*new Vector3(size.x,0.05f,size.y));
         vs.Add(pos+Quaternion.Euler(0,rotation,0)*new Vector3(size.x,0.05f,-size.y));

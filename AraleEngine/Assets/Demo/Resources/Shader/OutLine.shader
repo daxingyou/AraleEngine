@@ -1,9 +1,11 @@
-﻿Shader "TestShader/多通道"
+﻿//描边shader,模型法线外扩法,要求camera renderpath=Deferred 否则有些坐标点无法显示
+Shader "Arale/Model/OutLine"
 {
 	Properties
 	{
 		_MainTex ("Texture", 2D) = "white" {}
 		_Outline("Outline width", float)=0.007
+		_OutLineColor("Outline color", Color)=(0,0,0,1)
 		_Factor("Factor", float)=1
 	}
 	SubShader
@@ -22,6 +24,7 @@
 
 			float _Factor;
 			float _Outline;
+			fixed4 _OutLineColor;
 
 			struct appdata
 			{
@@ -44,16 +47,16 @@
 				float3 dir2= v.normal;
 				float D = dot(dir, dir2);
 				D=(D/_Factor+1)/(1+1/_Factor);
-				dir = lerp(dir2,dir,D);
+				dir = lerp(dir2,dir,D);//对应正方体,法线方向跳度太大会导致描边断掉，所以采用法向量和顶点方向插值
 				dir = mul((float3x3)UNITY_MATRIX_IT_MV, dir);
-				float2 offset=TransformViewToProjection(dir.xy);
-				o.vertex.xy += offset*_Outline;
+				float2 xyOffset=TransformViewToProjection(dir.xy);
+				o.vertex.xy += xyOffset*_Outline;
 				return o;
 			}
 			
 			fixed4 frag (v2f i) : SV_Target
 			{
-				return fixed4(0,0,0,1);
+				return _OutLineColor;
 			}
 			ENDCG
 		}
@@ -90,7 +93,7 @@
 			
 			fixed4 frag (v2f i) : SV_Target
 			{
-				fixed4 col = fixed4(0,1,0,1);//tex2D(_MainTex, i.uv);
+				fixed4 col = tex2D(_MainTex, i.uv);
 				return col;
 			}
 			ENDCG
