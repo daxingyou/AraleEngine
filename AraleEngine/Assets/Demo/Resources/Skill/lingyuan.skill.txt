@@ -15,7 +15,7 @@
         </action>
         <action time="1.5" end=""/>
     </skill>
-    <skill id="12" name="ly.skill3" pointType="2" distance="4" cd="3" area="0,4.00" icon="sk_skill2" anim="skill02" state="FFFB">
+    <skill id="12" name="ly.skill3" pointType="2" distance="4" cd="3" icon="sk_skill2" anim="skill02" state="FFFB">
         <action time="0.5">
             <Move id="101" target="Area" area="2,4.00,5.00" selector="Nearst" relation="Emney"/>
             <Harm harm="20" target="Area" area="2,4.00,6.00" selector="Nearst" relation="Emney"/>

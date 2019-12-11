@@ -1,5 +1,5 @@
 ﻿//场景技能指示器
-Shader "Custom/Indicator"
+Shader "Arale/Skill/Indicator"
 {
 	Properties {
 		_Color ("Main Color", Color) = (1,1,1,1)
@@ -22,7 +22,6 @@ Shader "Custom/Indicator"
 		
 		SubShader {
 			Pass {
-			//ZTest Always//显示在上面
 				CGPROGRAM   
 					#pragma vertex vert  
 					#pragma fragment frag
@@ -106,48 +105,39 @@ Shader "Custom/Indicator"
 						return smoothAlpha(d/w)+0.2f;
 					}
 
+					float getArrowAlpha(float2 uv)
+					{
+						if(uv.x>0.5||uv.x<-0.5)return 0;
+						float d = 0.5 - abs(uv.x);
+						if(uv.x>=0)
+						{
+							float ty = _HalfWidth-uv.x;
+							float by = -_HalfWidth+0.5f-uv.x;
+							if(uv.y>ty||uv.y<by)return 0;
+							float dy = min(ty-uv.y,uv.y-by);
+							if(d>dy)d=dy;
+						}
+						else
+						{
+							float ty = _HalfWidth+uv.x;
+							float by = -_HalfWidth+0.5f+uv.x;
+							if(uv.y>ty||uv.y<by)return 0;
+							float dy = min(ty-uv.y,uv.y-by);
+							if(d>dy)d=dy;
+						}
+						if(d>w)return 0.2;
+						return smoothAlpha(d/w)+0.2f;
+					}
+
 					half4 frag (v2f i) : COLOR   
 					{
 						half4 result = _Color;
-						result.a = _Ang>0?(_Ang>=360?getCircleAlpha(i.uv1):getFanAlpha(i.uv1)):getRectAlpha(i.uv1);
+						result.a = _Ang>0?(_Ang>=360?getCircleAlpha(i.uv1):getFanAlpha(i.uv1)):(_HalfHeight>0?getRectAlpha(i.uv1):getArrowAlpha(i.uv1));
 						if(result.a<=0)discard;
 						return result; 
 					} 
 				ENDCG 
 			}
-			//Pass {
-			//ZTest Greater//当被遮挡时该pass起效
-			//	CGPROGRAM   
-			//		#pragma vertex vert  
-			//		#pragma fragment frag
-					
-			//		#include "UnityCG.cginc"   
-					
-			//		struct v2f {   
-			//			float4 pos : SV_POSITION;   
-			//			float2 uv : TEXCOORD0;   
-			//		};   
-			//		v2f vert(appdata_tan v)   
-			//		{   
-			//			v2f o;   
-			//			o.pos = mul (UNITY_MATRIX_MVP, v.vertex);  
-			//			o.uv = v.texcoord; 
-			//			return o;    
-			//		}
-			//		
-			//		sampler2D _MainTex;  
-			//		float4 _Color; 
-	    	//
-			//		half4 frag (v2f i) : SV_Target   
-			//		{   
-			//			half4 result = tex2D (_MainTex, i.uv); 
-			//			result.rgb=1;
-			//			result*=_Color;
-			//			result.a /= 3;
-			//			return result; 
-			//		}    
-			//	ENDCG 
-			//}
 		}
 	}
 }

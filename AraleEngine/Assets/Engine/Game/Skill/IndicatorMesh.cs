@@ -24,7 +24,7 @@ public class IndicatorMesh : MonoBehaviour
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
     void Start()
     {
-        rangeMat= Object.Instantiate(ResLoad.get("Mat/Indicator", ResideType.InScene).asset<Material>());
+        rangeMat = Object.Instantiate(ResLoad.get("Mat/Indicator", ResideType.InScene).asset<Material>());
         rectMat = Object.Instantiate(ResLoad.get("Mat/Indicator", ResideType.InScene).asset<Material>());
     }
 
@@ -52,7 +52,11 @@ public class IndicatorMesh : MonoBehaviour
             case Skill.PointType.Dir:
                 if (gs.area == null)
                 {
-                    //rectMesh.draw(sticker.localToWorldMatrix, rectMat);
+                    rectMat.SetFloat("_HalfWidth", gs.distance/2);
+                    rectMat.SetFloat("_HalfHeight", 0);
+                    rectMat.SetFloat("_Ang", 0);
+                    rectMesh.get(1, gs.distance, new Vector3(0,0.02f,gs.distance/2));
+                    rectMesh.draw(sticker.localToWorldMatrix*mLocalMX, rectMat);
                 }
                 else
                 {
