@@ -197,6 +197,7 @@ public class GameArea : MonoBehaviour {
 		Square,     //矩形区域
 		Rectangle,  //长方形区域
 		Fan,        //扇形区域
+        None=int.MaxValue,
 	}
 
 	public static IArea ceateArea(AreaType type)
