@@ -26,6 +26,7 @@ Rigidbody = CS.UnityEngine.Rigidbody
 NavMeshAgent = CS.UnityEngine.NavMeshAgent
 Collider = CS.UnityEngine.Collider
 WaitForSeconds = CS.UnityEngine.WaitForSeconds
+Camera = CS.UnityEngine.Camera
 --==============DoTween
 DOTween = CS.DG.Tweening.DOTween
 --==============引擎
@@ -61,6 +62,7 @@ UIItemSlot = CS.UIItemSlot
 PlayerHeader = CS.PlayerHeader
 UISListItem = CS.UISListItem
 UIImageText = CS.UIImageText
+ImageEffect = CS.ImageEffect
 --===============配表
 TBSkill = CS.Arale.Engine.TBSkill
 TBMonster = CS.Arale.Engine.TBMonster

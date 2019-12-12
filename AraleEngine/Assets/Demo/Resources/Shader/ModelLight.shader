@@ -1,4 +1,5 @@
-Shader "JOshader/Mo_Charactor_Show" {
+//很据环境手动调光，减少光线计算带来的性能损失,绑定在角色或动态物体上
+Shader "Arale/Model/ModelLight" {
 	Properties {
 	_MainTex ("Base (RGB)", 2D) = "white" {}
 	_Color ("Main Color", Color) = (0.6392,0.6039,0.6039,1)

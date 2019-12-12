@@ -48,6 +48,7 @@ public class Player : Unit, PoolMgr<int>.IPoolObject
         {
             mHeadInfo = HeadInfo.Bind(this.transform, this);
             effect.playEffect(1);
+            EventMgr.single.SendEvent("Player.Die", false);
         }
     }
 
@@ -96,13 +97,20 @@ public class Player : Unit, PoolMgr<int>.IPoolObject
 
 	void onAttrChanged(int mask, object val)
 	{
-		if (!isState (UnitState.Alive))return;
+		//if (!isState (UnitState.Alive))return;
         switch (mask)
         {
             case (int)AttrID.HP:
                 int hp = (int)val;
                 if (hp > 0)break;
-                if(isServer)buff.addBuff(2);
+                if (isServer)
+                {
+                    buff.addBuff(2);
+                }
+                else
+                {
+                    EventMgr.single.SendEvent("Player.Die", true);
+                }
                 break;
             case (int)AttrID.Speed:
                 scale = (float)val;

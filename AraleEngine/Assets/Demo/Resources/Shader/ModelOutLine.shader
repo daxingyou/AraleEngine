@@ -1,5 +1,5 @@
-﻿//描边shader,模型法线外扩法,要求camera renderpath=Deferred 否则有些坐标点无法显示
-Shader "Arale/Model/OutLine"
+﻿//描边shader,模型法线外扩法
+Shader "Arale/Model/ModelOutLine"
 {
 	Properties
 	{
@@ -10,13 +10,9 @@ Shader "Arale/Model/OutLine"
 	}
 	SubShader
 	{
-		Tags { "RenderType"="Opaque" }
-		LOD 100
-
 		Pass
 		{
-			ZWrite Off
-			ZTEST Less
+			Cull FRONT
 			CGPROGRAM
 			#pragma vertex vert
 			#pragma fragment frag

@@ -1,9 +1,9 @@
-﻿Shader "TestShader/Image-径向模糊"
+﻿Shader "Arale/Image/ImageRadialBlur"
 {
 	Properties
 	{
 		_MainTex ("Base", 2D) = "white" {}
-		_IterationNumber("迭代次数",Int)=16
+		_IterationNumber("迭代次数",Int)=11
 		_CenterX("CenterX", Range(0, 1))=0.5
 		_CenterY("CenterY", Range(0, 1))=0.5
 		_Value("Value", Float)=1.0

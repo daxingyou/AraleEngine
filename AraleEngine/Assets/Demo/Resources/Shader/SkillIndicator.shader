@@ -1,5 +1,5 @@
 ﻿//场景技能指示器
-Shader "Arale/Skill/Indicator"
+Shader "Arale/Skill/SkillIndicator"
 {
 	Properties {
 		_Color ("Main Color", Color) = (1,1,1,1)
