@@ -19,7 +19,7 @@ namespace Arale.Engine
     		mViewports.Add (new Viewport ("2"));
     		mViewports.Add (new Viewport ("3"));
     		mViewports.Add (new Viewport ("4"));
-    		resizeViewport ();
+    		ResizeViewport ();
     	}
 
     	List<Viewport> mViewports;
@@ -74,7 +74,7 @@ namespace Arale.Engine
     		return mViewports[idx];
     	}
 
-    	void resizeViewport()
+    	void ResizeViewport()
     	{
     		if (mMaxViewport != null)
     		{
@@ -85,12 +85,12 @@ namespace Arale.Engine
     		switch (mLayout)
     		{
     		case Layout.L22:
-    			resizeL22 ();
+    			ResizeL22 ();
     			break;
     		}
     	}
 
-    	void resizeL22()
+    	void ResizeL22()
     	{
     		mViewports [0].SetRect (0.0f, 0.0f, 0.5f, 0.5f);
     		mViewports [1].SetRect (0.0f, 0.5f, 0.5f, 0.5f);

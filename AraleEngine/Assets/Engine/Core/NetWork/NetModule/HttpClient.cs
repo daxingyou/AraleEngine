@@ -48,7 +48,7 @@ namespace Arale.Engine
         }
 
         // 发送消息队列中的第一条消息
-        protected override void processSendData()
+        protected override void ProcessSendData()
         {
             try
             {
@@ -116,7 +116,7 @@ namespace Arale.Engine
         {
         }
 
-        public override void clear()
+        public override void Clear()
         {
             mSendList.Clear();
             mRecvList.Clear();

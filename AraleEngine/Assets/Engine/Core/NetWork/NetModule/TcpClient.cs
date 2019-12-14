@@ -62,7 +62,7 @@ namespace Arale.Engine
 
 
         #region  建立连接
-		public void connect(string ip = null, string hostname = null, int port = 0)
+		public void Connect(string ip = null, string hostname = null, int port = 0)
 		{
             if (!string.IsNullOrEmpty(ip))
             {
@@ -88,7 +88,7 @@ namespace Arale.Engine
                     mSocket.SendTimeout = (int)(1000 * NetworkMgr.single.mTimeout);
                     mSocket.SendBufferSize = 1 << 20;
                     mSocket.NoDelay = true;
-                    mSocket.BeginConnect(ipEndpoint, new AsyncCallback(connectCallback), mSocket);
+                    mSocket.BeginConnect(ipEndpoint, new AsyncCallback(ConnectCallback), mSocket);
                 }
                 else if (false == string.IsNullOrEmpty(mHostName))
                 {
@@ -98,7 +98,7 @@ namespace Arale.Engine
                     mSocket.SendTimeout = (int)(1000 * NetworkMgr.single.mTimeout);
                     mSocket.SendBufferSize = 1 << 20;
                     mSocket.NoDelay = true;
-                    mSocket.BeginConnect(mHostName, mPort, new AsyncCallback(connectCallback), mSocket);
+                    mSocket.BeginConnect(mHostName, mPort, new AsyncCallback(ConnectCallback), mSocket);
                 }
                 else
                 {
@@ -112,7 +112,7 @@ namespace Arale.Engine
             }
 		}
 		
-		void connectCallback(IAsyncResult asyncConnect)
+		void ConnectCallback(IAsyncResult asyncConnect)
 		{
 			Socket client = (Socket)asyncConnect.AsyncState;
 			try
@@ -122,7 +122,7 @@ namespace Arale.Engine
                 //开始收包
                 Log.d("Socket Connect End. Begin Read", Log.Tag.Net);
 				ReceiveBuffer buffer = new ReceiveBuffer(Packet.SizeBytes);
-                mSocket.BeginReceive(buffer.buffer, buffer.offset, buffer.size, SocketFlags.None, onReadPacketHeader, buffer);
+                mSocket.BeginReceive(buffer.buffer, buffer.offset, buffer.size, SocketFlags.None, OnReadPacketHeader, buffer);
                 //========
 				mReadySend=true;
 				netState=State.Ok;
@@ -151,7 +151,7 @@ namespace Arale.Engine
 
 
         #region 收包
-        void onReadPacketHeader(IAsyncResult result)
+        void OnReadPacketHeader(IAsyncResult result)
         {
             try
             {
@@ -166,16 +166,16 @@ namespace Arale.Engine
                 }
                 else if( size == buffer.size )
                 { //package's header is received
-					int len = Packet.readInt32(buffer.buffer, 0);
+					int len = Packet.ReadInt32(buffer.buffer, 0);
 					if(len > Packet.MaxSize)throw new Exception("packet size error");
                     ReceiveBuffer body = new ReceiveBuffer(len);
-					Packet.writeInt32(len, body.buffer, 0);
-					mSocket.BeginReceive(body.buffer, Packet.SizeBytes, body.size-Packet.SizeBytes, SocketFlags.None, onReadPacketBody, body);
+					Packet.WriteInt32(len, body.buffer, 0);
+					mSocket.BeginReceive(body.buffer, Packet.SizeBytes, body.size-Packet.SizeBytes, SocketFlags.None, OnReadPacketBody, body);
                 }
                 else
                 {
                     buffer.offset = buffer.offset + size;
-                    mSocket.BeginReceive(buffer.buffer, buffer.offset, buffer.size, SocketFlags.None, onReadPacketHeader, buffer);
+                    mSocket.BeginReceive(buffer.buffer, buffer.offset, buffer.size, SocketFlags.None, OnReadPacketHeader, buffer);
                 }
             }
             catch( SocketException e)
@@ -195,7 +195,7 @@ namespace Arale.Engine
             }
         }
 
-        void onReadPacketBody(IAsyncResult result)
+        void OnReadPacketBody(IAsyncResult result)
         {
             try
             {
@@ -213,12 +213,12 @@ namespace Arale.Engine
                     //BufferReader msg = new BufferReader(buffer.buffer, 0);
                     AddPacketResult(buffer.buffer);
 					ReceiveBuffer head = new ReceiveBuffer(Packet.SizeBytes);
-                    mSocket.BeginReceive(head.buffer, head.offset, head.size, SocketFlags.None, onReadPacketHeader, head);
+                    mSocket.BeginReceive(head.buffer, head.offset, head.size, SocketFlags.None, OnReadPacketHeader, head);
                 }
                 else
                 {
                     buffer.offset = buffer.offset+size; 
-                    mSocket.BeginReceive(buffer.buffer, buffer.offset, buffer.size, SocketFlags.None, onReadPacketBody, buffer);
+                    mSocket.BeginReceive(buffer.buffer, buffer.offset, buffer.size, SocketFlags.None, OnReadPacketBody, buffer);
                 }
             }
             catch( SocketException)
@@ -238,22 +238,22 @@ namespace Arale.Engine
 
 
         #region 发包
-        protected override void processSendData()
+        protected override void ProcessSendData()
         {
             if (!mReadySend || mSendList.Count < 1)
                 return;
             Packet pack = mSendList[0] as Packet;
             mSendList.RemoveAt(0);
-            writePacket(pack);
+            WritePacket(pack);
         }
 
-        void writePacket(Packet packet)
+        void WritePacket(Packet packet)
         {
             try
             {
                 if( mSocket == null )return;
                 byte[] dat = packet.mNetData;
-                mSocket.BeginSend(dat, 0, dat.Length, SocketFlags.None, onWritePacket, dat);
+                mSocket.BeginSend(dat, 0, dat.Length, SocketFlags.None, OnWritePacket, dat);
             }
             catch( SocketException e)
             {
@@ -272,7 +272,7 @@ namespace Arale.Engine
             }
         }
 
-        void onWritePacket(IAsyncResult result)
+        void OnWritePacket(IAsyncResult result)
         {
             try
             {
@@ -299,7 +299,7 @@ namespace Arale.Engine
         #endregion
 
         #region
-        public override void close()
+        public override void Close()
         {
             if( mSocket == null )return;
             try

@@ -29,7 +29,7 @@ namespace Arale.Engine
     		if (mOnSelGameObject != null)mOnSelGameObject (go);
     	}
 
-    	public void setCamera(Camera cam, OnSelGameObject onSelCallback)
+    	public void SetCamera(Camera cam, OnSelGameObject onSelCallback)
     	{
     		mCamera = cam;
     		mOnSelGameObject = onSelCallback;

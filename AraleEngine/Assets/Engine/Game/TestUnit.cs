@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 public class TestUnit : GRoot
 {
 	public static Unit mPlayer;
-	protected override void gameStart()
+	protected override void GameStart()
 	{
 		Log.mFilter = (int)(Log.Tag.Net | Log.Tag.Unit | Log.Tag.Skill | Log.Tag.Default);
 		Log.mDebugLevel = 2;
@@ -27,7 +27,7 @@ public class TestUnit : GRoot
 			
 	}
 
-	protected override void gameExit()
+	protected override void GameExit()
 	{
 		Selection.selectionChanged = null;
 		mPlayer = null;
@@ -36,7 +36,7 @@ public class TestUnit : GRoot
 		EventMgr.single.RemoveListener ("Game.Player", onPlayer);
 	}
 
-	protected override void gameUpdate()
+	protected override void GameUpdate()
 	{
 		if (mPlayer == null)return;
 

@@ -23,6 +23,15 @@ namespace Arale.Engine
         {
     		int.TryParse(value[0], out _id);
         }
+
+        public virtual void read(BinaryReader r, int[] idx)
+        {
+            Debug.LogError("read not implement:"+this.GetType());
+        }
+        public virtual void write(BinaryWriter w)
+        {
+            Debug.LogError("write not implement"+this.GetType());
+        }
     }
 
     public class TableField:Attribute

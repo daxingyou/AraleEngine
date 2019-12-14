@@ -61,11 +61,11 @@ namespace Arale.Engine
                 int offset = (i % 11) * 3;
                 if (isFile)
                 {
-                    exchangeFile(ref data[i]);
+                    ExchangeFile(ref data[i]);
                 }
                 else
                 {
-                    exchangeData(ref data[i]);
+                    ExchangeData(ref data[i]);
                 }
 
                 XOR(ref data[i], i);
@@ -87,11 +87,11 @@ namespace Arale.Engine
                 XOR(ref data[i], i);
                 if (isFile)
                 {
-                    exchangeFile(ref data[i]);
+                    ExchangeFile(ref data[i]);
                 }
                 else
                 {
-                    exchangeData(ref data[i]);
+                    ExchangeData(ref data[i]);
                 }
             }
     #else
@@ -165,7 +165,7 @@ namespace Arale.Engine
             data = lastData;
         }
 
-        static void exchangeData(ref byte data)
+        static void ExchangeData(ref byte data)
         {
             byte[] total = new byte[] { data };
             BitArray old_array = new BitArray(total);
@@ -195,7 +195,7 @@ namespace Arale.Engine
             data = lastData;
         }
 
-        static void exchangeFile(ref byte data)
+        static void ExchangeFile(ref byte data)
         {
             byte[] total = new byte[] { data };
             BitArray old_array = new BitArray(total);

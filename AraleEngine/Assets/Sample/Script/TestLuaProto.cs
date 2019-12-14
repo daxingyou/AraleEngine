@@ -8,9 +8,9 @@ using ProtoBuf.Meta;
 //勾选uselua
 public class TestLuaProto : GRoot
 {
-    protected override void gameStart(){}
-    protected override void gameExit(){}
-    protected override void gameUpdate(){}
+    protected override void GameStart(){}
+    protected override void GameExit(){}
+    protected override void GameUpdate(){}
 
     void OnGUI()
     {

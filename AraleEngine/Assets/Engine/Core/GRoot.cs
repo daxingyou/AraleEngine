@@ -53,13 +53,13 @@ namespace Arale.Engine
                 DontDestroyOnLoad(EventSystem.current.gameObject);
             }
             ResLoad.init(this);
-            gameStart();
+            GameStart();
         }
 
         void Update()
         {
             RTime.R.Update();
-            gameUpdate();
+            GameUpdate();
             for (int i = mUpdates.Count - 1; i >= 0; --i)
             {
                 mUpdates[i]();
@@ -68,7 +68,7 @@ namespace Arale.Engine
 
         void OnDestroy ()
         {
-            gameExit();
+            GameExit();
             ResLoad.deinit();
             Log.deinit ();
         }
@@ -85,9 +85,9 @@ namespace Arale.Engine
             EventMgr.single.SendEvent(EventGameFocus, isFocus);
         }
 
-        protected abstract void gameStart();
-        protected abstract void gameExit();
-        protected abstract void gameUpdate();
+        protected abstract void GameStart();
+        protected abstract void GameExit();
+        protected abstract void GameUpdate();
         public void AddUpdate(VoidDelegate updateFunc)
         {
             mUpdates.Insert(0, updateFunc);

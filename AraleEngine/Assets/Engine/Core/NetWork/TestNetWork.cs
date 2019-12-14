@@ -15,11 +15,11 @@ public class TestNetWork : GRoot {
 	Socket mServer;
 	Dictionary<IntPtr, SocketAsyncEventArgs> mClients = new Dictionary<IntPtr, SocketAsyncEventArgs>();
 	//SocketAsyncEventArgs mEvent;
-	protected override void gameStart(){
+	protected override void GameStart(){
 		Log.mFilter = (int)Log.Tag.Net;
 		Log.mDebugLevel = 3;
 		NetworkMgr.single.Init ();
-		NetworkMgr.single.getHandler (1).regHandler (onPacketCallback);
+		NetworkMgr.single.GetHandler (1).RegHandler (onPacketCallback);
 		EventMgr.single.AddListener (NetworkMgr.EventSendError, onSendError);
 		EventMgr.single.AddListener (NetworkMgr.EventRecvError, onReciveError);
 		EventMgr.single.AddListener (NetworkMgr.EventConnect, onNetConnect);
@@ -30,13 +30,13 @@ public class TestNetWork : GRoot {
 		doAccept ();
 	}
 
-	protected override void gameUpdate()
+	protected override void GameUpdate()
 	{
 		NetworkMgr.single.Update ();
 	}
 
-	protected override void gameExit(){
-		NetworkMgr.single.getHandler (1).unregHandler (onPacketCallback);
+	protected override void GameExit(){
+		NetworkMgr.single.GetHandler (1).UnregHandler (onPacketCallback);
 		EventMgr.single.AddListener (NetworkMgr.EventSendError, onSendError);
 		EventMgr.single.RemoveListener (NetworkMgr.EventRecvError, onReciveError);
 		EventMgr.single.RemoveListener (NetworkMgr.EventConnect, onNetConnect);
@@ -137,12 +137,12 @@ public class TestNetWork : GRoot {
 	{
 		if (GUI.Button (new Rect (0, 0, 100, 30), "建立连接"))
 		{
-			mClient = NetworkMgr.single.createClient (ClientType.Tcp, "") as Arale.Engine.TcpClient;
-			mClient.connect ("127.0.0.1", null, 9527);
+			mClient = NetworkMgr.single.CreateClient (ClientType.Tcp, "") as Arale.Engine.TcpClient;
+			mClient.Connect ("127.0.0.1", null, 9527);
 		}
 		if (GUI.Button (new Rect (0, 30, 100, 30), "断开连接"))
 		{
-			mClient.close ();
+			mClient.Close ();
 		}
 		if (GUI.Button (new Rect (0, 60, 100, 30), "发送数据"))
 		{
@@ -160,9 +160,9 @@ public class TestNetWork : GRoot {
             msg.b = 1234;
             msg.c = 5678;
             msg.d.AddRange(new int[]{1,2,3});
-			Packet pk = Packet.createPacket (1, msg);
-			pk = Packet.createPacket (pk.mNetData);
-            msg = pk.toOBJ(typeof(TestProto)) as TestProto;
+			Packet pk = Packet.CreatePacket (1, msg);
+			pk = Packet.CreatePacket (pk.mNetData);
+            msg = pk.ToOBJ(typeof(TestProto)) as TestProto;
             Debug.LogError ("msg:"+msg.a+","+msg.b+","+msg.c+","+GHelper.toString<int>(msg.d.ToArray()));
 		}
         if (GUI.Button(new Rect(0, 120, 100, 30), "LuaPB编解码测试"))
@@ -218,10 +218,10 @@ public class TestNetWork : GRoot {
 
 	void onPacketCallback(Packet packet)
 	{
-        TestProto msg = packet.toOBJ(typeof(TestProto)) as TestProto;
+        TestProto msg = packet.ToOBJ(typeof(TestProto)) as TestProto;
         Debug.LogError ("cs msg:"+msg.a+","+msg.b+","+msg.c+","+GHelper.toString<int>(msg.d.ToArray()));
         packet.mMetaPacket = null;//清除缓存
-        LuaObject lo = packet.toLua("TestProto") as LuaObject;
+        LuaObject lo = packet.ToLua("TestProto") as LuaObject;
         Debug.LogError("lua msg:" + lo.value<string>("a") + "," + lo.value<int>("b") + "," + lo.value<int>("c")+","+GHelper.toString<int>(lo.value<int[]>("d")));
 	}
 
@@ -229,14 +229,14 @@ public class TestNetWork : GRoot {
 	{
 		Debug.LogError ("onSendError");
 		NetClient nc = ed.data as NetClient;
-		nc.close ();
+		nc.Close ();
 	}
 
 	void onReciveError(Arale.Engine.EventMgr.EventData ed)
 	{
 		Debug.LogError ("onReciveError");
 		NetClient nc = ed.data as NetClient;
-		nc.close ();
+		nc.Close ();
 	}
 
 	void onNetConnect(Arale.Engine.EventMgr.EventData ed)

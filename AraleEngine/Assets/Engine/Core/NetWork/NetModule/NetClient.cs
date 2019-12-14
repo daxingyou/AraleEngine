@@ -30,7 +30,7 @@ namespace Arale.Engine
             try
             {
                 if (msgData == null)throw new Exception("msgData can not be null");
-				mSendList.Add(Packet.createPacket(msgID, msgData));
+				mSendList.Add(Packet.CreatePacket(msgID, msgData));
             }
             catch (System.Exception ex)
             {
@@ -39,16 +39,16 @@ namespace Arale.Engine
             }
         }
 
-        public virtual void update()
+        public virtual void Update()
         {
             //处理发送队列中的消息
-            processSendData();
+            ProcessSendData();
             // 处理接受队列中的消息
-            processReceiveData();
+            ProcessReceiveData();
         }
 
-        protected virtual void processSendData(){}
-        protected virtual void processReceiveData()
+        protected virtual void ProcessSendData(){}
+        protected virtual void ProcessReceiveData()
         {
             if (mRecvList.Count < 1)
                 return;
@@ -61,7 +61,7 @@ namespace Arale.Engine
                 mRecvList.RemoveAt(0);
             }
 
-            if (!packet.handle())
+            if (!packet.Handle())
             {
                 EventMgr.single.SendEvent(NetworkMgr.EventHandlerError, this);
             }
@@ -69,7 +69,7 @@ namespace Arale.Engine
 
         protected void AddPacketResult(byte[] bytes)
         {
-			Packet packet = Packet.createPacket(bytes);
+			Packet packet = Packet.CreatePacket(bytes);
 			if (packet == null || packet.mHandler==null)return;
 
             lock (mLock)
@@ -88,8 +88,8 @@ namespace Arale.Engine
             }
         }
 
-        public virtual void clear(){}
-        public virtual void close(){}
+        public virtual void Clear(){}
+        public virtual void Close(){}
     }
 
 }

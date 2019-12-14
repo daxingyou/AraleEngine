@@ -62,12 +62,12 @@ function M:OnBindPlayer(evt)
 	self:UpdateSkills()
 
     self:SetPlayer()
-    self._hero.attr:AddAttrListener(self._onAttrChanged)
+    self._hero.attr:AddListener(self._onAttrChanged)
 end
 
 function M:UnBindPlayer(unit)
 	if unit == nil then return end
-	unit.attr:RemoveAttrListener(self._onAttrChanged)
+	unit.attr:RemoveListener(self._onAttrChanged)
 end
 
 function M:SetPlayer()

@@ -14,11 +14,11 @@ namespace Arale.Engine
         public bool discardable;//是否可丢弃
         public bool lastone;    //是否只处理最后收到的包
         OnPacketCallback mOnPacketCallback;
-        public void regHandler(OnPacketCallback callback)
+        public void RegHandler(OnPacketCallback callback)
         {
             mOnPacketCallback += callback;
         }
-        public void unregHandler(OnPacketCallback callback)
+        public void UnregHandler(OnPacketCallback callback)
         {//即使没注册再调用也不会有问题
             mOnPacketCallback -= callback;
         }
@@ -38,26 +38,26 @@ namespace Arale.Engine
 		public const int SizeBytes  = 4;
         // 整包长度
 		public int mLen {
-			protected set{writeInt32 (value, mNetData, 0);}
-			get{return readInt32 (mNetData, 0);}
+			protected set{WriteInt32 (value, mNetData, 0);}
+			get{return ReadInt32 (mNetData, 0);}
 		}
 
 		// 消息包ID
 		public int mID {
-			protected set{writeInt32 (value, mNetData, 4);}
-			get{return readInt32 (mNetData, 4);}
+			protected set{WriteInt32 (value, mNetData, 4);}
+			get{return ReadInt32 (mNetData, 4);}
 		}
 
 		// 时间戳
 		public long mStamp {
-			protected set{writeInt64 (value, mNetData, 8);}
-			get{return readInt64 (mNetData, 8);}
+			protected set{WriteInt64 (value, mNetData, 8);}
+			get{return ReadInt64 (mNetData, 8);}
 		}
 
 		// 标志位
 		public int mFlag {
-			protected set{writeInt32 (value, mNetData, 16);}
-			get{return readInt32 (mNetData, 16);}
+			protected set{WriteInt32 (value, mNetData, 16);}
+			get{return ReadInt32 (mNetData, 16);}
 		}
 		#endregion
         
@@ -68,7 +68,7 @@ namespace Arale.Engine
 
 		//该包对应的处理器
 		public PacketHandler mHandler;
-		public virtual object toOBJ(Type t)
+		public virtual object ToOBJ(Type t)
 		{
 			if (mMetaPacket != null)return mMetaPacket;
 			using (MemoryStream ms = new MemoryStream(mNetData, HeaderSize, mNetData.Length - HeaderSize))
@@ -78,7 +78,7 @@ namespace Arale.Engine
 			return mMetaPacket;
 		}
 
-		public virtual object toLua(string name)
+		public virtual object ToLua(string name)
 		{
 			if (mMetaPacket != null)return mMetaPacket;
 			using (MemoryStream ms = new MemoryStream(mNetData, HeaderSize, mNetData.Length - HeaderSize))
@@ -92,7 +92,7 @@ namespace Arale.Engine
 		}
 
         //将proto数据包(原始包msgData)封包,encrypt表示是否加密数据包
-		protected virtual void encodeMeta(MemoryStream ms)
+		protected virtual void EncodeMeta(MemoryStream ms)
         {
 			LuaObject luaPacket = mMetaPacket as LuaObject;
 			if (luaPacket == null)
@@ -108,7 +108,7 @@ namespace Arale.Engine
         }
 
         //处理数据包
-        public bool handle()
+        public bool Handle()
         {
             try
             {
@@ -124,14 +124,14 @@ namespace Arale.Engine
         }
 			
 
-		public static Packet createPacket(int msgID, object msgData, bool encrypt = false)
+		public static Packet CreatePacket(int msgID, object msgData, bool encrypt = false)
 		{
 			Packet pk = new Packet ();
 			pk.mMetaPacket = msgData;
 			using (MemoryStream ms = new MemoryStream ())
 			{
 				ms.Seek (HeaderSize, SeekOrigin.Begin);
-				pk.encodeMeta (ms);
+				pk.EncodeMeta (ms);
 				pk.mNetData = ms.ToArray();
 				pk.mLen  = pk.mNetData.Length;
 				pk.mID   = msgID;
@@ -141,22 +141,22 @@ namespace Arale.Engine
 			return pk;
 		}
 
-		public static Packet createPacket(byte[] data, bool encrypt = false)
+		public static Packet CreatePacket(byte[] data, bool encrypt = false)
 		{
 			Packet pk = new Packet ();
 			pk.mNetData = data;
-			pk.mHandler = NetworkMgr.single.getHandler(pk.mID);
+			pk.mHandler = NetworkMgr.single.GetHandler(pk.mID);
 			return pk;
 		}
 
 		#region 简单数据网络读写
 		//网络字节序为大端字节序(高位字节存低地址)
-		public static int readInt32(byte[] buff, int offset)
+		public static int ReadInt32(byte[] buff, int offset)
 		{
 			return (int)(buff [offset] << 3) | (int)(buff [offset+1] << 2) | (int)(buff [offset+2] << 1) | (int)(buff [offset+3]);
 		}
 
-		public static void writeInt32(int val, byte[] buff, int offset)
+		public static void WriteInt32(int val, byte[] buff, int offset)
 		{
 			buff [offset]   = (byte)(val>>3);
 			buff [offset+1] = (byte)(val>>2);
@@ -164,12 +164,12 @@ namespace Arale.Engine
 			buff [offset+3] = (byte)(val);
 		}
 
-		public static long readInt64(byte[] buff, int offset)
+		public static long ReadInt64(byte[] buff, int offset)
 		{
 			return (long)(buff [offset] << 7) | (long)(buff [offset+1] << 6) | (long)(buff [offset+2] << 5) | (long)(buff [offset+3] << 4) | (long)(buff [offset+4] << 3) | (long)(buff [offset+5] << 2) | (long)(buff [offset+6] << 1) | (long)(buff [offset+7]);
 		}
 
-		public static void writeInt64(long val, byte[] buff, int offset)
+		public static void WriteInt64(long val, byte[] buff, int offset)
 		{
 			buff [offset]   = (byte)(val>>7);
 			buff [offset+1] = (byte)(val>>6);

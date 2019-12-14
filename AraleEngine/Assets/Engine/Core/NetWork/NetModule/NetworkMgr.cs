@@ -42,7 +42,7 @@ namespace Arale.Engine
 
         #region 消息ID-Handler映射
         IDictionary<int, PacketHandler> mPacketHandlers = new Dictionary<int, PacketHandler>();
-        public PacketHandler getHandler(int msgID)
+        public PacketHandler GetHandler(int msgID)
         {
             PacketHandler handler;
 			if (!mPacketHandlers.TryGetValue(msgID, out handler))
@@ -54,7 +54,7 @@ namespace Arale.Engine
         }
         #endregion
 
-		public NetClient getLink(int idx)
+		public NetClient GetLink(int idx)
 		{
 			return mClients [idx];
 		}
@@ -67,7 +67,7 @@ namespace Arale.Engine
             {
                 NetClient c = mClients[i];
                 if (c == null)continue;
-                c.update();
+                c.Update();
             }
         }
 
@@ -77,12 +77,12 @@ namespace Arale.Engine
 			{
 				NetClient c = mClients[i];
 				if (c == null)continue;
-				c.close ();
+				c.Close ();
 				mClients[i] = null;
 			}
 		}
 
-        public NetClient createClient(ClientType ct, string url)
+        public NetClient CreateClient(ClientType ct, string url)
         {
             NetClient c = null;
             for(int i=0;i<mClients.Length;++i)
@@ -111,8 +111,8 @@ namespace Arale.Engine
             {
                 NetClient c = mClients[i];
                 if (c == null)continue;
-                c.clear();
-                c.close();
+                c.Clear();
+                c.Close();
                 mClients[i] = null;
             }
         }

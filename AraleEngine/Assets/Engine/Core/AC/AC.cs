@@ -15,7 +15,7 @@ namespace Arale.Engine
     	public List<ACItem> _acs;
     	//=======
     	static Dictionary<string, AnimationCurve> mCach = new Dictionary<string, AnimationCurve>();
-    	public static AnimationCurve get(string assetName, string acName)
+    	public static AnimationCurve Get(string assetName, string acName)
     	{
     		AnimationCurve ac=null;
             string key = assetName + acName;

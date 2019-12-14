@@ -3,9 +3,9 @@ using System.Collections;
 using Arale.Engine;
 
 public class TestCamera : GRoot {
-    protected override void gameStart(){}
-    protected override void gameExit(){}
-    protected override void gameUpdate(){}
+    protected override void GameStart(){}
+    protected override void GameExit(){}
+    protected override void GameUpdate(){}
 	string camName = "";
 	void OnGUI()
 	{

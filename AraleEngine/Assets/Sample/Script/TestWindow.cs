@@ -6,14 +6,14 @@ using Arale.Engine;
 public class TestWindow : GRoot
 {
 	static int WinID = 0;
-    protected override void gameStart()
+    protected override void GameStart()
     {
         WindowMgr.SetWindowRes ("TestWindow", "UI/TestWindow");
     }
-    protected override void gameExit()
+    protected override void GameExit()
     {
     }
-    protected override void gameUpdate()
+    protected override void GameUpdate()
     {
     }
 

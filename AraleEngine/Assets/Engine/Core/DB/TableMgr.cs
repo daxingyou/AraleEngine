@@ -162,7 +162,7 @@ namespace Arale.Engine
 		#if UNITY_EDITOR
 		//运行时重新加载选中的lua文件
 		[MenuItem("Assets/DevelopTools/Reload Table")]
-		public static void reload()
+		public static void Reload()
 		{
 			string tableName = Selection.activeObject.name;
 			System.Type t = System.Type.GetType ("Arale.Engine." + tableName);

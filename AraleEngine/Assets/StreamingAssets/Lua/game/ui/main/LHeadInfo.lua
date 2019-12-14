@@ -14,11 +14,11 @@ local M =
 		end
 		self.luaName.text = tb.name
 		self.luaHP.value = unit.attr.HP/100;
-		unit.attr:AddAttrListener(self._onAttrChanged)
+		unit.attr:AddListener(self._onAttrChanged)
 	end;
 
 	[Enum.UnitEvent.HeadInfoDeinit] = function(self)
-		self._unit.attr:RemoveAttrListener(self._onAttrChanged)
+		self._unit.attr:RemoveListener(self._onAttrChanged)
 		self._unit = nil
 	end;
 }

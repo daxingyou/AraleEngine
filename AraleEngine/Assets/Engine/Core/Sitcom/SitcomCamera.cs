@@ -10,7 +10,7 @@ namespace Arale.Engine
 public class SitcomCamera : SitcomSystem.Action
 {
 	GameObject[] mCam;
-    public void onEvent (TimeMgr.Action a)
+    public void OnEvent (TimeMgr.Action a)
 	{
 		Log.i ("camera act="+act+","+id, Log.Tag.Sitcom);
 		if(actor!=null)mCam = GHelper.GetGameObjectByName(actor.Split(','));

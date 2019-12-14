@@ -6,11 +6,11 @@ using Arale.Engine;
 public class TestSitcom : GRoot
 {
 	public TextAsset mSitcomFile;
-    protected override void gameStart(){
+    protected override void GameStart(){
     }
-    protected override void gameExit(){
+    protected override void GameExit(){
     }
-    protected override void gameUpdate(){
+    protected override void GameUpdate(){
     }
 	
 	void OnGUI()

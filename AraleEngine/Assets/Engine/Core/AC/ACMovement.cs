@@ -26,10 +26,10 @@ namespace Arale.Engine
     	{
     		t = 0;
     		k = 0.3f;
-            acS = AC.get(acName, "s");
-            acX = AC.get(acName, "x");
-            acY = AC.get(acName, "y");
-            acZ = AC.get(acName, "z");
+            acS = AC.Get(acName, "s");
+            acX = AC.Get(acName, "x");
+            acY = AC.Get(acName, "y");
+            acZ = AC.Get(acName, "z");
     		switch(mt)
     		{
     		case MoveType.Centripetence:
