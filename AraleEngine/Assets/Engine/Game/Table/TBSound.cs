@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Arale.Engine;
 
-namespace Arale.Engine
-{
 
-public class TBSound : TableBase
+public partial class TBSound : TableBase
 {
     public string asset = "";
     public int    loop = 0;
@@ -13,6 +12,4 @@ public class TBSound : TableBase
     public override void Init(string[] value)
     {
     }
-}
-
 }

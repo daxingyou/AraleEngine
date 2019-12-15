@@ -14,7 +14,7 @@ namespace Arale.Engine
         public int _id;
         public int id { get { return _id; } }
         [TableField("Lua表:如{a=1;b=2;}")]
-    	public string _extend;
+    	public string _extend="";
         public TableBase()
         {
     		
@@ -28,10 +28,6 @@ namespace Arale.Engine
         {
             Debug.LogError("read not implement:"+this.GetType());
         }
-        public virtual void write(BinaryWriter w)
-        {
-            Debug.LogError("write not implement"+this.GetType());
-        }
     }
 
     public class TableField:Attribute
@@ -43,4 +39,15 @@ namespace Arale.Engine
         public string desc;
     }
 
+    public static class BinaryReaderExtend
+    {
+        public static Vector3 ReadVector3(this System.IO.BinaryReader r)
+        {
+            Vector3 v;
+            v.x = r.ReadSingle();
+            v.y = r.ReadSingle();
+            v.z = r.ReadSingle();
+            return v;
+        }
+    }
 }

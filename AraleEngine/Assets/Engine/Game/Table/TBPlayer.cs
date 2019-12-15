@@ -4,12 +4,10 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
 using System.IO;
+using Arale.Engine;
 
-
-namespace Arale.Engine
-{
-    
-public class TBPlayer: TableBase
+ 
+public partial class TBPlayer: TableBase
 {
     public string model="";
 	public float  speed=0f;
@@ -25,6 +23,4 @@ public class TBPlayer: TableBase
         ai = value[2];
         ai = ai.Replace("\\n", "\n"); 
     }
-}
-
 }
