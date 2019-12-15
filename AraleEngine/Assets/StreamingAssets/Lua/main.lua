@@ -64,10 +64,10 @@ UISListItem = CS.UISListItem
 UIImageText = CS.UIImageText
 ImageEffect = CS.ImageEffect
 --===============配表
-TBSkill = CS.Arale.Engine.TBSkill
-TBMonster = CS.Arale.Engine.TBMonster
-TBPlayer = CS.Arale.Engine.TBPlayer
-TBItem = CS.Arale.Engine.TBItem
+TBSkill = CS.TBSkill
+TBMonster = CS.TBMonster
+TBPlayer = CS.TBPlayer
+TBItem = CS.TBItem
 --===============协议
 ProtoWriter = CS.ProtoBuf.ProtoWriter
 ProtoReader = CS.ProtoBuf.ProtoReader
