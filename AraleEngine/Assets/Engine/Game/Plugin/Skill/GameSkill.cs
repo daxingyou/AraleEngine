@@ -8,8 +8,11 @@ using System.Xml;
 public partial class GameSkill : AraleSerizlize
 {//所有变量只允许读,不允许设置,属于静态共享数据
     float  lastUseTime;
+    [AraleSerizlize.Field]
     public int state=UnitState.ALL;
+    [AraleSerizlize.Field]
     public string anim="";
+    [AraleSerizlize.Field]
     public List<SkillAction> actions = new List<SkillAction>();
     public int id{ get; protected set;}
     public string name{ get; protected set;}
@@ -17,6 +20,7 @@ public partial class GameSkill : AraleSerizlize
     public float distance{ get; protected set;}
     public float cd{ get;protected set;}
     public IArea area{ get; protected set;}
+    [AraleSerizlize.Field]
     string mIcon;
     public string icon{ get{return "Skill/Icon/" + mIcon;}}
     public string lua{ get; protected set;}
@@ -74,28 +78,8 @@ public partial class GameSkill : AraleSerizlize
         desc = attr== null ? "" : attr.Value;
     }
 
-    public static bool saveSkill(string skillPath)
-    {
-        FileStream fs = null;
-        try
-        {
-            fs = new FileStream(skillPath, FileMode.Create);
-            BinaryWriter w = new BinaryWriter(fs);
-            w.Write(new byte[]{0x73,0x6b,0x69,0x6c,0x6c});
-            w.Write(ver);
-            AraleSerizlize.write<GameSkill>(skills,w);
-            fs.Close();
-            return true;
-        }
-        catch(System.Exception e)
-        {
-            Log.e(e.Message, Log.Tag.Skill, e);
-            if(fs!=null)fs.Close();
-            return false;
-        }
-    }
 
-    public static bool loadSkill(string skillPath)
+    static bool loadSkill(string skillPath, Dictionary<int, GameSkill> skills)
     {
         TextAsset ta = ResLoad.get(skillPath).asset<TextAsset>();
         if (ta == null)
@@ -103,11 +87,10 @@ public partial class GameSkill : AraleSerizlize
             Log.e("Skill not find by ResLoad path="+skillPath, Log.Tag.Skill);
             return false;
         }
-        //return loadSkills(ta.bytes);
-        return ta.bytes[0] == 0x73?loadSkills(ta.bytes):loadSkills(ta.text);;
+        return ta.bytes[0] == 0x73?loadSkills(ta.bytes,skills):loadSkills(ta.text,skills);
     }
 
-    static bool loadSkills(byte[] buff)
+    static bool loadSkills(byte[] buff, Dictionary<int, GameSkill> skills)
     {
         try
         {
@@ -130,7 +113,7 @@ public partial class GameSkill : AraleSerizlize
         }
     }
 
-    static bool loadSkills(string ctx)
+    static bool loadSkills(string ctx, Dictionary<int, GameSkill> skills)
     {
         try
         {
@@ -174,7 +157,7 @@ public partial class GameSkill : AraleSerizlize
         GameSkill gs;
         if (!skills.TryGetValue(id, out gs))
         {
-            if (!loadSkill("Skill/"+getFile(id)))return null;
+            if (!loadSkill("Skill/"+getFile(id),skills))return null;
             gs = skills[id];
         }
         gs.lastUseTime = Time.realtimeSinceStartup;

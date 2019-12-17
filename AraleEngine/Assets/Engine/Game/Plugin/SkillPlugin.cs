@@ -118,9 +118,9 @@ public class Skill
 
 		public Skill addSkill(int skillTID)
 		{
-			Skill s = new Skill (skillTID);
-			mSkills.Add(s);
-			return s;
+            Skill skill = new Skill (skillTID);
+            mSkills.Add(skill);
+            return skill;
 		}
 
 		public void delKill(int skillTID)

@@ -7,12 +7,18 @@ using System.Xml;
 
 public partial class SkillAction : SkillNode
 {
+    [AraleSerizlize.Field]
     public float  time;
-    public float  loopInterval=1;
+    [AraleSerizlize.Field]
+    public float  loopInterval;
+    [AraleSerizlize.Field]
     public int    loopTimes;
+    [AraleSerizlize.Field]
     public int    state;//0默认不生效
+    [AraleSerizlize.Field]
     int    mask;
     public bool   end{get{return (mask&0x0001)!=0;} set{mask = value ? mask | 0x0001 : mask & ~0x0001;}}
+    [AraleSerizlize.Field]
     public List<SkillNode> nodes = new List<SkillNode>();
     public override void read(BinaryReader r)
     {

@@ -23,6 +23,27 @@ public class AnimPlugin : Plugin
 		if (mUnit.attr != null)mUnit.attr.onAttrChanged += onAttrChange;
     }
 
+    public float Length(string clipName)
+    {
+        if (mAnim != null)
+        {
+            AnimationClip ac = mAnim.GetClip(clipName);
+            return ac == null ? 0f : ac.length;
+        }
+
+        if (mAnimtor != null)
+        {
+            AnimationClip[] ac = mAnimtor.runtimeAnimatorController.animationClips;
+            for (int i = 0; i < ac.Length; ++i)
+            {
+                if (ac[i].name == clipName)
+                    return ac[i].length;
+            }
+            return 0f;
+        }
+        return 0f;
+    }
+
 	void onAttrChange(int mask, object val)
 	{
 		if (mask != (int)AttrID.Speed)return;

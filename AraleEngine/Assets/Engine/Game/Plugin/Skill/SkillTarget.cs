@@ -31,9 +31,12 @@ public partial class SkillTarget : SkillNode
         MaxDF,
     }
 
+    [AraleSerizlize.Field]
     int mask;
+    [AraleSerizlize.Field]
     public Vector3 vct;
-    public string  area;
+    [AraleSerizlize.Field]
+    public string  area="";
     public Target target{get{return (Target)(mask&0x000000ff);} protected set{mask&=0x7fffff00; mask|=((int)value&0x000000ff);}}
     public Location location{get{return (Location)((mask&0x0000ff00)>>8);} protected set{mask &= 0x7fff00ff; mask|=(((int)value&0x000000ff)<<8);}}
     public UnitRelation relation{get{return (UnitRelation)((mask&0x00ff0000)>>16);} protected set{mask &= 0x7f00ffff; mask|=(((int)value&0x000000ff)<<16);}}

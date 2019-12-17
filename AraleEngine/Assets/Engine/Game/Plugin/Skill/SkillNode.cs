@@ -71,6 +71,7 @@ public abstract partial class SkillNode : AraleSerizlize
 
 public partial class SkillAnim : SkillNode
 {
+    [AraleSerizlize.Field]
     public string anim="";
     public override void read(BinaryReader r)
     {
@@ -100,9 +101,13 @@ public partial class SkillBullet : SkillTarget
         Chain,  //链式
     }
 
+    [AraleSerizlize.Field]
     public int  id;
+    [AraleSerizlize.Field]
     public int  harm;
+    [AraleSerizlize.Field]
     public int  num;
+    [AraleSerizlize.Field]
     public Mode mode;
     public override void read(BinaryReader r)
     {
@@ -131,6 +136,7 @@ public partial class SkillBullet : SkillTarget
 
 public partial class SkillHarm : SkillTarget
 {
+    [AraleSerizlize.Field]
     public int harm;
     public override void read(BinaryReader r)
     {
@@ -153,6 +159,7 @@ public partial class SkillHarm : SkillTarget
 
 public partial class SkillBuff : SkillTarget
 {
+    [AraleSerizlize.Field]
     public int id;
     public override void read(BinaryReader r)
     {
@@ -175,6 +182,7 @@ public partial class SkillBuff : SkillTarget
 
 public partial class SkillEvent : SkillNode
 {
+    [AraleSerizlize.Field]
     public string evt="";
     public override void read(BinaryReader r)
     {
@@ -197,6 +205,7 @@ public partial class SkillEvent : SkillNode
 
 public partial class SkillMove : SkillNode
 {
+    [AraleSerizlize.Field]
     public int id;
     public override void read(BinaryReader r)
     {
@@ -219,7 +228,9 @@ public partial class SkillMove : SkillNode
 
 public partial class SkillLua : SkillNode
 {
+    [AraleSerizlize.Field]
     public int evt;
+    [AraleSerizlize.Field]
     public string param;
     public override void read(BinaryReader r)
     {
