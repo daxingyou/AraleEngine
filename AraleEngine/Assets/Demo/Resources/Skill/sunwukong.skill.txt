@@ -1,21 +1,33 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<skills>
-    <skill id="300" name="swk.skill1"  pointType="0" distance="4" cd="3" icon="sk_skill5" anim="attack" state="FFFB">
-    	<action time="0.5"><Harm harm="10" target="Area" area="3,4.00,72.00" relation="Emney"/></action>
-        <action time="1" end=""/>
-    </skill>
-	<skill id="301" name="swk.skill2"  pointType="2" distance="4" cd="3" icon="sk_skill6" anim="skill01" state="FFFB">
-        <action time="1"> <Harm harm="20" target="Area" area="2,2.00,6.00" relation="Emney"/></action>
-        <action time="1.5" end=""/>
-    </skill>
-    <skill id="302" name="swk.skill3"  pointType="2" distance="4" cd="3" icon="sk_skill7" anim="skill02" state="FFFB">
-        <action time="1"><Harm harm="20" target="Area" area="2,2.00,3.20" relation="Emney"/></action>
-        <action time="1.5" end=""/>
-    </skill>
-    <skill id="303" name="swk.skill4"  pointType="2" distance="4" cd="3" icon="sk_skill8" anim="skill04" state="FFFB">
-        <action time="1"><Harm harm="5" target="Area" area="2,2,7" relation="Emney"/></action>
-        <action time="1.5"><Harm harm="5" target="Area" area="2,2,7" relation="Emney"/></action>
-        <action time="2.5"><Harm harm="5" target="Area" area="2,2,7" relation="Emney"/></action>
-        <action time="3" end=""/>
-    </skill>
-</skills>
+<?xml version="1.0" encoding="utf-8"?>
+<Root Type="GameSkill+XmlPack">
+	<skill Type="GameSkill" id="300" name="swk.skill1" distance="4" cd="3" state="65531" anim="attack" mIcon="sk_skill5">
+		<actions Type="SkillAction" time="0.5">
+			<nodes Type="SkillHarm" target="Area" relation="Emney" harm="10" area="3,4.00,72.00" />
+		</actions>
+		<actions Type="SkillAction" end="True" time="1" />
+	</skill>
+	<skill Type="GameSkill" id="301" name="swk.skill2" distance="4" cd="3" state="65531" anim="skill01" pointType="Dir" mIcon="sk_skill6">
+		<actions Type="SkillAction" time="1">
+			<nodes Type="SkillHarm" target="Area" relation="Emney" harm="20" area="2,2.00,6.00" />
+		</actions>
+		<actions Type="SkillAction" end="True" time="1.5" />
+	</skill>
+	<skill Type="GameSkill" id="302" name="swk.skill3" distance="4" cd="3" state="65531" anim="skill02" pointType="Dir" mIcon="sk_skill7">
+		<actions Type="SkillAction" time="1">
+			<nodes Type="SkillHarm" target="Area" relation="Emney" harm="20" area="2,2.00,3.20" />
+		</actions>
+		<actions Type="SkillAction" end="True" time="1.5" />
+	</skill>
+	<skill Type="GameSkill" id="303" name="swk.skill4" distance="4" cd="3" state="65531" anim="skill04" pointType="Dir" mIcon="sk_skill8">
+		<actions Type="SkillAction" time="1">
+			<nodes Type="SkillHarm" target="Area" relation="Emney" harm="5" area="2,2,7" />
+		</actions>
+		<actions Type="SkillAction" time="1.5">
+			<nodes Type="SkillHarm" target="Area" relation="Emney" harm="5" area="2,2,7" />
+		</actions>
+		<actions Type="SkillAction" time="2.5">
+			<nodes Type="SkillHarm" target="Area" relation="Emney" harm="5" area="2,2,7" />
+		</actions>
+		<actions Type="SkillAction" end="True" time="3" />
+	</skill>
+</Root>

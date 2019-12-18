@@ -2,7 +2,6 @@
 using System.Collections;
 using Arale.Engine;
 using System.IO;
-using System.Xml;
 
 public abstract partial class SkillNode : AraleSerizlize
 {
@@ -84,12 +83,6 @@ public partial class SkillAnim : SkillNode
         base.write(w);
         w.Write(anim);
     }
-
-    public override void read(XmlNode n)
-    {
-        base.read(n);
-        anim = n.Attributes["anim"].Value;
-    }
 } 
 
 public partial class SkillBullet : SkillTarget
@@ -124,14 +117,6 @@ public partial class SkillBullet : SkillTarget
         w.Write(harm);
         w.Write((int)mode);
     }
-
-    public override void read(XmlNode n)
-    {
-        base.read(n);
-        id = int.Parse(n.Attributes["id"].Value);
-        XmlAttribute attr = n.Attributes["harm"];
-        harm = attr == null ? 0 : int.Parse(attr.Value);
-    }
 }
 
 public partial class SkillHarm : SkillTarget
@@ -148,12 +133,6 @@ public partial class SkillHarm : SkillTarget
     {
         base.write(w);
         w.Write(harm);
-    }
-
-    public override void read(XmlNode n)
-    {
-        base.read(n);
-        harm = int.Parse(n.Attributes["harm"].Value);
     }
 }
 
@@ -172,12 +151,6 @@ public partial class SkillBuff : SkillTarget
         base.write(w);
         w.Write(id);
     }
-
-    public override void read(XmlNode n)
-    {
-        base.read(n);
-        id = int.Parse(n.Attributes["id"].Value);
-    }
 }
 
 public partial class SkillEvent : SkillNode
@@ -195,12 +168,6 @@ public partial class SkillEvent : SkillNode
         base.write(w);
         w.Write(evt);
     }
-
-    public override void read(XmlNode n)
-    {
-        base.read(n);
-        evt = n.Attributes["evt"].Value;
-    }
 }
 
 public partial class SkillMove : SkillNode
@@ -217,12 +184,6 @@ public partial class SkillMove : SkillNode
     {
         base.write(w);
         w.Write(id);
-    }
-
-    public override void read(XmlNode n)
-    {
-        base.read(n);
-        id = int.Parse(n.Attributes["id"].Value);
     }
 }
 
@@ -244,13 +205,5 @@ public partial class SkillLua : SkillNode
         base.write(w);
         w.Write(evt);
         w.Write(param);
-    }
-
-    public override void read(XmlNode n)
-    {
-        base.read(n);
-        evt = int.Parse(n.Attributes["evt"].Value);
-        XmlAttribute attr = n.Attributes["param"];
-        param = attr == null ? null:attr.Value;
     }
 }

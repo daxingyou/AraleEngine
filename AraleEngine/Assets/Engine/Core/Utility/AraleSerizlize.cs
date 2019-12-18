@@ -18,12 +18,15 @@ namespace Arale.Engine
         {
             public Field()
             {
+                
             }
+            public delegate object FromString();
+            public delegate string ToString();
         }
-        
+
+        #region 2进制序列化
         public abstract void write(BinaryWriter w);
         public abstract void read(BinaryReader r);
-        public virtual void read(XmlNode node){}
         public static void write<T>(List<T> ls, BinaryWriter w) where T:AraleSerizlize
         {
             int n = ls.Count;
@@ -38,19 +41,6 @@ namespace Arale.Engine
             {
                 T t = new T();
                 t.read(r);
-                ls.Add(t);
-            }
-            return ls;
-        }
-        public static List<T> read<T>(XmlNode parent) where T:AraleSerizlize,new()
-        {
-            int n = parent.ChildNodes.Count;
-            List<T> ls = new List<T>(n);
-            for (int i = 0; i < n; ++i)
-            {
-                XmlNode node = parent.ChildNodes[i];
-                T t = new T();
-                t.read(node);
                 ls.Add(t);
             }
             return ls;
@@ -78,21 +68,10 @@ namespace Arale.Engine
                 dic[key] = val;
             }
         }
+        #endregion
 
-        public static void read<VType>(Dictionary<int,VType> dic, XmlNode parent) where VType:AraleSerizlize,new()
-        {
-            for (int i = 0,max=parent.ChildNodes.Count; i < max; ++i)
-            {
-                XmlNode n = parent.ChildNodes[i];
-                int key = int.Parse(n.Attributes["id"].Value);
-                VType val = new VType();
-                val.read(n);
-                if (dic.ContainsKey(key))throw new UnityException("has same key="+key);
-                dic[key] = val;
-            }
-        }
 
-        //将一个对象序列化到xml文件
+        #region Xml对象序列化
         public static bool saveXml(object o, string path)
         {
             XmlDocument xml = new XmlDocument();
@@ -101,7 +80,7 @@ namespace Arale.Engine
             XmlElement root = xml.DocumentElement; 
             XmlDeclaration c = xml.CreateXmlDeclaration ("1.0", "utf-8", null);
             xml.InsertBefore (c, root);
-            writeXml(o,"Root",root);
+            writeXml(o,null,root);
             //save version.xml
             byte[] utf8 = Encoding.GetEncoding("UTF-8").GetBytes(formatXml(xml));
             FileStream fs = new FileStream(path, FileMode.Create);
@@ -120,8 +99,7 @@ namespace Arale.Engine
                     node.AppendChild(node.OwnerDocument.CreateElement(name)).InnerText=o.ToString();
                 }
                 else
-                //if (isValueChanged(o, fi))
-                {//如果是默认值就不记录
+                {
                     node.Attributes.Append(node.OwnerDocument.CreateAttribute(name)).Value=o.ToString();
                 }
                 return;
@@ -135,24 +113,28 @@ namespace Arale.Engine
             }
 
             if (typeof(IEnumerable).IsAssignableFrom(type))
-            {//List
-                Type[] tType = type.GetGenericArguments();
-                if (tType.Length == 1)
-                {
-                    object list = o;
-                    int count = (int)type.GetProperty("Count").GetValue(list, null);
-                    for (int j = 0; j < count; ++j)
-                    {
-                        object lo = type.GetProperty("Item").GetValue(list, new object[]{ j });
-                        writeXml(lo, name, node, true);
-                    }
-                }
+            {//list 不支持字典集合，该集合可通过List重建
+                IList list = o as IList;
+                if (list == null)return;
+                for(int i=0;i<list.Count;++i)writeXml(list[i], name, node, true);
                 return;
             }
 
-            node = node.AppendChild(node.OwnerDocument.CreateElement(name));
-            node.Attributes.Append(node.OwnerDocument.CreateAttribute("Type")).Value=type.Name;
+            switch (type.Name)
+            {//存储为json属性
+                case "Vector2":
+                    if(o.Equals(default(Vector2)))return;
+                    node.Attributes.Append(node.OwnerDocument.CreateAttribute(name)).Value = JsonUtility.ToJson(o).Replace('\"','\'');
+                    return;
+                case "Vector3":
+                    if(o.Equals(default(Vector3)))return;
+                    node.Attributes.Append(node.OwnerDocument.CreateAttribute(name)).Value = JsonUtility.ToJson(o).Replace('\"','\'');
+                    return;
+            }
 
+
+            if(name!=null)node = node.AppendChild(node.OwnerDocument.CreateElement(name));
+            node.Attributes.Append(node.OwnerDocument.CreateAttribute("Type")).Value=type.FullName;
             //必须BindingFlags.Instance,否则获取GetCustomAttributes为空
             MemberInfo[] mbs = type.GetMembers(BindingFlags.NonPublic|BindingFlags.Public|BindingFlags.Instance);
             for (int i = 0; i < mbs.Length; ++i)
@@ -167,15 +149,23 @@ namespace Arale.Engine
                 {
                     case MemberTypes.Field:
                         FieldInfo fi = mb as FieldInfo;
-                        val = fi.GetValue(o);
                         valType = fi.FieldType;
+                        if ((valType.IsPrimitive || valType.IsEnum || valType == typeof(string)) && isDefault(o, fi))
+                        {//默认值未改过
+                            continue;
+                        }
                         valName = fi.Name;
+                        val = fi.GetValue(o);
                         break;
                     case MemberTypes.Property:
                         PropertyInfo pi = mb as PropertyInfo;
-                        val = pi.GetValue(o, null);
                         valType = pi.PropertyType;
+                        if ((valType.IsPrimitive || valType.IsEnum || valType == typeof(string)) && isDefault(o, pi))
+                        {//默认值未改过
+                            continue;
+                        }
                         valName = pi.Name;
+                        val = pi.GetValue(o, null);
                         break;
                     default:
                         continue;
@@ -197,25 +187,153 @@ namespace Arale.Engine
             return sb.ToString ();
         }
 
-        static bool isValueChanged(object o, FieldInfo fi)
+        static bool isDefault(object o, FieldInfo fi)
         {
             Type oType = o.GetType();
             object co = oType.Assembly.CreateInstance(oType.Name);
-            if (fi.GetValue(co)==null)return true;
-            return fi.GetValue(co).ToString() != fi.GetValue(o).ToString();
+            if (fi.GetValue(o) == null)return true;
+            if (fi.GetValue(co)==null)return false;
+            return fi.GetValue(co).ToString() == fi.GetValue(o).ToString();
         }
 
-        /*public static class ReaderExtend
+        static bool isDefault(object o, PropertyInfo pi)
         {
-            public static Vector3 FromString(this Vector3 o)
-            {
-                string[] ss = s.Split(',');
-                Vector3 v;
-                v.x = float.Parse(ss[0]);
-                v.y = float.Parse(ss[1]);
-                v.z = float.Parse(ss[2]);
-                return v;
+            Type oType = o.GetType();
+            object co = oType.Assembly.CreateInstance(oType.Name);
+            if (pi.GetValue(o,null) == null)return true;
+            if (pi.GetValue(co,null)==null)return false;
+            return pi.GetValue(co,null).ToString() == pi.GetValue(o,null).ToString();
+        }
+
+        public static object fromXml(Type type, string strXml)
+        {
+            XmlDocument xml = new XmlDocument();
+            xml.LoadXml(strXml);
+            XmlElement root = xml.DocumentElement;
+            bool isDefault = false;
+            return readXml(type, null, root, ref isDefault);
+        }
+
+        static object readXml(Type type, string name, XmlNode node, ref bool defaultValue, bool element=false)
+        {
+            XmlAttribute attr = null;
+            if (type.IsPrimitive || type.IsEnum || type == typeof(string))
+            {//基本类型或字符串
+                if (element)
+                {//集合元素
+                    return typeValue(type, node.InnerText);
+                }
+                else
+                {
+                    attr = node.Attributes[name];
+                    if (attr == null)
+                    {
+                        defaultValue = true;
+                        return null;
+                    }
+                    return typeValue(type, attr.Value);
+                }
             }
-        }*/
+
+            if(type.IsArray)
+            {//数组
+                XmlNodeList sn = node.SelectNodes(name);
+                Array array = Array.CreateInstance(type.GetElementType(),sn.Count);
+                bool isDefault = false;
+                for (int j = 0; j < sn.Count; ++j)array.SetValue(readXml(type.GetElementType(), null, sn.Item(j), ref isDefault, true),j);
+                return array;
+            }
+
+            if (typeof(IList).IsAssignableFrom(type))
+            {//list 不支持字典集合，该集合可通过List重建
+                XmlNodeList sn = node.SelectNodes(name);
+                IList list = System.Activator.CreateInstance(type) as IList;
+                bool isDefault = false;
+                for(int j=0;j<sn.Count;++j)list.Add(readXml(type.GetGenericArguments()[0], null, sn.Item(j), ref isDefault, true));
+                return list;
+            }
+
+            switch (type.Name)
+            {//存储为json属性
+                case "Vector2":
+                    attr = node.Attributes[name];
+                    if (attr == null)return default(Vector2);
+                    return JsonUtility.FromJson<Vector2>(attr.Value);
+                case "Vector3":
+                    attr = node.Attributes[name];
+                    if (attr == null)return default(Vector3);
+                    return JsonUtility.FromJson<Vector3>(attr.Value);
+            }
+
+            if (name != null)node = node.SelectSingleNode(name);
+            attr = node.Attributes["Type"];
+            if (attr != null)type = Type.GetType(attr.Value, true);
+            object o = System.Activator.CreateInstance(type);
+            MemberInfo[] mbs = type.GetMembers(BindingFlags.NonPublic|BindingFlags.Public|BindingFlags.Instance);
+            for (int i = 0; i < mbs.Length; ++i)
+            {
+                MemberInfo mb = mbs[i];
+                if (mb.GetCustomAttributes(typeof(AraleSerizlize.Field), false).Length < 1)continue;
+
+                bool isDefault = false;
+                switch (mb.MemberType)
+                {
+                    case MemberTypes.Field:
+                        FieldInfo fi = mb as FieldInfo;
+                        object val = readXml(fi.FieldType, fi.Name, node, ref isDefault);
+                        if (isDefault)break;
+                        fi.SetValue(o, val);
+                        break;
+                    case MemberTypes.Property:
+                        PropertyInfo pi = mb as PropertyInfo;
+                        object val2 = readXml(pi.PropertyType, pi.Name, node, ref isDefault);
+                        if (isDefault)break;
+                        pi.SetValue(o, val2, null);
+                        break;
+                    default:
+                        continue;
+                }
+            }
+            return o;
+        }
+
+        static object typeValue(Type type, string val)
+        {
+            if (type.IsEnum)return Enum.Parse(type, val);
+            if (type == typeof(System.Type)) return Type.GetType(val);
+            TypeCode code = System.Type.GetTypeCode(type);
+            switch (code)
+            {
+                case TypeCode.Boolean:
+                    return Boolean.Parse(val);
+                case TypeCode.Char:
+                    return Char.Parse(val);
+                case TypeCode.SByte:
+                    return SByte.Parse(val);
+                case TypeCode.Byte:
+                    return Byte.Parse(val);
+                case TypeCode.Int16:
+                    return Int16.Parse(val);
+                case TypeCode.UInt16:
+                    return UInt16.Parse(val);
+                case TypeCode.Int32:
+                    return Int32.Parse(val);
+                case TypeCode.UInt32:
+                    return UInt32.Parse(val);
+                case TypeCode.Int64:
+                    return Int64.Parse(val);
+                case TypeCode.UInt64:
+                    return UInt64.Parse(val);
+                case TypeCode.Single:
+                    return Single.Parse(val);
+                case TypeCode.Double:
+                    return Double.Parse(val);
+                case TypeCode.String:
+                    return val;
+            }
+            Debug.LogError("not support type="+type);
+            return null;
+        }
+        #endregion
     }
 }

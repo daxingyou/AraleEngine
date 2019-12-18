@@ -1,41 +1,41 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<skills>
-    <skill id="10" name="ly.skill1" pointType="2" distance="4" cd="3" area="3,2.50,120.00" icon="sk_skill4" anim="attack" state="FFFB">
-        <action time="0.5">
-            <Harm harm="10" target="Area" area="3,2.00,112.21" selector="Nearst" relation="Emney"/>
-        </action>
-        <action time="1.5" end=""/>
-    </skill>
-    <skill id="11" name="ly.skill2" pointType="2" distance="4" cd="3" area="2,4.00,7.00" icon="sk_skill1" anim="skill01" state="FFFB">
-        <action time="0.5">
-            <Harm harm="10" target="Area" area="2,4.00,7.00" selector="Nearst" relation="Emney"/>
-        </action>
-        <action time="0.8">
-            <Harm harm="10" target="Area" area="2,4.00,7.00" selector="Nearst" relation="Emney"/>
-        </action>
-        <action time="1.5" end=""/>
-    </skill>
-    <skill id="12" name="ly.skill3" pointType="2" distance="4" cd="3" icon="sk_skill2" anim="skill02" state="FFFB">
-        <action time="0.5">
-            <Move id="101" target="Area" area="2,4.00,5.00" selector="Nearst" relation="Emney"/>
-            <Harm harm="20" target="Area" area="2,4.00,6.00" selector="Nearst" relation="Emney"/>
-        </action>
-        <action time="1.5">
-            <Move id="201" target="Area" area="2,4.00,6.00" selector="Nearst" relation="Emney"/>
-            <Harm harm="30" target="Area" area="2,4.00,6.00" selector="Nearst" relation="Emney"/>
-        </action>
-        <action time="2.0" end=""/>
-    </skill>
-    <skill id="13" name="ly.skill4" pointType="0" distance="4" cd="3" icon="sk_skill3" anim="skill04" state="FFFB">
-        <action time="2">
-            <Harm harm="10" target="Area" area="3,2.00,112.21" selector="Nearst" relation="Emney"/>
-        </action>
-        <action time="2.2">
-            <Harm harm="10" target="Area" area="3,2.00,112.21" selector="Nearst" relation="Emney"/>
-        </action>
-        <action time="2.5">
-            <Harm harm="10" target="Area" area="3,2.00,112.21" selector="Nearst" relation="Emney"/>
-        </action>
-        <action time="3.0" end=""/>
-    </skill>
-</skills>
+<?xml version="1.0" encoding="utf-8"?>
+<Root Type="GameSkill+XmlPack">
+	<skill Type="GameSkill" id="10" name="ly.skill1" distance="4" cd="3" state="65531" anim="attack" pointType="Dir" mIcon="sk_skill4">
+		<actions Type="SkillAction" time="0.5">
+			<nodes Type="SkillHarm" target="Area" relation="Emney" selector="Nearst" harm="10" area="3,2.00,112.21" />
+		</actions>
+		<actions Type="SkillAction" end="True" time="1.5" />
+	</skill>
+	<skill Type="GameSkill" id="11" name="ly.skill2" distance="4" cd="3" state="65531" anim="skill01" pointType="Dir" mIcon="sk_skill1">
+		<actions Type="SkillAction" time="0.5">
+			<nodes Type="SkillHarm" target="Area" relation="Emney" selector="Nearst" harm="10" area="2,4.00,7.00" />
+		</actions>
+		<actions Type="SkillAction" time="0.8">
+			<nodes Type="SkillHarm" target="Area" relation="Emney" selector="Nearst" harm="10" area="2,4.00,7.00" />
+		</actions>
+		<actions Type="SkillAction" end="True" time="1.5" />
+	</skill>
+	<skill Type="GameSkill" id="12" name="ly.skill3" distance="4" cd="3" state="65531" anim="skill02" pointType="Dir" mIcon="sk_skill2">
+		<actions Type="SkillAction" time="0.5">
+			<nodes Type="SkillMove" id="101" />
+			<nodes Type="SkillHarm" target="Area" relation="Emney" selector="Nearst" harm="20" area="2,4.00,6.00" />
+		</actions>
+		<actions Type="SkillAction" time="1.5">
+			<nodes Type="SkillMove" id="201" />
+			<nodes Type="SkillHarm" target="Area" relation="Emney" selector="Nearst" harm="30" area="2,4.00,6.00" />
+		</actions>
+		<actions Type="SkillAction" end="True" time="2" />
+	</skill>
+	<skill Type="GameSkill" id="13" name="ly.skill4" distance="4" cd="3" state="65531" anim="skill04" mIcon="sk_skill3">
+		<actions Type="SkillAction" time="2">
+			<nodes Type="SkillHarm" target="Area" relation="Emney" selector="Nearst" harm="10" area="3,2.00,112.21" />
+		</actions>
+		<actions Type="SkillAction" time="2.2">
+			<nodes Type="SkillHarm" target="Area" relation="Emney" selector="Nearst" harm="10" area="3,2.00,112.21" />
+		</actions>
+		<actions Type="SkillAction" time="2.5">
+			<nodes Type="SkillHarm" target="Area" relation="Emney" selector="Nearst" harm="10" area="3,2.00,112.21" />
+		</actions>
+		<actions Type="SkillAction" end="True" time="3" />
+	</skill>
+</Root>

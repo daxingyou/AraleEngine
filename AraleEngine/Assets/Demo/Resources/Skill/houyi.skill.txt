@@ -1,23 +1,39 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<skills>
-    <skill id="100" name="hy.skill1"  pointType="2" distance="4" cd="3" icon="sk_skill5" anim="attack" state="FFFB">
-    	<action time="1"><Bullet id="100" harm="10" target="Dir" relation="Emney"/></action>
-        <action time="1.5" end=""/>
-    </skill>
-	<skill id="101" name="hy.skill2"  pointType="2" distance="4" cd="3" icon="sk_skill6" anim="skill01" state="FFFB">
-        <action time="0.5"><Bullet id="100"  harm="10" target="Dir" relation="Emney"/></action>
-        <action time="1"><Bullet id="100"  harm="10" target="Dir" relation="Emney"/></action>
-        <action time="1.5"><Bullet id="101"  harm="10" target="Dir" relation="Emney"/></action>
-        <action time="2" end=""/>
-    </skill>
-    <skill id="102" name="hy.skill3"  pointType="3" distance="4" cd="3" icon="sk_skill7" anim="skill02" state="FFFB">
-        <action time="1.5"><Bullet id="100" harm="10" target="Unit" relation="Emney"/></action>
-        <action time="2" end=""/>
-    </skill>
-    <skill id="103" name="hy.skill4"  pointType="2" distance="4" cd="3" icon="sk_skill8" anim="skill04" state="FFFB">
-        <action time="2"><Bullet id="100" harm="10" target="Dir" relation="Emney"/></action>
-        <action time="2.2"><Bullet id="100" harm="10" target="Dir" relation="Emney"/></action>
-        <action time="2.5"><Bullet id="101" harm="10" target="Dir" relation="Emney"/></action>
-        <action time="3" end=""/>
-    </skill>
-</skills>
+<?xml version="1.0" encoding="utf-8"?>
+<Root Type="GameSkill+XmlPack">
+	<skill Type="GameSkill" id="100" name="hy.skill1" distance="4" cd="3" state="65531" anim="attack" pointType="Dir" mIcon="sk_skill5">
+		<actions Type="SkillAction" time="1">
+			<nodes Type="SkillBullet" target="Dir" relation="Emney" id="100" harm="10" />
+		</actions>
+		<actions Type="SkillAction" end="True" time="1.5" />
+	</skill>
+	<skill Type="GameSkill" id="101" name="hy.skill2" distance="4" cd="3" state="65531" anim="skill01" pointType="Dir" mIcon="sk_skill6">
+		<actions Type="SkillAction" time="0.5">
+			<nodes Type="SkillBullet" target="Dir" relation="Emney" id="100" harm="10" />
+		</actions>
+		<actions Type="SkillAction" time="1">
+			<nodes Type="SkillBullet" target="Dir" relation="Emney" id="100" harm="10" />
+		</actions>
+		<actions Type="SkillAction" time="1.5">
+			<nodes Type="SkillBullet" target="Dir" relation="Emney" id="101" harm="10" />
+		</actions>
+		<actions Type="SkillAction" end="True" time="2" />
+	</skill>
+	<skill Type="GameSkill" id="102" name="hy.skill3" distance="4" cd="3" state="65531" anim="skill02" pointType="Target" mIcon="sk_skill7">
+		<actions Type="SkillAction" time="1.5">
+			<nodes Type="SkillBullet" relation="Emney" id="100" harm="10" />
+		</actions>
+		<actions Type="SkillAction" end="True" time="2" />
+	</skill>
+	<skill Type="GameSkill" id="103" name="hy.skill4" distance="4" cd="3" state="65531" anim="skill04" pointType="Dir" mIcon="sk_skill8">
+		<actions Type="SkillAction" time="2">
+			<nodes Type="SkillBullet" target="Dir" relation="Emney" id="100" harm="10" />
+		</actions>
+		<actions Type="SkillAction" time="2.2">
+			<nodes Type="SkillBullet" target="Dir" relation="Emney" id="100" harm="10" />
+		</actions>
+		<actions Type="SkillAction" time="2.5">
+			<nodes Type="SkillBullet" target="Dir" relation="Emney" id="101" harm="10" />
+		</actions>
+		<actions Type="SkillAction" end="True" time="3" />
+	</skill>
+</Root>

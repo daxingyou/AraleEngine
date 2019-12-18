@@ -1,23 +1,39 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<skills>
-    <skill id="20" name="yxx.skill1"  pointType="3" distance="4" cd="3" icon="sk_skill1" anim="attack" state="FFFB">
-    	<action time="0.5"><Harm harm="10" target="Unit" relation="Emney"/></action>
-        <action time="1" end=""/>
-    </skill>
-	<skill id="21" name="yxx.skill2"  pointType="3" distance="4" cd="3" icon="sk_skill2" anim="skill01" state="FFFB">
-        <action time="0.5"> <Harm harm="10" target="Unit" relation="Emney"/></action>
-        <action time="1"> <Harm harm="10" target="Unit" relation="Emney"/></action>
-        <action time="1.5"> <Harm harm="10" target="Unit" relation="Emney"/></action>
-        <action time="2" end=""/>
-    </skill>
-    <skill id="22" name="yxx.skill3"  pointType="3" distance="4" cd="3" icon="sk_skill3" anim="skill02" state="FFFB">
-        <action time="1.5"><Harm harm="10" target="Unit" relation="Emney"/></action>
-        <action time="2" end=""/>
-    </skill>
-    <skill id="23" name="yxx.skill4"  pointType="0" distance="4" cd="3" icon="sk_skill4" anim="skill04" state="FFFB">
-        <action time="2"> <Harm harm="-10" target="Area" area="0,3" relation="Self,Friend"/></action>
-        <action time="2.2"> <Harm harm="-10" target="Area" area="0,3" relation="Self,Friend"/></action>
-        <action time="2.5"> <Harm harm="-10" target="Area" area="0,3" relation="Self,Friend"/></action>
-        <action time="3" end=""/>
-    </skill>
-</skills>
+<?xml version="1.0" encoding="utf-8"?>
+<Root Type="GameSkill+XmlPack">
+	<skill Type="GameSkill" id="20" name="yxx.skill1" distance="4" cd="3" state="65531" anim="attack" pointType="Target" mIcon="sk_skill1">
+		<actions Type="SkillAction" time="0.5">
+			<nodes Type="SkillHarm" relation="Emney" harm="10" />
+		</actions>
+		<actions Type="SkillAction" end="True" time="1" />
+	</skill>
+	<skill Type="GameSkill" id="21" name="yxx.skill2" distance="4" cd="3" state="65531" anim="skill01" pointType="Target" mIcon="sk_skill2">
+		<actions Type="SkillAction" time="0.5">
+			<nodes Type="SkillHarm" relation="Emney" harm="10" />
+		</actions>
+		<actions Type="SkillAction" time="1">
+			<nodes Type="SkillHarm" relation="Emney" harm="10" />
+		</actions>
+		<actions Type="SkillAction" time="1.5">
+			<nodes Type="SkillHarm" relation="Emney" harm="10" />
+		</actions>
+		<actions Type="SkillAction" end="True" time="2" />
+	</skill>
+	<skill Type="GameSkill" id="22" name="yxx.skill3" distance="4" cd="3" state="65531" anim="skill02" pointType="Target" mIcon="sk_skill3">
+		<actions Type="SkillAction" time="1.5">
+			<nodes Type="SkillHarm" relation="Emney" harm="10" />
+		</actions>
+		<actions Type="SkillAction" end="True" time="2" />
+	</skill>
+	<skill Type="GameSkill" id="23" name="yxx.skill4" distance="4" cd="3" state="65531" anim="skill04" mIcon="sk_skill4">
+		<actions Type="SkillAction" time="2">
+			<nodes Type="SkillHarm" target="Area" relation="5" harm="-10" area="0,3" />
+		</actions>
+		<actions Type="SkillAction" time="2.2">
+			<nodes Type="SkillHarm" target="Area" relation="5" harm="-10" area="0,3" />
+		</actions>
+		<actions Type="SkillAction" time="2.5">
+			<nodes Type="SkillHarm" target="Area" relation="5" harm="-10" area="0,3" />
+		</actions>
+		<actions Type="SkillAction" end="True" time="3" />
+	</skill>
+</Root>

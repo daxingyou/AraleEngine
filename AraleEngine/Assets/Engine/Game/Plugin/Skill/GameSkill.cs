@@ -14,17 +14,24 @@ public partial class GameSkill : AraleSerizlize
     public string anim="";
     [AraleSerizlize.Field]
     public List<SkillAction> actions = new List<SkillAction>();
+    [AraleSerizlize.Field]
     public int id{ get; protected set;}
+    [AraleSerizlize.Field]
     public string name{ get; protected set;}
-    public Skill.PointType pointType{ get; protected set;}
+    [AraleSerizlize.Field]
+    public Skill.PointType pointType=Skill.PointType.None;
+    [AraleSerizlize.Field]
     public float distance{ get; protected set;}
+    [AraleSerizlize.Field]
     public float cd{ get;protected set;}
     public IArea area{ get; protected set;}
     [AraleSerizlize.Field]
     string mIcon;
     public string icon{ get{return "Skill/Icon/" + mIcon;}}
-    public string lua{ get; protected set;}
-    public string desc{ get; protected set;}
+    [AraleSerizlize.Field]
+    public string lua;
+    [AraleSerizlize.Field]
+    public string desc;
     public GameSkill()
     {
         desc = "";
@@ -52,33 +59,8 @@ public partial class GameSkill : AraleSerizlize
         AraleSerizlize.write<SkillAction>(actions, w);
     }
 
-    public override void read(XmlNode n)
-    {
-        id = int.Parse(n.Attributes["id"].Value);
-        Debug.Assert(id != 0);
-        XmlAttribute attr = n.Attributes["name"];
-        name = attr==null?"":attr.Value;
-        attr = n.Attributes["anim"];
-        anim = attr==null?"":attr.Value;
-        state = System.Convert.ToInt32(n.Attributes["state"].Value, 16);
-        actions = AraleSerizlize.read<SkillAction>(n);
-        attr = n.Attributes["pointType"];
-        pointType = attr==null?Skill.PointType.None:(Skill.PointType)System.Enum.Parse(typeof(Skill.PointType), attr.Value);
-        attr = n.Attributes["distance"];
-        distance = attr == null ? 0 : float.Parse(attr.Value);
-        attr = n.Attributes["cd"];
-        cd = attr== null ? 0 : float.Parse(attr.Value);
-        attr = n.Attributes["area"];
-        area = attr == null ? null : GameArea.fromString(attr.Value);
-        attr = n.Attributes["icon"];
-        mIcon = attr== null ? "" : attr.Value;
-        attr = n.Attributes["lua"];
-        lua = attr== null ? null : attr.Value;
-        attr = n.Attributes["desc"];
-        desc = attr== null ? "" : attr.Value;
-    }
 
-
+    #region 技能加载
     static bool loadSkill(string skillPath, Dictionary<int, GameSkill> skills)
     {
         TextAsset ta = ResLoad.get(skillPath).asset<TextAsset>();
@@ -113,13 +95,21 @@ public partial class GameSkill : AraleSerizlize
         }
     }
 
+    class XmlPack
+    {
+        [AraleSerizlize.Field]
+        public List<GameSkill> skill;
+    }
+
     static bool loadSkills(string ctx, Dictionary<int, GameSkill> skills)
     {
         try
         {
-            XmlDocument xml = new XmlDocument();
-            xml.LoadXml(ctx);
-            AraleSerizlize.read<GameSkill>(skills, xml.SelectSingleNode("skills"));
+            XmlPack pack = AraleSerizlize.fromXml(typeof(XmlPack), ctx) as XmlPack;
+            for(int i=0;i<pack.skill.Count;++i)
+            {
+                skills[pack.skill[i].id] = pack.skill[i];
+            }
             return true;
         }
         catch(System.Exception e)
@@ -143,6 +133,8 @@ public partial class GameSkill : AraleSerizlize
         }
         return skillmap[id];
     }
+    #endregion
+
 
     #region 外部接口
     public const short ver = 5;

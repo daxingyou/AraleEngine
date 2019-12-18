@@ -1,27 +1,43 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<skills>
-    <skill id="200" name="eh.skill1" pointType="1" distance="4" cd="3" icon="sk_skill1" anim="attack" state="FFFB">
-    	<action time="1"><Bullet id="200" target="Pos" location="Target" relation="Emney"/></action>
-        <action time="1.5" end=""/>
-    </skill>
-	<skill id="201" name="eh.skill2"  pointType="3" distance="4" cd="3" icon="sk_skill2" anim="skill01" state="FFFB">
-        <action time="0.5"><Bullet id="202" target="Unit" relation="Emney"/></action>
-        <action time="1"><Bullet id="202" target="Unit" relation="Emney"/></action>
-        <action time="1.5"><Bullet id="202" target="Unit" relation="Emney"/></action>
-        <action time="2" end=""/>
-    </skill>
-    <skill id="202" name="eh.skill3"  pointType="1" distance="4" cd="3" icon="sk_skill3" anim="skill02" state="FFFB">
-        <action time="0.5"><Bullet id="201" target="Pos" location="Target" relation="Emney"/></action>
-        <action time="1" end=""/>
-    </skill>
-    <skill id="203" name="eh.skill4"  pointType="0" distance="4" cd="3" icon="sk_skill4" anim="skill04" state="FFFB">
-        <action time="0.5"><Buff id="10008" target="Area" area="3,2.00,112.21" selector="Nearst" relation="Emney"/></action>
-        <action time="2"><Harm harm="10" target="Area" area="0,3" selector="Nearst" relation="Emney"/></action>
-        <action time="2.2"><Harm harm="10" target="Area" area="0,3" selector="Nearst" relation="Emney"/></action>
-        <action time="2.5">
-            <Harm harm="-10" target="Area" area="0,3" selector="Nearst" relation="Self"/>
-            <Buff id="10006" target="Area" area="0,3" selector="Nearst" relation="Friend"/>
-        </action>
-        <action time="3" end=""/>
-    </skill>
-</skills>
+<?xml version="1.0" encoding="utf-8"?>
+<Root Type="GameSkill+XmlPack">
+	<skill Type="GameSkill" id="200" name="eh.skill1" distance="4" cd="3" state="65531" anim="attack" pointType="Pos" mIcon="sk_skill1">
+		<actions Type="SkillAction" time="1">
+			<nodes Type="SkillBullet" target="Pos" location="Target" relation="Emney" id="200" />
+		</actions>
+		<actions Type="SkillAction" end="True" time="1.5" />
+	</skill>
+	<skill Type="GameSkill" id="201" name="eh.skill2" distance="4" cd="3" state="65531" anim="skill01" pointType="Target" mIcon="sk_skill2">
+		<actions Type="SkillAction" time="0.5">
+			<nodes Type="SkillBullet" relation="Emney" id="202" />
+		</actions>
+		<actions Type="SkillAction" time="1">
+			<nodes Type="SkillBullet" relation="Emney" id="202" />
+		</actions>
+		<actions Type="SkillAction" time="1.5">
+			<nodes Type="SkillBullet" relation="Emney" id="202" />
+		</actions>
+		<actions Type="SkillAction" end="True" time="2" />
+	</skill>
+	<skill Type="GameSkill" id="202" name="eh.skill3" distance="4" cd="3" state="65531" anim="skill02" pointType="Pos" mIcon="sk_skill3">
+		<actions Type="SkillAction" time="0.5">
+			<nodes Type="SkillBullet" target="Pos" location="Target" relation="Emney" id="201" />
+		</actions>
+		<actions Type="SkillAction" end="True" time="1" />
+	</skill>
+	<skill Type="GameSkill" id="203" name="eh.skill4" distance="4" cd="3" state="65531" anim="skill04" mIcon="sk_skill4">
+		<actions Type="SkillAction" time="0.5">
+			<nodes Type="SkillBuff" target="Area" relation="Emney" selector="Nearst" id="10008" area="3,2.00,112.21" />
+		</actions>
+		<actions Type="SkillAction" time="2">
+			<nodes Type="SkillHarm" target="Area" relation="Emney" selector="Nearst" harm="10" area="0,3" />
+		</actions>
+		<actions Type="SkillAction" time="2.2">
+			<nodes Type="SkillHarm" target="Area" relation="Emney" selector="Nearst" harm="10" area="0,3" />
+		</actions>
+		<actions Type="SkillAction" time="2.5">
+			<nodes Type="SkillHarm" target="Area" relation="Self" selector="Nearst" harm="-10" area="0,3" />
+			<nodes Type="SkillBuff" target="Area" relation="Friend" selector="Nearst" id="10006" area="0,3" />
+		</actions>
+		<actions Type="SkillAction" end="True" time="3" />
+	</skill>
+</Root>
