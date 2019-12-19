@@ -7,6 +7,7 @@ public abstract partial class SkillNode : AraleSerizlize
 {
     public enum Type
     {
+        None,  
         Action,//行为
         Anim,  //动画
         Harm,  //伤害
@@ -16,7 +17,7 @@ public abstract partial class SkillNode : AraleSerizlize
         Move,  //位移
         Lua,   //Lua事件
     };
-    public Type type;
+    public virtual Type type{get{return Type.None;}}
     #if UNITY_EDITOR
     public SkillAction action{ get; set;}
     #endif
@@ -53,13 +54,12 @@ public abstract partial class SkillNode : AraleSerizlize
                 Debug.LogError("unsurpport skillnode type:"+nodeType);
                 return null;
         }
-        n.type = nodeType;
         return n;
     }
 
     public override void read(BinaryReader r)
     {
-        type = (Type)r.ReadInt32();
+        int type = r.ReadInt32();//not set type
     }
 
     public override void write(BinaryWriter w)
@@ -72,6 +72,7 @@ public partial class SkillAnim : SkillNode
 {
     [AraleSerizlize.Field]
     public string anim="";
+    public override Type type{get{return Type.Anim;}}
     public override void read(BinaryReader r)
     {
         base.read(r);
@@ -102,6 +103,7 @@ public partial class SkillBullet : SkillTarget
     public int  num;
     [AraleSerizlize.Field]
     public Mode mode;
+    public override Type type{get{return Type.Bullet;}}
     public override void read(BinaryReader r)
     {
         base.read(r);
@@ -123,6 +125,7 @@ public partial class SkillHarm : SkillTarget
 {
     [AraleSerizlize.Field]
     public int harm;
+    public override Type type{get{return Type.Harm;}}
     public override void read(BinaryReader r)
     {
         base.read(r);
@@ -140,6 +143,7 @@ public partial class SkillBuff : SkillTarget
 {
     [AraleSerizlize.Field]
     public int id;
+    public override Type type{get{return Type.Buff;}}
     public override void read(BinaryReader r)
     {
         base.read(r);
@@ -157,6 +161,7 @@ public partial class SkillEvent : SkillNode
 {
     [AraleSerizlize.Field]
     public string evt="";
+    public override Type type{get{return Type.Event;}}
     public override void read(BinaryReader r)
     {
         base.read(r);
@@ -174,6 +179,7 @@ public partial class SkillMove : SkillNode
 {
     [AraleSerizlize.Field]
     public int id;
+    public override Type type{get{return Type.Move;}}
     public override void read(BinaryReader r)
     {
         base.read(r);
@@ -193,6 +199,7 @@ public partial class SkillLua : SkillNode
     public int evt;
     [AraleSerizlize.Field]
     public string param;
+    public override Type type{get{return Type.Lua;}}
     public override void read(BinaryReader r)
     {
         base.read(r);

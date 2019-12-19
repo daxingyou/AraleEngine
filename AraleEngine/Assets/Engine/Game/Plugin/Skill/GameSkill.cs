@@ -24,6 +24,7 @@ public partial class GameSkill : AraleSerizlize
     public float distance{ get; protected set;}
     [AraleSerizlize.Field]
     public float cd{ get;protected set;}
+    [AraleSerizlize.Field]
     public IArea area{ get; protected set;}
     [AraleSerizlize.Field]
     string mIcon;

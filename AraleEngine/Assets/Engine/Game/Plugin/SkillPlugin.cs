@@ -70,7 +70,7 @@ public class Skill
 
     void playSkill(Unit unit)
     {
-		if (!unit.isState (UnitState.Skill))return;
+        if (!unit.isState (UnitState.Skill))return;
         unit.move.stop ();
         if (unit.isServer)
         {
@@ -91,7 +91,6 @@ public class Skill
 	#region 插件
 	public class Plug : Plugin
 	{
-		public Skill   skill;     //当前正在释放的技能
 		public Vector3 targetPos; //当前技能目标位置
         public Vector3 targetDir{get{return(targetPos - mUnit.pos).normalized;}}
 		public Unit targetUnit;   //当前技能目标单位
@@ -103,7 +102,6 @@ public class Skill
         IndicatorMesh mIndicator;//技能指示器
 		public override void reset ()
 		{
-			skill = null;
 			targetPos = Vector3.zero;
 			targetUnit = null;
             GameObject.DestroyObject(mIndicator);
@@ -152,19 +150,19 @@ public class Skill
 
         void playSkill(Skill skill, bool aiCall)
         {
-            if (this.skill != null)return;
             if (!mUnit.isState (UnitState.Skill))return;
             Log.i("playIndex skill="+skill.GS.id, Log.Tag.Skill);
             skill.play (mUnit, aiCall);
-            this.skill = skill;
         }
 
 		public virtual bool onEvent (int evt, object param, object sender)
 		{
-			if (evt == (int)UnitEvent.SkillBegin){
-					
-			} else if (evt == (int)UnitEvent.SkillEnd) {
-				skill = null;
+			if (evt == (int)UnitEvent.SkillBegin)
+            {
+			    
+			}
+            else if (evt == (int)UnitEvent.SkillEnd)
+            {
 			}
 			return true;
 		}
@@ -179,7 +177,7 @@ public class Skill
 
 		public void drawDebug()
 		{
-			DebugLine.drawCircle(targetPos, 0.7f, Color.red);
+            DebugLine.drawCircle(targetPos, 0.7f, Color.yellow);
 			if (targetUnit != null)DebugLine.drawCircle(targetUnit.pos, 0.7f, Color.magenta);
 		}
 

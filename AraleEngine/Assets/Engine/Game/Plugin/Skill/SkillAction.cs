@@ -19,6 +19,7 @@ public partial class SkillAction : SkillNode
     public bool   end{get{return (mask&0x0001)!=0;} set{mask = value ? mask | 0x0001 : mask & ~0x0001;}}
     [AraleSerizlize.Field]
     public List<SkillNode> nodes = new List<SkillNode>();
+    public override Type type{get{return Type.Action;}}
     public override void read(BinaryReader r)
     {
         time = r.ReadSingle();

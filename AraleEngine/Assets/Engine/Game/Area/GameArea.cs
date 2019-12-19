@@ -44,7 +44,7 @@ public class CircleArea : IArea
 
 	public string toString()
 	{
-		return string.Format ("{0:F2}", r);
+        return string.Format ("{0},{1:F2}", (int)type,r);
 	}
 
 	public void fromString(string s)
@@ -85,7 +85,7 @@ public class SquareArea : IArea {
 
 	public string toString()
 	{
-		return string.Format ("{0:F2}", inR);
+        return string.Format ("{0},{1:F2}", (int)type,inR);
 	}
 
 	public void fromString(string s)
@@ -128,7 +128,7 @@ public class RectangleArea : IArea {
 
 	public string toString()
 	{
-		return string.Format ("{0:F2},{1:F2}", w, l);
+        return string.Format ("{0},{1:F2},{2:F2}", (int)type,w, l);
 	}
 
 	public void fromString(string s)
@@ -179,7 +179,7 @@ public class FanArea : IArea {
 
 	public string toString()
 	{
-		return string.Format ("{0:F2},{1:F2}", r, ang);
+        return string.Format ("{0},{1:F2},{2:F2}", (int)type, r, ang);
 	}
 
 	public void fromString(string s)
@@ -228,7 +228,7 @@ public class GameArea : MonoBehaviour {
 
 	public string toString()
 	{
-		return string.Format("{0},{1}", (int)mType, mArea.toString ());
+		return mArea.toString ();
 	}
 		
 	public AreaType mType;
@@ -237,7 +237,7 @@ public class GameArea : MonoBehaviour {
 	void OnDrawGizmosSelected()
 	{
 		if (mArea == null)return;
-		UnityEditor.Handles.color = Color.gray;
+        UnityEditor.Handles.color = Color.red;
 		Matrix4x4 m = UnityEditor.Handles.matrix;
 		UnityEditor.Handles.matrix = Matrix4x4.TRS (transform.position, Quaternion.LookRotation (transform.forward), Vector3.one);
 		mArea.debugDraw ();

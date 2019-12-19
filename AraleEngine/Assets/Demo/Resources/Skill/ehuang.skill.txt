@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Root Type="GameSkill+XmlPack">
-	<skill Type="GameSkill" id="200" name="eh.skill1" distance="4" cd="3" state="65531" anim="attack" pointType="Pos" mIcon="sk_skill1">
-		<actions Type="SkillAction" time="1">
-			<nodes Type="SkillBullet" target="Pos" location="Target" relation="Emney" id="200" />
+	<skill Type="GameSkill" id="200" name="回春术" cd="3" state="-21" anim="attack" mIcon="sk_skill1" desc="瞬间恢复自身30点生命，并给自身添加一个每秒2点生命回复的buf,持续5秒">
+		<actions Type="SkillAction" time="1" loopTimes="-57" state="-21">
+			<nodes Type="SkillHarm" relation="Self" harm="-30" />
 		</actions>
-		<actions Type="SkillAction" end="True" time="1.5" />
+		<actions Type="SkillAction" end="True" time="1.5" loopTimes="-73" state="-1" />
 	</skill>
 	<skill Type="GameSkill" id="201" name="eh.skill2" distance="4" cd="3" state="65531" anim="skill01" pointType="Target" mIcon="sk_skill2">
 		<actions Type="SkillAction" time="0.5">

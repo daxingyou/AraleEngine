@@ -171,6 +171,15 @@ public abstract class Unit : LuaMono
         }
     }
 
+    public Vector3 hitPos
+    {
+        get
+        {
+            if (mTran == null)return mPos;
+            return mTran.GetChild(0).position;
+        }
+    }
+
 	public void setDir(Vector3 dir)
 	{
 		if (dir == Vector3.zero)return;
@@ -386,6 +395,7 @@ public abstract class Unit : LuaMono
 		mat.color = Color.green;
 		foreach (GameArea ga in areas)
 		{
+            if (ga.mArea == null)continue;
 			Vector3 tpos = Matrix4x4.TRS (ga.transform.position, Quaternion.LookRotation (ga.transform.forward), Vector3.one).inverse.MultiplyPoint(pos); 
 			if (ga.mArea.inArea (tpos))mat.color = Color.red;
 		}

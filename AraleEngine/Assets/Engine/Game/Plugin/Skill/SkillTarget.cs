@@ -34,7 +34,7 @@ public partial class SkillTarget : SkillNode
     [AraleSerizlize.Field]
     public Vector3 vct;
     [AraleSerizlize.Field]
-    public string  area="";
+    public IArea  area;
     [AraleSerizlize.Field]
     public Target target{get{return (Target)(mask&0x000000ff);} protected set{mask&=0x7fffff00; mask|=((int)value&0x000000ff);}}
     [AraleSerizlize.Field]
@@ -43,7 +43,6 @@ public partial class SkillTarget : SkillNode
     public UnitRelation relation{get{return (UnitRelation)((mask&0x00ff0000)>>16);} protected set{mask &= 0x7f00ffff; mask|=(((int)value&0x000000ff)<<16);}}
     [AraleSerizlize.Field]
     public Selector selector{get{return (Selector)((mask&0xff000000)>>24);} protected set{mask &= 0x00ffffff; mask|=(((int)value&0x000000ff)<<24);}}
-
     public override void read(BinaryReader r)
     {
         mask = r.ReadInt32();

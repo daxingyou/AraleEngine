@@ -42,12 +42,12 @@ public class Move
         }
     }
 	
-	public delegate void OnMoveEvent(Event evt, object param);
+	public delegate void OnMoveEvent(Event evt, Move move);
 	protected OnMoveEvent onEvent;
     public TBMove table{ get; protected set;}
-	protected Vector3   vTarget;
-    protected Unit      uTarget;
-    protected float     mSpeed;
+    public Vector3   vTarget;
+    public Unit      uTarget;
+    protected float  mSpeed;
 	protected virtual void start(Unit unit){}
     protected virtual void update(Unit unit){}
     protected virtual void stop(Unit unit, bool arrived)
@@ -79,8 +79,6 @@ public class Move
         NavMove  mNavMove;
         public State   moveState;
         public float   speed{get{return   mMove==null?0:mMove.mSpeed;}}
-        public Vector3 vTarget{get{return mMove==null?default(Vector3):mMove.vTarget;}}
-        public Unit    uTarget{get{return mMove==null?null:mMove.uTarget;}}
         public Move    curMove{get{return mMove;}}
         public Plug(Unit unit):base(unit)
 		{
@@ -93,10 +91,10 @@ public class Move
             }
 		}
 
-        public void play(int id, Vector3 vTarget, Unit uTarget, bool bSync=false, OnMoveEvent callbck=null)
+        public Move play(int id, Vector3 vTarget, Unit uTarget, bool bSync=false, OnMoveEvent callbck=null)
         {
 			TBMove tb = TableMgr.single.GetData<TBMove>(id);
-			if (tb == null)return;
+			if (tb == null)return null;
 			switch (tb.type)
 			{
     			case 1:
@@ -116,7 +114,7 @@ public class Move
                     break;
     			default:
     				Log.e ("unsupport move type=" + tb.type, Log.Tag.Unit);
-    				return;
+    				return null;
 			}
 
             mMove.vTarget = vTarget;
@@ -125,6 +123,7 @@ public class Move
             mMove.onEvent = callbck;
             mMove.start(mUnit);
             if (bSync)mMove.sync(mUnit);
+            return mMove;
 		}
 
         public void move(Vector3 dir)

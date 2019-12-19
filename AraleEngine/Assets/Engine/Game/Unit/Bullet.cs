@@ -17,8 +17,8 @@ public class Bullet : Unit, PoolMgr<int>.IPoolObject
 	public override Buff.Plug buff{get{ return mBuff;}}
 	public void play(Vector3 vTarget, uint uTarget)
 	{
-        move.play (table.move, vTarget, mgr.getUnit(uTarget), false, onMoveEvent);
-		if(this.isServer)sync ();
+        Move mv = move.play (table.move, vTarget, mgr.getUnit(uTarget), false, onMoveEvent);
+		if(this.isServer)sync (mv);
 	}
 	//=====
 	protected override void onAwake()
@@ -27,7 +27,7 @@ public class Bullet : Unit, PoolMgr<int>.IPoolObject
 		mBuff  = new Buff.Plug (this);
 	}
 
-	void onMoveEvent(Move.Event evt, object param)
+	void onMoveEvent(Move.Event evt, Move mv)
 	{
 		if (evt == Move.Event.Stop)
 		{
@@ -40,9 +40,8 @@ public class Bullet : Unit, PoolMgr<int>.IPoolObject
 				Invoke ("dispear", table.life);
 				return;
 			}
-
-			Move mv = param as Move;
-			switch (mv.table.type)
+                
+            switch (mv.table.type)
 			{
 			case 1:
 				IArea area = GameArea.fromString ("0,1.0");
@@ -60,7 +59,7 @@ public class Bullet : Unit, PoolMgr<int>.IPoolObject
 				}
 				break;
 			case 3:
-				Unit target = move.uTarget;
+                Unit target = mv.uTarget;
 				if (target != null)
 				{
 					target.anim.sendEvent (AnimPlugin.Hit);
@@ -140,7 +139,7 @@ public class Bullet : Unit, PoolMgr<int>.IPoolObject
 		}
     }
 
-	public void sync()
+    public void sync(Move mv)
 	{
 		MsgCreateBullet msg = new MsgCreateBullet ();
 		msg.guid    = guid;
@@ -148,8 +147,8 @@ public class Bullet : Unit, PoolMgr<int>.IPoolObject
 		msg.dir     =  dir;
 		msg.state   = msg.state;
 		msg.tid     = table._id;
-		msg.vTarget = move.vTarget;
-        msg.uTarget = move.uTarget==null?0:move.uTarget.guid;
+		msg.vTarget = mv.vTarget;
+        msg.uTarget = mv.uTarget==null?0:mv.uTarget.guid;
 		this.sendMsg ((short)MyMsgId.CreateBullet, msg);
 	}
 

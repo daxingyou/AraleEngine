@@ -11,7 +11,8 @@ using System.Runtime.InteropServices;
 namespace Arale.Engine
 {
         
-    public class GHelper{
+    public class GHelper
+    {
     	static long utcTicks = new System.DateTime (1970, 1, 1, 0, 0, 0).Ticks;
     	static string[] color = new string[]{"[ffffff]","[ffffff]","[32e9ff]","[feeb4d]","[fc7a12]","[f3586e]"};
     	static Transform GetTransform(Transform t,string name)
@@ -372,4 +373,13 @@ namespace Arale.Engine
         #endregion
     }
 
+    public static class UnityExtend
+    {
+        public static MonoBehaviour AddMissComponent(this GameObject go, System.Type type)
+        {
+            MonoBehaviour m = go.GetComponent(type) as MonoBehaviour;
+            if (m != null)return m;
+            return go.AddComponent(type) as MonoBehaviour;
+        }
+    }
 }

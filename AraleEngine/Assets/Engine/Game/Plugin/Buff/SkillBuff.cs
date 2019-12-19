@@ -91,9 +91,8 @@ public class GameSkillBuff : LuaBuff
     {
         if (n.target == SkillTarget.Target.Area)
         {//区域伤害
-            IArea garea = GameArea.fromString (n.area);
             Matrix4x4 mt = Matrix4x4.TRS (mUnit.pos, Quaternion.LookRotation (mUnit.dir), Vector3.one).inverse;
-            List<Unit> units = mUnit.mgr.getUnitInArea (UnitType.Monster|UnitType.Player, garea, mt);
+            List<Unit> units = mUnit.mgr.getUnitInArea (UnitType.Monster|UnitType.Player, n.area, mt);
             for (int i = 0; i < units.Count; ++i)
             {
                 Unit u = units [i];
@@ -146,9 +145,8 @@ public class GameSkillBuff : LuaBuff
                 }
             case SkillTarget.Target.Area:
                 {
-                    IArea garea = GameArea.fromString (n.area);
                     Matrix4x4 mt = Matrix4x4.TRS (mUnit.pos, Quaternion.LookRotation (mUnit.dir), Vector3.one).inverse;
-                    List<Unit> units = mUnit.mgr.getUnitInArea (UnitType.Monster|UnitType.Player, garea, mt);
+                    List<Unit> units = mUnit.mgr.getUnitInArea (UnitType.Monster|UnitType.Player, n.area, mt);
                     for (int i = 0; i < units.Count; ++i)
                     {
                         Bullet bt = mUnit.mgr.getUnit (0, UnitType.Bullet, n.id) as Bullet;
@@ -166,9 +164,8 @@ public class GameSkillBuff : LuaBuff
     {
         if (n.target == SkillTarget.Target.Area)
         {
-            IArea garea = GameArea.fromString (n.area);
             Matrix4x4 mt = Matrix4x4.TRS (mUnit.pos, Quaternion.LookRotation (mUnit.dir), Vector3.one).inverse;
-            List<Unit> units = mUnit.mgr.getUnitInArea (UnitType.Monster|UnitType.Player, garea, mt);
+            List<Unit> units = mUnit.mgr.getUnitInArea (UnitType.Monster|UnitType.Player, n.area, mt);
             for (int i = 0; i < units.Count; ++i)
             {
                 Unit u = units [i];

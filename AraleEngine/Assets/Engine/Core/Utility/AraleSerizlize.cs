@@ -14,19 +14,12 @@ namespace Arale.Engine
     public abstract class AraleSerizlize
     {
         [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field,AllowMultiple = false, Inherited = true)]
-        public class Field:Attribute
-        {
-            public Field()
-            {
-                
-            }
-            public delegate object FromString();
-            public delegate string ToString();
-        }
+        public class Field:Attribute{}
 
         #region 2进制序列化
         public abstract void write(BinaryWriter w);
         public abstract void read(BinaryReader r);
+        protected virtual  void readFinish(){}//对象读取完后处理
         public static void write<T>(List<T> ls, BinaryWriter w) where T:AraleSerizlize
         {
             int n = ls.Count;
@@ -91,6 +84,7 @@ namespace Arale.Engine
 
         static void writeXml(object o, string name, XmlNode node, bool element=false)
         {
+            if (o == null)return;
             Type type = o.GetType();
             if (type.IsPrimitive || type.IsEnum || type == typeof(string))
             {//基本类型或字符串
@@ -120,19 +114,8 @@ namespace Arale.Engine
                 return;
             }
 
-            switch (type.Name)
-            {//存储为json属性
-                case "Vector2":
-                    if(o.Equals(default(Vector2)))return;
-                    node.Attributes.Append(node.OwnerDocument.CreateAttribute(name)).Value = JsonUtility.ToJson(o).Replace('\"','\'');
-                    return;
-                case "Vector3":
-                    if(o.Equals(default(Vector3)))return;
-                    node.Attributes.Append(node.OwnerDocument.CreateAttribute(name)).Value = JsonUtility.ToJson(o).Replace('\"','\'');
-                    return;
-            }
-
-
+            if (specialWrite(o, name, type, node))return;
+                
             if(name!=null)node = node.AppendChild(node.OwnerDocument.CreateElement(name));
             node.Attributes.Append(node.OwnerDocument.CreateAttribute("Type")).Value=type.FullName;
             //必须BindingFlags.Instance,否则获取GetCustomAttributes为空
@@ -172,6 +155,9 @@ namespace Arale.Engine
                 }
                 writeXml(val, valName, node);
             }
+
+            AraleSerizlize arale = o as AraleSerizlize;
+            if (arale != null)arale.readFinish();
         }
 
         static string formatXml(XmlDocument xml)
@@ -253,22 +239,13 @@ namespace Arale.Engine
                 return list;
             }
 
-            switch (type.Name)
-            {//存储为json属性
-                case "Vector2":
-                    attr = node.Attributes[name];
-                    if (attr == null)return default(Vector2);
-                    return JsonUtility.FromJson<Vector2>(attr.Value);
-                case "Vector3":
-                    attr = node.Attributes[name];
-                    if (attr == null)return default(Vector3);
-                    return JsonUtility.FromJson<Vector3>(attr.Value);
-            }
+            object o;
+            if (specialRead(out o, name, type, node))return o;
 
             if (name != null)node = node.SelectSingleNode(name);
             attr = node.Attributes["Type"];
             if (attr != null)type = Type.GetType(attr.Value, true);
-            object o = System.Activator.CreateInstance(type);
+            o = System.Activator.CreateInstance(type);
             MemberInfo[] mbs = type.GetMembers(BindingFlags.NonPublic|BindingFlags.Public|BindingFlags.Instance);
             for (int i = 0; i < mbs.Length; ++i)
             {
@@ -333,6 +310,46 @@ namespace Arale.Engine
             }
             Debug.LogError("not support type="+type);
             return null;
+        }
+
+        static bool specialWrite(object o, string name, Type type, XmlNode node)
+        {
+            switch (type.Name)
+            {
+                case "Vector2":
+                case "Vector3":
+                    object co = System.Activator.CreateInstance(type);
+                    if (o.Equals(co))return true;
+                    node.Attributes.Append(node.OwnerDocument.CreateAttribute(name)).Value = JsonUtility.ToJson(o).Replace('\"', '\'');
+                    return true;
+            }
+
+            if (typeof(IArea).IsAssignableFrom(type))
+            {
+                node.Attributes.Append(node.OwnerDocument.CreateAttribute(name)).Value = (o as IArea).toString();
+                return true;
+            }
+            return false;
+        }
+
+        static bool specialRead(out object o, string name, Type type, XmlNode node)
+        {
+            o = null;
+            XmlAttribute attr = node.Attributes[name];
+            switch (type.Name)
+            {
+                case "Vector2":
+                    o = attr==null?default(Vector2):JsonUtility.FromJson(attr.Value, type);
+                    return true;
+                case "Vector3":
+                    o = attr == null ? default(Vector3) : JsonUtility.FromJson(attr.Value, type);
+                    return true;
+                case "IArea":
+                    o = attr==null?null:GameArea.fromString(attr.Value);
+                    return true;
+                default:
+                    return false;
+            }
         }
         #endregion
     }
