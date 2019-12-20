@@ -61,39 +61,11 @@ public partial class GameSkill : AraleSerizlize
     }
 
 
-    #region 技能加载
-    static bool loadSkill(string skillPath, Dictionary<int, GameSkill> skills)
+    #region 技能管理
+    public const short ver = 5;
+    public static bool isSkillFile(byte[] bs)
     {
-        TextAsset ta = ResLoad.get(skillPath).asset<TextAsset>();
-        if (ta == null)
-        {
-            Log.e("Skill not find by ResLoad path="+skillPath, Log.Tag.Skill);
-            return false;
-        }
-        return ta.bytes[0] == 0x73?loadSkills(ta.bytes,skills):loadSkills(ta.text,skills);
-    }
-
-    static bool loadSkills(byte[] buff, Dictionary<int, GameSkill> skills)
-    {
-        try
-        {
-            if(!isSkillFile(buff))throw new System.Exception("not skill file");
-            using(MemoryStream fs = new MemoryStream(buff))
-            {
-                fs.Seek(5, SeekOrigin.Begin);
-                BinaryReader r = new BinaryReader(fs);
-                int v = r.ReadInt16();
-                //新版本应对老代码兼容，根据版本使用对应的读取序列化
-                if(v>ver)throw new System.Exception("version error!v="+v);
-                AraleSerizlize.read<GameSkill>(skills, r);
-            }
-            return true;
-        }
-        catch(System.Exception e)
-        {
-            Log.e(e.Message, Log.Tag.Skill, e);
-            return false;
-        }
+        return bs.Length>5 && ((bs[0] == 0x73 && bs[1] == 0x6b && bs[2] == 0x69 && bs[3] == 0x6c && bs[4] == 0x6c)||(bs[0]==0xEF));
     }
 
     class XmlPack
@@ -101,65 +73,138 @@ public partial class GameSkill : AraleSerizlize
         [AraleSerizlize.Field]
         public List<GameSkill> skill;
     }
-
-    static bool loadSkills(string ctx, Dictionary<int, GameSkill> skills)
+        
+    public partial class Mgr
     {
-        try
+        Dictionary<int, string> skillmap;
+        Dictionary<int, GameSkill> skills = new Dictionary<int, GameSkill>();
+        public void clear()
         {
-            XmlPack pack = AraleSerizlize.fromXml(typeof(XmlPack), ctx) as XmlPack;
-            for(int i=0;i<pack.skill.Count;++i)
+            skills.Clear();
+        }
+
+        public GameSkill get(int id)
+        {
+            GameSkill gs;
+            if (!skills.TryGetValue(id, out gs))
             {
-                skills[pack.skill[i].id] = pack.skill[i];
+                if (!loadSkill("Skill/"+getFile(id)))return null;
+                gs = skills[id];
             }
-            return true;
+            gs.lastUseTime = Time.realtimeSinceStartup;
+            return gs;
         }
-        catch(System.Exception e)
-        {
-            Log.e(e.Message, Log.Tag.Skill, e);
-            return false;
-        }
-    }
 
-    static string getFile(int id)
-    {
-        if (skillmap == null)
+        string getFile(int id)
         {
-            skillmap = new Dictionary<int, string>();
-            TextAsset ta = ResLoad.get("Skill/skillmap").asset<TextAsset>();
-            string[] ss = ta.text.Split(new string[]{ "," }, System.StringSplitOptions.RemoveEmptyEntries);
-            for (int i = 0; i < ss.Length; i += 2)
+            if (skillmap == null)
             {
-                skillmap[int.Parse(ss[i])] = ss[i+1];
+                skillmap = new Dictionary<int, string>();
+                TextAsset ta = ResLoad.get("Skill/skillmap").asset<TextAsset>();
+                string[] ss = ta.text.Split(new string[]{ "," }, System.StringSplitOptions.RemoveEmptyEntries);
+                for (int i = 0; i < ss.Length; i += 2)
+                {
+                    skillmap[int.Parse(ss[i])] = ss[i+1];
+                }
+            }
+            return skillmap[id];
+        }
+
+        public bool loadSkill(string skillPath)
+        {
+            TextAsset ta = ResLoad.get(skillPath).asset<TextAsset>();
+            if (ta == null)
+            {
+                Log.e("Skill not find by ResLoad path="+skillPath, Log.Tag.Skill);
+                return false;
+            }
+            return ta.bytes[0] == 0x73?loadSkills(ta.bytes):loadSkills(ta.text);
+        }
+
+        bool loadSkills(byte[] buff)
+        {
+            try
+            {
+                if(!isSkillFile(buff))throw new System.Exception("not skill file");
+                using(MemoryStream fs = new MemoryStream(buff))
+                {
+                    fs.Seek(5, SeekOrigin.Begin);
+                    BinaryReader r = new BinaryReader(fs);
+                    int v = r.ReadInt16();
+                    //新版本应对老代码兼容，根据版本使用对应的读取序列化
+                    if(v>ver)throw new System.Exception("version error!v="+v);
+                    AraleSerizlize.read<GameSkill>(skills, r);
+                }
+                return true;
+            }
+            catch(System.Exception e)
+            {
+                Log.e(e.Message, Log.Tag.Skill, e);
+                return false;
             }
         }
-        return skillmap[id];
-    }
-    #endregion
 
+        bool loadSkills(string ctx)
+        {
+            try
+            {
+                XmlPack pack = AraleSerizlize.fromXml(typeof(XmlPack), ctx) as XmlPack;
+                for(int i=0;i<pack.skill.Count;++i)
+                {
+                    skills[pack.skill[i].id] = pack.skill[i];
+                }
+                return true;
+            }
+            catch(System.Exception e)
+            {
+                Log.e(e.Message, Log.Tag.Skill, e);
+                return false;
+            }
+        }
 
-    #region 外部接口
-    public const short ver = 5;
-    static Dictionary<int, string> skillmap;
-    static Dictionary<int, GameSkill> skills = new Dictionary<int, GameSkill>();
-    public static void clear()
-    {
-        skills.Clear();
+        public bool saveSkill(string skillPath, bool xml=true)
+        {
+            FileStream fs = null;
+            try
+            {
+                if(xml)
+                {
+                    XmlPack pack = new XmlPack();
+                    pack.skill = new List<GameSkill>();
+                    pack.skill.AddRange(skills.Values);
+                    AraleSerizlize.saveXml(pack, skillPath);
+                }
+                else
+                {
+                    fs = new FileStream(skillPath, FileMode.Create);
+                    BinaryWriter w = new BinaryWriter(fs);
+                    w.Write(new byte[]{0x73,0x6b,0x69,0x6c,0x6c});
+                    w.Write(ver);
+                    AraleSerizlize.write<GameSkill>(skills,w);
+                    fs.Close();
+                }
+                return true;
+            }
+            catch(System.Exception e)
+            {
+                Log.e(e.Message, Log.Tag.Skill, e);
+                if(fs!=null)fs.Close();
+                return false;
+            }
+        }
     }
+
+    static Mgr mMgr;
     public static GameSkill get(int id)
     {
-        GameSkill gs;
-        if (!skills.TryGetValue(id, out gs))
-        {
-            if (!loadSkill("Skill/"+getFile(id),skills))return null;
-            gs = skills[id];
-        }
-        gs.lastUseTime = Time.realtimeSinceStartup;
-        return gs;
+        if(mMgr!=null)return mMgr.get(id);
+        mMgr = new Mgr();
+        return mMgr.get(id);
     }
-
-    public static bool isSkillFile(byte[] bs)
+    public static void clear()
     {
-        return bs.Length>5 && ((bs[0] == 0x73 && bs[1] == 0x6b && bs[2] == 0x69 && bs[3] == 0x6c && bs[4] == 0x6c)||(bs[0]==0xEF));
+        if (mMgr == null)return;
+        mMgr.clear();
     }
     #endregion
 }
