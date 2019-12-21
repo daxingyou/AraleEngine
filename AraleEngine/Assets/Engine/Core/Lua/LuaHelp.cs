@@ -12,6 +12,22 @@ public static class LuaHelp
 	public static void ExportToLua()
 	{
 	}
+
+    public static void Enum2Lua(Type t)
+    {
+        Debug.Assert(t.IsEnum);
+        LuaEnv env = LuaRoot.single.mL;
+        LuaTable enumTable = env.Global["Enum"] as LuaTable;
+        LuaTable tb = env.NewTable();
+        string[] names = Enum.GetNames(t);
+        Array values = Enum.GetValues(t);
+        for (int i = 0; i < names.Length; ++i)
+        {
+            tb[names[i]] = (int)values.GetValue(i);
+        }
+        enumTable[t.Name] = tb;
+    }
+
 	public static List<object> List_object{get{return new List<object>();}}
 	//类型导出
 	[LuaCallCSharp]
@@ -60,8 +76,7 @@ public static class LuaHelp
 		typeof(EventListener.VoidDelegate),
 		typeof(UISwitch.OnValueChange),
 		typeof(UISList.OnSelectChange),
-		typeof(Unit.OnStateChange),
-        typeof(AttrPlugin.OnAttrChanged),
+        typeof(Unit.OnUnitEventListener),
 		typeof(LuaBuff.OnEvent),
 		typeof(TimeMgr.Action.OnAction),
 		typeof(UIDrag.OnDragReceived),

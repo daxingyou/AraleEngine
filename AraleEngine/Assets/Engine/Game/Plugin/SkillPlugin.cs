@@ -28,8 +28,8 @@ public class Skill
 	protected virtual void play(Unit self, bool aiCall)
 	{
         if (mRCD > 0)return;
-		Vector3 tPos = self.skill.targetPos;
-		Unit    tUnit= self.skill.targetUnit;
+        Unit    tUnit= self.skill.targetUnit;
+        Vector3 tPos = aiCall&&tUnit!=null?tUnit.pos:self.skill.targetPos;
         switch (GS.pointType)
         {
         case PointType.Pos://位置技能
@@ -57,7 +57,7 @@ public class Skill
 			}
 			if (Vector3.Distance(self.pos, tUnit.pos) > GS.distance)
             {
-                self.move.nav(tUnit, GS.distance, delegate(bool isArray){if(isArray)playSkill(self);});
+                self.move.nav(tUnit, GS.distance, delegate(bool isAI){if(isAI)playSkill(self);});
                 return;
             }
             break;

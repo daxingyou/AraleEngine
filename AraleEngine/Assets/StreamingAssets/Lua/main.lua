@@ -78,6 +78,10 @@ MsgItem = CS.MsgItem
 --通过Debug.Log(typeof(List<object>)获取模板类的真实名称
 --==============
 require "LuaEnum"
+LuaHelp.Enum2Lua(typeof(CS.MyMsgId))
+LuaHelp.Enum2Lua(typeof(CS.Arale.Engine.Log.Tag))
+LuaHelp.Enum2Lua(typeof(CS.UnitEvent))
+LuaHelp.Enum2Lua(typeof(CS.AttrID))
 require "game/data/LClient"
 require "game/ais"
 require "game/uis"

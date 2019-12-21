@@ -11,4 +11,5 @@ public class Plugin
 	public virtual void reset (){}
     public virtual void update(){}
 	public virtual void onSync(MessageBase msg){}
+    public virtual void onEvent(int evt, object param){}
 }

@@ -20,7 +20,6 @@ public class AnimPlugin : Plugin
     {
 		mAnimtor = unit.GetComponent<Animator> ();
 		mAnim = unit.GetComponent<Animation>();
-		if (mUnit.attr != null)mUnit.attr.onAttrChanged += onAttrChange;
     }
 
     public float Length(string clipName)
@@ -44,22 +43,29 @@ public class AnimPlugin : Plugin
         return 0f;
     }
 
-	void onAttrChange(int mask, object val)
-	{
-		if (mask != (int)AttrID.Speed)return;
-		if (mAnimtor != null)mAnimtor.speed = (float)val;
-		if (mAnim != null)foreach (AnimationState state in mAnim)state.speed = (float)val;
-	}
-		
 	public void sendEvent(int evt, string anim=null)
 	{
 		bool needSync = false;
-		onEvent (evt, anim, ref needSync);
+        onSkillEvent (evt, anim, ref needSync);
 		if (needSync)sync (evt, anim);
 	}
 
+    public override void onEvent(int evt, object param)
+    {
+        if (evt == (int)UnitEvent.AttrChanged)
+        {
+            AttrPlugin.EventData ed = (AttrPlugin.EventData)param;
+            if (ed.attrId != (int)AttrID.Speed)return;
+            if (mAnimtor != null)mAnimtor.speed = (float)ed.val;
+            if (mAnim != null)
+            {
+                foreach (AnimationState state in mAnim)state.speed = (float)ed.val;
+            }
+        }
+    }
+
     float jioTime;
-	protected virtual void onEvent(int evt, string anim, ref bool needSync)
+	protected virtual void onSkillEvent(int evt, string anim, ref bool needSync)
 	{
         if (!mUnit.isState(UnitState.Anim))return;
 		switch (evt)
@@ -119,7 +125,7 @@ public class AnimPlugin : Plugin
         MsgAnim msg = message as MsgAnim;
 		mUnit.onSyncState (msg);
 		bool needSync = false;
-		onEvent (msg.evt, msg.anim, ref needSync);
+        onSkillEvent (msg.evt, msg.anim, ref needSync);
     }
 
     void sync(int evt, string anim)

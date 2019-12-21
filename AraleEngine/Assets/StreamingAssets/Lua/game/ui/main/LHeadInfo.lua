@@ -3,7 +3,6 @@ if LHeadInfo then print("same lua, reload ignore!!!") end
 local M =
 {
 	_unit;
-	_onAttrChanged;
 	[Enum.UnitEvent.HeadInfoInit] = function(self, unit)
 		self._unit = unit;
 		local tb;
@@ -14,11 +13,11 @@ local M =
 		end
 		self.luaName.text = tb.name
 		self.luaHP.value = unit.attr.HP/100;
-		unit.attr:AddListener(self._onAttrChanged)
+		unit:addListener(self._onUnitListener)
 	end;
 
 	[Enum.UnitEvent.HeadInfoDeinit] = function(self)
-		self._unit.attr:RemoveListener(self._onAttrChanged)
+		self._unit:removeListener(self._onUnitListener)
 		self._unit = nil
 	end;
 }
@@ -26,11 +25,12 @@ local M =
 function M:new(cs)
 	cs.luaOnAwake = self.Awake
 	cs.luaOnEvent = self.OnEvent
-	self._onAttrChanged = function(mask, val)
-		if Enum.AttrID.HP == mask then
-			self.luaHP.value = val/100;
+	self._onUnitListener = function(evt, param)
+		if evt ~= Enum.UnitEvent.AttrChanged then return end
+		if Enum.AttrID.HP == param.attrId then
+			self.luaHP.value = param.val/100;
 		end
-	end
+	end;
 end
 
 function M:Awake()

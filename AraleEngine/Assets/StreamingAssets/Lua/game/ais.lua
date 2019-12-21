@@ -1,2 +1,2 @@
-require "game/ai/LHero"
-require "game/ai/LMonster"
+--require "game/ai/LHero"
+--require "game/ai/LMonster"

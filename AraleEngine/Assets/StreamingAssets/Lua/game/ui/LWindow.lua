@@ -19,6 +19,12 @@ function M:OnWindowEvent(windEvent)
 	f(self)
 end
 
+function M:OnEvent(evt,param)
+	local f = self[evt]
+	if f==nil then return false end
+	f(self, param)
+	return true
+end
 --=======================
 LWindow = M
 createClass("LWindow",LWindow);

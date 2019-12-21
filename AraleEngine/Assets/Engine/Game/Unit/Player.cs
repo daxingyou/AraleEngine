@@ -28,7 +28,7 @@ public class Player : Unit, PoolMgr<int>.IPoolObject
 		mBuff   = new Buff.Plug(this);
 		mEffect = new EffectPlugin(this);
 		mMove   = new Move.Plug (this);
-		mAI     = new LuaAI (this);
+        mAI     = new AIPlugin(this);
 	}
 
 	HeadInfo mHeadInfo;
@@ -42,13 +42,10 @@ public class Player : Unit, PoolMgr<int>.IPoolObject
         mAI.reset();
 
 		mSkill.addSkills (GHelper.toIntArray (table.skills));
-        mAttr.onAttrChanged += onAttrChanged;
-
         if (!isServer)
         {
             mHeadInfo = HeadInfo.Bind(this.transform, this);
             effect.playEffect(1);
-            EventMgr.single.SendEvent("Player.Die", false);
         }
     }
 
@@ -68,23 +65,48 @@ public class Player : Unit, PoolMgr<int>.IPoolObject
 
 	protected override void onUnitDeinit()
 	{
-		mAttr.onAttrChanged -= onAttrChanged;
 		if (mHeadInfo != null)mHeadInfo.Unbind ();
 		Pool.recyle (this);
 	}
 
-	protected override bool onEvent (int evt, object param, object sender)
+    protected override void onUnitState(int state, int oldState)
+    {
+        if ((oldState & UnitState.Alive) == (state & UnitState.Alive))
+            return;
+        EventMgr.single.SendEvent("Player.Die", !isState(UnitState.Alive));
+    }
+
+	protected override bool onEvent (int evt, object param)
 	{
+        if (!isState (UnitState.Alive))return false;
+        base.onEvent (evt, param);
 		switch (evt)
 		{
-		case (int)UnitEvent.AIStart:
-			mAI.startAI (table.ai);
-			return true;
-		case (int)UnitEvent.AIStop:
-			mAI.stopAI ();
-			return true;
+		    case (int)UnitEvent.AIStart:
+			    mAI.startAI (table.ai);
+			    return true;
+            case (int)UnitEvent.AIStop:
+                mAI.stopAI();
+                return true;
+            case (int)UnitEvent.AttrChanged:
+                {
+                    AttrPlugin.EventData ed = (AttrPlugin.EventData)param;
+                    if (ed.attrId == (int)AttrID.HP)
+                    {
+                        int hp = (int)ed.val;
+                        if (hp > 0)return true;
+                        if (isServer)buff.addBuff(2);
+                    }
+
+                    if (ed.attrId == (int)AttrID.Speed)
+                    {
+                        scale = (float)ed.val; 
+                    }
+                    return true;
+                }
+			    return true;
 		}
-		return base.onEvent (evt, param, sender);
+        return true;
 	}
 
     public override int relation(Unit u)
@@ -94,29 +116,6 @@ public class Player : Unit, PoolMgr<int>.IPoolObject
 	}
 
     public override float speed{get{return isState(UnitState.Move)?scale * table.speed:0;}}
-
-	void onAttrChanged(int mask, object val)
-	{
-		//if (!isState (UnitState.Alive))return;
-        switch (mask)
-        {
-            case (int)AttrID.HP:
-                int hp = (int)val;
-                if (hp > 0)break;
-                if (isServer)
-                {
-                    buff.addBuff(2);
-                }
-                else
-                {
-                    EventMgr.single.SendEvent("Player.Die", true);
-                }
-                break;
-            case (int)AttrID.Speed:
-                scale = (float)val;
-                break;
-        }
-	}
 
 	#region 对象池
 	public static PoolMgr<int> Pool = new PoolMgr<int> (delegate(int param) {

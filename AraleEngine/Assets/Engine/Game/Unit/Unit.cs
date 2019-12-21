@@ -25,6 +25,10 @@ public enum UnitEvent
 	BuffClear,
 	AIStart,
 	AIStop,
+    AIEnemyFound,//发现敌人
+    AIEnemyDied, //敌人死亡
+    AIWakeUp,    //AI唤醒
+    AttrChanged, //属性改变
 	HeadInfoInit,
 	HeadInfoDeinit,
 	Max,
@@ -79,14 +83,18 @@ public abstract class Unit : LuaMono
     public int   state{get {return buff==null||(mState&UnitState.STOK)!=0?mState:mState=buff.unitState;}}
 	public void addState(int mask, bool sync=false)
 	{//请使用buff设置状态
+        int oldState = state;
         mState |= mask;
-        notifyStateChanged(state, sync);
+        onUnitState(state, oldState);
+        if (sync)syncState ();
 	}
 
 	public void decState(int mask, bool sync=false)
     {//请使用buff设置状态
+        int oldState = state;
         mState &= (~mask);
-        notifyStateChanged(state, sync);
+        onUnitState(state, oldState);
+        if (sync)syncState ();
 	}
 
 	public bool isState(int mask)
@@ -96,10 +104,11 @@ public abstract class Unit : LuaMono
 
 	public void onSyncState(MsgState msg)
 	{
+        int oldState = state;
 		pos = msg.pos;
 		dir = msg.dir;
 		mState = msg.state;
-        notifyStateChanged(state,false);
+        onUnitState(state, oldState);
 	}
 
 	public void syncState()
@@ -111,17 +120,6 @@ public abstract class Unit : LuaMono
 		msg.state = state;
 		sendMsg((short)MyMsgId.State, msg);
 	}
-
-    void notifyStateChanged(int state, bool sync)
-    {
-        sendUnitEvent((int)UnitEvent.StateChanged, state);
-        if (null!=mOnStateChange)mOnStateChange (this);
-        if (sync)syncState ();
-    }
-	public delegate void OnStateChange (Unit u);
-	protected OnStateChange mOnStateChange;
-	public void AddStateListener (OnStateChange callback){mOnStateChange += callback;}
-	public void RemoveStateListener (OnStateChange callback){mOnStateChange -= callback;}
     #endregion
 
 	uint mAgentID;
@@ -240,16 +238,26 @@ public abstract class Unit : LuaMono
 		onUnitParam (param);
 	}
 
-    protected override bool onEvent(int evt, object param, object sender=null)
+    public delegate void OnUnitEventListener(int evt, object param, object sender);
+    OnUnitEventListener onUnitEventListener;
+    public void addListener(OnUnitEventListener listener){onUnitEventListener += listener;}
+    public void removeListener(OnUnitEventListener listener){onUnitEventListener -= listener;}
+    protected override bool onEvent(int evt, object param)
     {
-        if (skill != null)skill.onEvent(evt, param, sender);
-        if (ai != null)ai.onEvent(evt, param, sender);
-        return base.onEvent(evt, param, sender);
+        base.onEvent(evt, param);
+        if(anim!=null)anim.onEvent(evt, param);
+        if(buff!=null)buff.onEvent(evt, param);
+        if(move!=null)move.onEvent(evt, param);
+        if(effect!=null)effect.onEvent(evt, param);
+        if(skill!= null)skill.onEvent(evt, param);
+        if(ai!= null)ai.onEvent(evt, param);
+        if(onUnitEventListener != null)onUnitEventListener(evt, param, this);
+        return false;
     }
 
 	public void sendUnitEvent(int evt, object param, bool sync=false)
 	{
-		sendEvent (evt, param);
+        onEvent (evt, param);
 		if (!sync)return;
 		MsgEvent msg = new MsgEvent();
 		msg.guid = guid;
@@ -323,7 +331,8 @@ public abstract class Unit : LuaMono
 	}
 		
     protected abstract void onUnitInit();
-	protected virtual void onUnitParam(object param){}
+	protected virtual void  onUnitParam(object param){}
+    protected virtual void  onUnitState(int newState, int oldState){}
     protected abstract void onUnitUpdate();
     protected abstract void onUnitDeinit();
     public virtual int relation(Unit u){return 0;}
@@ -410,9 +419,9 @@ public abstract class Unit : LuaMono
         string attrInfo = "STATE:"+Convert.ToString(state, 2)+" HP:"+attr.HP + " MP:" + attr.MP+" BUFF:" + buff.getBuffs(0xFFFF).Count;
 		GUI.Label (new Rect(0,y,200,50), attrInfo);
 		testTID = GUI.TextField (new Rect (0, y+=50, 100, 25), testTID);
-		if (ai!=null && GUI.Button (new Rect (0, y+=25, 100, 25), ai.isPlay?"关闭AI":"打开AI"))
+		if (ai!=null && GUI.Button (new Rect (0, y+=25, 100, 25), ai.isPlaying?"关闭AI":"打开AI"))
 		{
-			sendEvent (ai.isPlay?(int)UnitEvent.AIStop:(int)UnitEvent.AIStart,null);
+            sendEvent (ai.isPlaying?(int)UnitEvent.AIStop:(int)UnitEvent.AIStart,null);
 		}
 		if (buff != null && GUI.Button (new Rect (0, y += 25, 100, 25), "添加Buff"))
 		{
@@ -445,15 +454,16 @@ public abstract class Unit : LuaMono
 			unitRoot = null;
 		}
 
-		public void broadcastEvent(Unit sender, int evt, object param)
-		{
+        public void broadcastEvent(Unit sender, int evt, object param, float distance=3)
+		{//把sender的事件广播给distance范围类的unit
 			Vector3 senderPos = sender.pos;
 			for (int i = 0, max = mUnitList.Count; i < max; ++i)
 			{
 				Unit moniter = mUnitList[i];
-				if (Vector3.Distance(senderPos, moniter.pos) <= 3)
+                if (Vector3.Distance(senderPos, moniter.pos) <= distance)
 				{
-					moniter.onEvent (evt, param, sender);
+                    Debug.Assert(false);//未实现
+                    //moniter.onUnitEvent (evt, param, sender);
 				}
 			}
 		}
@@ -598,8 +608,8 @@ public abstract class Unit : LuaMono
 					{
 						mUnits.Remove(it.guid);
 					}
-					it.mOnStateChange = null;
 					it.onUnitDeinit();
+                    it.onUnitEventListener = null;
 				}
 				else
 				{

@@ -9,7 +9,6 @@ using DG.Tweening;
 
 namespace Arale.Engine
 {
-
     public class LuaMono : MonoBehaviour
     {
     	#if UNITY_EDITOR
@@ -124,14 +123,14 @@ namespace Arale.Engine
         protected virtual void onEnable(){}
         protected virtual void onDisable(){}
 
-		protected virtual bool onEvent(int evt, object param, object sender)
+		protected virtual bool onEvent(int evt, object param)
 		{
-			if (luaOnEvent != null)return luaOnEvent (mLO.mLT, evt, param);
+            if (luaOnEvent != null)return luaOnEvent (mLO.mLT, evt, param);
 			return false;
 		}
-		public void sendEvent(int evt, object param)
+        public void sendEvent(int evt, object param)
 		{
-			onEvent (evt,param,this);
+            onEvent (evt, param);
 		}
 
 		public Coroutine startLuaCoroutine(LuaTable lt)

@@ -4,7 +4,6 @@ local M =
 {
 	_hero;
 	_timeGap = 0;
-	_onAttrChanged;
 	_cs;
 }
 
@@ -13,15 +12,16 @@ function M:new(cs)
 	cs.luaOnStart = self.Start
 	cs.luaOnDestroy=self.OnDestroy
 	cs.luaOnUpdate=self.OnUpdate
+	cs.luaOnEvent = self.OnEvent
 	self._onBindPlayer = function(evt) self:OnBindPlayer(evt) end
-	self._onAttrChanged = function(mask, val)
-		if Enum.AttrID.HP == mask then
-			self.luaHP.value = val/100;
-		end
-		if Enum.AttrID.MP == mask then
-			self.luaMP.value = val/100;
-		end
-	end
+	self._onUnitListener = function(evt, param)
+		if evt ~= Enum.UnitEvent.AttrChanged then return end
+		if Enum.AttrID.HP == param.attrId then
+			self.luaHP.value = param.val/100;
+		elseif Enum.AttrID.MP == param.attrId then
+			self.luaMP.value = param.val/100;
+		end	
+	end;
 end
 
 function M:Start()
@@ -62,12 +62,12 @@ function M:OnBindPlayer(evt)
 	self:UpdateSkills()
 
     self:SetPlayer()
-    self._hero.attr:AddListener(self._onAttrChanged)
+    self._hero:addListener(self._onUnitListener)
 end
 
 function M:UnBindPlayer(unit)
 	if unit == nil then return end
-	unit.attr:RemoveListener(self._onAttrChanged)
+	unit:removeListener(self._onUnitListener)
 end
 
 function M:SetPlayer()

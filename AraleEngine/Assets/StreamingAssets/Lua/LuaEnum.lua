@@ -1,6 +1,6 @@
 --Auto Gen,Don't modify
 Enum={}
-Enum.MyMsgId={
+--[[Enum.MyMsgId={
 	Time=998,
 	Login=999,
 	State=1000,
@@ -70,3 +70,4 @@ Enum.AttrID={
 	Speed=7,
 }
 
+]]

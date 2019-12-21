@@ -232,9 +232,6 @@ public class LanHost : NetworkDiscovery//局域网发现,两端的端口设置�
 		if (u == null)return null;
 		u.agentId = agentId;
 		u.setParam(pos, dir);
-		u.ai.setPatrolPoint (new List<Vector3>{new Vector3(23,-1,23), new Vector3(-23,-1,23), new Vector3(-23,-1,-23), new Vector3(23,-1,-23)});
-		u.ai.setPatrolArea (Vector3.zero, 6);
-
         MsgCreate reply = new MsgCreate();
         reply.agentId = u.agentId;
         reply.guid  = u.guid;

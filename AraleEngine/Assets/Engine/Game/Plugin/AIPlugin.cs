@@ -4,112 +4,161 @@ using System.Collections.Generic;
 using Arale.Engine;
 
 
-public abstract class AIPlugin : Plugin
+public class AIPlugin : Plugin
 {
+    public const int StateCmd = 0xFF;
+    public enum Cmd
+    {
+        Idle  =0,//空闲
+        Attack=1,//攻击敌人
+        Patrol=2,//巡逻
+        Trace =3,//跟随
+        Flee  =5,//逃离
+        Detect=0x100,//侦测敌人
+    }
+
 	public AIPlugin(Unit unit):base(unit){}
-    public virtual  bool onEvent (int evt, object param, object sender){return false;}
-	public abstract bool isPlay{ get; }
-	public abstract bool startAI (string btPath);
-	public abstract void stopAI ();
+    public bool isPlaying{ get; protected set;}
+    public virtual bool startAI (string btPath)
+    {
+        warnningHP = 30;
+        startCmd(Cmd.Detect);
+        isPlaying = true;
+        return true;
+    }
 
-	public Unit target{ get; set;}
-    public bool busy{ get; set;}
-	protected List<Vector3> mPatrolPoint;
-	protected int           mPatrolIndex;
-	protected Vector3       mPatrolCenter;
-	protected float         mPatrolArea;
-	protected Vector3       mFlee;
-	public void setPatrolPoint(List<Vector3> points)
-	{
-		mPatrolPoint = points;
-		mPatrolIndex = 0;
-	}
-	public void setPatrolArea(Vector3 center, float r)
-	{
-		mPatrolCenter = center;
-        if (mPatrolCenter == Vector3.zero)mPatrolCenter = mUnit.pos;
-		mPatrolArea = r;
-	}
-	public void setFlee(Vector3 v)
-	{
-		mFlee = v;
-	}
+    public virtual void stopAI()
+    {
+        if (!isPlaying)return;
+        isPlaying = false;
+        mUnit.unbindLua();
+    }
 
-	//巡逻
-	public bool doPatrol(int type)
-	{
-        busy = true;
-		switch (type)
-		{
-    		case 1://顺序点巡逻
-    			if (mPatrolPoint == null || mPatrolPoint.Count < 1)break;
-                mUnit.move.nav (mPatrolPoint [mPatrolIndex]);
-    			mPatrolIndex = ++mPatrolIndex % mPatrolPoint.Count;
-    			return true;
-    		case 2://随机点巡逻
-    			if (mPatrolPoint == null || mPatrolPoint.Count < 1)break;
-    			int idx = Random.Range (0, mPatrolPoint.Count);
-    			if (idx == mPatrolIndex)break;
-                mUnit.move.nav (mPatrolPoint [mPatrolIndex = idx]);
-    			return true;
-            case 3://范围随机巡逻
-                float r   = Randoms.rang(0, mPatrolArea);
-                float ang = Randoms.rang(0, 2*Mathf.PI);
-                Vector3 pos = mPatrolCenter + new Vector3(Mathf.Cos(ang), 0, Mathf.Sin(ang)) * r;
-                mUnit.move.nav (pos);
-			    return true;
-    		default:
-    			break;
-		}
-        busy = false;
-		return false;
-	}
+    public override void reset ()
+    {
+        stopAI();
+        trigCmd = 0;
+        stateCmd= 0;
+    }
 
-	//查找目标
-	public bool doTarget(int unitType)
-	{
-		List<Unit> ls = null;
-		ls = mUnit.mgr.getEnemy (mUnit, unitType, 10f, 1);
-		if (ls.Count < 1)return false;
-		target = ls [0];
-		return true;
-	}
+    public int   warnningHP; //警戒血量
+    public float sleepTime;  //休眠时间
+    public float minDistance;//跟随最近距离
+    public float maxDistance;//跟随最大距离
+    public Vector3 targetPos;//导航目标点
+    public Unit   targetUnit;//导航目标
+    int trigCmd;
+    int stateCmd;
+    public void startCmd(Cmd cmd)
+    {
+        if ((int)cmd < StateCmd)
+        {//触发型
+            trigCmd = (int)cmd;
+            doCmd(cmd);
+        }
+        else
+        {//状态型
+            stateCmd|=(int)cmd;   
+        }
+    }
 
-	//释放技能
-	public bool doSkill(int idx)
-	{
-		if (!target.isState (UnitState.Alive))
-		{
-			target = null;
-			mUnit.skill.targetUnit = null;
-			return false;
-		}
-		mUnit.skill.targetPos  = target.pos;
-		mUnit.skill.targetUnit = target;
-		mUnit.skill.playIndex (idx, true);
-        busy = true;
-		return true;
-	}
+    public void stopCmd(Cmd cmd)
+    {
+        if ((int)cmd < StateCmd)
+        {//触发型
+            if((int)cmd!=trigCmd)return;
+            trigCmd = 0;
+        }
+        else
+        {//状态型
+            stateCmd&=~(int)cmd;   
+        }
+    }
 
-	//逃离
-	public bool doFlee(int type)
-	{
-        busy = true;
-		switch (type)
-		{
-            case 0://目标方向逃离
-                mUnit.move.nav(mUnit.pos + mFlee * 5);
-    			return true;
-    		case 1://反向逃离
-    			if (target == null)break;
-    			Vector3 dir = mUnit.pos - target.pos;
-                mUnit.move.nav (mUnit.pos + dir * 3);
-    			return true;
-    		case 2://目标点逃离
-                mUnit.move.nav (mFlee);
-    			return true;
-		}
-        busy = false;
-		return false;
-	}
+    void doCmd(Cmd cmd)
+    {
+        switch (cmd)
+        {
+            case Cmd.Attack:
+                mUnit.skill.targetUnit = targetUnit;
+                mUnit.skill.playIndex(0, true);
+                break;
+            case Cmd.Patrol:
+                mUnit.move.nav(targetPos);
+                break;
+            case Cmd.Trace:
+                mUnit.move.nav(targetUnit, minDistance);
+                break;
+            case Cmd.Flee:
+                mUnit.move.nav(targetPos);
+                break;
+            default:
+                break;
+        }
+    }
+        
+    bool isStateCmd(Cmd cmd)
+    {
+        return (stateCmd & (int)cmd) != 0;
+    }
+
+    public override void update()
+    {
+        if (!isPlaying)return;
+        if (isStateCmd(Cmd.Detect))
+        {
+            int ut = (mUnit is Player) ? UnitType.Monster : UnitType.Player;
+            List<Unit> ls = mUnit.mgr.getEnemy(mUnit, ut, 3, 1);
+            if (ls.Count > 0)
+            {
+                onEvent((int)UnitEvent.AIEnemyFound, ls[0]);
+            }
+        }
+
+        if (trigCmd == (int)Cmd.Idle && (sleepTime -= Time.deltaTime)<0)
+        {
+            onEvent((int)UnitEvent.AIWakeUp, 0);
+        }
+    }
+
+    public override void onEvent(int evt, object param)
+    {
+        if (!isPlaying)return;
+        switch (evt)
+        {
+            case (int)UnitEvent.NavEnd:
+                break;
+            case (int)UnitEvent.AIEnemyFound:
+                targetUnit = param as Unit;
+                stopCmd(Cmd.Detect);
+                startCmd(Cmd.Attack);
+                break;
+            case (int)UnitEvent.AIEnemyDied:
+                targetUnit = null;
+                sleepTime = Random.Range(3, 8);
+                startCmd(Cmd.Detect);
+                break;
+            case (int)UnitEvent.AIWakeUp:
+                startCmd(Cmd.Patrol);
+                break;
+            case (int)UnitEvent.BeHit:
+                Unit attacker = mUnit.mgr.getUnit((uint)param);
+                if (attacker == null)break;
+                if (mUnit.attr.HP > warnningHP && warnningHP > 0)
+                {
+                    targetUnit = attacker;
+                    startCmd(Cmd.Attack);
+                }
+                else
+                {
+                    Vector3 dir = mUnit.pos - attacker.pos;
+                    targetPos = mUnit.pos + dir.normalized * 5;
+                    startCmd(Cmd.Flee);
+                }
+                break;
+            case (int)UnitEvent.SkillEnd:
+                if (trigCmd == (int)Cmd.Attack)startCmd(Cmd.Attack);
+                break;
+        }
+    }
 }

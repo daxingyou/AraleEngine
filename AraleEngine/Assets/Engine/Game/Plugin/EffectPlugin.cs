@@ -15,16 +15,7 @@ public class EffectPlugin : Plugin
 		if (!enable)return;
 		stopEffect (effectTID);
 		Effect.play (effectTID, mUnit.transform, onEffectEvent);
-		if (mUnit.attr != null)mUnit.attr.onAttrChanged += onAttrChange;
     }
-
-	void onAttrChange(int mask, object val)
-	{
-		if (mask != (int)AttrID.Speed)return;
-		for (int i = 0, max = mEffects.Count; i < max; ++i) {
-			mEffects [i].setSpeed ((float)val);
-		}
-	}
 
 	public void pauseEffect(int effectTID)
 	{
@@ -75,6 +66,19 @@ public class EffectPlugin : Plugin
         for (int i = 0; i < mEffects.Count; ++i)
         {
             mEffects[i].stop();
+        }
+    }
+
+    public override void onEvent(int evt, object param)
+    {
+        if (evt == (int)UnitEvent.AttrChanged)
+        {
+            AttrPlugin.EventData ed = (AttrPlugin.EventData)param;
+            if (ed.attrId != (int)AttrID.Speed)return;
+            for (int i = 0, max = mEffects.Count; i < max; ++i)
+            {
+                mEffects [i].setSpeed ((float)ed.val);
+            }
         }
     }
 }

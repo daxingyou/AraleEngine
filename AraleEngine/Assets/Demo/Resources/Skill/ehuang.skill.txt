@@ -18,25 +18,25 @@
 		</actions>
 		<actions Type="SkillAction" end="True" time="2" />
 	</skill>
-	<skill Type="GameSkill" id="202" name="eh.skill3" distance="4" cd="3" state="65531" anim="skill02" pointType="Pos" mIcon="sk_skill3">
-		<actions Type="SkillAction" time="0.5">
+	<skill Type="GameSkill" id="202" name="eh.skill3" distance="8" cd="3" state="-5" anim="skill02" pointType="Pos" mIcon="sk_skill3">
+		<actions Type="SkillAction" time="0.5" state="-127">
 			<nodes Type="SkillBullet" target="Pos" location="Target" relation="Emney" id="201" />
 		</actions>
-		<actions Type="SkillAction" end="True" time="1" />
+		<actions Type="SkillAction" end="True" time="1" state="-127" />
 	</skill>
 	<skill Type="GameSkill" id="203" name="eh.skill4" distance="4" cd="3" state="65531" anim="skill04" mIcon="sk_skill4">
 		<actions Type="SkillAction" time="0.5">
 			<nodes Type="SkillBuff" target="Area" relation="Emney" selector="Nearst" id="10008" area="3,2.00,112.21" />
 		</actions>
 		<actions Type="SkillAction" time="2">
-			<nodes Type="SkillHarm" target="Area" relation="Emney" selector="Nearst" harm="10" area="0,3" />
+			<nodes Type="SkillHarm" target="Area" relation="Emney" selector="Nearst" harm="10" area="0,3.00" />
 		</actions>
 		<actions Type="SkillAction" time="2.2">
-			<nodes Type="SkillHarm" target="Area" relation="Emney" selector="Nearst" harm="10" area="0,3" />
+			<nodes Type="SkillHarm" target="Area" relation="Emney" selector="Nearst" harm="10" area="0,3.00" />
 		</actions>
 		<actions Type="SkillAction" time="2.5">
-			<nodes Type="SkillHarm" target="Area" relation="Self" selector="Nearst" harm="-10" area="0,3" />
-			<nodes Type="SkillBuff" target="Area" relation="Friend" selector="Nearst" id="10006" area="0,3" />
+			<nodes Type="SkillHarm" target="Area" relation="Self" selector="Nearst" harm="-10" area="0,3.00" />
+			<nodes Type="SkillBuff" target="Area" relation="Friend" selector="Nearst" id="10006" area="0,3.00" />
 		</actions>
 		<actions Type="SkillAction" end="True" time="3" />
 	</skill>

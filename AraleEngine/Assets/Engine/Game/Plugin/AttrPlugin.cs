@@ -5,17 +5,24 @@ using System.Collections.Generic;
 
 public class AttrPlugin : Plugin
 {
-    public delegate void OnAttrChanged(int mask, object val=null);
-    public OnAttrChanged onAttrChanged;
-	public void AddListener(OnAttrChanged callback){onAttrChanged += callback;}
-	public void RemoveListener(OnAttrChanged callback){onAttrChanged -= callback;}
+    public struct EventData
+    {
+        public int attrId;
+        public object val;
+        public EventData(int attrId, object newVal)
+        {
+            this.attrId = attrId;
+            this.val = newVal;
+        }
+    }
+
     public virtual void notify(int attrID, object val=null)
 	{
         if (mUnit.isServer)
         {
             changes.Add(new Attr(attrID, val));
         }
-		if (onAttrChanged != null)onAttrChanged(attrID, val);
+        mUnit.sendUnitEvent((int)UnitEvent.AttrChanged, new EventData(attrID,val));
     }
 
     string mName;

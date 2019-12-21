@@ -41,9 +41,9 @@ public class Buff
 
 	protected void deinit()
 	{
-		onDeinit ();
         setUnitState(UnitState.ALL, true);
         mUnit.syncState();
+		onDeinit ();
         mUnit = null;
         timer = null;
 	}

@@ -238,14 +238,14 @@ namespace Arale.Engine
 		{
 			string luaCode = "--Auto Gen,Don't modify"+RET;
 			luaCode += "Enum={}" + RET;
-			luaCode += Enum2Lua(typeof(MyMsgId))+RET;
-			luaCode += Enum2Lua(typeof(Log.Tag))+RET;
-			luaCode += Enum2Lua(typeof(UnitEvent))+RET;
-			luaCode += Enum2Lua(typeof(AttrID))+RET;
+            luaCode += Enum2LuaString(typeof(MyMsgId))+RET;
+            luaCode += Enum2LuaString(typeof(Log.Tag))+RET;
+            luaCode += Enum2LuaString(typeof(UnitEvent))+RET;
+            luaCode += Enum2LuaString(typeof(AttrID))+RET;
 			File.WriteAllText(Application.streamingAssetsPath + "/Lua/LuaEnum.lua", luaCode);
 		}
 
-		static string Enum2Lua(Type t)
+		static string Enum2LuaString(Type t)
 		{//参数为具体的枚举值
 			Debug.Assert(t.IsEnum);
 			string s = "Enum."+t.Name+"={"+RET;
