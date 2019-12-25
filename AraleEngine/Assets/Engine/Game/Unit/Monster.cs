@@ -66,7 +66,7 @@ public class Monster : Unit, PoolMgr<int>.IPoolObject
 
 	protected override void onUnitParam(object param)
 	{
-        if (isAgent)mAI.startAI (table.ai);
+        if (isAgent)sendUnitEvent((int)UnitEvent.AIStart, table.ai);
 	}
 
 	protected override void onUnitUpdate()
@@ -81,7 +81,7 @@ public class Monster : Unit, PoolMgr<int>.IPoolObject
 	protected override void onUnitDeinit()
 	{
 		if (mHeadInfo != null)mHeadInfo.Unbind ();
-		mAI.stopAI ();
+        sendUnitEvent((int)UnitEvent.AIStop, null);
 		mAnim.sendEvent (AnimPlugin.Die);
 		if (isServer)
 		{
@@ -102,9 +102,9 @@ public class Monster : Unit, PoolMgr<int>.IPoolObject
 		Pool.recyle (this);
 	}
 
-	protected override bool onEvent (int evt, object param)
-	{
-        if (!isState (UnitState.Alive))return false;
+    #region 事件处理
+    protected override void onEvent (int evt, object param)
+    {
         base.onEvent (evt, param);
 		switch (evt)
 		{
@@ -112,33 +112,35 @@ public class Monster : Unit, PoolMgr<int>.IPoolObject
                 {
     				TBBuff tb = TableMgr.single.GetData<TBBuff> ((short)param);
     				//headInfo.mName.text += tb.flag;
-                    return true;
+                    return;
 			    }
     		case (int)UnitEvent.BuffDec:
     			{
     				TBBuff tb = TableMgr.single.GetData<TBBuff> ((short)param);
     				//headInfo.mName.text = headInfo.mName.text.Replace(tb.flag,"");
-                    return true;
+                    return;
     			}
             case (int)UnitEvent.AttrChanged:
-                {
-                    AttrPlugin.EventData ed = (AttrPlugin.EventData)param;
-                    if (ed.attrId == (int)AttrID.HP)
-                    {
-                        int hp = (int)ed.val;
-                        if (hp > 0)return true;
-                        buff.addBuff(2);
-                    }
-
-                    if (ed.attrId == (int)AttrID.Speed)
-                    {
-                        scale = (float)ed.val; 
-                    }
-                    return true;
-                }
+                onAttrChange((AttrPlugin.EventData)param);
+                return;
 		}
-        return true;
 	}
+
+    void onAttrChange(AttrPlugin.EventData data)
+    {
+        if (data.attrId == (int)AttrID.HP)
+        {
+            int hp = (int)data.val;
+            if (hp > 0)return;
+            if (isServer)buff.addBuff(2);
+        }
+
+        if (data.attrId == (int)AttrID.Speed)
+        {
+            scale = (float)data.val; 
+        }
+    }
+    #endregion
 
     public override int relation(Unit u)
 	{

@@ -25,12 +25,12 @@ public enum UnitEvent
 	BuffClear,
 	AIStart,
 	AIStop,
-    AIEnemyFound,//发现敌人
-    AIEnemyDied, //敌人死亡
     AIWakeUp,    //AI唤醒
+    AILoseTarget,//目标丢失
     AttrChanged, //属性改变
 	HeadInfoInit,
 	HeadInfoDeinit,
+    Timer,
 	Max,
 }
 #endregion
@@ -85,7 +85,7 @@ public abstract class Unit : LuaMono
 	{//请使用buff设置状态
         int oldState = state;
         mState |= mask;
-        onUnitState(state, oldState);
+        sendUnitEvent((int)UnitEvent.StateChanged, oldState);
         if (sync)syncState ();
 	}
 
@@ -93,7 +93,7 @@ public abstract class Unit : LuaMono
     {//请使用buff设置状态
         int oldState = state;
         mState &= (~mask);
-        onUnitState(state, oldState);
+        sendUnitEvent((int)UnitEvent.StateChanged, oldState);
         if (sync)syncState ();
 	}
 
@@ -108,7 +108,7 @@ public abstract class Unit : LuaMono
 		pos = msg.pos;
 		dir = msg.dir;
 		mState = msg.state;
-        onUnitState(state, oldState);
+        sendUnitEvent((int)UnitEvent.StateChanged, oldState);
 	}
 
 	public void syncState()
@@ -234,29 +234,46 @@ public abstract class Unit : LuaMono
 		if (type == 0)throw new Exception ("can't new object by yourself");
         if (isState(UnitState.Alive))return;
         addState(UnitState.Alive);
+        timer = new Timer(onTimer);
 		this.pos=pos;this.dir=dir;
 		onUnitParam (param);
 	}
+
+
+
+    Timer timer;
+    void onTimer(Timer.Node timer)
+    {
+        sendUnitEvent((int)UnitEvent.Timer, timer);
+    }
+    public void AddTimer(int timerID, float delay)
+    {
+        timer.AddTimer(timerID, delay);
+    }
+    public void RemoveTimer(int timerID)
+    {
+        timer.RemoveTimer(timerID);
+    }
 
     public delegate void OnUnitEventListener(int evt, object param, object sender);
     OnUnitEventListener onUnitEventListener;
     public void addListener(OnUnitEventListener listener){onUnitEventListener += listener;}
     public void removeListener(OnUnitEventListener listener){onUnitEventListener -= listener;}
-    protected override bool onEvent(int evt, object param)
+    protected  virtual void onEvent(int evt, object param)
     {
-        base.onEvent(evt, param);
+        if (base.onEvent(evt, param))return;
         if(anim!=null)anim.onEvent(evt, param);
         if(buff!=null)buff.onEvent(evt, param);
         if(move!=null)move.onEvent(evt, param);
         if(effect!=null)effect.onEvent(evt, param);
         if(skill!= null)skill.onEvent(evt, param);
         if(ai!= null)ai.onEvent(evt, param);
-        if(onUnitEventListener != null)onUnitEventListener(evt, param, this);
-        return false;
+        if (onUnitEventListener != null)onUnitEventListener(evt, param, this);
     }
 
 	public void sendUnitEvent(int evt, object param, bool sync=false)
 	{
+        if (!isState(UnitState.Alive))return;
         onEvent (evt, param);
 		if (!sync)return;
 		MsgEvent msg = new MsgEvent();
@@ -332,7 +349,6 @@ public abstract class Unit : LuaMono
 		
     protected abstract void onUnitInit();
 	protected virtual void  onUnitParam(object param){}
-    protected virtual void  onUnitState(int newState, int oldState){}
     protected abstract void onUnitUpdate();
     protected abstract void onUnitDeinit();
     public virtual int relation(Unit u){return 0;}
@@ -363,6 +379,10 @@ public abstract class Unit : LuaMono
 		if (isServer)return;
 		if(effect!=null)effect.playEffect (effectId);
 	}
+
+    public void OnHitEvent()
+    {
+    }
 
 	public Transform getMount(string nodeName)
 	{
@@ -416,7 +436,7 @@ public abstract class Unit : LuaMono
         if (!object.Equals (UnityEditor.Selection.activeObject, gameObject) || attr==null || buff==null)return;
 		float y = 100;
 		GUI.color = Color.gray;
-        string attrInfo = "STATE:"+Convert.ToString(state, 2)+" HP:"+attr.HP + " MP:" + attr.MP+" BUFF:" + buff.getBuffs(0xFFFF).Count;
+        string attrInfo = "STATE:"+Convert.ToString(state, 2)+" HP:"+attr.HP + " MP:" + attr.MP+" BUFF:" + buff.getBuffs(0xFFFF).Count+" AI:"+ai.cmd;
 		GUI.Label (new Rect(0,y,200,50), attrInfo);
 		testTID = GUI.TextField (new Rect (0, y+=50, 100, 25), testTID);
 		if (ai!=null && GUI.Button (new Rect (0, y+=25, 100, 25), ai.isPlaying?"关闭AI":"打开AI"))
@@ -613,6 +633,7 @@ public abstract class Unit : LuaMono
 				}
 				else
 				{
+                    if(it.timer!=null)it.timer.update();
 					it.onUnitUpdate();
 				}
 			}

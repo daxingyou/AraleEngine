@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Root Type="GameSkill+XmlPack">
-	<skill Type="GameSkill" id="600" name="lg.skill1" distance="4" cd="3" state="65531" anim="attack" pointType="Dir" mIcon="sk_skill5">
-		<actions Type="SkillAction" time="0.5">
-			<nodes Type="SkillHarm" target="Area" relation="Emney" selector="Nearst" harm="10" area="3,4.00,72.00" />
+	<skill Type="GameSkill" id="600" name="lg.skill1" distance="2" cd="3" state="-21" anim="attack" pointType="Target" mIcon="sk_skill5">
+		<actions Type="SkillAction" time="0.5" state="-21">
+			<nodes Type="SkillHarm" relation="Emney" selector="Nearst" harm="10" area="3,4.00,72.00" />
 		</actions>
-		<actions Type="SkillAction" end="True" time="1" />
+		<actions Type="SkillAction" end="True" time="1" state="-1" />
 	</skill>
-	<skill Type="GameSkill" id="601" name="lg.skill2" distance="4" cd="3" state="65531" anim="skill01" pointType="Pos" mIcon="sk_skill6">
-		<actions Type="SkillAction" time="1.3">
+	<skill Type="GameSkill" id="601" name="lg.skill2" distance="4" cd="3" state="-21" anim="skill01" pointType="Pos" mIcon="sk_skill6">
+		<actions Type="SkillAction" time="1.3" state="-21">
 			<nodes Type="SkillBullet" target="Pos" location="Target" relation="Emney" id="601" />
 			<nodes Type="SkillHarm" target="Area" relation="Emney" selector="Nearst" harm="10" area="2,2.00,6.00" />
 		</actions>
-		<actions Type="SkillAction" end="True" time="1.8" />
+		<actions Type="SkillAction" end="True" time="1.8" state="-1" />
 	</skill>
-	<skill Type="GameSkill" id="602" name="lg.skill3" distance="4" cd="3" state="65531" anim="skill02" pointType="Pos" mIcon="sk_skill7">
-		<actions Type="SkillAction" time="1.5">
+	<skill Type="GameSkill" id="602" name="lg.skill3" distance="4" cd="3" state="-21" anim="skill02" pointType="Pos" mIcon="sk_skill7">
+		<actions Type="SkillAction" time="1.5" state="-21">
 			<nodes Type="SkillBullet" target="Pos" location="Target" relation="Emney" id="602" />
 		</actions>
-		<actions Type="SkillAction" end="True" time="2" />
+		<actions Type="SkillAction" end="True" time="2" state="-1" />
 	</skill>
-	<skill Type="GameSkill" id="603" name="lg.skill4" distance="4" cd="3" state="65531" anim="skill04" pointType="Pos" mIcon="sk_skill8">
-		<actions Type="SkillAction" time="2">
+	<skill Type="GameSkill" id="603" name="lg.skill4" distance="4" cd="3" state="-21" anim="skill04" pointType="Pos" mIcon="sk_skill8">
+		<actions Type="SkillAction" time="2" state="-21">
 			<nodes Type="SkillBullet" target="Pos" location="Target" relation="Emney" id="603" />
 			<nodes Type="SkillHarm" target="Area" relation="Emney" selector="Nearst" harm="50" area="2,2.00,3.20" />
 		</actions>
-		<actions Type="SkillAction" end="True" time="2.5" />
+		<actions Type="SkillAction" end="True" time="2.5" state="-1" />
 	</skill>
 </Root>

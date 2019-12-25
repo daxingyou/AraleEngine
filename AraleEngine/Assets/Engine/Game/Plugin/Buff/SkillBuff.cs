@@ -16,7 +16,7 @@ public class GameSkillBuff : LuaBuff
     {
         mUnit.sendUnitEvent ((int)UnitEvent.SkillBegin,null,true);
         setUnitState(mGS.state,true);
-        mUnit.forward (mUnit.skill.targetPos);
+        if(mGS.pointType!=Skill.PointType.None)mUnit.forward (mUnit.skill.targetPos);
         if (!string.IsNullOrEmpty(mGS.anim))
         {
             mUnit.anim.sendEvent(AnimPlugin.PlayAnim, mGS.anim);

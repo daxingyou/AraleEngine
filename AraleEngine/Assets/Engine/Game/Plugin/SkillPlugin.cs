@@ -8,6 +8,8 @@ using Arale.Engine;
 #region Skill基类
 public class Skill
 {
+    public const int NoTarget = 1;
+    public const int OutRange = 2;
     //指向类型
     public enum PointType
 	{
@@ -17,6 +19,18 @@ public class Skill
 		Target,//目标施法
 	}
 
+    public enum FuncType
+    {
+        Attack=0x01,        //攻击
+        Recover=0x02,       //恢复
+        Control=0x04,       //控制
+        DeControl=0x08,     //解控
+        HarmStrengthen=0x10,//伤害加强
+        HarmReduce=0x20,    //伤害减免
+        Summon=0x40,        //召唤
+        Move=0x80,          //位移
+    }
+
     public Skill(int skillID)
     {
         GS = GameSkill.get(skillID); 
@@ -25,45 +39,29 @@ public class Skill
     public int   mLV;         //技能等级
     public float mRCD;        //技能RCD
     public GameSkill GS{get;protected set;}
-	protected virtual void play(Unit self, bool aiCall)
+	protected virtual void play(Unit self)
 	{
         if (mRCD > 0)return;
         Unit    tUnit= self.skill.targetUnit;
-        Vector3 tPos = aiCall&&tUnit!=null?tUnit.pos:self.skill.targetPos;
+        Vector3 tPos = self.skill.targetPos;
         switch (GS.pointType)
-        {
-        case PointType.Pos://位置技能
-			if (Vector3.Distance(self.pos, tPos) > GS.distance)
-            {
-                self.move.nav(tPos, GS.distance, delegate(bool isAI){if(isAI)playSkill(self);});
+        {//服务端技能不在距离内也施法，但不一定造成伤害.如果和客户端一样做距离跟踪处理，则会因为客户端和服务端通信延迟导致距离差距不一致，客户端人可以可以释放技能，服务端认为需要继续跟踪，从而导致动画节奏不一致
+            case PointType.Pos://位置技能
+                if (self.isServer || Vector3.Distance(self.pos, tPos) <= GS.distance)break;
+                self.move.nav(tPos, GS.distance, delegate(bool arrive){if(arrive)playSkill(self);});
                 return;
-            }
-            break;
-
-        case PointType.Dir://方向技能
-			if (!aiCall)break;
-			if (Vector3.Distance(self.pos, tUnit.pos) > GS.distance)
-			{
-                self.move.nav(tUnit, GS.distance, delegate(bool isAI){if(isAI)playSkill(self);});
-				return;
-			}
-            break;
-
-        case PointType.Target://目标技能
-			if (tUnit == null)
-			{
-				Debug.LogError ("目标技能未指定目标");
-				return;
-			}
-			if (Vector3.Distance(self.pos, tUnit.pos) > GS.distance)
-            {
-                self.move.nav(tUnit, GS.distance, delegate(bool isAI){if(isAI)playSkill(self);});
+            case PointType.Target://目标技能
+                if (tUnit == null)
+                {
+                    Debug.LogError("未指定技能目标");
+                    self.sendEvent((int)UnitEvent.SkillBegin, NoTarget);
+                    return;
+                }
+                if (self.isServer || Vector3.Distance(self.pos, tUnit.pos) <= GS.distance)break;
+                self.move.nav(tUnit, GS.distance, delegate(bool arrive){if (arrive)playSkill(self);});
                 return;
-            }
-            break;
-
-        default:
-            break;
+            default:
+                break;
         }
         playSkill(self);
     }
@@ -127,7 +125,7 @@ public class Skill
 			if (skill != null)mSkills.Remove (skill);
 		}
 
-		public void play(int skillTID, bool aiCall=false)
+		public void play(int skillTID)
 		{
             Skill skill = mSkills.Find(delegate(Skill s){return s.GS.id == skillTID;});
 			if (skill == null)
@@ -135,24 +133,24 @@ public class Skill
 				Log.i("skill tid not exit, tid="+skillTID, Log.Tag.Skill);
 				return;
 			}
-            playSkill(skill, aiCall);
+            playSkill(skill);
 		}
 
-		public void playIndex(int idx, bool aiCall=false)
+		public void playIndex(int idx)
 		{
 			if (mSkills.Count <= idx)
 			{
 				Log.i("skill index not exit, idx="+idx, Log.Tag.Skill);
 				return;
 			}
-            playSkill(mSkills [idx], aiCall);
+            playSkill(mSkills [idx]);
 		}
 
-        void playSkill(Skill skill, bool aiCall)
+        void playSkill(Skill skill)
         {
             if (!mUnit.isState (UnitState.Skill))return;
             Log.i("playIndex skill="+skill.GS.id, Log.Tag.Skill);
-            skill.play (mUnit, aiCall);
+            skill.play (mUnit);
         }
 
 		public virtual bool onEvent (int evt, object param, object sender)
@@ -175,13 +173,6 @@ public class Skill
 			play (m.skillTID);
 		}
 
-		public void drawDebug()
-		{
-            DebugLine.drawCircle(targetPos, 0.7f, Color.yellow);
-			if (targetUnit != null)DebugLine.drawCircle(targetUnit.pos, 0.7f, Color.magenta);
-		}
-
-
         public void showIndicator(Skill skill, Vector2 dir, float disPercent, bool end)
         {
             if (mIndicator == null)mIndicator = mUnit.gameObject.AddComponent<IndicatorMesh>();
@@ -190,9 +181,28 @@ public class Skill
             {
                 Vector3 d = new Vector3(dir.x, 0, dir.y);
                 targetPos = mUnit.pos + skill.GS.distance * disPercent*d;
-                playSkill(skill,false);
+                playSkill(skill);
             }
         }
+
+        public Skill getSkill(Skill.FuncType type, bool playAble=false)
+        {
+            for (int i = 0; i < skills.Count; ++i)
+            {
+                Skill sk = skills[i];
+                if ((sk.GS.funcType & type)==0)continue;
+                return sk;
+            }
+            return null;
+        }
+
+        #if UNITY_EDITOR
+        public void drawDebug()
+        {
+            DebugLine.drawCircle(targetPos, 0.7f, Color.yellow);
+            if (targetUnit != null)DebugLine.drawCircle(targetUnit.pos, 0.7f, Color.magenta);
+        }
+        #endif
 	}
 	#endregion
 }

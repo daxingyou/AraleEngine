@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class AttrPlugin : Plugin
 {
-    public struct EventData
+    public class EventData
     {
         public int attrId;
         public object val;

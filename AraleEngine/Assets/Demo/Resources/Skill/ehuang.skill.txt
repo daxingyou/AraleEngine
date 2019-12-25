@@ -1,43 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Root Type="GameSkill+XmlPack">
-	<skill Type="GameSkill" id="200" name="回春术" cd="3" state="-21" anim="attack" mIcon="sk_skill1" desc="瞬间恢复自身30点生命，并给自身添加一个每秒2点生命回复的buf,持续5秒">
+	<skill Type="GameSkill" id="200" name="回春术" cd="3" state="-21" anim="attack" funcType="Recover" mIcon="sk_skill1" desc="瞬间恢复自身30点生命，并给自身添加一个每秒2点生命回复的buf,持续5秒">
 		<actions Type="SkillAction" time="1" loopTimes="-57" state="-21">
 			<nodes Type="SkillHarm" relation="Self" harm="-30" />
 		</actions>
 		<actions Type="SkillAction" end="True" time="1.5" loopTimes="-73" state="-1" />
 	</skill>
-	<skill Type="GameSkill" id="201" name="eh.skill2" distance="4" cd="3" state="65531" anim="skill01" pointType="Target" mIcon="sk_skill2">
-		<actions Type="SkillAction" time="0.5">
+	<skill Type="GameSkill" id="201" name="eh.skill2" distance="4" cd="3" state="-21" anim="skill01" pointType="Target" mIcon="sk_skill2">
+		<actions Type="SkillAction" time="0.5" state="-21">
 			<nodes Type="SkillBullet" relation="Emney" id="202" />
 		</actions>
-		<actions Type="SkillAction" time="1">
+		<actions Type="SkillAction" time="1" state="-21">
 			<nodes Type="SkillBullet" relation="Emney" id="202" />
 		</actions>
-		<actions Type="SkillAction" time="1.5">
+		<actions Type="SkillAction" time="1.5" state="-21">
 			<nodes Type="SkillBullet" relation="Emney" id="202" />
 		</actions>
-		<actions Type="SkillAction" end="True" time="2" />
+		<actions Type="SkillAction" end="True" time="2" state="-1" />
 	</skill>
-	<skill Type="GameSkill" id="202" name="eh.skill3" distance="8" cd="3" state="-5" anim="skill02" pointType="Pos" mIcon="sk_skill3">
-		<actions Type="SkillAction" time="0.5" state="-127">
+	<skill Type="GameSkill" id="202" name="eh.skill3" distance="8" cd="3" state="-21" anim="skill02" pointType="Pos" mIcon="sk_skill3">
+		<actions Type="SkillAction" time="0.5" state="-21">
 			<nodes Type="SkillBullet" target="Pos" location="Target" relation="Emney" id="201" />
 		</actions>
-		<actions Type="SkillAction" end="True" time="1" state="-127" />
+		<actions Type="SkillAction" end="True" time="1" state="-1" />
 	</skill>
-	<skill Type="GameSkill" id="203" name="eh.skill4" distance="4" cd="3" state="65531" anim="skill04" mIcon="sk_skill4">
-		<actions Type="SkillAction" time="0.5">
+	<skill Type="GameSkill" id="203" name="eh.skill4" distance="4" cd="3" state="-21" anim="skill04" mIcon="sk_skill4">
+		<actions Type="SkillAction" time="0.5" state="-21">
 			<nodes Type="SkillBuff" target="Area" relation="Emney" selector="Nearst" id="10008" area="3,2.00,112.21" />
 		</actions>
-		<actions Type="SkillAction" time="2">
+		<actions Type="SkillAction" time="2" state="-21">
 			<nodes Type="SkillHarm" target="Area" relation="Emney" selector="Nearst" harm="10" area="0,3.00" />
 		</actions>
-		<actions Type="SkillAction" time="2.2">
+		<actions Type="SkillAction" time="2.2" state="-21">
 			<nodes Type="SkillHarm" target="Area" relation="Emney" selector="Nearst" harm="10" area="0,3.00" />
 		</actions>
-		<actions Type="SkillAction" time="2.5">
+		<actions Type="SkillAction" time="2.5" state="-21">
 			<nodes Type="SkillHarm" target="Area" relation="Self" selector="Nearst" harm="-10" area="0,3.00" />
 			<nodes Type="SkillBuff" target="Area" relation="Friend" selector="Nearst" id="10006" area="0,3.00" />
 		</actions>
-		<actions Type="SkillAction" end="True" time="3" />
+		<actions Type="SkillAction" end="True" time="3" state="-1" />
 	</skill>
 </Root>

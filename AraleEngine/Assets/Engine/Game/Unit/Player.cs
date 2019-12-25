@@ -69,45 +69,43 @@ public class Player : Unit, PoolMgr<int>.IPoolObject
 		Pool.recyle (this);
 	}
 
-    protected override void onUnitState(int state, int oldState)
-    {
-        if ((oldState & UnitState.Alive) == (state & UnitState.Alive))
-            return;
-        EventMgr.single.SendEvent("Player.Die", !isState(UnitState.Alive));
-    }
-
-	protected override bool onEvent (int evt, object param)
+    #region 事件处理
+    protected override void onEvent (int evt, object param)
 	{
-        if (!isState (UnitState.Alive))return false;
         base.onEvent (evt, param);
 		switch (evt)
 		{
-		    case (int)UnitEvent.AIStart:
-			    mAI.startAI (table.ai);
-			    return true;
-            case (int)UnitEvent.AIStop:
-                mAI.stopAI();
-                return true;
+            case (int)UnitEvent.StateChanged:
+                onStateChange(state, (int)param);
+                return;
             case (int)UnitEvent.AttrChanged:
-                {
-                    AttrPlugin.EventData ed = (AttrPlugin.EventData)param;
-                    if (ed.attrId == (int)AttrID.HP)
-                    {
-                        int hp = (int)ed.val;
-                        if (hp > 0)return true;
-                        if (isServer)buff.addBuff(2);
-                    }
-
-                    if (ed.attrId == (int)AttrID.Speed)
-                    {
-                        scale = (float)ed.val; 
-                    }
-                    return true;
-                }
-			    return true;
+                onAttrChange(param as AttrPlugin.EventData);
+			    return;
 		}
-        return true;
 	}
+
+    void onStateChange(int newState, int oldState)
+    {
+        if ((oldState & UnitState.Alive) == (state & UnitState.Alive))return;
+        EventMgr.single.SendEvent("Player.Die", !isState(UnitState.Alive));
+        return;
+    }
+
+    void onAttrChange(AttrPlugin.EventData data)
+    {
+        if (data.attrId == (int)AttrID.HP)
+        {
+            int hp = (int)data.val;
+            if (hp > 0)return;
+            if (isServer)buff.addBuff(2);
+        }
+
+        if (data.attrId == (int)AttrID.Speed)
+        {
+            scale = (float)data.val; 
+        }
+    }
+    #endregion
 
     public override int relation(Unit u)
 	{

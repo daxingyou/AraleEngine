@@ -21,6 +21,8 @@ public partial class GameSkill : AraleSerizlize
     [AraleSerizlize.Field]
     public Skill.PointType pointType=Skill.PointType.None;
     [AraleSerizlize.Field]
+    public Skill.FuncType funcType=Skill.FuncType.Attack;
+    [AraleSerizlize.Field]
     public float distance{ get; protected set;}
     [AraleSerizlize.Field]
     public float cd{ get;protected set;}

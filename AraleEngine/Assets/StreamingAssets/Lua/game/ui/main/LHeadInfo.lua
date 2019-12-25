@@ -11,6 +11,7 @@ local M =
 		else
 			tb = LTBMonster[unit.tid]
 		end
+
 		self.luaName.text = tb.name
 		self.luaHP.value = unit.attr.HP/100;
 		unit:addListener(self._onUnitListener)

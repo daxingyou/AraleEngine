@@ -76,6 +76,7 @@ public static class LuaHelp
 		typeof(EventListener.VoidDelegate),
 		typeof(UISwitch.OnValueChange),
 		typeof(UISList.OnSelectChange),
+        typeof(Timer.OnTimer),
         typeof(Unit.OnUnitEventListener),
 		typeof(LuaBuff.OnEvent),
 		typeof(TimeMgr.Action.OnAction),

@@ -1,45 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Root Type="GameSkill+XmlPack">
-	<skill Type="GameSkill" id="400" name="nz.skill1" distance="4" cd="3" state="65531" anim="attack" mIcon="sk_skill1">
-		<actions Type="SkillAction" time="0.5">
+	<skill Type="GameSkill" id="400" name="nz.skill1" distance="4" cd="3" state="-21" anim="attack" pointType="Dir" mIcon="sk_skill1">
+		<actions Type="SkillAction" time="0.5" state="-21">
 			<nodes Type="SkillHarm" target="Area" relation="Emney" harm="10" area="3,4.00,72.00" />
 		</actions>
-		<actions Type="SkillAction" end="True" time="1" />
+		<actions Type="SkillAction" end="True" time="1" state="-1" />
 	</skill>
-	<skill Type="GameSkill" id="401" name="nz.skill2" distance="4" cd="3" state="65531" anim="skill01" pointType="Dir" mIcon="sk_skill2">
-		<actions Type="SkillAction" time="0.5">
+	<skill Type="GameSkill" id="401" name="nz.skill2" distance="4" cd="3" state="-21" anim="skill01" pointType="Dir" mIcon="sk_skill2">
+		<actions Type="SkillAction" time="0.5" state="-21">
 			<nodes Type="SkillHarm" target="Area" relation="Emney" harm="10" area="2,1.50,3.00" />
 		</actions>
-		<actions Type="SkillAction" time="1">
+		<actions Type="SkillAction" time="1" state="-21">
 			<nodes Type="SkillHarm" target="Area" relation="Emney" harm="20" area="2,1.50,3.00" />
 		</actions>
-		<actions Type="SkillAction" end="True" time="1.5" />
+		<actions Type="SkillAction" end="True" time="1.5" state="-1" />
 	</skill>
-	<skill Type="GameSkill" id="402" name="nz.skill3" distance="4" cd="3" state="65531" anim="skill02" pointType="Dir" mIcon="sk_skill3">
-		<actions Type="SkillAction" time="1">
+	<skill Type="GameSkill" id="402" name="nz.skill3" distance="4" cd="3" state="-21" anim="skill02" pointType="Dir" mIcon="sk_skill3">
+		<actions Type="SkillAction" time="1" state="-21">
 			<nodes Type="SkillHarm" target="Area" relation="Emney" harm="20" area="2,1.50,3.00" />
 		</actions>
-		<actions Type="SkillAction" end="True" time="1.5" />
+		<actions Type="SkillAction" end="True" time="1.5" state="-1" />
 	</skill>
-	<skill Type="GameSkill" id="403" name="nz.skill4" distance="4" cd="3" state="65531" anim="skill04" pointType="Dir" mIcon="sk_skill4">
-		<actions Type="SkillAction" time="1.5">
+	<skill Type="GameSkill" id="403" name="nz.skill4" distance="4" cd="3" state="-21" anim="skill04" pointType="Dir" mIcon="sk_skill4">
+		<actions Type="SkillAction" time="1.5" state="-21">
 			<nodes Type="SkillHarm" target="Area" relation="Emney" harm="5" area="2,1.50,3.00" />
 		</actions>
-		<actions Type="SkillAction" time="2">
+		<actions Type="SkillAction" time="2" state="-21">
 			<nodes Type="SkillHarm" target="Area" relation="Emney" harm="5" area="2,1.50,3.00" />
 		</actions>
-		<actions Type="SkillAction" time="2.8">
+		<actions Type="SkillAction" time="2.8" state="-21">
 			<nodes Type="SkillHarm" target="Area" relation="Emney" harm="5" area="2,1.50,3.00" />
 		</actions>
-		<actions Type="SkillAction" time="3.2">
+		<actions Type="SkillAction" time="3.2" state="-21">
 			<nodes Type="SkillHarm" target="Area" relation="Emney" harm="5" area="2,1.50,3.00" />
 		</actions>
-		<actions Type="SkillAction" time="3.4">
+		<actions Type="SkillAction" time="3.4" state="-21">
 			<nodes Type="SkillHarm" target="Area" relation="Emney" harm="5" area="2,1.50,3.00" />
 		</actions>
-		<actions Type="SkillAction" time="4">
+		<actions Type="SkillAction" time="4" state="-21">
 			<nodes Type="SkillHarm" target="Area" relation="Emney" harm="20" area="2,1.50,3.00" />
 		</actions>
-		<actions Type="SkillAction" end="True" time="4.5" />
+		<actions Type="SkillAction" end="True" time="4.5" state="-1" />
 	</skill>
 </Root>

@@ -43,11 +43,12 @@ public class ActorCreator : MonoBehaviour
 	public List<Vector3>   mBornPos   = new List<Vector3>();   //随机出生点
 	int mUnitCount;
 	// Use this for initialization
-    void OnTriggerEnter()
+    void OnTriggerEnter(Collider other)
     {
 		Debug.LogError ("OnTriggerEnter");
 		if (NetMgr.server == null)return;//不是服务器
 		if (mUnitCount > 0)return;//刷新点怪没有清光
+        if(!(other.GetComponent<Unit>() is Player))return;//不是玩家触发
 		StartCoroutine(CreateActor());
     }
 
