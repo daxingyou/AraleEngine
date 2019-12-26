@@ -143,7 +143,11 @@ public class Move
                 if (null != callback)callback(false);
                 return;
             }
-            if(mNavMove == null || !mUnit.isState(UnitState.Move))return;
+            if (mNavMove == null || !mUnit.isState(UnitState.Move))
+            {
+                if (null != callback)callback(false);
+                return;
+            }
             if(mMove!=null&&!object.ReferenceEquals(mMove, mNavMove))mMove.stop(mUnit,false);
             mMove = mNavMove;
             mNavMove.uTarget = null;
@@ -160,7 +164,11 @@ public class Move
                 if (null != callback)callback(false);
                 return;
             }
-            if(mNavMove == null || !mUnit.isState(UnitState.Move))return;
+            if (mNavMove == null || !mUnit.isState(UnitState.Move))
+            {
+                if (null != callback)callback(false);
+                return;
+            }
             if(mMove!=null&&!object.ReferenceEquals(mMove, mNavMove))mMove.stop(mUnit,false);
             mMove = mNavMove;
             mNavMove.uTarget = unit;

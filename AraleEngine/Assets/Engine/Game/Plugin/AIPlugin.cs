@@ -165,6 +165,12 @@ public class AIPlugin : Plugin
         switch (tn.timerID)
         {
             case TimerDectect:
+                if (mUnit.attr.HP < warnningHP && warnningHP > 0)
+                {
+                    tn.loop(1f);
+                    break;
+                }
+
                 if (findTarget())
                 {
                     next = Cmd.Attack;
@@ -203,7 +209,7 @@ public class AIPlugin : Plugin
             next = Cmd.Idle;
             return;
         }
-
+ 
         mUnit.skill.targetUnit = targetUnit;
         Skill sk = mUnit.skill.getSkill(Skill.FuncType.Attack);
         if (Vector3.Distance(mUnit.pos, targetUnit.pos) <= sk.GS.distance)
@@ -272,6 +278,12 @@ public class AIPlugin : Plugin
         switch (tn.timerID)
         {
             case TimerDectect:
+                if (mUnit.attr.HP < warnningHP && warnningHP > 0)
+                {
+                    tn.loop(1f);
+                    break;
+                }
+
                 if (findTarget())
                 {
                     next = Cmd.Attack;
@@ -322,12 +334,10 @@ public class AIPlugin : Plugin
     #region 逃离
     void flee()
     {
-        Debug.LogError("flee");
         mOnEvent = onFleeEvent;
         mOnTimer = onFleeTimer;
         mUnit.move.nav(targetPos, 0, delegate(bool arrive)
             {
-                Debug.LogError("flee end");
                 if (arrive)
                 {
                     next = Cmd.Idle;
