@@ -3,6 +3,8 @@ using System.Collections;
 using UnityEngine.Networking;
 using System.Collections.Generic;
 using Arale.Engine;
+using System.Net.NetworkInformation;
+using System.Net.Sockets;
 
 
 public class LanHost : NetworkDiscovery//局域网发现,两端的端口设置要一致
@@ -56,7 +58,7 @@ public class LanHost : NetworkDiscovery//局域网发现,两端的端口设置�
     public void startHost()
     {
         if(running)StopBroadcast();
-        this.broadcastData = string.Format("{0}:{1}:{2}", Network.player.ipAddress, 5003, gameName);
+        this.broadcastData = string.Format("{0}:{1}:{2}", getLocalIP(), 5003, gameName);
         StartAsServer();
     }
 
@@ -95,6 +97,31 @@ public class LanHost : NetworkDiscovery//局域网发现,两端的端口设置�
 		}
 		return c;
 	}
+
+    static string getLocalIP(bool ipv6=false)
+    {
+        foreach (NetworkInterface item in NetworkInterface.GetAllNetworkInterfaces())
+        {
+            foreach (UnicastIPAddressInformation ip in item.GetIPProperties().UnicastAddresses)
+            {
+                if (ipv6)
+                {
+                    if (ip.Address.AddressFamily == AddressFamily.InterNetworkV6)
+                    {
+                        return ip.Address.ToString();
+                    }
+                }
+                else
+                {
+                    if (ip.Address.AddressFamily == AddressFamily.InterNetwork)
+                    {
+                        return ip.Address.ToString();
+                    }
+                }
+            }
+        }
+        return "";
+    }
 
     #region server
     static uint ACCOUNTID = 10000;
