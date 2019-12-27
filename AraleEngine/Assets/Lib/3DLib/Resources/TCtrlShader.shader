@@ -1,4 +1,6 @@
-﻿Shader "Unlit/TCtrlShader"
+﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+Shader "Unlit/TCtrlShader"
 {
 	Properties
 	{
@@ -39,7 +41,7 @@
 			v2f vert (appdata v)
 			{
 				v2f o;
-				o.vertex = mul(UNITY_MATRIX_MVP, v.vertex);
+				o.vertex = UnityObjectToClipPos(v.vertex);
 				o.color  = v.color;
 				float4 d = mul(UNITY_MATRIX_MV, v.vertex);
 				if(d.z<_Center.z)o.color.a = 0;
@@ -83,7 +85,7 @@
 			v2f vert (appdata v)
 			{
 				v2f o;
-				o.vertex = mul(UNITY_MATRIX_MVP, v.vertex);
+				o.vertex = UnityObjectToClipPos(v.vertex);
 				o.color  = v.color;
 				return o;
 			}

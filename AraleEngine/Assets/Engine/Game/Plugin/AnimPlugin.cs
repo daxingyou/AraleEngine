@@ -71,7 +71,7 @@ public class AnimPlugin : Plugin
 		switch (evt)
 		{
     		case StopAnim:
-    			if (mAnimtor != null)mAnimtor.Stop ();
+    			if (mAnimtor != null)mAnimtor.enabled=false;
     			if(mAnim!=null)mAnim.Stop (anim);
     			needSync=true;
     			break;

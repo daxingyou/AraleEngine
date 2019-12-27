@@ -180,7 +180,7 @@ public class UICirclePage : MonoBehaviour,  IBeginDragHandler, IDragHandler, IEn
         if (Mathf.Abs(mIneriaSpeed) <= mSpeed)
         {
             mIneriaSpeed = 0;
-            mCon = StartCoroutine_Auto(anim(clamp(mAng)));
+            mCon = StartCoroutine(anim(clamp(mAng)));
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿//场景技能指示器
+﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+//场景技能指示器
 Shader "Arale/Skill/SkillIndicator"
 {
 	Properties {
@@ -42,7 +44,7 @@ Shader "Arale/Skill/SkillIndicator"
 					v2f vert(appdata_tan v)   
 					{   
 						v2f o;
-						o.pos = mul (UNITY_MATRIX_MVP, v.vertex);
+						o.pos = UnityObjectToClipPos (v.vertex);
 						o.uv1.x =  v.vertex.x;
 						o.uv1.y =  v.vertex.z;
 						return o;    

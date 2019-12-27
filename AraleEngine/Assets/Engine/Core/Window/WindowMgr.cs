@@ -15,7 +15,7 @@ namespace Arale.Engine
 
         public override void Init()
         {
-            mWinRoot = GRoot.single.transform.FindChild("WinRoot");
+            mWinRoot = GRoot.single.transform.Find("WinRoot");
             EventMgr.single.AddListener ("Window", OnWindowMessage);
         }
 

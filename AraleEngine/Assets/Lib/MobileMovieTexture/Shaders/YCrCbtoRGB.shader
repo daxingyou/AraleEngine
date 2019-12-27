@@ -1,3 +1,5 @@
+// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
 Shader "Color Space/YCbCrtoRGB" 
 {
     Properties 
@@ -39,7 +41,7 @@ Shader "Color Space/YCbCrtoRGB"
 			v2f vert (appdata_base v)
 			{
 				v2f o;
-				o.pos = mul (UNITY_MATRIX_MVP, v.vertex);
+				o.pos = UnityObjectToClipPos (v.vertex);
 				o.uvY = TRANSFORM_TEX (v.texcoord, _YTex);
 				o.uvCbCr = TRANSFORM_TEX (v.texcoord, _CbTex);
 				return o;

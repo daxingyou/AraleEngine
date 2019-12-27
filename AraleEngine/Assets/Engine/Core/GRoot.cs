@@ -34,7 +34,7 @@ namespace Arale.Engine
 
         IEnumerator Splash()
         {
-            CanvasGroup splash = transform.FindChild("Splash").GetComponent<CanvasGroup>();
+            CanvasGroup splash = transform.Find("Splash").GetComponent<CanvasGroup>();
             splash.DOFade(1, 0.2f);
             yield return new WaitForSeconds(mSplashTime);
             splash.DOFade(0, 0.2f).OnComplete(delegate {

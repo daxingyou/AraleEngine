@@ -327,8 +327,7 @@ public class CodeGuardWindow : EditorWindow
                                    "Automatic obfuscation and protection via postprocess build actions. Available for Windows, Mac, Linux, WebPlayer, Android and iOS/iPhone builds.",
                                    CodeGuard.PostBuildGuarding);
 
-        if (buildTarget == BuildTarget.WebPlayer || buildTarget == BuildTarget.WebPlayerStreamed ||
-            buildTarget == BuildTarget.Android || buildTarget == BuildTarget.iOS)
+        if (buildTarget == BuildTarget.Android || buildTarget == BuildTarget.iOS)
         {
             EditorGUI.BeginDisabledGroup(true);
             Toggle("Create Backup",

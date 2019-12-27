@@ -1,4 +1,6 @@
-﻿Shader "TestShader/海浪" {
+﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+Shader "TestShader/海浪" {
 	Properties {
 		_WaterTex ("WaterTex", 2D) = "black" {} 
 		_WaveTex ("WaveTex", 2D) = "black" {} //海浪
@@ -73,7 +75,7 @@
 		void vert (inout appdata_full v, out Input i) {
 			UNITY_INITIALIZE_OUTPUT(Input, i);
 
-			i.proj = ComputeScreenPos(mul(UNITY_MATRIX_MVP, v.vertex));
+			i.proj = ComputeScreenPos(UnityObjectToClipPos(v.vertex));
 			COMPUTE_EYEDEPTH(i.proj.z);
 		}
 

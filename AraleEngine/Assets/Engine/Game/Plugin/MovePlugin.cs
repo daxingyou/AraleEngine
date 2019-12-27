@@ -83,7 +83,7 @@ public class Move
         public Plug(Unit unit):base(unit)
 		{
             mCtrlMove = new CtrlMove();
-            NavMeshAgent agent = unit.GetComponent<NavMeshAgent> ();
+            UnityEngine.AI.NavMeshAgent agent = unit.GetComponent<UnityEngine.AI.NavMeshAgent> ();
             if(agent!=null)
             {
                 mNavMove  = new NavMove();

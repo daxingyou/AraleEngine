@@ -21,7 +21,12 @@ public class ImageEffect : MonoBehaviour {
 	// Use this for initialization
     void OnRenderImage(RenderTexture src, RenderTexture dst)
     {
-        if (mEffectMat == null)return;
+        if (mEffectMat == null)
+        {
+            Graphics.Blit(src, dst);
+            return;
+        }
+
         if (mDuration > 0)
         {
             if (mTime < mDuration)

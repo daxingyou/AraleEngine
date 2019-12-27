@@ -5,7 +5,7 @@ using Arale.Engine;
 using System;
 
 public class NavMove : Move {
-    public  NavMeshAgent mAgent;
+    public  UnityEngine.AI.NavMeshAgent mAgent;
     public  Action<bool>  mCallback;
     Vector3 mNavDir;
 	// Use this for initialization
@@ -106,7 +106,7 @@ public class NavMove : Move {
     int getOffMeshLinkAction(Unit unit)
     {
         if (!mAgent.isOnOffMeshLink)return 0;
-        OffMeshLinkData lk = mAgent.currentOffMeshLinkData;
+        UnityEngine.AI.OffMeshLinkData lk = mAgent.currentOffMeshLinkData;
         mAgent.autoTraverseOffMeshLink = false;
         Vector3 b = lk.startPos;
         Vector3 e = lk.endPos;

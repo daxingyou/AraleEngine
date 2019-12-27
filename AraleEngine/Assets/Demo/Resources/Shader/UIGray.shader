@@ -1,4 +1,6 @@
-﻿//通过Shader "UI/Default"修改
+﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+//通过Shader "UI/Default"修改
 //Image灰度化
 Shader "Arale/UI/UIGray"  
 {  
@@ -85,7 +87,7 @@ Shader "Arale/UI/UIGray"
             {  
                 v2f OUT;  
                 OUT.worldPosition = IN.vertex;  
-                OUT.vertex = mul(UNITY_MATRIX_MVP, OUT.worldPosition);  
+                OUT.vertex = UnityObjectToClipPos(OUT.worldPosition);  
   
                 OUT.texcoord = IN.texcoord;  
                   

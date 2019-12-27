@@ -17,7 +17,7 @@ namespace Arale.Engine
     	static string[] color = new string[]{"[ffffff]","[ffffff]","[32e9ff]","[feeb4d]","[fc7a12]","[f3586e]"};
     	static Transform GetTransform(Transform t,string name)
     	{
-    		Transform tt = t.FindChild (name);
+    		Transform tt = t.Find (name);
     		if (null != tt)return tt;
     		for (int i=0; i<t.childCount; ++i) 
     		{
@@ -36,7 +36,7 @@ namespace Arale.Engine
     			Transform t = go.transform;
     			for(int i=1; i<name.Length; i++)
     			{
-    				t = t.FindChild(name[i]);
+    				t = t.Find(name[i]);
                     if (null == t)
                     {
     					Log.e("在 " + go.name + " 中找不到以下节点: " + path);

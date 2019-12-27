@@ -1,4 +1,8 @@
-﻿Shader "TestShader/自定义光照"
+﻿// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
+// Upgrade NOTE: replaced '_World2Object' with 'unity_WorldToObject'
+// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+Shader "TestShader/自定义光照"
 {
 	Properties
 	{
@@ -78,11 +82,11 @@
 					//float4 lightPos  = _WorldSpaceLightPos0;
 					//half4 lightColor = _LightColor0;
 					float3 ambientLighting = float3(UNITY_LIGHTMODEL_AMBIENT.rgb) * float3(_Color.rgb);
-					fixed3 worldNormal = normalize(mul(n, (float3x3)_World2Object));
+					fixed3 worldNormal = normalize(mul(n, (float3x3)unity_WorldToObject));
 					fixed3 worldLightDir = normalize(lightPos.xyz);
 					float3 diffuseLighting = lightColor.rgb*_Color.rgb*saturate(dot(worldNormal,worldLightDir));
 					fixed3 reflectDir = normalize(reflect(-worldLightDir,worldNormal));
-					fixed3 viewDir = normalize(_WorldSpaceCameraPos.xyz - mul(_Object2World,v).xyz);
+					fixed3 viewDir = normalize(_WorldSpaceCameraPos.xyz - mul(unity_ObjectToWorld,v).xyz);
 					float k = _Shininess;
 					fixed3 specularLight = lightColor.rgb*_Specular.rgb*pow(saturate(dot(reflectDir,viewDir)),k);
 					fixed3 PhongLight = ambientLighting + diffuseLighting + specularLight;
@@ -94,15 +98,15 @@
 			v2f vert (appdata v)
 			{
 				v2f o;
-				o.vertex = mul(UNITY_MATRIX_MVP, v.vertex);
+				o.vertex = UnityObjectToClipPos(v.vertex);
 				o.uv = TRANSFORM_TEX(v.uv, _MainTex);
 #ifdef SD_VERTEX_LIGHT
 				o.color = float4(VertexLights(v.vertex, v.normal), _Color.a);
 				//o.color = float4(ShadeVertexLights(v.vertex, v.normal), _Color.a);
 #elif SD_PIXEL_LIGHT
 				o.color = float3(UNITY_LIGHTMODEL_AMBIENT.rgb) * float3(_Color.rgb);
-				o.normal = normalize(mul(v.normal, (float3x3)_World2Object));
-				o.worldPos = mul(v.vertex, _Object2World);
+				o.normal = normalize(mul(v.normal, (float3x3)unity_WorldToObject));
+				o.worldPos = mul(v.vertex, unity_ObjectToWorld);
 				o.lightDir = WorldSpaceLightDir(v.vertex);
 				o.viewDir  = WorldSpaceViewDir(v.vertex);
 #endif

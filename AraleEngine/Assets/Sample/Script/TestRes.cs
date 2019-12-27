@@ -77,7 +77,7 @@ public class TestRes : MonoBehaviour {
 
 	void LoadFromMemory(string path)
 	{
-		Profiler.BeginSample("LoadFromMemory");
+		UnityEngine.Profiling.Profiler.BeginSample("LoadFromMemory");
 		path = ResLoad.resPath + path + ".data";
 		byte[] buf = File.ReadAllBytes(path);
 		float t1 = Time.realtimeSinceStartup;
@@ -90,7 +90,7 @@ public class TestRes : MonoBehaviour {
 			Debug.Log ("use time="+(Time.realtimeSinceStartup-t));
 		}
 		Debug.Log ("use time="+(Time.realtimeSinceStartup-t1));
-		Profiler.EndSample();
+		UnityEngine.Profiling.Profiler.EndSample();
 	}
 
 	IEnumerator loadFromMemoryAsync(string path)
@@ -111,7 +111,7 @@ public class TestRes : MonoBehaviour {
 
 	void loadFromFile(string path)
 	{
-		Profiler.BeginSample("LoadFromFile");
+		UnityEngine.Profiling.Profiler.BeginSample("LoadFromFile");
 		path = ResLoad.resPath + path + ".data";
 		for(int i=0;i<times;++i)
 		{
@@ -121,12 +121,12 @@ public class TestRes : MonoBehaviour {
 			ab.Unload (false);
 			Debug.Log ("use time="+(Time.realtimeSinceStartup-t));
 		}
-		Profiler.EndSample();
+		UnityEngine.Profiling.Profiler.EndSample();
 	}
 
 	IEnumerator loadFromFileAsync(string path)
 	{
-		Profiler.BeginSample("LoadFromFileAsync");
+		UnityEngine.Profiling.Profiler.BeginSample("LoadFromFileAsync");
 		path = ResLoad.resPath + path + ".data";
 		for(int i=0;i<times;++i)
 		{
@@ -138,12 +138,12 @@ public class TestRes : MonoBehaviour {
 			ab.Unload (false);
 			Debug.Log ("use time="+(Time.realtimeSinceStartup-t));
 		}
-		Profiler.EndSample();
+		UnityEngine.Profiling.Profiler.EndSample();
 	}
 
 	IEnumerator createAssetByLoadFromCacheOrDownload(string path)
 	{
-		Caching.CleanCache ();
+		Caching.ClearCache ();
 		path = "file:///"+ResLoad.resPath + path + ".data";
 		for(int i=0;i<times;++i)
 		{
@@ -175,7 +175,7 @@ public class TestRes : MonoBehaviour {
 	
 	void createAssetByResLoadSync(string path)
 	{
-		Caching.CleanCache ();
+		Caching.ClearCache ();
 		float t1 = Time.realtimeSinceStartup;
 		for(int i=0;i<times;++i)
 		{
@@ -193,7 +193,7 @@ public class TestRes : MonoBehaviour {
 	}
 	void createAssetByResLoadAsync(string path)
 	{
-		Caching.CleanCache ();
+		Caching.ClearCache ();
 		tResLoad = Time.realtimeSinceStartup;
 		for(int i=0;i<times;++i)
 		{

@@ -1,4 +1,6 @@
-﻿//描边shader,模型法线外扩法
+﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+//描边shader,模型法线外扩法
 Shader "Arale/Model/ModelOutLine"
 {
 	Properties
@@ -37,8 +39,8 @@ Shader "Arale/Model/ModelOutLine"
 			v2f vert (appdata v)
 			{
 				v2f o;
-				o.vertex = mul(UNITY_MATRIX_MVP, v.vertex);
-				o.normal = mul(UNITY_MATRIX_MVP, v.normal);
+				o.vertex = UnityObjectToClipPos(v.vertex);
+				o.normal = UnityObjectToClipPos(v.normal);
 				float3 dir = normalize(v.vertex);
 				float3 dir2= v.normal;
 				float D = dot(dir, dir2);
@@ -82,7 +84,7 @@ Shader "Arale/Model/ModelOutLine"
 			v2f vert (appdata v)
 			{
 				v2f o;
-				o.vertex = mul(UNITY_MATRIX_MVP, v.vertex);
+				o.vertex = UnityObjectToClipPos(v.vertex);
 				o.uv = TRANSFORM_TEX(v.uv, _MainTex);
 				return o;
 			}

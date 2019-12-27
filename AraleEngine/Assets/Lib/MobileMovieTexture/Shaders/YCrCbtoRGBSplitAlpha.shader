@@ -1,3 +1,5 @@
+// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
 Shader "Color Space/YCrCbtoRGB Split Alpha" 
 {
     Properties 
@@ -45,7 +47,7 @@ Shader "Color Space/YCrCbtoRGB Split Alpha"
 			v2f vert (appdata_base v)
 			{
 				v2f o;
-				o.pos = mul (UNITY_MATRIX_MVP, v.vertex);
+				o.pos = UnityObjectToClipPos (v.vertex);
 				
 				float4 texcoordBottom = v.texcoord;
 				float4 texcoordTop = v.texcoord;

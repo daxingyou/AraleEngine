@@ -795,15 +795,7 @@ public static class CodeGuard
 
         setup.assemblySelectionMode = CodeGuard.AssembliesSetting;
 
-        if (buildTarget == BuildTarget.WebPlayer || buildTarget == BuildTarget.WebPlayerStreamed)
-        {
-            string enginePath = Path.Combine(EditorApplication.applicationContentsPath, "PlaybackEngines");
-            enginePath = Path.Combine(enginePath, "WebPlayer");
-            enginePath = Path.Combine(enginePath, "Managed");
-            setup.AddAssemblySearchDirectory(enginePath);
-            setup.buildTarget = "WebPlayer";
-        }
-        else if (buildTarget == BuildTarget.Android)
+        if (buildTarget == BuildTarget.Android)
         {
             string enginePath = Path.Combine(EditorApplication.applicationContentsPath, "PlaybackEngines");
             if (EditorUserBuildSettings.development)
@@ -1220,10 +1212,6 @@ public static class CodeGuard
 
             DoCodeGuardFolder(managedDir.FullName);
         }
-        else if (buildTarget == BuildTarget.WebPlayer || buildTarget == BuildTarget.WebPlayerStreamed)
-        {
-            _hasMidCodeGuarded = false;
-        }
         else if (buildTarget == BuildTarget.Android || buildTarget == BuildTarget.iOS)
         {
             _hasMidCodeGuarded = false;
@@ -1251,18 +1239,7 @@ public static class CodeGuard
 
         BuildTarget buildTarget = EditorUserBuildSettings.activeBuildTarget;
 
-        if (buildTarget == BuildTarget.WebPlayer || buildTarget == BuildTarget.WebPlayerStreamed)
-        {
-            if (DoCodeGuardWebPlayerBuild())
-            {
-                _hasMidCodeGuarded = true;
-            }
-            else
-            {
-                Debug.LogWarning("CodeGuard: Failed to guard WebPlayer!");
-            }
-        }
-        else if (buildTarget == BuildTarget.Android)
+        if (buildTarget == BuildTarget.Android)
         {
             if (DoCodeGuardAndroidBuild())
             {

@@ -1,4 +1,6 @@
-﻿//通过Shader "UI/Default"修改
+﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+//通过Shader "UI/Default"修改
 //让UGUI Image在Screen SPace模式下也有z轴深度
 Shader "Arale/UI/UIZDepth"  
 {  
@@ -87,7 +89,7 @@ Shader "Arale/UI/UIZDepth"
             {  
                 v2f OUT;  
                 OUT.worldPosition = IN.vertex;  
-                OUT.vertex = mul(UNITY_MATRIX_MVP, OUT.worldPosition);  
+                OUT.vertex = UnityObjectToClipPos(OUT.worldPosition);  
   
                 OUT.texcoord = IN.texcoord;  
                   

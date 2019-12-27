@@ -1,4 +1,6 @@
-﻿Shader "TestShader/Shader3"
+﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+Shader "TestShader/Shader3"
 {
 	Properties{
 		_Color("MainColor",Color)=(1,1,1,0.5)
@@ -25,7 +27,7 @@
 			v2f vert(appdata_base v)
 			{
 				v2f o;
-				o.pos=mul(UNITY_MATRIX_MVP, v.vertex);
+				o.pos=UnityObjectToClipPos(v.vertex);
 				o.color = v.normal * 0.5 + 0.5;
 				o.uv = TRANSFORM_TEX(v.texcoord, _MainTex);
 				return o;
