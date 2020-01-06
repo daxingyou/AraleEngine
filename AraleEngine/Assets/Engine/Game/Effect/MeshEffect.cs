@@ -5,7 +5,7 @@ using System.Collections.Generic;
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshRenderer))]
 public class MeshEffect : MonoBehaviour
-{
+{//unity单个网格顶点数超过65000时会报错
     const int MaxEffectCount = 10000;
     static MeshEffect mThis;
     List<Vector3> vs = new List<Vector3>();

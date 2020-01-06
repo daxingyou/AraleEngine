@@ -12,7 +12,8 @@ public class Randoms
     int   mIdx;
     Randoms()
     {
-        mSeeds = new int[]{1,2,6,0,22,99,56,12,34,44,112,343,9,22,21,65,1,2,6,0,22,99,56,12,34,44,112,343,9,22,21,65};
+        mSeeds = new int[]{1,2,6,0,22,99,56,12,34,44,112,343,9,22,21,65,11,12,16,10,122,199,156,112,134,144,1112,1343,19,122,121,165,
+                          21,13,43,123,42,4534,23432,33,323,123,54,656,367,3232,663,981,653,893,948,7664,74,536,425,4012,837,4561,38};
     }
 
     class DropRandom
@@ -46,9 +47,9 @@ public class Randoms
         }
     }
 
-    public static float rang(float b, float e)
+    public static float range(float b, float e)
     {
-        Random.seed = mThis.mSeeds[mThis.mIdx=++mThis.mIdx%mThis.mSeeds.Length];
+        Random.InitState(mThis.mSeeds[mThis.mIdx=++mThis.mIdx%mThis.mSeeds.Length]);
         return Random.Range(b, e);
     }
 

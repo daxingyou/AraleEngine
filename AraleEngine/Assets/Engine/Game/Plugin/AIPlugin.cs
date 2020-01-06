@@ -157,7 +157,7 @@ public class AIPlugin : Plugin
         mOnEvent = onIdleEvent;
         mOnTimer = onIdleTimer;
         mUnit.AddTimer(TimerDectect, 0.1f);
-        mUnit.AddTimer(TimerWakeup, Randoms.rang(3, 8));
+        mUnit.AddTimer(TimerWakeup, Randoms.range(3, 8));
     }
 
     void onIdleTimer(Timer.Node tn)
@@ -255,8 +255,8 @@ public class AIPlugin : Plugin
     #region 巡航
     void patrol()
     {
-        float r = Randoms.rang(3f, this.patrolArea);
-        float ang=Randoms.rang(0f, 2*Mathf.PI);
+        float r = Randoms.range(3f, this.patrolArea);
+        float ang=Randoms.range(0f, 2*Mathf.PI);
         targetPos = bornPos+new Vector3(Mathf.Cos(ang),0,Mathf.Sin(ang))*r;
 
         mOnEvent = onPatrolEvent;
