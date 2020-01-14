@@ -94,10 +94,14 @@ namespace Arale.Engine
     	#region mono Event
     	AnimAction mAnimAction;
     	bool bStart = false;
-    	protected override void onStart ()
+        protected override void onAwake()
+        {
+            OnWindowEvent(Window.Event.Create);
+        }
+
+        protected override void onStart ()
         {
     		bStart = true;
-    		OnWindowEvent (Window.Event.Create);
     		mAnimAction = GetComponent<AnimAction>();
     		if(mAnimAction) mAnimAction.play (AnimAction.ActionMask.WindowShow);
     		OnWindowEvent (Window.Event.Show);

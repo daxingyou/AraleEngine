@@ -216,18 +216,7 @@ public abstract class Unit : LuaMono
             NetMgr.client.sendMsg(msgid, msg);
     }
 
-	public Mgr mgr
-    {
-        get
-        {
-            if (isServer)
-                return NetMgr.server.unitMgr;
-            else
-                return NetMgr.client.unitMgr;
-        }
-    }
-
-
+	public Mgr mgr { get; protected set; }
 
 	public void setParam(Vector3 pos, Vector3 dir, object param=null)
 	{
@@ -528,6 +517,7 @@ public abstract class Unit : LuaMono
 			unit.tid      = tid;
             unit.mState   = UnitState.Init;
 			unit.isServer = isServer;
+            unit.mgr      = this;
 			mUnitList.Add(unit);
 			mUnits[unit.guid] = unit; 
 			//======================
@@ -629,6 +619,7 @@ public abstract class Unit : LuaMono
 						mUnits.Remove(it.guid);
 					}
 					it.onUnitDeinit();
+                    it.mgr = null;
                     it.onUnitEventListener = null;
 				}
 				else
