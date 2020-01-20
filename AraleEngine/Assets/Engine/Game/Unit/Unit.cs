@@ -137,6 +137,7 @@ public abstract class Unit : LuaMono
 	}//代理的id(accountId)由对应的客户端管理达到分布式处理,0由服务端管理
 	public bool  isAgent{get{return  mAgentID==mgr.accountId;}}
 	public bool  isServer{ set; get;}
+    public bool isNet { get { return guid != 0; } }
 
     Transform mTran;
     Vector3  mPos;
@@ -502,16 +503,15 @@ public abstract class Unit : LuaMono
 			}
 
 			//======================
-			if (guid==0)
-			{//客户端必须指定guid创建对象
-				if (!isServer)throw new Exception("client can't new Unit guid=0");
-				unit.guid = ++mGuid;
-			}
-			else
-			{//服务器不允许指定guid创建对象
-				if (isServer)throw new Exception("server can't new Unit guid!=0");
-				unit.guid = guid;
-			}
+            if(isServer)
+            {//服务器不允许指定guid创建对象
+                if (guid != 0) throw new Exception("server can't new Unit guid!=0");
+                unit.guid = ++mGuid;
+            }
+            else
+            {//客户端必须指定guid创建对象
+                unit.guid = guid;
+            }
 
 			unit.type     = unitType;
 			unit.tid      = tid;

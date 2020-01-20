@@ -36,7 +36,7 @@ public class CtrlMove : Move
 
     protected override void sync(Unit unit)
     {
-        if (!unit.isAgent)return;
+        if (!unit.isAgent || !unit.isNet)return;
         MsgNav msg = new MsgNav();
         msg.guid  = unit.guid;
         msg.time  = RTime.R.utcTickMs;

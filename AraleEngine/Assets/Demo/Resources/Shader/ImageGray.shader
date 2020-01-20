@@ -1,5 +1,4 @@
-﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
-
+﻿//后期处理:彩色渐变灰度图，模拟角色死亡，画面灰化
 Shader "Arale/Image/ImageGray"
 {
 	Properties

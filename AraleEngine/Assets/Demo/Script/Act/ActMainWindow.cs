@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class ActMainWindow : Window
 {
+    CameraController camCtrl;
     Player hero;
     public UIStick stick;
     // Start is called before the first frame update
@@ -24,21 +25,24 @@ public class ActMainWindow : Window
     void OnBindPlayer(EventMgr.EventData ed)
     {
        hero = ed.data as Player;
-        Camera.main.GetComponent<CameraController>().mTarget = hero.transform;
+       camCtrl = Camera.main.GetComponent<CameraController>();
+       camCtrl.mTarget = hero.transform;
     }
 
     // Update is called once per frame
     void Update()
     {
         if (hero == null) return;
-        Vector3 dir = new Vector3(stick.mDir.x, 0.0f, stick.mDir.y).normalized;
-        if (dir.z == 0 && dir.x == 0)
+        Vector3 viewdir = new Vector3(stick.mDir.x, 0.0f, stick.mDir.y);
+        if (viewdir.z == 0 && viewdir.x == 0)
         {
             hero.move.moveStop();
         }
         else
         {
-            hero.move.move(dir);
+            Vector3 worlddir = camCtrl.transform.localToWorldMatrix.MultiplyVector(viewdir).normalized;
+            worlddir.y = 0;//水平移动
+            hero.move.move(worlddir);
         }
     }
 }

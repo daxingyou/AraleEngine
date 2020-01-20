@@ -7,6 +7,7 @@ public class ActBattleSceneCtrl : SceneCtrl
 {
     public Unit.Mgr unitMgr { get; protected set; }
     public Unit player{ get; protected set;}
+    public Vector3 bornPos;
 	protected override void onAwake()
 	{
         TableMgr.TestModel = true;
@@ -19,9 +20,8 @@ public class ActBattleSceneCtrl : SceneCtrl
     protected override void onStart()
     {
        unitMgr = new Unit.Mgr(false);
-       Player u = unitMgr.getUnit(1, UnitType.Player, 1001) as Player;
-       u.agentId = 0;
-       u.setParam(Vector3.zero, Vector3.forward);
+       Player u = unitMgr.getUnit(0, UnitType.Player, 1002) as Player;
+       u.setParam(bornPos, Vector3.forward);
        player = u;
 
        Camera.main.gameObject.AddComponent<CameraController4First>();
@@ -99,5 +99,7 @@ public class ActBattleSceneCtrl : SceneCtrl
 		if (Input.GetKeyDown (KeyCode.F4)) {
 			player.skill.playIndex(3);
 		}
+
+        unitMgr.update();
 	}
 }
