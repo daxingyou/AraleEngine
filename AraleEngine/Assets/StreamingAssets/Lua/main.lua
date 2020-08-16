@@ -5,6 +5,7 @@
 print(package.path)
 require "common/LClass"
 require "common/LObject"
+require "common/LData"
 require "common/LProtoWrite"
 --=====================your code begin=================
 --==============工具库

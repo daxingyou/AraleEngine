@@ -60,7 +60,7 @@ public static class LuaHelp
         typeof(DG.Tweening.ShortcutExtensions50),
 		typeof(DG.Tweening.Core.TweenerCore<Vector3, Vector3, DG.Tweening.Plugins.Options.VectorOptions>),
 		typeof(DG.Tweening.Core.TweenerCore<Quaternion, Vector3, DG.Tweening.Plugins.Options.QuaternionOptions>),
-		typeof(DOTweenExtend),
+        typeof(DOTweenExtend),
 	};
 
 	//delegate导出
@@ -122,22 +122,22 @@ public static class LuaHelp
 #region DOTween泛型函数导出(利用c#扩展机制)
 public static class DOTweenExtend
 {
-	public static DG.Tweening.Sequence LPlay(this DG.Tweening.Sequence seq)
+	public static DG.Tweening.Sequence Play(this DG.Tweening.Sequence seq)
 	{
 		return DG.Tweening.TweenExtensions.Play<DG.Tweening.Sequence> (seq);
 	}
 
-	public static DG.Tweening.Sequence LPause(this DG.Tweening.Sequence seq)
+	public static DG.Tweening.Sequence Pause(this DG.Tweening.Sequence seq)
 	{
 		return DG.Tweening.TweenExtensions.Pause<DG.Tweening.Sequence> (seq);
 	}
 
-	public static DG.Tweening.Sequence LOnComplete(this DG.Tweening.Sequence seq, DG.Tweening.TweenCallback action)
+	public static DG.Tweening.Sequence OnComplete(this DG.Tweening.Sequence seq, DG.Tweening.TweenCallback action)
 	{
 		return DG.Tweening.TweenSettingsExtensions.OnComplete<DG.Tweening.Sequence> (seq, action);
 	}
 
-	public static DG.Tweening.Tween LOnComplete(this DG.Tweening.Tween t, DG.Tweening.TweenCallback action)
+	public static DG.Tweening.Tween OnComplete(this DG.Tweening.Tween t, DG.Tweening.TweenCallback action)
 	{
 		return DG.Tweening.TweenSettingsExtensions.OnComplete<DG.Tweening.Tween> (t, action);
 	}

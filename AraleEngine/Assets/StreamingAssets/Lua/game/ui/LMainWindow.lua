@@ -109,7 +109,7 @@ function M:ShowDrop(dropID)
 	seq:Append(t:DOScale(1, 0.3))
 	seq:Insert(0.8, t:DOMove(self.luaBag.transform.position, 1))
 	seq:Insert(1.3, t:DOScale(0.5, 0.5))
-	seq:LPlay():LOnComplete(function() GameObject.Destroy(fly) end)
+	seq:Play():OnComplete(function() GameObject.Destroy(fly) end)
 end
 
 function M:UpdateSkills()
